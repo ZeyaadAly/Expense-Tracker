@@ -1,4 +1,9 @@
-import "dotenv/config";
+import { fileURLToPath } from "node:url";
+import { config } from "dotenv";
+
+// Resolve from this module so both src/ and dist/ load backend/.env.
+// Deployment environment variables retain precedence over the local file.
+config({ path: fileURLToPath(new URL("../../.env", import.meta.url)), quiet: true });
 
 function readPort(value: string | undefined): number {
   const text = value?.trim() || "4000";
@@ -31,6 +36,8 @@ function readClientOrigin(value: string | undefined): string {
 }
 
 function readDatabaseUrl(value: string | undefined): string {
+  const invalidUrlMessage =
+    "DATABASE_URL must be a valid PostgreSQL URL: postgres://USER:PASSWORD@HOST:PORT/DATABASE or postgresql://USER:PASSWORD@HOST:PORT/DATABASE. Percent-encode reserved password characters.";
   const text = value?.trim();
   if (!text) {
     throw new Error("DATABASE_URL is required");
@@ -39,10 +46,18 @@ function readDatabaseUrl(value: string | undefined): string {
   try {
     url = new URL(text);
   } catch {
-    throw new Error("DATABASE_URL must be a valid PostgreSQL URL");
+    throw new Error(invalidUrlMessage);
   }
-  if (!(["postgres:", "postgresql:"].includes(url.protocol) && url.hostname && url.pathname !== "/")) {
-    throw new Error("DATABASE_URL must be a valid PostgreSQL URL");
+  if (
+    !["postgres:", "postgresql:"].includes(url.protocol) ||
+    !url.hostname ||
+    !url.pathname ||
+    url.pathname === "/" ||
+    url.hash ||
+    /\s/.test(text) ||
+    (url.port && (Number(url.port) < 1 || Number(url.port) > 65535))
+  ) {
+    throw new Error(invalidUrlMessage);
   }
   return text;
 }

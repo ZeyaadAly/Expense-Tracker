@@ -1,5 +1,7 @@
 # Expense Tracker — Project Brief
 
+> T04 workflow update (2026-10-01): No Docker, `db pull`, or `db push` for the existing remote baseline. Migration `20261001144302_initial_expense_tracker_schema.sql` was generated with the CLI and contains the exact V1 reference SQL. After CLI authentication and verification that the repository is linked to `kpbyvbgcfwavcsgtcdws`, run `npx supabase migration repair --status applied 20261001144302`. This supersedes pull-based instructions below. Remote history repair, live connectivity, and disposable database SQL verification remain pending; T04 stays open and T05 has not started.
+
 **Version:** 1.0  
 **Date:** 2026-10-01  
 **Stage:** Planning  
