@@ -7,11 +7,11 @@
 
 ## 1. Design overview
 
-Use PostgreSQL with one application table: `expense_tracker.transactions`. Each row represents one income or expense transaction. Express is the only application component that accesses the database.
+Use Supabase PostgreSQL with one application table: `expense_tracker.transactions`. Each row represents one income or expense transaction. Express is the only application component that accesses transaction data.
 
-V1 has no users table or ownership relationships because it has one shared collection and no login. Categories are fixed values enforced by constraints; a separate categories table is unnecessary until category management is introduced.
+Supabase Auth stores the approved account in `auth.users`. V1 has one approved account and one transaction collection. Express must verify the Supabase Auth user ID against its server-only `APP_OWNER_USER_ID` before querying this table. The table has no per-row ownership column because multiple accounts are outside V1. Adding multiple accounts later requires an ownership-aware migration and access policy first. Categories are fixed values enforced by constraints; a separate categories table is unnecessary until category management is introduced.
 
-Use a dedicated `expense_tracker` schema and fully qualified table names. Hosting may be local PostgreSQL or Supabase PostgreSQL; selecting a provider does not change this data model.
+Use a dedicated `expense_tracker` schema and fully qualified table names in Supabase PostgreSQL. This document specifies the future migration; no database table is created during backend preparation.
 
 ## 2. Table definition
 
@@ -215,13 +215,13 @@ Use one reusable connection pool in Express with a server-only `DATABASE_URL`. S
 
 Separate migration access from application access. The application role needs schema usage and transaction-table SELECT, INSERT, UPDATE, and DELETE privileges; it does not need permission to create/drop tables or manage roles. Configure the trigger function's execution grants as part of the migration-role setup.
 
-If Supabase is selected, keep `expense_tracker` outside Data API exposed schemas and verify that `anon` and `authenticated` have no access to it. Do not add the schema to the exposed list or create public access policies to solve connection errors. Configure any RLS policies deliberately for the backend role if RLS is enabled; the current model has no user ownership column.
+Keep `expense_tracker` outside Data API exposed schemas and verify that `anon` and `authenticated` have no access to it. Do not add the schema to the exposed list or create public access policies to solve connection errors. Configure any RLS policies deliberately for the backend role if RLS is enabled; the current one-account model has no row ownership column. Express must enforce the approved-account check before every transaction query, including reads and summaries.
 
-No browser Supabase client, service-role key, Supabase Auth, or direct browser database access is needed for V1. Express still exposes one unauthenticated collection, so any hosted version remains a sample-data demo.
+The frontend may use a Supabase Auth client for sign-in, but it must not access this database schema directly. The service-role key stays server-only and is not needed for transaction SQL. Do not enable transaction endpoints until Supabase Auth and the approved-account check have been verified.
 
 ## 9. Migration and sample-data plan
 
-1. Select local PostgreSQL or Supabase PostgreSQL during setup and verify access using the appropriate plugin/tools.
+1. Configure a Supabase project and verify Auth and PostgreSQL access using the appropriate plugin/tools. Provision the one approved account and configure its user ID in Express.
 2. Create the database/schema using a migration role and record the verified schema in migration history.
 3. Configure a limited application role and the Express connection pool.
 4. Keep migrations in version control. If Supabase CLI is chosen, use its migration-generation workflow rather than inventing migration filenames.
@@ -254,7 +254,7 @@ These checks are planned, not executed. Verify the SQL on PostgreSQL during impl
 - [ ] Verify empty summary results and totals larger than the per-transaction limit.
 - [ ] Verify missing-record updates/deletes and persistent data after app restart.
 - [ ] Verify the application role's intended access and lack of schema-management privileges.
-- [ ] If hosted on Supabase, verify no anonymous/authenticated Data API access to this schema.
+- [ ] Verify no anonymous/authenticated Data API access to this schema and no transaction access through Express for users other than the approved account.
 
 ## 11. References and next step
 

@@ -15,11 +15,11 @@ This is a small first full-stack project. Follow a lightweight BMAD-style workfl
 
 Recording transactions in scattered notes makes it difficult to see where money goes. The app will keep transactions in one place and calculate income, expenses, and balance automatically.
 
-The learning goal is to build and understand the complete flow: a user submits a form, the frontend calls an Express API, the API validates and stores data in PostgreSQL, and the frontend displays the saved result.
+The learning goal is to build and understand the complete flow: a signed-in user submits a form, the frontend calls an Express API, the API validates the Supabase Auth identity and stores data in Supabase PostgreSQL, and the frontend displays the saved result.
 
 ## 3. Intended user
 
-V1 is for one person tracking their own money in a local development environment. There are no accounts or separate user workspaces yet. Authentication and access controls must be considered before hosting real personal financial data.
+V1 is for one approved account tracking personal expenses. Supabase Auth is now part of the architecture; Express will accept transaction requests only from that account. The authentication flow will be implemented before transaction endpoints are exposed. The current bootstrap does not provide sign-in or protected data yet.
 
 ## 4. V1 scope
 
@@ -48,14 +48,14 @@ V1 is for one person tracking their own money in a local development environment
 - Expense categories: Food, Transport, Shopping, Bills, Entertainment, Other.
 - Summary cards represent all saved transactions. Filters affect the transaction list only, with this behavior made clear in the interface.
 - Balance = total income − total expenses. A negative balance is allowed.
-- PostgreSQL stores transactions so they remain available after refreshing the page or restarting the app.
+- Supabase PostgreSQL stores transactions so they remain available after refreshing the page or restarting the app.
 - Use exact monetary storage and calculations; avoid rounding errors from floating-point values.
 
 These are starting decisions and can be refined in the requirements document.
 
 ## 5. Main user flow
 
-1. Open the dashboard and see the financial summary and transaction list.
+1. Sign in with Supabase Auth, then open the dashboard and see the financial summary and transaction list.
 2. Select Add Transaction and complete the form.
 3. Submit the form; see validation feedback if required information is invalid.
 4. After a successful save, see the transaction and updated summary.
@@ -68,10 +68,11 @@ These are starting decisions and can be refined in the requirements document.
 | Frontend | Next.js + TypeScript | Build the dashboard and transaction forms. |
 | Styling | Tailwind CSS | Create a consistent, responsive interface. |
 | Backend | Express.js + TypeScript | Provide the REST API and enforce validation and business rules. |
-| Database | PostgreSQL | Persist transaction data. |
+| Database | Supabase PostgreSQL | Persist transaction data. |
+| Authentication | Supabase Auth | Issue sessions for the one approved account; Express verifies the user. |
 | Version control | Git + GitHub | Track changes and document progress. |
 
-The frontend calls Express over HTTP. Express communicates with PostgreSQL. Database credentials stay on the server.
+The frontend calls Express over HTTP for application data. Express verifies Supabase Auth access tokens, enforces authorization and business rules, and communicates with Supabase PostgreSQL. The frontend may use Supabase Auth for the sign-in flow, but does not call the database Data API or replace the Express application API. Database credentials and service-role keys stay on the server.
 
 ## 7. Plugin-assisted workflow
 
@@ -80,7 +81,7 @@ Use ChatGPT Work plugins during the relevant project stages. Plugins assist deve
 | Plugin | Planned role | When to use it |
 | --- | --- | --- |
 | Figma | Design a simple dashboard and transaction form, then reference the design during frontend implementation. | After requirements are clear. |
-| Supabase | Candidate host for PostgreSQL; assist with database setup and inspection. Express continues to own the application API. | During database setup, if selected. |
+| Supabase | Selected PostgreSQL host and Auth provider; assist with setup and inspection. Express continues to own the application API. | During Auth and database setup. |
 | Vercel | Help configure and deploy the Next.js frontend. | After the app works locally. |
 | Notion | Optional place to organize documentation and implementation tasks. Markdown files remain the project documentation source. | When a shared planning workspace is useful. |
 
@@ -88,14 +89,14 @@ Use ChatGPT Work plugins during the relevant project stages. Plugins assist deve
 
 - Figma, Supabase, Vercel, and Notion skills are available in this workspace. Verify account access and the required capabilities when each stage begins.
 - Keep Next.js, Express, PostgreSQL, Tailwind, and TypeScript as the agreed stack.
-- If Supabase is selected, use its PostgreSQL database through Express; Supabase Auth and direct browser database access are outside V1 scope.
+- Use Supabase PostgreSQL and Supabase Auth. Keep application data and business rules behind Express; do not expose the service-role key or database credentials to the browser.
 - Decide Express hosting separately during deployment planning. Do not assume frontend hosting also provides the required backend runtime.
 - Confirm hosting limitations and costs during setup. No paid services are selected by this brief.
-- Use sample transactions for a hosted demo until appropriate access controls exist.
+- Use sample transactions for a hosted demo until Auth and data access controls are implemented and verified.
 
 ## 8. Outside V1 scope
 
-- Sign-up, login, and multiple users.
+- Public sign-up, multiple accounts, team accounts, and shared workspaces.
 - Charts and analytics beyond the three summary totals.
 - Budgets, recurring transactions, and payment reminders.
 - Bank integrations, payment processing, and receipt uploads.
@@ -105,6 +106,7 @@ Use ChatGPT Work plugins during the relevant project stages. Plugins assist deve
 ## 9. V1 completion criteria
 
 - A valid transaction can be created, viewed, edited, and deleted through the interface.
+- Application data routes require a verified Supabase Auth identity matching the one approved account.
 - Saved data remains after a page refresh and application restart.
 - Income, expense, and balance totals are correct and update after successful changes.
 - Type and category filters work individually and together, and can be reset.
@@ -123,8 +125,8 @@ Create these files one at a time as decisions become clear:
 4. `04-api-design.md` — routes, request/response formats, and error behavior.
 5. `05-implementation-plan.md` — small implementation tasks and verification steps.
 
-Design the interface in Figma after requirements, then use it while implementing the frontend. Database and hosting plugins enter the workflow when their respective tasks begin.
+Design the interface in Figma after requirements, then use it while implementing the frontend. Supabase Auth integration precedes transaction data access. Database and hosting plugins enter the workflow when their respective tasks begin.
 
 ## 11. Next step
 
-Write `02-requirements.md`, turning the V1 features into small user stories with clear acceptance criteria. Resolve exact field limits and category rules there before database and API design.
+Next, integrate Supabase Auth in the frontend and Express API for the one approved account, then verify that other accounts cannot access transaction data before creating transaction tables.
