@@ -2,12 +2,12 @@
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** In progress; bootstrap and Supabase backend preparation complete
+**Status:** In progress; T04 remote baseline and database verification pending
 **Owner:** Zeyad Aly Elghazaly
 
 ## 1. Purpose
 
-Build V1 in small, understandable steps using Next.js, TypeScript, Tailwind CSS, Express, Supabase PostgreSQL, and Supabase Auth. Express remains the application API. Each task should produce a working result and a clear completion check before dependent work begins.
+Build V1 in small, understandable steps using Next.js, TypeScript, Tailwind CSS, Express, and Supabase PostgreSQL. Express remains the application API, and V1 has no authentication. Each task should produce a working result and a clear completion check before dependent work begins.
 
 Source documents:
 
@@ -22,13 +22,13 @@ This file plans the work. It does not create repositories, connect accounts, exe
 
 | Milestone | Tasks | Result |
 | --- | --- | --- |
-| M1 — Project ready | T01–T03, including T02A–T02B | Runnable skeletons, Supabase Auth for one approved account, and a simple interface design. |
+| M1 — Project ready | T01–T03 | Runnable frontend/backend skeletons and a simple interface design. |
 | M2 — First complete flow | T04–T08 | Add a transaction through the browser, store it, and view it with correct totals. |
 | M3 — V1 features complete | T09–T11 | Edit, delete, filtering, and recovery behavior work. |
 | M4 — Local V1 verified | T12–T13 | Required checks pass and local setup is documented. |
 | M5 — Sample-data demo | T14 | Frontend and backend deployment work with the selected database. |
 
-Complete M4 before deployment. M5 is a separate hosting milestone; use sample data until Auth and account access controls are verified.
+Complete M4 before deployment. M5 is a separate hosting milestone; the unauthenticated demo uses sample data only.
 
 ## 3. Proposed project organization
 
@@ -36,12 +36,13 @@ Complete M4 before deployment. M5 is a separate hosting milestone; use sample da
 | --- | --- |
 | `docs/` | The five planning documents and later decision notes. |
 | `frontend/` | Next.js application, components, API client, and frontend checks. |
-| `backend/` | Express application, Auth verification, validation, database access, and API checks. |
-| `backend/src/config/` | Validated environment and server-only Supabase Auth client. |
+| `backend/` | Express application, validation, database access, and API checks. |
+| `backend/src/config/` | Validated server-only environment configuration. |
+| `backend/src/db/` | Reusable PostgreSQL pool and database health check. |
 | `backend/src/routes/` | REST route handlers. |
 | `backend/src/validators/` | Request and query validation. |
 | `backend/src/services/` | Future database access with parameterized queries. |
-| `backend/src/middleware/` | Auth checks, error handling, and API middleware. |
+| `backend/src/middleware/` | Error handling and API middleware. |
 | `README.md` | Project explanation and reproducible local setup. |
 
 Choose one authoritative Supabase migration history when database setup begins. If Supabase CLI is selected, use its generated migration directory. Do not maintain duplicate migration histories.
@@ -74,29 +75,6 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 **Done when:** Both development processes start; frontend renders; both packages type-check and build.
 
-### T02A — Prepare Supabase backend configuration
-
-**Depends on:** T02. This is the current phase.
-
-- Select Supabase PostgreSQL and Supabase Auth in the project documents.
-- Add server-only Supabase dependencies and environment examples without secrets.
-- Validate startup configuration and create a server-only Supabase Auth client for the next phase.
-- Add public `GET /api/health` to confirm Express runs with syntactically valid configuration; it does not check remote connectivity.
-- Do not create transaction routes or database tables.
-
-**Done when:** Lint, type checks, build, startup validation, and the health response pass with non-secret local test values.
-
-### T02B — Integrate Supabase Auth for the approved account
-
-**Depends on:** T02A. This is the next phase.
-
-- Provision one approved Auth user; disable public sign-up for V1 and set `APP_OWNER_USER_ID` on the backend.
-- Choose and document the sign-in/session flow in Next.js. The frontend may use Supabase Auth, but all application data continues through Express.
-- Verify bearer access tokens in Express and reject users other than the approved account before any transaction route is implemented.
-- Verify missing, invalid, expired, and other-user tokens without exposing the service-role key.
-
-**Done when:** The approved account can authenticate, Express rejects all other identities, and the frontend can send its session token to Express. No transaction table is required for this check.
-
 ### T03 — Design the main interface using Figma
 
 **Depends on:** T01; may be done before or after T02.
@@ -111,19 +89,20 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 ### T04 — Set up PostgreSQL
 
-**Depends on:** T01–T02B.
+**Depends on:** T01–T02.
 
-- Verify Supabase project access, connection mode, and current setup documentation at this stage.
-- Implement and run the schema from `03-database-design.md` on a disposable development database first.
-- Set up migration and limited application roles, including required function grants.
-- Configure one reusable Express connection pool using server-only environment variables.
-- Add repeatable sample seeding, separate from the schema migration.
+- Link this repository to the existing Supabase project and pull the remote V1 schema into a CLI-generated baseline migration. Do not recreate the remote schema.
+- Review the baseline against `03-database-design.md` and confirm remote migration history records it as already applied.
+- Verify the limited application role and required function grants without exposing the private schema through the Data API.
+- Configure one reusable Express `pg` connection pool using only server-only `DATABASE_URL`.
+- Add a read-only PostgreSQL health check at `GET /api/v1/health` with the API error contract.
+- Add repeatable sample seeding in `supabase/seed.sql`, separate from the baseline migration; do not seed the retained remote database during setup.
 
-**Done when:** Schema migration succeeds, the application role can perform intended CRUD operations, constraints reject invalid rows, and sample totals are correct. Verify no unintended Data API exposure.
+**Done when:** The CLI-generated baseline exists and is recorded as applied remotely; the linked project and database are reachable; a disposable database can apply the baseline and seed without errors; the application role has intended access; and no unintended Data API exposure exists. Lint, type checks, build, and both health success/failure cases pass. If CLI login, a database password, or Docker is missing, leave T04 open and record the manual step.
 
 ### T05 — Implement validation and API foundations
 
-**Depends on:** T02B; T04 is required before database integration checks.
+**Depends on:** T02; T04 is required before database integration checks.
 
 - Add the `/api/v1` route prefix, JSON body limit, configured CORS, and no-store headers.
 - Implement common error responses, unknown-route handling, and unsupported-method responses.
@@ -221,7 +200,7 @@ Use separate frontend and backend packages to keep the first project easy to und
 **Depends on:** T12.
 
 - Complete README instructions for prerequisites, dependency installation, environment variables, migrations, seeding, development, and builds.
-- Explain the architecture, fixed currency, one approved account, and current V1 limits.
+- Explain the architecture, fixed currency, shared collection, and unauthenticated V1 limits.
 - Update planning documents if implementation changed a contract; avoid conflicting descriptions.
 - Verify setup from a clean checkout against a disposable database using the documented steps.
 - Commit coherent changes and make the repository available through the selected Git workflow.
@@ -236,7 +215,7 @@ Use separate frontend and backend packages to keep the first project easy to und
 - Select and verify compatible Express hosting separately; do not assume frontend deployment also hosts the API.
 - Confirm database provider connection mode, TLS, pool limits, and applicable costs before setup.
 - Configure production API URL, allowed frontend origin, and server secrets through provider configuration.
-- Use sample data until Auth and the approved-account check have been verified; document the one-account limit.
+- Use sample data only and document that the unauthenticated shared collection is accessible to anyone who can reach the API.
 - Deploy the backend and frontend, then check complete CRUD, filters, totals, and persistence through deployed URLs.
 
 **Done when:** The deployed sample-data flow works end to end, required environment settings are present, and the README records the demo URL and limitations. Local V1 remains complete even if deployment is blocked by unavailable hosting access.
@@ -246,7 +225,7 @@ Use separate frontend and backend packages to keep the first project easy to und
 | Plugin | Task | Action |
 | --- | --- | --- |
 | Figma | T03, T07 | Create the dashboard/form design and use it during frontend implementation. |
-| Supabase | T02A–T02B, T04, T14 | Prepare Auth and PostgreSQL, then verify access and connection settings. |
+| Supabase | T04, T14 | Pull and inspect PostgreSQL schema; verify access and connection settings. |
 | Vercel | T14 | Configure and deploy the frontend using supported capabilities. |
 | Notion | Optional throughout | Mirror task status and links if a planning workspace is requested. |
 
@@ -260,7 +239,7 @@ Verify each connection when needed. An available skill does not prove account ac
 4. Record what works, any decision changes, and remaining blockers.
 5. Commit a coherent result before moving to dependent work.
 
-Keep explanations simple enough to understand the flow, not just copy code. Implement Auth only in T02B; do not introduce charts, budgets, or additional infrastructure to finish a V1 task.
+Keep explanations simple enough to understand the flow, not just copy code. Do not introduce authentication, charts, budgets, or additional infrastructure to finish a V1 task.
 
 ## 7. Progress tracker
 
@@ -268,8 +247,6 @@ Mark tasks complete only when their completion criteria have been verified.
 
 - [x] T01 — Prepare the project
 - [x] T02 — Start frontend/backend skeletons
-- [x] T02A — Prepare Supabase backend configuration
-- [ ] T02B — Integrate Supabase Auth for the approved account
 - [ ] T03 — Figma interface design
 - [ ] T04 — PostgreSQL setup
 - [ ] T05 — Validation and API foundations
@@ -289,12 +266,12 @@ Mark tasks complete only when their completion criteria have been verified.
 | --- | --- | --- |
 | Runtime/package versions | T01–T02 | Verify compatible supported versions at implementation time. |
 | Repository location | T01 | Use an existing repository if provided; otherwise initialize locally. |
-| Database provider | T02A | Supabase PostgreSQL selected. |
-| Account policy | T02A–T02B | One approved Supabase Auth account; Express checks its user ID. |
+| Database provider | T04 | Supabase PostgreSQL selected; remote V1 schema reported applied. |
+| Authentication | V1 scope | None; hosted demos use sample data only. |
 | Migration workflow | T04 | One authoritative history, matching the chosen setup. |
 | Plugin account access | Relevant task | Verify individually; no connection assumed. |
 | Express hosting and provider costs | T14 | Undecided; must support the backend and database connection model. |
 
 ## 9. Immediate next action
 
-Complete **T02A — Prepare Supabase backend configuration**, then **T02B — Integrate Supabase Auth for the approved account**. T03 Figma design can follow or run independently before T04 Supabase PostgreSQL setup.
+Finish **T04 — Supabase PostgreSQL setup** by linking the CLI, pulling and verifying the remote baseline, and checking Express database connectivity. Do not start T05 until T04 is verified. T03 Figma design remains independent.

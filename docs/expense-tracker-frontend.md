@@ -1,11 +1,11 @@
 Expense Tracker Frontend
 Start from project decisions
-Read the relevant files in the project's docs directory: project brief, requirements, database design, API design, and implementation plan. Locate them in the active project instead of assuming a machine path. Follow the current user instructions and project contracts before these defaults. Keep V1 limited to Supabase Auth for one approved account, transaction CRUD, summaries, filters, and responsive flows.
+Read the relevant files in the project's docs directory: project brief, requirements, database design, API design, and implementation plan. Locate them in the active project instead of assuming a machine path. Follow the current user instructions and project contracts before these defaults. Keep V1 limited to transaction CRUD, summaries, filters, and responsive flows. V1 is unauthenticated.
 Technologies and boundaries
 - Use Next.js App Router, React functional components, strict TypeScript, and Tailwind CSS.
 - Inspect installed versions and lockfiles before changing configuration. Consult current official documentation for version-sensitive APIs.
 - Keep Server Components by default; add use client at boundaries requiring state, effects, browser APIs, or event handlers.
-- Keep Express as the application backend. The frontend may use Supabase Auth for sign-in and session handling; application data and business rules remain behind Express. Do not replace Express with Next.js route handlers, server actions, or direct database access.
+- Keep Express as the application backend. Application data and business rules remain behind Express. Do not replace Express with Next.js route handlers, server actions, or direct Supabase/database access.
 - Use native fetch through a small typed API module. Keep state local or lift it to the nearest shared owner. Add libraries only for a concrete unmet need.
 - Preserve the existing package manager and dependency conventions.
 CSS variables and design tokens
@@ -59,7 +59,6 @@ Money, dates, and validation
 - Provide immediate frontend feedback while retaining independent server validation.
 API and request state
 Read the API design before integration. Use NEXT_PUBLIC_API_BASE_URL for the public API URL only. Never put database credentials or private keys in browser configuration.
-- Send the Supabase Auth access token to protected Express routes, and handle 401 and 403 without displaying another account's data.
 - Follow documented GET, POST, full-field PUT, DELETE, and summary contracts.
 - Check HTTP status before consuming success data; handle 204 without JSON parsing.
 - Distinguish loading, empty database, no filter matches, current data, stale data, and errors.
@@ -75,7 +74,7 @@ Build mobile-first layouts and check 360px, 768px, and 1440px widths. Keep actio
 Use semantic elements, labeled inputs, real buttons, visible focus, and readable type/status text. Associate errors with fields and announce asynchronous status changes appropriately. Manage dialog focus entry, trapping, Escape behavior, and return focus according to the requirements. Identify the record in deletion confirmation and provide Cancel. Respect reduced-motion preferences when adding animation.
 Plugin workflow
 Use Figma for design when that stage is requested. Load relevant Figma skills before their tools, verify account access, record design links, and map design values to semantic tokens.
-Use Vercel capabilities for requested frontend deployment after local verification. Decide Express hosting separately. Use Supabase Auth for the agreed sign-in flow; keep Supabase PostgreSQL access behind Express and do not add browser database calls. Use Notion for requested planning/documentation actions.
+Use Vercel capabilities for requested frontend deployment after local verification. Decide Express hosting separately. Keep Supabase PostgreSQL access behind Express and do not add browser database calls. Use Notion for requested planning/documentation actions.
 Load relevant Next.js and review skills during implementation. Do not assume an available plugin proves account access or change the architecture to fit a provider.
 Verify and report
 Run relevant type checks, lint checks, and builds. Check meaningful money formatting, date boundary, validation, stale request, error, and 204 cases. Use supported browser verification for actual UI inspection, keyboard operation, and responsive states.

@@ -17,3 +17,10 @@ coverage/
 *.log
 .DS_Store
 Thumbs.db
+
+# Supabase CLI local link and secrets
+supabase/.temp/
+supabase/.branches/
+supabase/.env.keys
+supabase/.env.local
+supabase/.env.*.local

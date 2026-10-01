@@ -2,16 +2,16 @@
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** Design specification; SQL has not been executed  
+**Status:** V1 schema reported applied remotely; local baseline pull and verification pending
 **Related documents:** [Project brief](01-project-brief.md) · [Requirements](02-requirements.md)
 
 ## 1. Design overview
 
 Use Supabase PostgreSQL with one application table: `expense_tracker.transactions`. Each row represents one income or expense transaction. Express is the only application component that accesses transaction data.
 
-Supabase Auth stores the approved account in `auth.users`. V1 has one approved account and one transaction collection. Express must verify the Supabase Auth user ID against its server-only `APP_OWNER_USER_ID` before querying this table. The table has no per-row ownership column because multiple accounts are outside V1. Adding multiple accounts later requires an ownership-aware migration and access policy first. Categories are fixed values enforced by constraints; a separate categories table is unnecessary until category management is introduced.
+V1 has one shared transaction collection and no authentication or user ownership column. Adding accounts later requires an ownership-aware migration and access policy first. Categories are fixed values enforced by constraints; a separate categories table is unnecessary until category management is introduced.
 
-Use a dedicated `expense_tracker` schema and fully qualified table names in Supabase PostgreSQL. This document specifies the future migration; no database table is created during backend preparation.
+Use a dedicated `expense_tracker` schema and fully qualified table names in Supabase PostgreSQL. The remote V1 schema already exists. Pull it with the Supabase CLI to create the authoritative baseline migration; do not execute this document's reference SQL against the remote project again.
 
 ## 2. Table definition
 
@@ -70,7 +70,7 @@ Future-date validation uses a trigger rather than a check constraint involving t
 
 ## 6. Proposed schema SQL
 
-This is the reference design for the initial migration. It creates no external project and has not been run against a database. At implementation time, place verified SQL in a version-controlled migration using the chosen migration workflow.
+This SQL records the design intent for comparison with the existing remote schema. The Supabase CLI pull, once completed and reviewed, is the authoritative baseline migration. Do not run this reference SQL against the remote project again.
 
 ```sql
 BEGIN;
@@ -215,16 +215,16 @@ Use one reusable connection pool in Express with a server-only `DATABASE_URL`. S
 
 Separate migration access from application access. The application role needs schema usage and transaction-table SELECT, INSERT, UPDATE, and DELETE privileges; it does not need permission to create/drop tables or manage roles. Configure the trigger function's execution grants as part of the migration-role setup.
 
-Keep `expense_tracker` outside Data API exposed schemas and verify that `anon` and `authenticated` have no access to it. Do not add the schema to the exposed list or create public access policies to solve connection errors. Configure any RLS policies deliberately for the backend role if RLS is enabled; the current one-account model has no row ownership column. Express must enforce the approved-account check before every transaction query, including reads and summaries.
+Keep `expense_tracker` outside Data API exposed schemas and verify that `anon` and `authenticated` have no access to it. Do not add the schema to the exposed list or create public access policies to solve connection errors. V1 has no user ownership model; the limited PostgreSQL role and Express API are the intended access path.
 
-The frontend may use a Supabase Auth client for sign-in, but it must not access this database schema directly. The service-role key stays server-only and is not needed for transaction SQL. Do not enable transaction endpoints until Supabase Auth and the approved-account check have been verified.
+The frontend does not use a Supabase client or access this database schema directly. Express uses only `DATABASE_URL` for database access. Because V1 is unauthenticated, use sample data for any hosted demo.
 
 ## 9. Migration and sample-data plan
 
-1. Configure a Supabase project and verify Auth and PostgreSQL access using the appropriate plugin/tools. Provision the one approved account and configure its user ID in Express.
-2. Create the database/schema using a migration role and record the verified schema in migration history.
+1. Link the repository to the existing Supabase project using the CLI and pull the already-applied remote schema into a baseline migration. Review the result against this design; do not recreate the remote schema.
+2. Verify the remote migration history records that baseline as already applied before any future `db push`.
 3. Configure a limited application role and the Express connection pool.
-4. Keep migrations in version control. If Supabase CLI is chosen, use its migration-generation workflow rather than inventing migration filenames.
+4. Keep the CLI-generated migration in version control. Use the CLI for future migration filenames and maintain one authoritative history.
 5. Seed sample data separately from the schema migration, only in development/demo environments. Make seeding repeatable without duplicating rows.
 6. Test migrations on a disposable database before applying them to retained data. Do not automatically drop an existing database to rerun setup.
 
@@ -239,9 +239,9 @@ Expected summary: income 1,000.00 EGP, expenses 250.50 EGP, balance 749.50 EGP. 
 
 ## 10. Verification checklist
 
-These checks are planned, not executed. Verify the SQL on PostgreSQL during implementation.
+These checks are planned unless explicitly recorded as verified. The remote schema was reported applied, but the repository baseline and database checks still require verification.
 
-- [ ] Apply the initial migration to a clean disposable database.
+- [ ] Pull and review the existing remote schema into a CLI-generated baseline migration; verify a clean disposable database can apply it later.
 - [ ] Insert both sample records and verify the expected summary.
 - [ ] Confirm 0.10 + 0.20 totals exactly 0.30.
 - [ ] Reject null fields, zero/negative/out-of-range amounts, excess scale, NaN, and infinity.
@@ -254,7 +254,7 @@ These checks are planned, not executed. Verify the SQL on PostgreSQL during impl
 - [ ] Verify empty summary results and totals larger than the per-transaction limit.
 - [ ] Verify missing-record updates/deletes and persistent data after app restart.
 - [ ] Verify the application role's intended access and lack of schema-management privileges.
-- [ ] Verify no anonymous/authenticated Data API access to this schema and no transaction access through Express for users other than the approved account.
+- [ ] Verify no anonymous/authenticated Data API access to this schema.
 
 ## 11. References and next step
 

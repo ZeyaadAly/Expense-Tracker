@@ -7,7 +7,7 @@
 
 ## 1. Purpose and architecture
 
-The Next.js frontend calls an Express REST API. Express verifies Supabase Auth access tokens, validates requests, accesses Supabase PostgreSQL, and returns JSON. The browser never connects directly to the transaction database. V1 allows only one approved Auth account, identified by the server-only `APP_OWNER_USER_ID`.
+The Next.js frontend calls an Express REST API. Express validates requests, accesses Supabase PostgreSQL through a server-only `DATABASE_URL`, and returns JSON. The browser never connects directly to Supabase. V1 has no authentication and one shared transaction collection.
 
 Development defaults:
 
@@ -16,13 +16,13 @@ Development defaults:
 - API prefix: `/api/v1`.
 - Example base URL: `http://localhost:4000/api/v1`.
 
-Configure origins through environment variables. Hosting URLs are decided during deployment. All transaction and summary routes require a valid Supabase Auth bearer token from the approved account. These routes are planned and have not been implemented. Any hosted demo uses sample data until access controls are verified.
+Configure origins through environment variables. Hosting URLs are decided during deployment. Transaction and summary routes are planned and have not been implemented. Because V1 is unauthenticated, any hosted demo uses sample data.
 
 ## 2. Endpoint overview
 
 Paths below are relative to `/api/v1`.
 
-`GET /api/health` is a public backend setup route outside `/api/v1`. It returns 200 with `{ "status": "ok", "api": "running", "configuration": "valid" }` after startup validation succeeds. It checks local configuration syntax only; it does not contact Supabase Auth or PostgreSQL. Missing required configuration prevents the server from starting, so the route is unavailable in that case.
+`GET /api/v1/health` is the T04 database health route. It returns 200 with `{ "data": { "api": "running", "database": "reachable" } }` only after a read-only PostgreSQL query succeeds. If PostgreSQL is unavailable, it returns 503 with `{ "error": { "code": "DATABASE_UNAVAILABLE", "message": "Database is unavailable. Please try again later.", "details": [] } }`. Missing `DATABASE_URL` prevents startup. Health responses use `Cache-Control: no-store` and never expose connection details.
 
 | Method | Path | Purpose | Success status |
 | --- | --- | --- | --- |
@@ -49,7 +49,6 @@ Use PUT for a complete editable-field update. Partial PATCH updates are outside 
 - Set `Cache-Control: no-store` on application API responses. The frontend refreshes the list and summary after successful writes.
 - Route IDs must be canonical hyphenated UUID strings; accept hexadecimal letters in either case and return lowercase IDs. Express generates new IDs server-side.
 - Validate route IDs, queries, and request bodies before querying the database. A syntactically invalid ID returns 400; a valid but absent ID returns 404.
-- For every transaction and summary route, require `Authorization: Bearer <Supabase access token>`. Express verifies the token with Supabase Auth and checks the user ID against `APP_OWNER_USER_ID` before any database access. Missing or invalid credentials return 401; a valid token for another user returns 403.
 
 ### Transaction response object
 
@@ -219,7 +218,7 @@ Example 200 response:
 }
 ```
 
-Calculate sums, balance, and count over all rows in the one approved account's collection in one database statement. Extend the database design's aggregate query with `COUNT(*)`; map its result to a nonnegative integer for this small V1 dataset. Totals remain unrestricted decimal strings and may exceed the per-transaction amount limit. Balance may be negative.
+Calculate sums, balance, and count over all rows in the shared collection in one database statement. Extend the database design's aggregate query with `COUNT(*)`; map its result to a nonnegative integer for this small V1 dataset. Totals remain unrestricted decimal strings and may exceed the per-transaction amount limit. Balance may be negative.
 
 An empty table returns `"0.00"` for all three monetary values and `transactionCount: 0`. A database failure returns an error rather than fabricated zeros.
 
@@ -246,8 +245,6 @@ Every error includes a stable `code`, a readable `message`, and a `details` arra
 
 | HTTP status | Error code | Situation |
 | --- | --- | --- |
-| 401 | `UNAUTHORIZED` | Missing, expired, or invalid Supabase Auth access token. |
-| 403 | `FORBIDDEN` | Valid user identity that is not the approved V1 account. |
 | 400 | `VALIDATION_ERROR` | Invalid fields, ID, query parameters, or body shape. |
 | 400 | `INVALID_JSON` | Malformed JSON syntax. |
 | 404 | `TRANSACTION_NOT_FOUND` | Valid ID with no matching transaction. |
@@ -277,9 +274,9 @@ For creation without request-level idempotency, checking similar records cannot 
 
 ## 13. Configuration and plugin integration
 
-- Server environment: `PORT` (development default 4000), `CLIENT_ORIGIN` (development default http://localhost:3000), `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `APP_OWNER_USER_ID` for the approved account (required when Auth protection is implemented). `DATABASE_URL` is needed when PostgreSQL access is implemented. `SUPABASE_SERVICE_ROLE_KEY` is reserved for future server-only admin operations and is not used by the current health route or planned direct SQL access.
+- Server environment: `PORT` (development default 4000), `CLIENT_ORIGIN` (development default http://localhost:3000), and required server-only `DATABASE_URL`. V1 does not use Supabase API keys or Auth.
 - Client environment: `NEXT_PUBLIC_API_BASE_URL`, containing the public API base URL only. No database secrets enter client configuration.
-- Allow configured frontend origins through CORS. CORS does not provide authentication; Express must verify the Auth token and approved account on each application data request.
+- Allow the configured frontend origin through CORS. CORS is not authentication and does not protect the shared collection from direct HTTP clients.
 - Use parameterized SQL and a reusable connection pool; keep provider credentials server-side.
 - Express connects to Supabase PostgreSQL using the database design's limited-role access model. The browser does not call the Supabase Data API for transaction data.
 - Vercel may host the frontend; decide Express hosting, URLs, TLS, connection mode, and provider limits during deployment setup.
@@ -304,7 +301,6 @@ Checks are planned and have not been executed.
 - [ ] Verify malformed JSON, oversized payloads, wrong media types, unsupported methods, and unknown routes.
 - [ ] Simulate database errors and uncertain network outcomes without leaking internal details or reporting false success.
 - [ ] Verify configured CORS behavior and no-store response headers.
-- [ ] Verify 401 for missing/invalid tokens and 403 for valid tokens from other users before transaction data is exposed.
 - [ ] Complete the frontend → Express → PostgreSQL → response flow using sample data.
 
 ## 15. Next step

@@ -9,25 +9,22 @@
 
 Define how the V1 features behave and how to check that they work. These requirements build on the project brief and guide interface, database, API, and implementation decisions.
 
-V1 serves one approved account tracking personal expenses in EGP. Supabase Auth is part of the updated architecture; Express permits application data access only to the configured account. The current bootstrap does not implement Auth. Public sign-up, multiple accounts, charts, budgets, recurring transactions, custom categories, exports, bank integrations, and AI features remain outside V1.
+V1 serves one person tracking personal expenses in EGP. It has one shared transaction collection and no authentication. A hosted demonstration uses sample data only. Sign-up, login, multiple accounts, charts, budgets, recurring transactions, custom categories, exports, bank integrations, and AI features remain outside V1.
 
 ## 2. Agreed technical constraints
 
 - Frontend: Next.js, TypeScript, and Tailwind CSS.
 - Backend: Express.js and TypeScript.
 - Database: Supabase PostgreSQL.
-- Authentication: Supabase Auth; Express validates user identity and enforces the application access policy.
-- The frontend sends application requests to Express; Express validates and reads or writes Supabase PostgreSQL data.
+- The frontend sends application requests to Express; Express validates and reads or writes Supabase PostgreSQL data through a server-only PostgreSQL connection.
 - Monetary values must be stored and calculated exactly. The database and API documents will define their representation.
-- Database credentials and the service-role key stay on the server. The frontend does not call the Supabase Data API for application data.
+- Database credentials stay on the server. The frontend does not connect to Supabase or call its Data API.
 
-## Authentication boundary
+## Access boundary
 
-- Sign-in and session handling use Supabase Auth. The sign-in method is defined in the next phase. Public sign-up is disabled for V1; the approved user is provisioned outside the public app.
-- Every transaction and summary endpoint must require a valid Supabase Auth access token before it is implemented. The public `/api/health` endpoint is the only route added during backend preparation.
-- Express verifies the token and checks its user ID against a server-only `APP_OWNER_USER_ID` before any database read or write. Missing or invalid tokens and other authenticated users must not receive application data.
-- V1 has one approved account and one transaction collection. Adding more accounts later requires an ownership-aware schema and access policy before multiuser access is enabled.
-- The service-role key must never be sent to the browser or used as a shortcut around authorization checks.
+- Express is the only application API and the only application component that connects to Supabase PostgreSQL.
+- V1 is unauthenticated. CORS limits browser origins but does not protect the shared collection from direct HTTP clients.
+- Do not host real personal financial data until authentication and ownership controls are designed and implemented in a later version.
 
 ## 3. Transaction fields and validation
 
@@ -184,7 +181,7 @@ Use an English interface for V1. Arabic translation and right-to-left layout can
 - Return useful public error messages; keep internal database errors and stack traces server-side.
 - Configure frontend/backend communication for documented development origins.
 - Provide database setup instructions and a README with commands for running both applications.
-- Implement and verify Supabase Auth and the approved-account check before exposing transaction data. Do not describe the app as a private hosted financial tracker until these controls are verified.
+- Keep the local V1 unauthenticated. Use sample data only for a hosted demo, and do not describe it as a private financial tracker.
 
 ## 8. Plugin workflow requirements
 
@@ -193,7 +190,7 @@ Plugins support building the project. End users do not need ChatGPT plugins to u
 | Stage | Planned plugin | Expected output |
 | --- | --- | --- |
 | Interface design | Figma | Dashboard and transaction form designs covering mobile, desktop, loading, empty, and error states. |
-| Auth and database setup | Supabase | Supabase Auth plus PostgreSQL aligned with the revised account policy; Express remains the application API. |
+| Database setup | Supabase | PostgreSQL aligned with the database design; Express remains the application API. |
 | Frontend deployment | Vercel | A working sample-data demo after local verification, with backend hosting decided separately. |
 | Optional planning | Notion | Organized documentation/tasks that remain consistent with the Markdown files. |
 
@@ -217,8 +214,7 @@ These checks will guide implementation verification; they have not been executed
 - [ ] Simulate read failures and rejected writes; confirm useful feedback, retained form values, and no false success messages.
 - [ ] Verify missing-record edit/delete behavior and refresh failure after a successful save.
 - [ ] Check keyboard operation and mobile/desktop layouts.
-- [ ] Verify that unauthenticated requests and authenticated users other than the approved account cannot access transaction or summary data.
 
 ## 10. Next step
 
-Integrate Supabase Auth next, provision the approved user, and verify Express rejects all other identities before creating transaction tables or implementing transaction routes.
+Finish T04 by pulling the existing remote schema into migration history and verifying Express database connectivity. Then proceed to T05 API foundations; do not add transaction routes during T04.
