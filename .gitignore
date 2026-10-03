@@ -16,6 +16,7 @@ backend/dist/
 coverage/
 *.log
 .tmp-t04/
+.tmp-t07/
 .DS_Store
 Thumbs.db
 

@@ -1,11 +1,9 @@
-export default function Home() {
-  return (
-    <main className="mx-auto flex min-h-screen max-w-3xl flex-col justify-center gap-4 px-6 py-16">
-      <h1 className="text-3xl font-semibold">Expense Tracker</h1>
-      <p className="text-base text-zinc-600">
-        Project setup is ready. The dashboard and transaction flows will be built
-        in later tasks.
-      </p>
-    </main>
-  );
+import { Dashboard } from "@/components/dashboard/dashboard";
+import { previewScene } from "@/lib/fixtures";
+
+export default async function Home({ searchParams }: { searchParams: Promise<{ preview?: string | string[] }> }) {
+  const query = await searchParams;
+  // Development-only visual fixtures; this never reads or writes application APIs.
+  const scene = process.env.NODE_ENV === "development" ? previewScene(query.preview) : "populated";
+  return <Dashboard key={scene} initialScene={scene} />;
 }

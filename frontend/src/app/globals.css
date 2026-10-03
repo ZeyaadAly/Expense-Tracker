@@ -1,6 +1,100 @@
 @import "tailwindcss";
 
+:root {
+  --canvas: #f8fafc;
+  --surface: #ffffff;
+  --surface-muted: #f1f5f9;
+  --foreground: #0f172a;
+  --muted: #475569;
+  --border: #cbd5e1;
+  --control: #64748b;
+  --primary: #1d4ed8;
+  --primary-hover: #1e40af;
+  --focus: #2563eb;
+  --income: #166534;
+  --expense: #b91c1c;
+  --danger-hover: #991b1b;
+  --success-surface: #f0fdf4;
+  --danger-surface: #fef2f2;
+  --info: #1e40af;
+  --info-surface: #eff6ff;
+  --warning: #92400e;
+  --warning-surface: #fffbeb;
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --shadow-dialog: 0 16px 48px rgb(15 23 42 / 18%);
+  --content-width: 1200px;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-control: var(--control);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-focus: var(--focus);
+  --color-income: var(--income);
+  --color-success: var(--income);
+  --color-expense: var(--expense);
+  --color-danger: var(--expense);
+  --color-danger-hover: var(--danger-hover);
+  --color-success-surface: var(--success-surface);
+  --color-danger-surface: var(--danger-surface);
+  --color-info: var(--info);
+  --color-info-surface: var(--info-surface);
+  --color-warning: var(--warning);
+  --color-warning-surface: var(--warning-surface);
+  --radius-control: var(--radius-control);
+  --radius-card: var(--radius-card);
+  --shadow-dialog: var(--shadow-dialog);
+  --container-content: calc(var(--content-width) + 64px);
+}
+
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
+  background: var(--canvas);
+  color: var(--foreground);
+}
+
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  button:not(:disabled), select:not(:disabled) { cursor: pointer; }
+}
+
+@layer components {
+  .form-control {
+    @apply min-h-11 w-full min-w-0 rounded-control border border-control bg-surface px-3 py-2 text-base leading-6 text-foreground disabled:cursor-not-allowed disabled:bg-surface-muted disabled:text-muted;
+  }
+  .form-control[aria-invalid="true"] { border-color: var(--expense); }
+  .transaction-table th { @apply h-12 px-2 py-3 font-medium first:rounded-tl-card last:rounded-tr-card lg:px-4; }
+  .transaction-table td { @apply h-16 px-2 py-3 align-middle lg:px-4; overflow-wrap: anywhere; }
+  .dialog-shell {
+    @apply m-auto max-h-[calc(100dvh-32px)] w-[calc(100%-32px)] max-w-[560px] overflow-y-auto rounded-card border border-border bg-surface p-6 text-foreground shadow-dialog;
+  }
+  .dialog-shell::backdrop { background: rgb(0 0 0 / 40%); }
+  .dialog-confirmation { max-width: 440px; }
+  @media (width < 768px) {
+    .dialog-full-mobile {
+      margin: 0;
+      width: 100%;
+      max-width: none;
+      height: 100dvh;
+      max-height: 100dvh;
+      border: 0;
+      border-radius: 0;
+      padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }
