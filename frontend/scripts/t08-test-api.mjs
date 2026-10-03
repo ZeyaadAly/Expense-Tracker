@@ -20,6 +20,14 @@ const failure = () => {throw new ApiError(503,'DATABASE_UNAVAILABLE','Database i
 const wrapped={...service,
   async list(filters) { if(['list-error','both-error'].includes(mode)) failure();const rows=await service.list(filters);if(mode==='slow'||mode==='loading') await new Promise(r=>setTimeout(r,mode==='loading'?1200:filters.type==='expense'?750:100));return rows; },
   async summary() {if(['summary-error','both-error'].includes(mode)) failure();if(mode==='slow'||mode==='loading') await new Promise(r=>setTimeout(r,mode==='loading'?3000:500));return service.summary();},
+  async update(id,values) {
+    if(mode==='put-pending') await new Promise(r=>setTimeout(r,1200));
+    if(mode==='put-validation') throw new ApiError(400,'VALIDATION_ERROR','SQL secret',[{field:'amount',message:'secret'},{field:'body',message:'secret'}]);
+    if(mode==='put-missing') return null;
+    if(mode==='put-503') failure();
+    if(mode==='put-500') throw new ApiError(500,'INTERNAL_ERROR','secret');
+    const saved=await service.update(id,values);if(mode==='put-refresh-error')mode='both-error';return saved;
+  },
   async create(values) {
     if(mode==='pending') await new Promise(r=>setTimeout(r,1200));
     if(mode==='validation') throw new ApiError(400,'VALIDATION_ERROR','SQL secret message',[{field:'amount',message:'SQL secret field'},{field:'body',message:'secret body'}]);
@@ -42,6 +50,11 @@ host.use(async(req,res,next)=>{
     // Lose the response after headers: the write commits, but JSON never completes.
     // Destroying a socket before any response can trigger Chrome transport retries.
     res.writeHead(201,{'Content-Type':'application/json','Content-Length':'1000','Access-Control-Allow-Origin':'http://localhost:3000'});
+    res.write('{"data":');setTimeout(()=>res.destroy(),50);return;
+  }
+  if(mode==='put-lost'&&req.method==='PUT'&&req.path.startsWith('/api/v1/transactions/')) {
+    await service.update(req.path.split('/').at(-1),req.body);
+    res.writeHead(200,{'Content-Type':'application/json','Content-Length':'1000','Access-Control-Allow-Origin':'http://localhost:3000'});
     res.write('{"data":');setTimeout(()=>res.destroy(),50);return;
   }
   next();

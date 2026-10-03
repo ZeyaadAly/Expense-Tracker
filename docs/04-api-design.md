@@ -2,7 +2,7 @@
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** T04–T06 health/create/read/summary endpoints verified; PUT/DELETE remain planned
+**Status:** T04-T09 health/create/read/update/summary endpoints verified; DELETE remains planned
 **Related documents:** [Project brief](01-project-brief.md) · [Requirements](02-requirements.md) · [Database design](03-database-design.md)
 
 ## 1. Purpose and architecture
@@ -305,4 +305,4 @@ T06 results are recorded in [T06 verification](t06-verification.md). The checkli
 
 ## 15. Next step
 
-T04–T06 are verified. Next is T07 dashboard layout after its outstanding T03 design prerequisite; PUT/DELETE remain assigned to T09/T10.
+T01-T09 are verified locally. PUT editing is complete; DELETE remains assigned to T10. See [T09 verification](t09-verification.md).

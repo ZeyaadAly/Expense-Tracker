@@ -33,7 +33,7 @@ export function createApiClient(base = process.env.NEXT_PUBLIC_API_BASE_URL, fet
   }
   async function request(path: string, init: RequestInit, valid: (v: unknown) => boolean, expected: number): Promise<unknown> {
     const url = baseUrl() + path;
-    const write = init.method === "POST";
+    const write = init.method === "POST" || init.method === "PUT";
     const controller = new AbortController();
     const abort = () => controller.abort();
     init.signal?.addEventListener("abort",abort,{once:true});
@@ -58,6 +58,11 @@ export function createApiClient(base = process.env.NEXT_PUBLIC_API_BASE_URL, fet
     } finally { clearTimeout(timer); init.signal?.removeEventListener("abort",abort); }
   }
   return {
+    async updateTransaction(id: string, values: TransactionInput): Promise<Transaction> {
+      const {type,amount,category,date,description} = values;
+      const body = await request(`/transactions/${encodeURIComponent(id)}`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({type,amount,category,date,description})},v => object(v) && transaction(v.data) && v.data.id === id,200);
+      return (body as {data:Transaction}).data;
+    },
     async list(filters: Filters, signal?: AbortSignal): Promise<TransactionList> {
       const q = new URLSearchParams(); if(filters.type !== "all") q.set("type",filters.type); if(filters.category !== "all") q.set("category",filters.category);
       const body = await request(`/transactions${q.size ? `?${q}` : ""}`,{signal},v => object(v) && Array.isArray(v.data) && v.data.every(transaction) && object(v.meta) && v.meta.count === v.data.length && object(v.meta.filters) && v.meta.filters.type === (filters.type === "all" ? null : filters.type) && v.meta.filters.category === (filters.category === "all" ? null : filters.category),200);

@@ -13,7 +13,7 @@ import { DashboardHeader } from "./dashboard-header";
 import { SummarySection } from "./summary";
 
 const api = createApiClient();
-type OpenDialog = { mode: "add" | "edit"; values: TransactionInput } | { mode: "delete"; transaction: Transaction };
+type OpenDialog = { mode: "add"; values: TransactionInput } | { mode: "edit"; id: string; values: TransactionInput } | { mode: "delete"; transaction: Transaction };
 export function Dashboard() {
   const [filters,setFilters] = useState<Filters>(DEFAULT_FILTERS);
   const [dialog,setDialog] = useState<OpenDialog | null>(null);
@@ -37,9 +37,10 @@ export function Dashboard() {
     if (writeLock.current) return;
     writeLock.current = true; setPending(true);
     try {
-      const saved = await api.create(values);
+      const editing = dialog?.mode === "edit";
+      const saved = editing ? await api.updateTransaction(dialog.id,values) : await api.create(values);
       setDialog(null);
-      setFeedback({tone:"success",message:`Transaction added.${matchesFilters(saved,filters) ? "" : " It is hidden by your current filters."}`});
+      setFeedback({tone:"success",message:`Transaction ${editing ? "updated" : "added"}.${matchesFilters(saved,filters) ? "" : " It is hidden by your current filters."}`});
       setSavedRefresh(true);
       if (await refreshBoth()) setSavedRefresh(false);
     } finally { setPending(false); writeLock.current = false; }
@@ -49,8 +50,8 @@ export function Dashboard() {
     {feedback ? <FeedbackBanner {...feedback} onDismiss={() => setFeedback(null)} action={feedback.message.includes("hidden") ? {label:"Reset Filters",onClick:() => setFilters(DEFAULT_FILTERS)} : undefined} /> : null}
     {savedRefreshFailed ? <FeedbackBanner tone="warning" message="Saved, but the dashboard could not refresh." action={{label:"Retry",onClick:() => void retryFailed()}} /> : bothFailed ? <FeedbackBanner tone="error" message="The dashboard could not load. Please try again." action={{label:"Retry all",onClick:() => void refreshBoth()}} /> : null}
     <SummarySection summary={summary.data} loading={summary.loading && !summary.data} updating={summary.loading && !!summary.data} error={summary.status === "error" && !summary.data} stale={summary.status === "error" && !!summary.data} errorMessage={summary.error?.message} onRetry={() => void summary.reload()} />
-    <TransactionPanel transactions={list.data?.data ?? []} count={list.data?.meta.count} overallCount={summary.status === "success" ? summary.data?.transactionCount : undefined} filters={filters} loading={list.loading} error={list.status === "error" && !list.loading} errorMessage={list.error?.message} onFilterChange={setFilters} onAdd={() => setDialog({mode:"add",values:newTransactionValues()})} onEdit={transaction => setDialog({mode:"edit",values:editableValues(transaction)})} onDelete={transaction => setDialog({mode:"delete",transaction})} onRetry={() => void list.reload()} />
-    <p className="text-sm leading-5 text-muted">Edit and Delete are previews only. Changes to existing transactions are not saved yet.</p>
-    {dialog?.mode === "delete" ? <DeleteConfirmation transaction={dialog.transaction} pending={false} feedback={{tone:"info",message:"Deletion is not available yet. This preview will not change the saved transaction."}} onConfirm={() => setFeedback({tone:"info",message:"Deletion is not available yet. No transaction was deleted."})} onCancel={closeDialog} /> : dialog ? <TransactionDialog mode={dialog.mode} initialValues={dialog.values} pending={pending} scenario="normal" onSubmit={dialog.mode === "add" ? save : async () => { throw new Error("Editing is not available yet. No transaction was changed."); }} onClose={closeDialog} onRefresh={async () => { if(!await refreshBoth()) throw new Error("Read failed"); }} readOnly={dialog.mode === "edit"} /> : null}
+    <TransactionPanel transactions={list.data?.data ?? []} count={list.data?.meta.count} overallCount={summary.status === "success" ? summary.data?.transactionCount : undefined} filters={filters} loading={list.loading} error={list.status === "error" && !list.loading} errorMessage={list.error?.message} onFilterChange={setFilters} onAdd={() => setDialog({mode:"add",values:newTransactionValues()})} onEdit={transaction => setDialog({mode:"edit",id:transaction.id,values:editableValues(transaction)})} onDelete={transaction => setDialog({mode:"delete",transaction})} onRetry={() => void list.reload()} />
+    <p className="text-sm leading-5 text-muted">Delete is a preview only. Deletion is not available yet.</p>
+    {dialog?.mode === "delete" ? <DeleteConfirmation transaction={dialog.transaction} pending={false} feedback={{tone:"info",message:"Deletion is not available yet. This preview will not change the saved transaction."}} onConfirm={() => setFeedback({tone:"info",message:"Deletion is not available yet. No transaction was deleted."})} onCancel={closeDialog} /> : dialog ? <TransactionDialog mode={dialog.mode} initialValues={dialog.values} pending={pending} scenario="normal" onSubmit={save} onClose={closeDialog} onRefresh={async () => { if(!await refreshBoth()) throw new Error("Read failed"); }} /> : null}
   </main>;
 }

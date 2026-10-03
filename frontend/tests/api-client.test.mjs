@@ -54,3 +54,16 @@ test('timeout and obsolete read cancellation are distinct',async()=> {
   await assert.rejects(createApiClient('http://localhost/api/v1',hanging,10).create(record),e=>e.code==='TIMEOUT'&&e.uncertain);
   const controller=new AbortController();const promise=createApiClient('http://localhost/api/v1',hanging).list(all,controller.signal);controller.abort();await assert.rejects(promise,e=>e.name==='AbortError');
 });
+
+test('T09 PUT serializes five strings and preserves exact successful records',async()=>{
+  for(const amount of ['0.10','0.20','1000.00','999999999.99']){const saved={...record,amount};let calls=0;const c=createApiClient('http://localhost/api/v1',async(url,init)=>{calls++;assert.equal(url,`http://localhost/api/v1/transactions/${record.id}`);assert.equal(init.method,'PUT');const body=JSON.parse(init.body);assert.deepEqual(Object.keys(body).sort(),['amount','category','date','description','type']);assert.ok(Object.values(body).every(v=>typeof v==='string'));assert.equal(body.amount,amount);return json({data:saved});});assert.deepEqual(await c.updateTransaction(record.id,saved),saved);assert.equal(calls,1);}
+});
+test('T09 PUT structured rejection, missing record, uncertain response and network never retry',async()=>{
+  for(const [status,code] of [[400,'VALIDATION_ERROR'],[404,'TRANSACTION_NOT_FOUND'],[503,'DATABASE_UNAVAILABLE']]){const c=createApiClient('http://localhost/api/v1',async()=>json({error:{code,message:'secret',details:[{field:'amount',message:'secret'}]}},status));await assert.rejects(c.updateTransaction(record.id,record),e=>e.code===code&&!e.uncertain&&!e.message.includes('secret'));}
+  for(const fetcher of [async()=>{throw Error('secret');},async()=>new Response('bad',{status:200}),async()=>json({data:{...record,id:'00000000-0000-0000-0000-000000000000'}})]){let calls=0;const c=createApiClient('http://localhost/api/v1',async(...args)=>{calls++;return fetcher(...args);});await assert.rejects(c.updateTransaction(record.id,record),e=>e.uncertain);assert.equal(calls,1);}
+});
+
+test('T09 update timeout is uncertain and never retried',async()=>{
+ let attempts=0;const c=createApiClient('http://localhost/api/v1',async(url,init)=>{attempts++;return new Promise((resolve,reject)=>init.signal.addEventListener('abort',()=>reject(Error('aborted')),{once:true}));},10);
+ await assert.rejects(c.updateTransaction(record.id,record),e=>e.code==='TIMEOUT'&&e.uncertain);assert.equal(attempts,1);
+});

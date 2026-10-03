@@ -87,7 +87,7 @@ An unavailable database returns HTTP 503 with `error.code` set to `DATABASE_UNAV
 
 Copy `frontend/.env.example` to `frontend/.env.local`, run the backend using its documented server-only configuration, then run `npm run dev` from `frontend/` and open `http://localhost:3000`. The public `NEXT_PUBLIC_API_BASE_URL` defaults in the example to `http://localhost:4000/api/v1`. Restart dev after changing it; configure it before a production build. No database credentials belong in the frontend.
 
-T08 is complete: the dashboard reads transactions and unfiltered summary from Express, applies type/category filters through the API, and creates transactions with authoritative validation and refresh. Saved records survive reloads. Failed saves retain the draft; uncertain outcomes require a read-only refresh/check before deliberate retry. Edit and Delete remain clearly labelled UI-only previews until T09/T10, and do not mutate stored records. See [T08 verification](docs/t08-verification.md).
+T08 is complete: the dashboard reads transactions and unfiltered summary from Express, applies type/category filters through the API, and creates transactions with authoritative validation and refresh. Saved records survive reloads. Failed saves retain the draft; uncertain outcomes require a read-only refresh/check before deliberate retry. T09 now connects Edit to PUT with full replacement validation, retained drafts on errors, and authoritative refreshes. Delete remains a UI-only preview until T10. See [T08 verification](docs/t08-verification.md).
 
 The approved [Figma design](https://www.figma.com/design/GWgioRUOXX3XcaDLYWi8HA) is recorded in the [T03 UI specification](docs/06-t03-ui-specification.md). T07 is complete; see [T07 verification](docs/t07-verification.md) for final checks and the non-blocking Figma-provider comparison limitation.
 
@@ -103,7 +103,7 @@ Live dashboard: https://expensetracker-inky-mu.vercel.app.
 
 For the Vercel project `expense_tracker`, set **Root Directory** to `frontend` in Project Settings → Build and Deployment. Use the Next.js framework preset, Node.js 24.x, and default install/build/output settings. The repository root has no Next.js app directory; building there fails with “Couldn't find any pages or app directory.” Root Directory is a Vercel project setting, rather than a `vercel.json` property.
 
-This existing deployment serves the earlier fixture build. T08 integration is verified locally; deploying the integrated frontend and separately hosted Express API remains T14. See [deployment verification](docs/vercel-deployment-verification.md).
+This existing deployment serves the earlier fixture build. T08/T09 integration is verified locally; deploying the integrated frontend and separately hosted Express API remains T14. See [deployment verification](docs/vercel-deployment-verification.md).
 
 ## Backend checks
 
@@ -113,4 +113,6 @@ To repeat the SQL checks, use a fresh disposable PostgreSQL database named `post
 
 For T06 PostgreSQL integration tests, prepare that disposable database first, set `T06_DISPOSABLE_DATABASE_URL` to its administrative test connection, and run `npm test`. The API tests connect as `expense_tracker_app`; the administrative connection manages fixtures. The runner uses the local trust-auth fixture, resets transaction data only in the selected loopback database, and must never target retained development data. Without this explicit variable, the PostgreSQL integration group is skipped; other tests still run. T04–T06 passed; T07 layout follows T03 design.
 
-Implemented application endpoints are POST/GET `/api/v1/transactions`, GET `/api/v1/transactions/:id`, and GET `/api/v1/summary`. List filters are optional `type` and `category` parameters only. Summary totals always cover all transactions. The API also retains `/api/v1/health`. PUT/DELETE are not implemented.
+Implemented application endpoints are POST/GET `/api/v1/transactions`, GET `/api/v1/transactions/:id`, and GET `/api/v1/summary`. List filters are optional `type` and `category` parameters only. Summary totals always cover all transactions. The API also retains `/api/v1/health`. PUT `/api/v1/transactions/:id` is implemented and verified in T09. DELETE remains unimplemented.
+
+T09 verification and reproduction steps: [Transaction editing](docs/t09-verification.md). From `frontend/`, run `node scripts/verify-t09.mjs PATH_TO_AGENT_BROWSER_EXECUTABLE` with the disposable T08 test wrapper and local dev server configured as documented. Evidence is saved in ignored `.tmp-t09/`. Backend test files run serially because the disposable fixture suite resets the shared test database.

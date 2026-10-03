@@ -21,6 +21,7 @@ export function TransactionForm({ initialValues, mode, pending, scenario = "norm
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState<FieldErrors>(() => scenario === "validation" ? validateTransaction(initialValues, cairoToday()) : {});
   const [feedback, setFeedback] = useState<Feedback | null>(null);
+  const [missing,setMissing] = useState(false);
   const [uncertain,setUncertain] = useState(false);
   const [checked,setChecked] = useState(false);
   const [checking,setChecking] = useState(false);
@@ -29,7 +30,7 @@ export function TransactionForm({ initialValues, mode, pending, scenario = "norm
   const prefix = useId();
   const fieldId = (field: keyof TransactionInput) => `${prefix}-${field}`;
   const today = cairoToday();
-  const unavailable = scenario === "edit-missing";
+  const unavailable = scenario === "edit-missing" || missing;
 
   function changeValues(next: TransactionInput) {
     setValues(next);
@@ -67,9 +68,10 @@ export function TransactionForm({ initialValues, mode, pending, scenario = "norm
       const safeError = error instanceof ApiError ? error : new ApiError("NETWORK_ERROR",0,[],true);
       const fields = apiFieldErrors(safeError);
       setErrors(fields);
+      if (mode === "edit" && safeError.code === "TRANSACTION_NOT_FOUND" && safeError.status === 404) setMissing(true);
       setUncertain(safeError.uncertain); setChecked(false);
       const formLevelValidation = safeError.code === "VALIDATION_ERROR" && (!Object.keys(fields).length || safeError.details.some(detail => !Object.hasOwn(fields,detail.field)));
-      setFeedback(safeError.code === "VALIDATION_ERROR" && !formLevelValidation ? null : {tone:safeError.uncertain ? "warning" : "error",message:formLevelValidation ? "The transaction was rejected. Review your entries and try again." : safeError.message});
+      setFeedback(safeError.code === "VALIDATION_ERROR" && !formLevelValidation ? null : {tone:safeError.uncertain ? "warning" : "error",message:formLevelValidation ? "The transaction was rejected. Review your entries and try again." : safeError.code === "TRANSACTION_NOT_FOUND" && mode === "edit" ? "This transaction is no longer available." : safeError.message});
       const first = Object.keys(fields)[0];
       // The parent releases its pending lock in the same React batch. Focus after
       // that commit so disabled inputs can receive focus again.
@@ -109,15 +111,19 @@ export function TransactionForm({ initialValues, mode, pending, scenario = "norm
       <textarea {...fieldProps("description")} className={`${fieldProps("description").className} min-h-24`} rows={3} placeholder="Grocery shopping" value={values.description} onChange={(event) => changeValues({ ...values, description: event.target.value })} />
     </FormField>
     {readOnly ? <FeedbackBanner tone="info" message="Editing is not available yet. This preview will not change the saved transaction." /> : null}
-    {displayedFeedback ? <FeedbackBanner {...displayedFeedback} action={scenario === "uncertain" || uncertain ? { label: checking ? "Refreshing…" : "Refresh dashboard", onClick: async () => {
+    {displayedFeedback ? <FeedbackBanner {...displayedFeedback} action={unavailable ? { label: checking ? "Refreshing..." : "Refresh dashboard", onClick: async () => {
       if(checking) return; setChecking(true);
-      try { await onRefresh(); setChecked(true); if(uncertain) setFeedback({tone:"warning",message:"Dashboard refreshed. Check your transactions before deliberately trying again. Similar records cannot prove which request created them."}); }
+      try { await onRefresh(); } catch { setFeedback({tone:"error",message:"This transaction is no longer available. The dashboard could not refresh. Your draft is kept."}); }
+      finally { setChecking(false); }
+    } } : scenario === "uncertain" || uncertain ? { label: checking ? "Refreshing…" : "Refresh dashboard", onClick: async () => {
+      if(checking) return; setChecking(true);
+      try { await onRefresh(); setChecked(true); if(uncertain) setFeedback({tone:"warning",message:mode === "edit" ? "Dashboard refreshed. Check your transaction before deliberately trying again." : "Dashboard refreshed. Check your transactions before deliberately trying again. Similar records cannot prove which request created them."}); }
       catch { setChecked(false); setFeedback({tone:"warning",message:"The dashboard could not refresh. Your draft is kept; refresh and check before trying again."}); }
       finally { setChecking(false); }
     } } : undefined} /> : null}
     <div className="mt-2 flex flex-col gap-3 md:flex-row md:justify-end">
       <Button type="submit" pending={pending} disabled={unavailable || readOnly || checking || (uncertain && !checked)} className="w-full md:w-auto">{pending ? "Saving…" : mode === "add" ? "Add transaction" : "Save changes"}</Button>
-      <Button variant="secondary" disabled={pending} onClick={onCancel} className="w-full md:w-auto">Cancel</Button>
+      <Button variant="secondary" disabled={pending} onClick={onCancel} className="w-full md:w-auto">{unavailable ? "Close" : "Cancel"}</Button>
     </div>
   </form>;
 }

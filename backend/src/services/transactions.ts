@@ -10,6 +10,15 @@ const columns = `id, type, amount::text AS amount, description, category,
 
 export function createTransactionService(database: Pick<Pool, "query">) {
   return {
+    async update(id: string, input: TransactionInput) {
+      const result = await database.query<TransactionRow>(
+        `UPDATE expense_tracker.transactions
+         SET type = $2, amount = $3, description = $4, category = $5, transaction_date = $6
+         WHERE id = $1 RETURNING ${columns}`,
+        [id, input.type, input.amount, input.description, input.category, input.date],
+      );
+      return result.rows[0] ? mapTransaction(result.rows[0]) : null;
+    },
     async create(input: TransactionInput) {
       const result = await database.query<TransactionRow>(
         `INSERT INTO expense_tracker.transactions

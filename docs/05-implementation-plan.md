@@ -4,7 +4,7 @@
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** In progress; T01–T08 complete; unavailable additional Figma comparisons recorded as a non-blocking T07 verification limitation; T09/T10 not started
+**Status:** In progress; T01-T09 complete; T10 not started; historical Figma comparison limitation remains recorded in T07.
 **Owner:** Zeyad Aly Elghazaly
 
 ## 1. Purpose
@@ -170,6 +170,8 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 **Done when:** Editing changes the same record and summary correctly; cancel changes nothing; invalid or missing-record updates do not create rows.
 
+**Completed (2026-10-03):** Full-body PUT validation, parameterized SQL and the existing timestamp trigger update the selected record. The prefilled form uses the typed client and authoritative filtered-list/global-summary refresh, preserving drafts on validation, missing-record and uncertain errors. Backend 16 groups, frontend 13 client groups, 58 T09 browser checks, 61 T08 and 69 T07 regression checks, lint/type-check/build, fresh migration/role/health checks and PostgreSQL restart persistence passed. See [T09 verification](t09-verification.md). T10 has not started.
+
 ### T10 — Add deletion
 
 **Depends on:** T08.
@@ -265,7 +267,7 @@ Mark tasks complete only when their completion criteria have been verified.
 - [x] T06 — Create/read/summary endpoints
 - [x] T07 — Dashboard layout
 - [x] T08 — First complete flow
-- [ ] T09 — Editing
+- [x] T09 — Editing
 - [ ] T10 — Deletion
 - [ ] T11 — Filtering and recovery
 - [ ] T12 — Local V1 verification
@@ -286,4 +288,4 @@ Mark tasks complete only when their completion criteria have been verified.
 
 ## 9. Immediate next action
 
-T01–T08 are complete; M2's first browser → Express → PostgreSQL create/read/summary flow is verified locally against a disposable database. Ready for **T09 — Add transaction editing**. T09/T10 remain not started; no PUT/DELETE integration was added. Remaining unavailable Figma comparisons are recorded as a non-blocking limitation in the T07 report. Deployment of the integrated frontend/backend remains T14.
+T01-T09 are complete. The full transaction editing flow is verified locally with Express and disposable PostgreSQL. Ready for **T10 - Add transaction deletion**. T10 remains not started; DELETE persistence was not added. See [T09 verification](t09-verification.md). Integrated deployment remains T14.
