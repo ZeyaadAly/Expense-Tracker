@@ -4,7 +4,7 @@
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** In progress; T03 and T04–T06 complete; T07 fixture UI implemented, final Figma dialog/state comparison pending; T08 not started
+**Status:** In progress; T01–T07 complete; unavailable additional Figma comparisons recorded as a non-blocking verification limitation; T08 not started
 **Owner:** Zeyad Aly Elghazaly
 
 ## 1. Purpose
@@ -143,7 +143,7 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 **Done when:** Main controls and forms work by keyboard and layouts are usable at 360px, 768px, and 1440px widths. The page does not hide actions or require page-level horizontal scrolling.
 
-**Implemented and locally verified; partial (2026-10-03):** Dashboard, local fixture filtering/add/edit/delete, reusable dialogs, design tokens, loading/empty/error/success/stale states, and contract validation are implemented without API integration. Frontend lint/type-check/build, contract edge-case checks, and 69 browser checks passed. Populated desktop/mobile/tablet Figma references were retrieved. Figma's Starter-plan MCP quota prevented reading the remaining dialog/state design context; those layouts follow the approved T03 specification. Keep T07 open until that remaining visual comparison is completed. Evidence is recorded in [T07 verification](t07-verification.md). T08 has not started.
+**✅ Completed (2026-10-03):** Dashboard, local fixture filtering/add/edit/delete, reusable dialogs, design tokens, loading/empty/error/success/stale states, and contract validation are implemented without API integration. Final frontend lint/type-check/build, domain checks, 69 browser checks including six zero-violation accessibility audits, and 16 supplemental dialog/specification checks passed. Corrected the amount field's missing EGP suffix and description textarea's 96px minimum height. Populated desktop/mobile/tablet Figma references were reviewed earlier. Retrying Add design context still returned the Starter-plan provider quota; unavailable additional dialog/state comparisons are a non-blocking external verification limitation under the user's explicit fallback instruction. Final verification used the approved T03 specification and existing reviewed references without claiming unavailable frame comparisons. Evidence is recorded in [T07 verification](t07-verification.md). T08 has not started.
 
 ### T08 — Connect the first complete flow
 
@@ -261,7 +261,7 @@ Mark tasks complete only when their completion criteria have been verified.
 - [x] T04 — PostgreSQL setup
 - [x] T05 — Validation and API foundations
 - [x] T06 — Create/read/summary endpoints
-- [ ] T07 — Dashboard layout
+- [x] T07 — Dashboard layout
 - [ ] T08 — First complete flow
 - [ ] T09 — Editing
 - [ ] T10 — Deletion
@@ -284,4 +284,4 @@ Mark tasks complete only when their completion criteria have been verified.
 
 ## 9. Immediate next action
 
-T03 and T04–T06 are complete. **T07 — Build the dashboard layout** has its fixture UI implemented; finish the outstanding Figma dialog/state visual comparison before marking it complete. **T08 — Connect the first complete flow** remains not started; no frontend API client or network mutations have been added.
+T01–T07 are complete. Ready for **T08 — Connect the frontend to the API**, the first complete flow. T08 remains not started; no frontend API client or network mutations have been added. Remaining unavailable Figma dialog/state comparisons are recorded as a non-blocking external verification limitation in the T07 report.

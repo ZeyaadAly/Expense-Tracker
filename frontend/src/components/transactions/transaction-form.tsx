@@ -76,7 +76,10 @@ export function TransactionForm({ initialValues, mode, pending, scenario = "norm
     </fieldset>
     <div className="grid min-w-0 gap-4 md:grid-cols-2">
       <FormField id={fieldId("amount")} label="Amount (EGP)" helper="0.01–999,999,999.99; up to 2 decimal places." error={errors.amount}>
-        <input {...fieldProps("amount")} type="text" inputMode="decimal" placeholder="250.50" value={values.amount} onChange={(event) => changeValues({ ...values, amount: event.target.value })} />
+        <div className="relative min-w-0">
+          <input {...fieldProps("amount")} className={`${fieldProps("amount").className} pr-14`} type="text" inputMode="decimal" placeholder="250.50" value={values.amount} onChange={(event) => changeValues({ ...values, amount: event.target.value })} />
+          <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm text-muted">EGP</span>
+        </div>
       </FormField>
       <FormField id={fieldId("category")} label="Category" helper="Choose a category for the selected type." error={errors.category}>
         <select {...fieldProps("category")} value={values.category} onChange={(event) => changeValues({ ...values, category: event.target.value as Category | "" })}>
@@ -88,7 +91,7 @@ export function TransactionForm({ initialValues, mode, pending, scenario = "norm
       <input {...fieldProps("date")} type="date" min="1900-01-01" max={today} value={values.date} onChange={(event) => changeValues({ ...values, date: event.target.value })} />
     </FormField>
     <FormField id={fieldId("description")} label="Description" helper={`1–200 characters after trimming. ${Array.from(values.description.trim()).length}/${DESCRIPTION_LIMIT} characters.`} error={errors.description}>
-      <textarea {...fieldProps("description")} rows={3} placeholder="Grocery shopping" value={values.description} onChange={(event) => changeValues({ ...values, description: event.target.value })} />
+      <textarea {...fieldProps("description")} className={`${fieldProps("description").className} min-h-24`} rows={3} placeholder="Grocery shopping" value={values.description} onChange={(event) => changeValues({ ...values, description: event.target.value })} />
     </FormField>
     {displayedFeedback ? <FeedbackBanner {...displayedFeedback} action={scenario === "uncertain" ? { label: "Refresh dashboard", onClick: onRefresh } : undefined} /> : null}
     <div className="mt-2 flex flex-col gap-3 md:flex-row md:justify-end">

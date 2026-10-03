@@ -87,7 +87,7 @@ An unavailable database returns HTTP 503 with `error.code` set to `DATABASE_UNAV
 
 Run `npm run dev` from `frontend/` and open `http://localhost:3000`. The T07 dashboard uses temporary fixtures only; the backend and frontend environment variables are not needed for this preview. Add, edit, delete and filters work in memory; all changes reset on reload. No frontend application API requests are made. T08 has not started.
 
-The approved [Figma design](https://www.figma.com/design/GWgioRUOXX3XcaDLYWi8HA) is recorded in the [T03 UI specification](docs/06-t03-ui-specification.md). See [T07 verification](docs/t07-verification.md) for component inventory, responsive checks and the remaining Figma comparison limitation.
+The approved [Figma design](https://www.figma.com/design/GWgioRUOXX3XcaDLYWi8HA) is recorded in the [T03 UI specification](docs/06-t03-ui-specification.md). T07 is complete; see [T07 verification](docs/t07-verification.md) for final checks and the non-blocking Figma-provider comparison limitation. T08 remains not started.
 
 Development-only state previews use `/?preview=loading`, `empty`, `no-results`, `error`, `summary-error`, `list-error`, `success`, `stale`, `negative`, `stress`, `submitting`, `validation`, `save-error`, `uncertain`, `edit-missing`, `delete-pending`, or `delete-error`. These are visual fixtures, not real network failures; production always starts with the populated fixture dashboard. Pending fixture dialogs intentionally remain pending until the page is reloaded.
 

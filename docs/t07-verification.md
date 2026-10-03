@@ -1,7 +1,7 @@
 # T07 — Dashboard layout verification
 
 **Date:** 2026-10-03
-**Status:** Partial: fixture UI implemented and locally verified; remaining Figma dialog/state visual comparison blocked by the connected account's Starter-plan MCP quota. T07 remains unchecked. T08 has not started.
+**Status:** ✅ Completed. Fixture UI and final specification verification passed. Unavailable Figma dialog/state reads are recorded as a non-blocking external verification limitation under the user's completion instruction. T08 has not started.
 
 ## Scope and checkpoint
 
@@ -26,7 +26,25 @@ Adaptations follow the approved T03 specification and explicit responsive/access
 
 Design-context requests for Add defaults (`6:935`, `6:2964`) and Delete confirmation (`6:1967`) returned the Starter-plan quota error. A subsequent read-only dialog inspection was also blocked. The dialogs and alternate UI states were implemented from the approved T03 specification; their browser behavior/layout is verified, but exact comparison to those Figma frames is not claimed. No Figma file edits or paid-plan changes were made.
 
-To finish T07, obtain access to those remaining design contexts or supplied exports/reference measurements, compare Add/Edit/Delete and state variants, resolve any differences, then update this report and the T07 checkbox. The quota limitation does not affect the running fixture dashboard.
+During final verification on 2026-10-03, retried high-fidelity design context for desktop Add defaults (`6:935`), with a screenshot requested by default. The provider again returned “You've reached the Figma MCP tool call limit on the Starter plan.” `whoami` confirmed the connected account's Full seat on a Starter team. No new design context or screenshot was returned. Further dialog/alternate-state reads were unavailable; no new visual comparison to those frames is claimed, and no Figma edits or plan changes were made.
+
+Per the user's explicit fallback instruction, completion is based on the approved T03 specification, consistency with the previously reviewed populated references, and passing implementation checks. The provider's inability to serve remaining frames is an external verification limitation, not an implementation defect or a prerequisite for completing T07.
+
+## Final specification verification
+
+Re-read the complete T03 specification, implementation plan, this report, current frontend source, and `frontend/CLAUDE.md` / `frontend/AGENTS.md`. Consulted the installed Next.js client-component and CSS guides before the small form changes.
+
+| Area | Final verification |
+| --- | --- |
+| Shared visual language | Existing semantic palette, Arial/Helvetica, heading hierarchy, summary typography, spacing scale and button styles remain consistent with the reviewed Foundations and populated desktop/tablet/mobile references. |
+| Add and validation | Required five-field order, radio segments, native selects/date control, two-column Amount/Category at 768px and above, stacked mobile fields, error summary/links, inline messages, preserved input and first-invalid-field focus. |
+| Edit | Shared form, prefilled type/amount/category/date/description, Save changes action, incompatible-category clearing, same-record fixture updates and unavailable-record messaging. |
+| Dialog geometry | Centered 560px Add/Edit at 768/1440px, 24px padding, 20px/28px title, white surface; full-viewport mobile form with 16px padding. Content scrolls internally and both footer buttons remain reachable in normal flow. |
+| Delete | 440px centered desktop/tablet confirmation; 328px width with 16px margins at 360px; description, type, category, signed amount and date retained; Cancel initially focused, secondary Cancel and red danger confirmation; pending dismissal/duplicate actions blocked. |
+| Rows/cards and states | Six-column table and mobile cards, visible Edit/Delete, exact signed money/calendar dates, distinct loading/empty/no-match/error messages, partial read-state fixtures, stale/success feedback, and long-content wrapping. Network-dependent rules remain future integration work; only their local presentation is verified here. |
+| Narrow and scrolling checks | Required 360/768/1440px coverage rerun; supplemental 320px stress/validation/loading/error checks pass without horizontal page overflow. Reviewed fresh validation, footer and confirmation screenshots. |
+
+Final review found two genuine specification mismatches and fixed them in the reusable form: added the visible EGP suffix outside the amount value, with right padding to prevent overlap; set the three-row description textarea's minimum height to 96px. No redesign or API integration was introduced. No unresolved T07 implementation defect was found within the verified scope. Exact dialog/state pixel comparison remains unverified.
 
 ## Components created
 
@@ -79,11 +97,14 @@ The development-only `preview` query accepts the scene constants in `src/lib/fix
 | `npm run build` in frontend | Passed; `/` statically rendered in production |
 | `node scripts/verify-t07-domain.mjs` | Passed amount syntax/range, no rounding, unbounded exact formatting, real calendar/leap-year/date boundaries, Unicode code-point length, type/category pairing |
 | `node scripts/verify-t07.mjs PATH_TO_AGENT_BROWSER` against local dev server | 69 checks passed, including six zero-violation accessibility audits |
+| Final supplemental dialog/specification review | 16 checks passed: Add form tokens/suffix/textarea, reachable footer, prefilled Edit, bounded Delete at 360/768/1440px; 320px stress/validation/loading/error wrapping |
 | Source boundary inspection | No fetch/axios/Supabase client/API-base usage in frontend source; backend/schema untouched |
 
 Browser checks cover all required widths, visible actions, overflow, dialog focus/sizing, input preservation, category reset/Other retention, unchanged overall summary during filters, local exact-money add/edit/delete, cancellation, date preservation, focus fallback, fixture reset on reload, supported state scenes, pending duplicate/dismissal prevention, focus ring, and absence of backend/Supabase resources. No browser errors were recorded in the final result.
 
 Verification found and fixed native Escape closing a pending dialog, and table text-button sizing that unnecessarily stacked desktop actions. Automation corrections included quoting PowerShell element references, setting a native date input through its value setter, waiting for hydration before fixture assertions, and disabling transitions with reduced-motion for deterministic focus-color checks. These harness issues are resolved.
+
+All listed frontend commands and the 69-check browser suite were rerun after the final form fixes and passed. The 16 supplemental checks also passed; their initial selector and PowerShell text-encoding harness mistakes were corrected without further application changes. Evidence is saved in ignored `.tmp-t07/final-review.json` and `final-form-footer-*` / `final-delete-*` screenshots. The six fresh axe audits had zero violations and the main browser suite recorded no browser errors. Source inspection again found no application HTTP client or backend/API integration. Documentation/source whitespace checks passed.
 
 ## Reproduce
 
@@ -97,7 +118,7 @@ Verification found and fixed native Escape closing a pending dialog, and table t
 
 - `.gitignore` — ignore temporary browser evidence/profile directory.
 - `README.md` — fixture preview, Figma link, state preview and verification instructions.
-- `docs/05-implementation-plan.md` — T03 completion, T07 partial verification status, T08 untouched.
+- `docs/05-implementation-plan.md` — T03 completion, T07 final completion status with non-blocking provider note, T08 untouched.
 - `docs/06-t03-ui-specification.md` — approved design link and checkpoint/node references; originally created in the preceding task.
 - `docs/t07-verification.md` — this report.
 - `frontend/src/app/page.tsx` — dashboard route, development-only scene selection.
@@ -121,6 +142,8 @@ Verification found and fixed native Escape closing a pending dialog, and table t
 
 No dependency, lockfile, backend, database, or environment-file changes. Next.js/React review covered client boundaries, serializable props, typed component inputs, derived rather than duplicated state, effect cleanup, static Tailwind variant strings, safe text rendering, and native accessible controls.
 
-## Remaining issue and next task
+## Completion decision and next task
 
-The only outstanding T07 item is exact visual comparison of remaining Figma dialog/alternate-state frames, blocked by the provider quota. The fixture implementation is ready for integration technically, but the formal T07 checkbox stays open until that design verification is resolved. Then proceed to **T08 — Connect the frontend to the API**. T08 remains not started; fixtures do not establish persistence or any browser → Express → database flow.
+**T07 is complete:** keyboard controls/forms, required responsive layouts, reusable fixture states, validation and final implementation checks satisfy its completion criteria. The user authorized specification-based final verification when the provider quota still prevents additional frame reads; this limitation is retained above without claiming an unavailable visual comparison.
+
+Ready for **T08 — Connect the frontend to the API**. T08 remains not started and was not implemented; fixtures do not establish persistence or any browser → Express → database flow. Full API request/recovery behavior will be verified during the corresponding integration tasks.
