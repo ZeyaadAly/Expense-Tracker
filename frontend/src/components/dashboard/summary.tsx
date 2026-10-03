@@ -13,7 +13,7 @@ export function SummaryCard({ label, value, role, loading = false }: { label: st
 }
 
 export function SummarySection({ summary, loading = false, error = false, stale = false, onRetry }: { summary: Summary; loading?: boolean; error?: boolean; stale?: boolean; onRetry: () => void }) {
-  return <section aria-labelledby="summary-heading" aria-busy={loading} className="space-y-4">
+  return <section aria-labelledby="summary-heading" aria-busy={loading} className="space-y-4 bg-surface">
     <h2 id="summary-heading" className="text-xl leading-7 font-semibold">Financial summary</h2>
     <p className="text-sm leading-5 text-muted">All transactions</p>
     {loading ? <p role="status" className="sr-only">Loading financial summary…</p> : null}

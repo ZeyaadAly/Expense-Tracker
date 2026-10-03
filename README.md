@@ -85,9 +85,25 @@ An unavailable database returns HTTP 503 with `error.code` set to `DATABASE_UNAV
 
 ## Frontend
 
-Copy `frontend/.env.example` to `frontend/.env.local`. Its only public value is the Express API base URL, `http://localhost:4000/api/v1`. Then run `npm run dev` from `frontend/` and open `http://localhost:3000`. The page remains a setup placeholder; it does not connect to Supabase.
+Run `npm run dev` from `frontend/` and open `http://localhost:3000`. The T07 dashboard uses temporary fixtures only; the backend and frontend environment variables are not needed for this preview. Add, edit, delete and filters work in memory; all changes reset on reload. No frontend application API requests are made. T08 has not started.
 
-## Checks
+The approved [Figma design](https://www.figma.com/design/GWgioRUOXX3XcaDLYWi8HA) is recorded in the [T03 UI specification](docs/06-t03-ui-specification.md). See [T07 verification](docs/t07-verification.md) for component inventory, responsive checks and the remaining Figma comparison limitation.
+
+Development-only state previews use `/?preview=loading`, `empty`, `no-results`, `error`, `summary-error`, `list-error`, `success`, `stale`, `negative`, `stress`, `submitting`, `validation`, `save-error`, `uncertain`, `edit-missing`, `delete-pending`, or `delete-error`. These are visual fixtures, not real network failures; production always starts with the populated fixture dashboard. Pending fixture dialogs intentionally remain pending until the page is reloaded.
+
+Frontend checks, from `frontend/`: `npm run lint`, `npm run typecheck`, `npm run build`, and `node scripts/verify-t07-domain.mjs`. With the dev server running and a local agent-browser session named `expense-t07` open against the preview, run `node scripts/verify-t07.mjs PATH_TO_AGENT_BROWSER_EXECUTABLE`. Browser evidence is saved to ignored `.tmp-t07/`; the executable is an external verification tool, not an application dependency.
+
+During T08, copy `frontend/.env.example` to `frontend/.env.local`; its only public value is the Express API base URL, `http://localhost:4000/api/v1`. No database credentials belong in the frontend.
+
+## Vercel frontend deployment
+
+Live dashboard: https://expensetracker-inky-mu.vercel.app.
+
+For the Vercel project `expense_tracker`, set **Root Directory** to `frontend` in Project Settings → Build and Deployment. Use the Next.js framework preset, Node.js 24.x, and default install/build/output settings. The repository root has no Next.js app directory; building there fails with “Couldn't find any pages or app directory.” Root Directory is a Vercel project setting, rather than a `vercel.json` property.
+
+This deployment serves the fixture dashboard described above. Backend integration and database persistence remain separate work. See [deployment verification](docs/vercel-deployment-verification.md).
+
+## Backend checks
 
 Run `npm run lint`, `npm run typecheck`, `npm run build`, then `npm test` in `backend/`. Tests load compiled modules, so rebuild after source changes. The tests use isolated HTTP servers and do not write to Supabase. After building, run `node scripts/verify-t04-health.mjs` with ports 4000 and 4001 free; it starts and stops test backend processes and checks live success plus simulated database failure. Set `HEALTH_SUCCESS_PORT` and `HEALTH_FAILURE_PORT` to alternate ports when a development server is running.
 

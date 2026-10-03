@@ -31,7 +31,10 @@ function check(name, code) {
   console.log(`PASS ${name}`);
 }
 function capture(name) { browser("screenshot", resolve(artifactDirectory, `${name}.png`), "--full"); }
-function open(scene = "") { browser("open", `${baseUrl}/${scene ? `?preview=${scene}` : ""}`); }
+function open(scene = "") {
+  browser("open", `${baseUrl}/${scene ? `?preview=${scene}` : ""}`);
+  browser("wait", "--load", "networkidle");
+}
 
 browser("set", "media", "light", "reduced-motion");
 for (const width of [360, 768, 1440]) {

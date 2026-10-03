@@ -7,7 +7,7 @@ import { TransactionList } from "./transaction-list";
 export function TransactionPanel({ transactions, overallCount, filters, loading, error, onFilterChange, onAdd, onEdit, onDelete, onRetry }: { transactions: Transaction[]; overallCount?: number; filters: Filters; loading: boolean; error: boolean; onFilterChange: (filters: Filters) => void; onAdd: () => void; onEdit: (transaction: Transaction) => void; onDelete: (transaction: Transaction) => void; onRetry: () => void }) {
   const activeFilters = filters.type !== "all" || filters.category !== "all";
   const noMatches = activeFilters && overallCount !== undefined && overallCount > 0;
-  return <section aria-labelledby="transactions-heading" className="min-w-0 space-y-4">
+  return <section aria-labelledby="transactions-heading" className="min-w-0 space-y-4 bg-surface">
     <div className="flex flex-wrap items-baseline justify-between gap-2"><h2 id="transactions-heading" tabIndex={-1} className="text-xl leading-7 font-semibold">Transactions</h2>{!loading && !error ? <p className="text-sm text-muted">{transactions.length} {transactions.length === 1 ? "transaction" : "transactions"}</p> : null}</div>
     <p className="text-sm leading-5 text-muted">Newest transaction dates first</p>
     <FilterBar filters={filters} onChange={onFilterChange} />

@@ -1,8 +1,10 @@
 # T03 Design Specification
 
 **Date:** 2026-10-03  
-**Status:** Specification prepared; T03 Figma design remains not started. T07 remains blocked by that design prerequisite.  
-**Deliverable:** Design instructions only; no application implementation or Figma file creation.
+**Status:** T03 completed externally and confirmed by the user on 2026-10-03; T07 fixture implementation follows this specification.
+
+**Approved design:** [Expense Tracker in Figma](https://www.figma.com/design/GWgioRUOXX3XcaDLYWi8HA).
+**Deliverable:** UI specification; actual Figma creation occurred after this document was prepared. The implementation font remains Arial/Helvetica, with Inter used only as a Figma fallback.
 
 ## Basis and scope
 
@@ -247,13 +249,13 @@ Required reusable Figma components/variants:
 - EmptyState: empty database/no matches/unknown overall count; ErrorState with Retry; skeleton row/card/value.
 - DialogShell, Add/Edit TransactionForm, DeleteConfirmation, DashboardHeader.
 
-Annotate keyboard focus order, dialog focus/return behavior, spacing tokens, overflow/wrapping, date and money formatting, API field mapping, filter transitions, and confirmed-versus-uncertain mutation outcomes. Use a simple prototype: Add → invalid → correct → submit → success; filter → no matches → reset; edit → save; delete → cancel/confirm. Loading/errors may be linked alternate frames. Attach the actual Figma URL/node references after creation; none exists as part of this deliverable.
+Annotate keyboard focus order, dialog focus/return behavior, spacing tokens, overflow/wrapping, date and money formatting, API field mapping, filter transitions, and confirmed-versus-uncertain mutation outcomes. Use a simple prototype: Add → invalid → correct → submit → success; filter → no matches → reset; edit → save; delete → cancel/confirm. Loading/errors may be linked alternate frames. Approved design references: desktop populated `6:2`, mobile populated `6:2258`, tablet populated `6:4011`, desktop add defaults `6:935`, mobile add defaults `6:2964`, desktop delete `6:1967`. See [T07 verification](t07-verification.md) for the limits of the retrieved design context.
 
 Use design-only fixtures from database documentation: Income/Freelance “Freelance payment” 1,000.00 EGP dated 29/09/2026 and Expense/Food “Grocery shopping” 250.50 EGP dated 30/09/2026. Summary is 749.50 balance / 1,000.00 income / 250.50 expenses. Display expense first. For negative-balance preview, use income 100.00 and expenses 250.50, balance −150.50. Validation preview can show amount `1.234`, blank description/category, absent type, and future date; it must never look like persisted data.
 
 ## T07 Implementation Notes
 
-- T03 is not complete until actual Figma frames cover V1 flows, their design link is recorded, and their implementability is reviewed. This specification alone does not unblock T07. Keep existing task checkboxes unchanged.
+- T03 was completed after this specification was written; the user confirmed approval and supplied the actual Figma file. T07 is authorized. Completion of this specification alone was not a T03 completion claim.
 - T07 builds layout and reusable states against reviewed Figma, using explicitly temporary fixtures. T08 connects create/read/summary; T09 connects editing; T10 connects deletion; T11 completes filtering/recovery. T06 already implements list filtering despite the older T11 backlog wording; do not add unsupported filters or duplicate backend work.
 - Keep future implementation in existing Next.js App Router + TypeScript + Tailwind 4. Read applicable installed Next.js guides first as required by frontend/AGENTS.md. Global semantic CSS variables and Tailwind 4 theme mappings should represent this token system; components consume shared tokens, not repeated one-off colors. No dependency or styling edits are authorized by this specification.
 - Browser calls only Express through `NEXT_PUBLIC_API_BASE_URL`; do not add direct Supabase access. Unwrap `{data}` and list `meta`; recognize structured `{error:{code,message,details}}` failures. POST/PUT bodies contain exactly type, amount, category, date, description, all strings. ID stays in the edit/delete path; never submit currency or timestamps.

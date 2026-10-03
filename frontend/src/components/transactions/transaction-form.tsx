@@ -66,7 +66,7 @@ export function TransactionForm({ initialValues, mode, pending, scenario = "norm
       <p className="font-medium">Check the highlighted fields.</p>
       <ul className="mt-2 space-y-1">{Object.entries(errors).map(([field, message]) => <li key={field}><a className="underline" href={`#${fieldId(field as keyof TransactionInput)}`} onClick={(event) => { event.preventDefault(); document.getElementById(fieldId(field as keyof TransactionInput))?.focus(); }}>{message}</a></li>)}</ul>
     </div> : null}
-    <fieldset disabled={pending || unavailable} aria-invalid={Boolean(errors.type)} aria-describedby={errors.type ? `${fieldId("type")}-error` : undefined} className="min-w-0">
+    <fieldset id={fieldId("type")} tabIndex={-1} disabled={pending || unavailable} aria-invalid={Boolean(errors.type)} aria-describedby={errors.type ? `${fieldId("type")}-error` : undefined} className="min-w-0">
       <legend className="mb-2 text-sm font-medium">Type <span className="text-muted">(required)</span></legend>
       <div className="grid grid-cols-2 gap-2">{(["expense", "income"] as const).map((type) => <label key={type} className={`flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-control border p-3 has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-focus ${values.type === type ? "border-primary bg-info-surface text-info" : "border-control bg-surface"}`}>
         <input type="radio" name="type" value={type} required checked={values.type === type} onChange={() => changeValues({ ...values, type, category: values.category && CATEGORIES[type].includes(values.category) ? values.category : "" })} className="size-4 accent-primary" />
