@@ -2,7 +2,7 @@
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** Contract specification; endpoints have not been implemented or tested  
+**Status:** Contract specification; T04 health endpoint verified, transaction/summary endpoints not implemented
 **Related documents:** [Project brief](01-project-brief.md) · [Requirements](02-requirements.md) · [Database design](03-database-design.md)
 
 ## 1. Purpose and architecture
@@ -274,7 +274,7 @@ For creation without request-level idempotency, checking similar records cannot 
 
 ## 13. Configuration and plugin integration
 
-- Server environment: `PORT` (development default 4000), `CLIENT_ORIGIN` (development default http://localhost:3000), and required server-only `DATABASE_URL`. V1 does not use Supabase API keys or Auth.
+- Server environment: `PORT` (development default 4000), `CLIENT_ORIGIN` (development default http://localhost:3000), required server-only `DATABASE_URL`, and optional `DATABASE_SSL_CA_FILE` for a trusted CA PEM file. The pool always uses verified TLS; URL SSL overrides are rejected. V1 does not use Supabase API keys or Auth.
 - Client environment: `NEXT_PUBLIC_API_BASE_URL`, containing the public API base URL only. No database secrets enter client configuration.
 - Allow the configured frontend origin through CORS. CORS is not authentication and does not protect the shared collection from direct HTTP clients.
 - Use parameterized SQL and a reusable connection pool; keep provider credentials server-side.
@@ -305,4 +305,4 @@ Checks are planned and have not been executed.
 
 ## 15. Next step
 
-Create `05-implementation-plan.md` with small tasks for project setup, Figma design, database setup, Express endpoints, frontend integration, verification, and sample-data deployment.
+The implementation plan exists and T04 is verified. Next is T05 - Validation and API foundations; CRUD and summary endpoints follow in later tasks.

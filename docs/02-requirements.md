@@ -2,7 +2,7 @@
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** V1 implementation baseline  
+**Status:** V1 implementation baseline
 **Related document:** [Project brief](01-project-brief.md)
 
 ## 1. Purpose and scope
@@ -217,4 +217,4 @@ These checks will guide implementation verification; they have not been executed
 
 ## 10. Next step
 
-Finish T04 by pulling the existing remote schema into migration history and verifying Express database connectivity. Then proceed to T05 API foundations; do not add transaction routes during T04.
+T04 is verified; see [T04 verification](t04-verification.md). Next is T05 - Validation and API foundations. Transaction routes belong to later tasks.

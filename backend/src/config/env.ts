@@ -1,4 +1,5 @@
 import { fileURLToPath } from "node:url";
+import { resolve } from "node:path";
 import { config } from "dotenv";
 
 // Resolve from this module so both src/ and dist/ load backend/.env.
@@ -66,4 +67,7 @@ export const env = Object.freeze({
   port: readPort(process.env.PORT),
   clientOrigin: readClientOrigin(process.env.CLIENT_ORIGIN),
   databaseUrl: readDatabaseUrl(process.env.DATABASE_URL),
+  databaseSslCaFile: process.env.DATABASE_SSL_CA_FILE?.trim()
+    ? resolve(fileURLToPath(new URL("../../", import.meta.url)), process.env.DATABASE_SSL_CA_FILE.trim())
+    : undefined,
 });

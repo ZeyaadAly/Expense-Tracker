@@ -1,10 +1,10 @@
 # Expense Tracker — Database Design
 
-> T04 workflow update (2026-10-01): No Docker, `db pull`, or `db push` for the existing remote baseline. Migration `20261001144302_initial_expense_tracker_schema.sql` was generated with the CLI and contains the exact V1 reference SQL. After CLI authentication and verification that the repository is linked to `kpbyvbgcfwavcsgtcdws`, run `npx supabase migration repair --status applied 20261001144302`. This supersedes pull-based instructions below. Remote history repair, live connectivity, and disposable database SQL verification remain pending; T04 stays open and T05 has not started.
+> T04 workflow verified (2026-10-03): Baseline `20261001144302` already matched the remote schema and was already recorded as applied; no baseline repair, `db pull`, or `db push` was needed. Separate role migration `20261003163341` is applied and recorded. Limited-role Session Pooler login with verified TLS, health success/failure, backend checks, and clean disposable PostgreSQL migration/seed checks passed. See [T04 verification](t04-verification.md). T04 is complete; T05 has not started.
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** V1 schema reported applied remotely; local baseline pull and verification pending
+**Status:** T04 schema, migration history, limited role, connectivity, and disposable database checks verified
 **Related documents:** [Project brief](01-project-brief.md) · [Requirements](02-requirements.md)
 
 ## 1. Design overview
@@ -13,7 +13,7 @@ Use Supabase PostgreSQL with one application table: `expense_tracker.transaction
 
 V1 has one shared transaction collection and no authentication or user ownership column. Adding accounts later requires an ownership-aware migration and access policy first. Categories are fixed values enforced by constraints; a separate categories table is unnecessary until category management is introduced.
 
-Use a dedicated `expense_tracker` schema and fully qualified table names in Supabase PostgreSQL. The remote V1 schema already exists. Pull it with the Supabase CLI to create the authoritative baseline migration; do not execute this document's reference SQL against the remote project again.
+Use a dedicated `expense_tracker` schema and fully qualified table names in Supabase PostgreSQL. The remote V1 schema already exists. The existing CLI-generated baseline is authoritative and matches the remote schema; do not execute this document's reference SQL against the remote project again.
 
 ## 2. Table definition
 
@@ -72,7 +72,7 @@ Future-date validation uses a trigger rather than a check constraint involving t
 
 ## 6. Proposed schema SQL
 
-This SQL records the design intent for comparison with the existing remote schema. The Supabase CLI pull, once completed and reviewed, is the authoritative baseline migration. Do not run this reference SQL against the remote project again.
+This SQL records the design intent for comparison with the existing remote schema. The verified existing CLI-generated migration is the authoritative baseline. Do not run this reference SQL against the remote project again.
 
 ```sql
 BEGIN;
@@ -223,7 +223,7 @@ The frontend does not use a Supabase client or access this database schema direc
 
 ## 9. Migration and sample-data plan
 
-1. Link the repository to the existing Supabase project using the CLI and pull the already-applied remote schema into a baseline migration. Review the result against this design; do not recreate the remote schema.
+1. Confirm the existing CLI project link and compare remote catalogs against the existing baseline. Do not pull, push, or recreate the retained remote schema.
 2. Verify the remote migration history records that baseline as already applied before any future `db push`.
 3. Configure a limited application role and the Express connection pool.
 4. Keep the CLI-generated migration in version control. Use the CLI for future migration filenames and maintain one authoritative history.
@@ -241,9 +241,9 @@ Expected summary: income 1,000.00 EGP, expenses 250.50 EGP, balance 749.50 EGP. 
 
 ## 10. Verification checklist
 
-These checks are planned unless explicitly recorded as verified. The remote schema was reported applied, but the repository baseline and database checks still require verification.
+T04 checks actually executed are recorded in [T04 verification](t04-verification.md). The remaining checklist includes future API/integration checks and is not a blanket completion claim.
 
-- [ ] Pull and review the existing remote schema into a CLI-generated baseline migration; verify a clean disposable database can apply it later.
+- [x] Compare the remote schema against the existing CLI-generated baseline and apply it successfully to a clean disposable database.
 - [ ] Insert both sample records and verify the expected summary.
 - [ ] Confirm 0.10 + 0.20 totals exactly 0.30.
 - [ ] Reject null fields, zero/negative/out-of-range amounts, excess scale, NaN, and infinity.
@@ -265,4 +265,4 @@ Reviewed PostgreSQL documentation:
 - [Numeric types](https://www.postgresql.org/docs/current/datatype-numeric.html): exact numeric storage and scale coercion.
 - [Constraints](https://www.postgresql.org/docs/current/ddl-constraints.html): stable checks and null handling.
 
-Next, create `04-api-design.md` with REST routes, decimal-string amounts, lowercase type/category codes, date-only values, response shapes, and error handling.
+The API design exists. T04 is verified; next implement T05 API foundations without changing the agreed contracts.

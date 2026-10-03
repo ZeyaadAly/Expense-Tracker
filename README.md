@@ -2,13 +2,13 @@
 
 V1 uses a Next.js frontend, an Express API, and Supabase PostgreSQL. The frontend sends application requests only to Express. V1 has one shared transaction collection and no authentication; use sample data only for any hosted demo.
 
-The remote V1 schema for Supabase project `kpbyvbgcfwavcsgtcdws` was reported applied. The CLI-generated baseline is `supabase/migrations/20261001144302_initial_expense_tracker_schema.sql`, copied exactly from the V1 schema SQL in the database design. Remote migration history repair and live database verification remain pending. No transaction CRUD routes are implemented.
+T04 is verified for Supabase project `kpbyvbgcfwavcsgtcdws`. The existing baseline `20261001144302_initial_expense_tracker_schema.sql` matches the remote schema and was already recorded as applied. Migration `20261003163341_backend_application_role.sql` adds the limited backend role and is also recorded remotely. See [T04 verification](docs/t04-verification.md). No transaction CRUD routes are implemented; T05 is next.
 
 ## Prerequisites
 
 - Node.js 22 or newer and npm.
-- A Supabase CLI login for the remote schema pull.
-- A running Docker-compatible engine for `supabase db pull` to create its shadow database.
+- A Supabase CLI login for linked migration-history inspection.
+- A disposable PostgreSQL database for migration verification; Docker is optional.
 - A server-only PostgreSQL connection string for backend health and later API work.
 
 ## Install application dependencies
@@ -36,11 +36,10 @@ npx supabase link --project-ref kpbyvbgcfwavcsgtcdws
 Verify that `supabase/.temp/project-ref` contains exactly `kpbyvbgcfwavcsgtcdws` before running:
 
 ```sh
-npx supabase migration repair --status applied 20261001144302
 npx supabase migration list --linked
 ```
 
-Repair records the existing schema as applied; it does not execute the migration SQL. Enter any database password only in the CLI prompt. Never run the initial migration against the existing remote schema. Keep sample seeding separate and explicit.
+Both migration versions are already recorded remotely. Repair is needed only if a missing history entry is discovered after verifying that its SQL is already applied. In that case, use `npx supabase migration repair --linked --status applied VERSION`; it records history without executing SQL. Enter any database password only in the CLI prompt. Never run the initial migration against the existing remote schema. Keep sample seeding separate and explicit.
 
 `supabase/seed.sql` contains three fixed sample transactions and `ON CONFLICT (id) DO NOTHING`, so rerunning it does not duplicate rows. It is for disposable local/demo data and is not applied to the remote project during setup. With an empty database, the sample totals are 1,000.00 EGP income, 296.25 EGP expenses, and 703.75 EGP balance.
 
@@ -52,11 +51,14 @@ Copy `backend/.env.example` to `backend/.env` and fill in `DATABASE_URL`. The fi
 PORT=4000
 CLIENT_ORIGIN=http://localhost:3000
 DATABASE_URL=
+DATABASE_SSL_CA_FILE=certs/supabase-ca.crt
 ```
 
 `PORT` and `CLIENT_ORIGIN` have those development defaults. `DATABASE_URL` is required, stays on the backend, and must not be committed. The root and Supabase ignore files exclude local environment files and CLI link state.
 
-To obtain the URL, open your Supabase project in the Dashboard and select **Connect**. Copy the **Direct connection** string if your backend can reach IPv6; otherwise copy the **Session pooler** string for an IPv4 network. Replace the password placeholder with your database password, percent-encoding reserved characters. Use the host, port, and username provided by the Dashboard. Configure TLS in the URL, for example with `sslmode=require`; use the Supabase certificate and `sslmode=verify-full` when certificate verification is configured. Keep the complete URL out of frontend variables and Git.
+Use **Connect → Session pooler** in the Supabase Dashboard. Keep the supplied host, database, and session port (5432), but use username `expense_tracker_app.kpbyvbgcfwavcsgtcdws` and that role's password, not the administrative database password. Percent-encode reserved password characters. The current ignored environment is already configured. A new environment needs the role's password provisioned privately through an administrative connection; passwords never belong in migration SQL or documentation.
+
+The pool explicitly enables TLS with certificate and hostname verification. `DATABASE_SSL_CA_FILE` points to a PEM CA certificate, with relative paths resolved from `backend/`. The public Supabase CA is included at `backend/certs/supabase-ca.crt`; its source is recorded in the verification report. Do not put `sslmode`, `sslrootcert`, `sslcert`, `sslkey`, or `uselibpqcompat` in `DATABASE_URL`: these can override node-postgres TLS configuration and are rejected. Keep the complete URL out of frontend variables and Git.
 
 The backend creates one reusable `pg` Pool. A missing or malformed `DATABASE_URL` stops startup. The health query checks PostgreSQL with `SELECT 1`; it does not inspect or change transaction data.
 
@@ -87,4 +89,6 @@ Copy `frontend/.env.example` to `frontend/.env.local`. Its only public value is 
 
 ## Checks
 
-Run `npm run lint`, `npm run typecheck`, and `npm run build` in `backend/`. T04 remains open until the remote baseline is recorded as applied, the database connection succeeds, and the migration and seed are verified on a disposable database. T05 API foundations starts afterward.
+Run `npm run lint`, `npm run typecheck`, and `npm run build` in `backend/`. After building, run `node scripts/verify-t04-health.mjs` with ports 4000 and 4001 free; it starts and stops test backend processes and checks live success plus simulated database failure.
+
+To repeat the SQL checks, use a fresh disposable PostgreSQL database named `postgres` on loopback. From `backend/`, set `DISPOSABLE_DATABASE_URL` privately and run `node scripts/verify-t04-database.mjs`. The runner refuses non-loopback hosts and an existing application schema, applies both migrations, runs the seed twice, and checks constraints, exact money, timestamp behavior, limited-role CRUD, and denied DDL. Do not point it at retained data. T04 checks passed; T05 API foundations is next.

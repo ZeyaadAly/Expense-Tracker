@@ -1,10 +1,10 @@
 # Expense Tracker — Project Brief
 
-> T04 workflow update (2026-10-01): No Docker, `db pull`, or `db push` for the existing remote baseline. Migration `20261001144302_initial_expense_tracker_schema.sql` was generated with the CLI and contains the exact V1 reference SQL. After CLI authentication and verification that the repository is linked to `kpbyvbgcfwavcsgtcdws`, run `npx supabase migration repair --status applied 20261001144302`. This supersedes pull-based instructions below. Remote history repair, live connectivity, and disposable database SQL verification remain pending; T04 stays open and T05 has not started.
+> T04 workflow verified (2026-10-03): Baseline `20261001144302` already matched the remote schema and was already recorded as applied; no baseline repair, `db pull`, or `db push` was needed. Separate role migration `20261003163341` is applied and recorded. Limited-role Session Pooler login with verified TLS, health success/failure, backend checks, and clean disposable PostgreSQL migration/seed checks passed. See [T04 verification](t04-verification.md). T04 is complete; T05 has not started.
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Stage:** Planning  
+**Stage:** Implementation - T04 complete
 **Owner:** Zeyad Aly Elghazaly
 
 ## 1. Project idea
@@ -129,4 +129,4 @@ Design the interface in Figma after requirements, then use it while implementing
 
 ## 11. Next step
 
-Finish T04 by pulling the already-applied remote schema into an authoritative migration, configuring Express database access, and verifying connectivity. T05 API foundations follows only after T04 is verified.
+T04 is verified. Next is T05 - Validation and API foundations. T03 Figma design remains outstanding and independent.

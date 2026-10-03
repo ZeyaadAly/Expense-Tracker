@@ -15,6 +15,7 @@ backend/dist/
 .npm-cache/
 coverage/
 *.log
+.tmp-t04/
 .DS_Store
 Thumbs.db
 

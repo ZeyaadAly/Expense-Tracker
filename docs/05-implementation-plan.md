@@ -1,10 +1,10 @@
 # Expense Tracker — Implementation Plan
 
-> T04 workflow update (2026-10-01): No Docker, `db pull`, or `db push` for the existing remote baseline. Migration `20261001144302_initial_expense_tracker_schema.sql` was generated with the CLI and contains the exact V1 reference SQL. After CLI authentication and verification that the repository is linked to `kpbyvbgcfwavcsgtcdws`, run `npx supabase migration repair --status applied 20261001144302`. This supersedes pull-based instructions below. Remote history repair, live connectivity, and disposable database SQL verification remain pending; T04 stays open and T05 has not started.
+> T04 workflow verified (2026-10-03): Baseline `20261001144302` already matched the remote schema and was already recorded as applied; no baseline repair, `db pull`, or `db push` was needed. Separate role migration `20261003163341` is applied and recorded. Limited-role Session Pooler login with verified TLS, health success/failure, backend checks, and clean disposable PostgreSQL migration/seed checks passed. See [T04 verification](t04-verification.md). T04 is complete; T05 has not started.
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** In progress; T04 remote baseline and database verification pending
+**Status:** In progress; T04 verified, T05 next, T03 outstanding
 **Owner:** Zeyad Aly Elghazaly
 
 ## 1. Purpose
@@ -93,14 +93,14 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 **Depends on:** T01–T02.
 
-- Link this repository to the existing Supabase project and pull the remote V1 schema into a CLI-generated baseline migration. Do not recreate the remote schema.
+- Confirm the existing Supabase project link and compare the remote schema against the existing CLI-generated baseline. Do not use db pull or db push for the retained baseline or recreate the remote schema.
 - Review the baseline against `03-database-design.md` and confirm remote migration history records it as already applied.
 - Verify the limited application role and required function grants without exposing the private schema through the Data API.
 - Configure one reusable Express `pg` connection pool using only server-only `DATABASE_URL`.
 - Add a read-only PostgreSQL health check at `GET /api/v1/health` with the API error contract.
 - Add repeatable sample seeding in `supabase/seed.sql`, separate from the baseline migration; do not seed the retained remote database during setup.
 
-**Done when:** The CLI-generated baseline exists and is recorded as applied remotely; the linked project and database are reachable; a disposable database can apply the baseline and seed without errors; the application role has intended access; and no unintended Data API exposure exists. Lint, type checks, build, and both health success/failure cases pass. If CLI login, a database password, or Docker is missing, leave T04 open and record the manual step.
+**Done when:** The CLI-generated baseline exists and is recorded as applied remotely; the linked project and database are reachable; a disposable database can apply the baseline and seed without errors; the application role has intended access; and no unintended Data API exposure exists. Lint, type checks, build, and both health success/failure cases pass. If required account/database access or disposable PostgreSQL verification is unavailable, leave T04 open and record the specific missing step. Docker is optional.
 
 ### T05 — Implement validation and API foundations
 
@@ -227,7 +227,7 @@ Use separate frontend and backend packages to keep the first project easy to und
 | Plugin | Task | Action |
 | --- | --- | --- |
 | Figma | T03, T07 | Create the dashboard/form design and use it during frontend implementation. |
-| Supabase | T04, T14 | Pull and inspect PostgreSQL schema; verify access and connection settings. |
+| Supabase | T04, T14 | Inspect existing PostgreSQL schema/history; verify access and connection settings. |
 | Vercel | T14 | Configure and deploy the frontend using supported capabilities. |
 | Notion | Optional throughout | Mirror task status and links if a planning workspace is requested. |
 
@@ -250,7 +250,7 @@ Mark tasks complete only when their completion criteria have been verified.
 - [x] T01 — Prepare the project
 - [x] T02 — Start frontend/backend skeletons
 - [ ] T03 — Figma interface design
-- [ ] T04 — PostgreSQL setup
+- [x] T04 — PostgreSQL setup
 - [ ] T05 — Validation and API foundations
 - [ ] T06 — Create/read/summary endpoints
 - [ ] T07 — Dashboard layout
@@ -268,7 +268,7 @@ Mark tasks complete only when their completion criteria have been verified.
 | --- | --- | --- |
 | Runtime/package versions | T01–T02 | Verify compatible supported versions at implementation time. |
 | Repository location | T01 | Use an existing repository if provided; otherwise initialize locally. |
-| Database provider | T04 | Supabase PostgreSQL selected; remote V1 schema reported applied. |
+| Database provider | T04 | Supabase PostgreSQL verified; baseline and limited-role migrations recorded as applied. |
 | Authentication | V1 scope | None; hosted demos use sample data only. |
 | Migration workflow | T04 | One authoritative history, matching the chosen setup. |
 | Plugin account access | Relevant task | Verify individually; no connection assumed. |
@@ -276,4 +276,4 @@ Mark tasks complete only when their completion criteria have been verified.
 
 ## 9. Immediate next action
 
-Finish **T04 — Supabase PostgreSQL setup** by linking the CLI, pulling and verifying the remote baseline, and checking Express database connectivity. Do not start T05 until T04 is verified. T03 Figma design remains independent.
+T04 is verified; next is **T05 - Validation and API foundations**. T05 was not implemented during T04. T03 Figma design remains outstanding and independent.
