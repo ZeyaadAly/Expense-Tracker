@@ -26,6 +26,6 @@ async function verify(port, overrides, status, body) {
     }
   }
 }
-await verify(4000, {}, 200, {data:{api:"running",database:"reachable"}});
-await verify(4001, { DATABASE_URL: "postgresql://unavailable:unavailable@127.0.0.1:55405/postgres" }, 503,
+await verify(Number(process.env.HEALTH_SUCCESS_PORT || 4000), {}, 200, {data:{api:"running",database:"reachable"}});
+await verify(Number(process.env.HEALTH_FAILURE_PORT || 4001), { DATABASE_URL: "postgresql://unavailable:unavailable@127.0.0.1:55405/postgres" }, 503,
   {error:{code:"DATABASE_UNAVAILABLE",message:"Database is unavailable. Please try again later.",details:[]}});

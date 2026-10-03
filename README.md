@@ -2,7 +2,7 @@
 
 V1 uses a Next.js frontend, an Express API, and Supabase PostgreSQL. The frontend sends application requests only to Express. V1 has one shared transaction collection and no authentication; use sample data only for any hosted demo.
 
-T04 is verified for Supabase project `kpbyvbgcfwavcsgtcdws`. The existing baseline `20261001144302_initial_expense_tracker_schema.sql` matches the remote schema and was already recorded as applied. Migration `20261003163341_backend_application_role.sql` adds the limited backend role and is also recorded remotely. See [T04 verification](docs/t04-verification.md). No transaction CRUD routes are implemented; T05 is next.
+T04 is verified for Supabase project `kpbyvbgcfwavcsgtcdws`. The existing baseline `20261001144302_initial_expense_tracker_schema.sql` matches the remote schema and was already recorded as applied. Migration `20261003163341_backend_application_role.sql` adds the limited backend role and is also recorded remotely. See [T04 verification](docs/t04-verification.md). [T05 foundations](docs/t05-verification.md) and [T06 create/read/summary endpoints](docs/t06-verification.md) are verified. PUT/DELETE remain planned. T07 dashboard layout follows the outstanding T03 design prerequisite.
 
 ## Prerequisites
 
@@ -89,6 +89,10 @@ Copy `frontend/.env.example` to `frontend/.env.local`. Its only public value is 
 
 ## Checks
 
-Run `npm run lint`, `npm run typecheck`, and `npm run build` in `backend/`. After building, run `node scripts/verify-t04-health.mjs` with ports 4000 and 4001 free; it starts and stops test backend processes and checks live success plus simulated database failure.
+Run `npm run lint`, `npm run typecheck`, `npm run build`, then `npm test` in `backend/`. Tests load compiled modules, so rebuild after source changes. The tests use isolated HTTP servers and do not write to Supabase. After building, run `node scripts/verify-t04-health.mjs` with ports 4000 and 4001 free; it starts and stops test backend processes and checks live success plus simulated database failure. Set `HEALTH_SUCCESS_PORT` and `HEALTH_FAILURE_PORT` to alternate ports when a development server is running.
 
-To repeat the SQL checks, use a fresh disposable PostgreSQL database named `postgres` on loopback. From `backend/`, set `DISPOSABLE_DATABASE_URL` privately and run `node scripts/verify-t04-database.mjs`. The runner refuses non-loopback hosts and an existing application schema, applies both migrations, runs the seed twice, and checks constraints, exact money, timestamp behavior, limited-role CRUD, and denied DDL. Do not point it at retained data. T04 checks passed; T05 API foundations is next.
+To repeat the SQL checks, use a fresh disposable PostgreSQL database named `postgres` on loopback. From `backend/`, set `DISPOSABLE_DATABASE_URL` privately and run `node scripts/verify-t04-database.mjs`. The runner refuses non-loopback hosts and an existing application schema, applies both migrations, runs the seed twice, and checks constraints, exact money, timestamp behavior, limited-role CRUD, and denied DDL. Do not point it at retained data.
+
+For T06 PostgreSQL integration tests, prepare that disposable database first, set `T06_DISPOSABLE_DATABASE_URL` to its administrative test connection, and run `npm test`. The API tests connect as `expense_tracker_app`; the administrative connection manages fixtures. The runner uses the local trust-auth fixture, resets transaction data only in the selected loopback database, and must never target retained development data. Without this explicit variable, the PostgreSQL integration group is skipped; other tests still run. T04–T06 passed; T07 layout follows T03 design.
+
+Implemented application endpoints are POST/GET `/api/v1/transactions`, GET `/api/v1/transactions/:id`, and GET `/api/v1/summary`. List filters are optional `type` and `category` parameters only. Summary totals always cover all transactions. The API also retains `/api/v1/health`. PUT/DELETE are not implemented.

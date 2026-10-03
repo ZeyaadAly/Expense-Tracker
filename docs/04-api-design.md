@@ -2,7 +2,7 @@
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** Contract specification; T04 health endpoint verified, transaction/summary endpoints not implemented
+**Status:** T04–T06 health/create/read/summary endpoints verified; PUT/DELETE remain planned
 **Related documents:** [Project brief](01-project-brief.md) · [Requirements](02-requirements.md) · [Database design](03-database-design.md)
 
 ## 1. Purpose and architecture
@@ -16,7 +16,7 @@ Development defaults:
 - API prefix: `/api/v1`.
 - Example base URL: `http://localhost:4000/api/v1`.
 
-Configure origins through environment variables. Hosting URLs are decided during deployment. Transaction and summary routes are planned and have not been implemented. Because V1 is unauthenticated, any hosted demo uses sample data.
+Configure origins through environment variables. Hosting URLs are decided during deployment. Health, creation, list, single-record, and summary routes are implemented; PUT/DELETE remain planned. Because V1 is unauthenticated, any hosted demo uses sample data.
 
 ## 2. Endpoint overview
 
@@ -286,7 +286,7 @@ This document creates no hosted resource or plugin connection.
 
 ## 14. API verification checklist
 
-Checks are planned and have not been executed.
+T06 results are recorded in [T06 verification](t06-verification.md). The checklist below also includes later update/delete/frontend/recovery work and is not a claim that all V1 checks passed.
 
 - [ ] Create a valid transaction; verify 201, Location, generated ID, normalized values, and persistence.
 - [ ] Read the record and list; verify field names and date/timestamp serialization.
@@ -305,4 +305,4 @@ Checks are planned and have not been executed.
 
 ## 15. Next step
 
-The implementation plan exists and T04 is verified. Next is T05 - Validation and API foundations; CRUD and summary endpoints follow in later tasks.
+T04–T06 are verified. Next is T07 dashboard layout after its outstanding T03 design prerequisite; PUT/DELETE remain assigned to T09/T10.

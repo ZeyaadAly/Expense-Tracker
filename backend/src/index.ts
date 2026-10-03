@@ -1,13 +1,11 @@
-import cors from "cors";
-import express from "express";
+import { createApp } from "./app.js";
 import { env } from "./config/env.js";
-import { healthRouter } from "./routes/health.js";
+import { isDatabaseReachable } from "./db/health.js";
+import { pool } from "./db/pool.js";
+import { createTransactionService } from "./services/transactions.js";
 
-const app = express();
-
-app.disable("x-powered-by");
-app.use(cors({ origin: env.clientOrigin }));
-app.use(healthRouter);
+const app = createApp({ clientOrigin: env.clientOrigin, databaseHealth: isDatabaseReachable,
+  transactions: createTransactionService(pool) });
 
 app.listen(env.port, () => {
   console.log(`Expense Tracker API listening on http://localhost:${env.port}`);

@@ -1,23 +1,22 @@
 import { Router } from "express";
-import { isDatabaseReachable } from "../db/health.js";
+import { databaseUnavailable } from "../utils/api-error.js";
+import { methodNotAllowed } from "../middleware/request.js";
+import { validateQuery } from "../validators/request.js";
 
-export const healthRouter = Router();
+export function createHealthRouter(databaseHealth: () => Promise<boolean>) {
+  const router = Router();
 
-healthRouter.get("/api/v1/health", async (_request, response) => {
-  response.set("Cache-Control", "no-store");
-
-  if (!(await isDatabaseReachable())) {
-    response.status(503).json({
-      error: {
-        code: "DATABASE_UNAVAILABLE",
-        message: "Database is unavailable. Please try again later.",
-        details: [],
-      },
-    });
-    return;
-  }
-
-  response.status(200).json({
-    data: { api: "running", database: "reachable" },
+  const rejectMethod = methodNotAllowed(["GET"]);
+  router.all("/health", (request, response, next) => {
+    if (request.method !== "GET") { rejectMethod(request, response, next); return; }
+    validateQuery(request.originalUrl);
+    next();
   });
-});
+  router.get("/health", async (_request, response) => {
+    if (!(await databaseHealth())) throw databaseUnavailable();
+    response.status(200).json({
+      data: { api: "running", database: "reachable" },
+    });
+  });
+  return router;
+}

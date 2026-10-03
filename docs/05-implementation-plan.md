@@ -4,7 +4,7 @@
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** In progress; T04 verified, T05 next, T03 outstanding
+**Status:** In progress; T04–T06 verified, T07 next with T03 design prerequisite outstanding
 **Owner:** Zeyad Aly Elghazaly
 
 ## 1. Purpose
@@ -114,6 +114,8 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 **Done when:** Focused checks verify amount syntax/range, impossible/future dates, Unicode description length, malformed JSON, field errors, and metadata rejection. Unexpected errors do not expose internals.
 
+**Verified:** Reusable validators, mapper, error middleware, request policy, and API router are implemented. Nine automated test groups, backend lint/type-check/build, live health success/failure, and disposable T04 database regression checks passed. See [T05 verification](t05-verification.md). No transaction CRUD endpoints were implemented.
+
 ### T06 — Build create, read, and summary endpoints
 
 **Depends on:** T04–T05.
@@ -125,6 +127,8 @@ Use separate frontend and backend packages to keep the first project easy to und
 - Follow the status codes, decimal strings, date-only strings, timestamps, and Location behavior in the API contract.
 
 **Done when:** API checks can create and retrieve sample records, verify persistence, verify exact 0.10 + 0.20 totals, and distinguish empty data, invalid input, missing IDs, and database failures.
+
+**Verified:** Create/list/single/summary endpoints, documented list filters, exact aggregates, response contracts, and centralized errors passed 12 automated test groups including limited-role disposable PostgreSQL integration. T04/T05 regressions and persistence after a database restart passed. See [T06 verification](t06-verification.md). PUT/DELETE and frontend work remain unimplemented.
 
 ### T07 — Build the dashboard layout
 
@@ -251,8 +255,8 @@ Mark tasks complete only when their completion criteria have been verified.
 - [x] T02 — Start frontend/backend skeletons
 - [ ] T03 — Figma interface design
 - [x] T04 — PostgreSQL setup
-- [ ] T05 — Validation and API foundations
-- [ ] T06 — Create/read/summary endpoints
+- [x] T05 — Validation and API foundations
+- [x] T06 — Create/read/summary endpoints
 - [ ] T07 — Dashboard layout
 - [ ] T08 — First complete flow
 - [ ] T09 — Editing
@@ -276,4 +280,4 @@ Mark tasks complete only when their completion criteria have been verified.
 
 ## 9. Immediate next action
 
-T04 is verified; next is **T05 - Validation and API foundations**. T05 was not implemented during T04. T03 Figma design remains outstanding and independent.
+T04–T06 are verified; next is **T07 — Build the dashboard layout**. Complete the outstanding **T03 — Figma interface design** prerequisite first. T07 has not started.
