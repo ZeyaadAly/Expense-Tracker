@@ -30,10 +30,10 @@ export function ErrorState({ title, message = "Please try again.", onRetry }: { 
   </div>;
 }
 
-export function LoadingState({ variant = "list" }: { variant?: "list" | "value" }) {
+export function LoadingState({ variant = "list", updating = false }: { variant?: "list" | "value"; updating?: boolean }) {
   if (variant === "value") return <div aria-hidden="true" className="h-9 w-3/4 animate-pulse rounded-control bg-border motion-reduce:animate-none" />;
-  return <div role="status" aria-label="Loading transactions" className="space-y-3 rounded-card border border-border bg-surface p-4">
-    <p className="text-muted">Loading transactions…</p>
+  return <div role="status" aria-label={updating ? "Updating transactions" : "Loading transactions"} className="space-y-3 rounded-card border border-border bg-surface p-4">
+    <p className="text-muted">{updating ? "Updating transactions…" : "Loading transactions…"}</p>
     {Array.from({ length: 5 }, (_, index) => <div aria-hidden="true" key={index} className={`h-24 animate-pulse rounded-control bg-surface-muted md:h-16 motion-reduce:animate-none ${index > 2 ? "hidden md:block" : ""}`} />)}
   </div>;
 }

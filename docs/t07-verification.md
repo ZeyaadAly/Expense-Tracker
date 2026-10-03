@@ -1,5 +1,7 @@
 # T07 — Dashboard layout verification
 
+This report records the completed T07 checkpoint. Following T08, the main dashboard uses Express; T07 fixtures remain available only through explicit development `?preview=populated` / state URLs. See [T08 verification](t08-verification.md) for the current integration checkpoint. The regression script selects the fixture preview explicitly.
+
 **Date:** 2026-10-03
 **Status:** ✅ Completed. Fixture UI and final specification verification passed. Unavailable Figma dialog/state reads are recorded as a non-blocking external verification limitation under the user's completion instruction. T08 has not started.
 

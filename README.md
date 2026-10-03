@@ -85,15 +85,17 @@ An unavailable database returns HTTP 503 with `error.code` set to `DATABASE_UNAV
 
 ## Frontend
 
-Run `npm run dev` from `frontend/` and open `http://localhost:3000`. The T07 dashboard uses temporary fixtures only; the backend and frontend environment variables are not needed for this preview. Add, edit, delete and filters work in memory; all changes reset on reload. No frontend application API requests are made. T08 has not started.
+Copy `frontend/.env.example` to `frontend/.env.local`, run the backend using its documented server-only configuration, then run `npm run dev` from `frontend/` and open `http://localhost:3000`. The public `NEXT_PUBLIC_API_BASE_URL` defaults in the example to `http://localhost:4000/api/v1`. Restart dev after changing it; configure it before a production build. No database credentials belong in the frontend.
 
-The approved [Figma design](https://www.figma.com/design/GWgioRUOXX3XcaDLYWi8HA) is recorded in the [T03 UI specification](docs/06-t03-ui-specification.md). T07 is complete; see [T07 verification](docs/t07-verification.md) for final checks and the non-blocking Figma-provider comparison limitation. T08 remains not started.
+T08 is complete: the dashboard reads transactions and unfiltered summary from Express, applies type/category filters through the API, and creates transactions with authoritative validation and refresh. Saved records survive reloads. Failed saves retain the draft; uncertain outcomes require a read-only refresh/check before deliberate retry. Edit and Delete remain clearly labelled UI-only previews until T09/T10, and do not mutate stored records. See [T08 verification](docs/t08-verification.md).
 
-Development-only state previews use `/?preview=loading`, `empty`, `no-results`, `error`, `summary-error`, `list-error`, `success`, `stale`, `negative`, `stress`, `submitting`, `validation`, `save-error`, `uncertain`, `edit-missing`, `delete-pending`, or `delete-error`. These are visual fixtures, not real network failures; production always starts with the populated fixture dashboard. Pending fixture dialogs intentionally remain pending until the page is reloaded.
+The approved [Figma design](https://www.figma.com/design/GWgioRUOXX3XcaDLYWi8HA) is recorded in the [T03 UI specification](docs/06-t03-ui-specification.md). T07 is complete; see [T07 verification](docs/t07-verification.md) for final checks and the non-blocking Figma-provider comparison limitation.
 
-Frontend checks, from `frontend/`: `npm run lint`, `npm run typecheck`, `npm run build`, and `node scripts/verify-t07-domain.mjs`. With the dev server running and a local agent-browser session named `expense-t07` open against the preview, run `node scripts/verify-t07.mjs PATH_TO_AGENT_BROWSER_EXECUTABLE`. Browser evidence is saved to ignored `.tmp-t07/`; the executable is an external verification tool, not an application dependency.
+Development-only state previews use `/?preview=populated`, `loading`, `empty`, `no-results`, `error`, `summary-error`, `list-error`, `success`, `stale`, `negative`, `stress`, `submitting`, `validation`, `save-error`, `uncertain`, `edit-missing`, `delete-pending`, or `delete-error`. These explicitly selected T07 fixtures never contact the API; fixture edits reset on reload. Production ignores this query and uses the API dashboard. Pending fixture dialogs intentionally remain pending until the page is reloaded.
 
-During T08, copy `frontend/.env.example` to `frontend/.env.local`; its only public value is the Express API base URL, `http://localhost:4000/api/v1`. No database credentials belong in the frontend.
+Frontend checks, from `frontend/`: `npm run lint`, `npm run typecheck`, `npm run build`, `npm test`, and `node scripts/verify-t07-domain.mjs`. With the dev server running and a local agent-browser session named `expense-t07` open against the preview, run `node scripts/verify-t07.mjs PATH_TO_AGENT_BROWSER_EXECUTABLE`. Browser evidence is saved to ignored `.tmp-t07/`; the executable is an external verification tool, not an application dependency.
+
+The real T08 browser integration runner is `node scripts/verify-t08.mjs PATH_TO_AGENT_BROWSER_EXECUTABLE`; it requires the disposable local test API setup documented in [T08 verification](docs/t08-verification.md). Its test wrapper and fixture-reset controls must never run against retained data or be deployed. Evidence is saved in ignored `.tmp-t08/`.
 
 ## Vercel frontend deployment
 
@@ -101,7 +103,7 @@ Live dashboard: https://expensetracker-inky-mu.vercel.app.
 
 For the Vercel project `expense_tracker`, set **Root Directory** to `frontend` in Project Settings → Build and Deployment. Use the Next.js framework preset, Node.js 24.x, and default install/build/output settings. The repository root has no Next.js app directory; building there fails with “Couldn't find any pages or app directory.” Root Directory is a Vercel project setting, rather than a `vercel.json` property.
 
-This deployment serves the fixture dashboard described above. Backend integration and database persistence remain separate work. See [deployment verification](docs/vercel-deployment-verification.md).
+This existing deployment serves the earlier fixture build. T08 integration is verified locally; deploying the integrated frontend and separately hosted Express API remains T14. See [deployment verification](docs/vercel-deployment-verification.md).
 
 ## Backend checks
 

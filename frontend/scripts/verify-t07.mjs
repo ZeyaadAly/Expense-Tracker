@@ -32,7 +32,7 @@ function check(name, code) {
 }
 function capture(name) { browser("screenshot", resolve(artifactDirectory, `${name}.png`), "--full"); }
 function open(scene = "") {
-  browser("open", `${baseUrl}/${scene ? `?preview=${scene}` : ""}`);
+  browser("open", `${baseUrl}/?preview=${scene || "populated"}`);
   browser("wait", "--load", "networkidle");
 }
 

@@ -4,7 +4,7 @@
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** In progress; T01–T07 complete; unavailable additional Figma comparisons recorded as a non-blocking verification limitation; T08 not started
+**Status:** In progress; T01–T08 complete; unavailable additional Figma comparisons recorded as a non-blocking T07 verification limitation; T09/T10 not started
 **Owner:** Zeyad Aly Elghazaly
 
 ## 1. Purpose
@@ -157,6 +157,8 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 **Done when:** A browser form saves a PostgreSQL row, the dashboard displays it, totals update correctly, and a refresh/restart preserves it. Record this as the first completed full-stack milestone.
 
+**✅ Completed (2026-10-03):** The live dashboard now uses Express for list, unfiltered summary, supported filters, and creation. A typed client validates envelopes/meta and preserves exact decimal/date strings. Independent read states, scoped retries, stale-request cancellation, validation mapping, confirmed-success refetch, and read-only uncertain-write recovery are verified. Ten API-client test groups, 61 real browser/Express/disposable PostgreSQL checks, six live zero-violation accessibility audits, the 69-check T07 fixture regression suite, lint/type-check/build/domain checks, and persistence through frontend/Express/PostgreSQL restart passed. Remote data was not modified; CORS, production TLS, roles, schema, and backend source are unchanged. Edit/Delete remain clearly labelled UI-only placeholders. See [T08 verification](t08-verification.md). T09 and T10 have not started.
+
 ### T09 — Add editing
 
 **Depends on:** T08.
@@ -262,7 +264,7 @@ Mark tasks complete only when their completion criteria have been verified.
 - [x] T05 — Validation and API foundations
 - [x] T06 — Create/read/summary endpoints
 - [x] T07 — Dashboard layout
-- [ ] T08 — First complete flow
+- [x] T08 — First complete flow
 - [ ] T09 — Editing
 - [ ] T10 — Deletion
 - [ ] T11 — Filtering and recovery
@@ -284,4 +286,4 @@ Mark tasks complete only when their completion criteria have been verified.
 
 ## 9. Immediate next action
 
-T01–T07 are complete. Ready for **T08 — Connect the frontend to the API**, the first complete flow. T08 remains not started; no frontend API client or network mutations have been added. Remaining unavailable Figma dialog/state comparisons are recorded as a non-blocking external verification limitation in the T07 report.
+T01–T08 are complete; M2's first browser → Express → PostgreSQL create/read/summary flow is verified locally against a disposable database. Ready for **T09 — Add transaction editing**. T09/T10 remain not started; no PUT/DELETE integration was added. Remaining unavailable Figma comparisons are recorded as a non-blocking limitation in the T07 report. Deployment of the integrated frontend/backend remains T14.

@@ -17,6 +17,7 @@ coverage/
 *.log
 .tmp-t04/
 .tmp-t07/
+.tmp-t08/
 .DS_Store
 Thumbs.db
 

@@ -4,6 +4,7 @@ import { useId, useRef, useState, type ReactNode } from "react";
 import { CATEGORIES, CATEGORY_LABELS, DESCRIPTION_LIMIT, cairoToday, validateTransaction, type Category, type FieldErrors, type TransactionInput, type TransactionType } from "@/lib/transactions";
 import { Button } from "../ui/button";
 import { FeedbackBanner, type Feedback } from "../ui/feedback";
+import { ApiError, apiFieldErrors } from "@/lib/api/client";
 
 export type FormScenario = "normal" | "submitting" | "validation" | "save-error" | "uncertain" | "edit-missing";
 
@@ -16,10 +17,13 @@ export function FormField({ id, label, helper, error, children }: { id: string; 
   </div>;
 }
 
-export function TransactionForm({ initialValues, mode, pending, scenario = "normal", onSubmit, onCancel, onRefresh }: { initialValues: TransactionInput; mode: "add" | "edit"; pending: boolean; scenario?: FormScenario; onSubmit: (values: TransactionInput) => Promise<void>; onCancel: () => void; onRefresh: () => void }) {
+export function TransactionForm({ initialValues, mode, pending, scenario = "normal", readOnly = false, onSubmit, onCancel, onRefresh }: { initialValues: TransactionInput; mode: "add" | "edit"; pending: boolean; scenario?: FormScenario; readOnly?: boolean; onSubmit: (values: TransactionInput) => Promise<void>; onCancel: () => void; onRefresh: () => void | Promise<void> }) {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState<FieldErrors>(() => scenario === "validation" ? validateTransaction(initialValues, cairoToday()) : {});
   const [feedback, setFeedback] = useState<Feedback | null>(null);
+  const [uncertain,setUncertain] = useState(false);
+  const [checked,setChecked] = useState(false);
+  const [checking,setChecking] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const submissionLock = useRef(false);
   const prefix = useId();
@@ -30,7 +34,7 @@ export function TransactionForm({ initialValues, mode, pending, scenario = "norm
   function changeValues(next: TransactionInput) {
     setValues(next);
     if (Object.keys(errors).length) setErrors(validateTransaction(next, cairoToday()));
-    setFeedback(null);
+    if (!uncertain) setFeedback(null);
   }
 
   function fieldProps(field: keyof TransactionInput) {
@@ -49,7 +53,7 @@ export function TransactionForm({ initialValues, mode, pending, scenario = "norm
 
   return <form ref={formRef} noValidate className="mt-6 flex min-w-0 flex-col gap-4" onSubmit={async (event) => {
     event.preventDefault();
-    if (pending || unavailable || submissionLock.current) return;
+    if (pending || unavailable || readOnly || (uncertain && !checked) || checking || submissionLock.current) return;
     const validation = validateTransaction(values, cairoToday());
     setErrors(validation);
     if (Object.keys(validation).length) {
@@ -59,7 +63,18 @@ export function TransactionForm({ initialValues, mode, pending, scenario = "norm
     }
     submissionLock.current = true;
     try { await onSubmit(values); }
-    catch { setFeedback({ tone: "error", message: "The preview could not update. Your entries are kept." }); }
+    catch (error) {
+      const safeError = error instanceof ApiError ? error : new ApiError("NETWORK_ERROR",0,[],true);
+      const fields = apiFieldErrors(safeError);
+      setErrors(fields);
+      setUncertain(safeError.uncertain); setChecked(false);
+      const formLevelValidation = safeError.code === "VALIDATION_ERROR" && (!Object.keys(fields).length || safeError.details.some(detail => !Object.hasOwn(fields,detail.field)));
+      setFeedback(safeError.code === "VALIDATION_ERROR" && !formLevelValidation ? null : {tone:safeError.uncertain ? "warning" : "error",message:formLevelValidation ? "The transaction was rejected. Review your entries and try again." : safeError.message});
+      const first = Object.keys(fields)[0];
+      // The parent releases its pending lock in the same React batch. Focus after
+      // that commit so disabled inputs can receive focus again.
+      requestAnimationFrame(() => formRef.current?.querySelector<HTMLElement>(`[name="${first ?? "amount"}"]`)?.focus());
+    }
     finally { submissionLock.current = false; }
   }}>
     {Object.keys(errors).length ? <div role="alert" className="rounded-control border border-danger bg-danger-surface p-3 text-sm text-danger">
@@ -93,9 +108,15 @@ export function TransactionForm({ initialValues, mode, pending, scenario = "norm
     <FormField id={fieldId("description")} label="Description" helper={`1–200 characters after trimming. ${Array.from(values.description.trim()).length}/${DESCRIPTION_LIMIT} characters.`} error={errors.description}>
       <textarea {...fieldProps("description")} className={`${fieldProps("description").className} min-h-24`} rows={3} placeholder="Grocery shopping" value={values.description} onChange={(event) => changeValues({ ...values, description: event.target.value })} />
     </FormField>
-    {displayedFeedback ? <FeedbackBanner {...displayedFeedback} action={scenario === "uncertain" ? { label: "Refresh dashboard", onClick: onRefresh } : undefined} /> : null}
+    {readOnly ? <FeedbackBanner tone="info" message="Editing is not available yet. This preview will not change the saved transaction." /> : null}
+    {displayedFeedback ? <FeedbackBanner {...displayedFeedback} action={scenario === "uncertain" || uncertain ? { label: checking ? "Refreshing…" : "Refresh dashboard", onClick: async () => {
+      if(checking) return; setChecking(true);
+      try { await onRefresh(); setChecked(true); if(uncertain) setFeedback({tone:"warning",message:"Dashboard refreshed. Check your transactions before deliberately trying again. Similar records cannot prove which request created them."}); }
+      catch { setChecked(false); setFeedback({tone:"warning",message:"The dashboard could not refresh. Your draft is kept; refresh and check before trying again."}); }
+      finally { setChecking(false); }
+    } } : undefined} /> : null}
     <div className="mt-2 flex flex-col gap-3 md:flex-row md:justify-end">
-      <Button type="submit" pending={pending} disabled={unavailable} className="w-full md:w-auto">{pending ? "Saving…" : mode === "add" ? "Add transaction" : "Save changes"}</Button>
+      <Button type="submit" pending={pending} disabled={unavailable || readOnly || checking || (uncertain && !checked)} className="w-full md:w-auto">{pending ? "Saving…" : mode === "add" ? "Add transaction" : "Save changes"}</Button>
       <Button variant="secondary" disabled={pending} onClick={onCancel} className="w-full md:w-auto">Cancel</Button>
     </div>
   </form>;
