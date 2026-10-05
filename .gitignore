@@ -29,3 +29,9 @@ supabase/.env.local
 supabase/.env.*.local
 
 .tmp-t09/
+
+.tmp-t10/
+
+.tmp-t11/
+
+.tmp-t12/

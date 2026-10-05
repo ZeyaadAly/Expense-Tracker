@@ -4,7 +4,7 @@
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** In progress; T01-T09 complete; T10 not started; historical Figma comparison limitation remains recorded in T07.
+**Status:** T01-T12 complete; local V1 acceptance verified; T13 not started. Historical Figma comparison limitation remains recorded in T07.
 **Owner:** Zeyad Aly Elghazaly
 
 ## 1. Purpose
@@ -183,11 +183,13 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 **Done when:** Cancel preserves the row; confirm removes only the intended row; totals update; repeated deletion returns the documented not-found response.
 
+**Completed (2026-10-05):** DELETE validates UUIDs before parameterized deletion through the shared limited-role service and returns empty 204 or structured 404. The existing confirmation dialog handles pending locks, definite rejection, missing records, uncertain outcomes and read-only recovery. Active filters survive authoritative list/global-summary refresh. Backend 20 groups, frontend 15 client groups, 34 T10 browser checks, T07/T08/T09 regressions, quality checks, fresh migration/security/health checks and PostgreSQL restart persistence passed. See [T10 verification](t10-verification.md). T11 has not started.
+
 ### T11 — Finish filtering and request recovery
 
 **Depends on:** T08–T10.
 
-- Add validated type/category filters to the list endpoint and connect the frontend selectors.
+- Audit the existing validated type/category list filters and connected frontend selectors; harden only genuine gaps.
 - Use AND logic, category choices per type, reset behavior, and Other across both types.
 - Preserve active filters after writes and keep summary totals independent of them.
 - Ignore/abort stale list responses after rapid filter changes.
@@ -195,6 +197,8 @@ Use separate frontend and backend packages to keep the first project easy to und
 - Handle read retry, uncertain write outcomes, and successful writes followed by failed dashboard refreshes.
 
 **Done when:** Filters behave as specified, hidden-by-filter saves remain valid, stale requests do not overwrite current results, and failures never falsely report success or trigger automatic write retries.
+
+**Completed (2026-10-05):** Audited and reused T06/T08 filtering and T09/T10 mutation recovery. Hardened stable current-filter loaders, cancellable request generations, shared in-flight retries, mutation-superseded reads, All-reset updating/focus, query error associations, conflicting count snapshots, dynamic hidden-record feedback and recovery-warning cleanup. Reduced motion is explicitly verified. Backend 23 groups, frontend 22 groups, 86 T11 browser checks with nine zero-violation audits, T07/T08/T09/T10 regressions, lint/typecheck/build, fresh migration/security and configured TLS health checks passed. See [T11 verification](t11-verification.md). T12 has not started.
 
 ### T12 — Verify local V1
 
@@ -268,9 +272,9 @@ Mark tasks complete only when their completion criteria have been verified.
 - [x] T07 — Dashboard layout
 - [x] T08 — First complete flow
 - [x] T09 — Editing
-- [ ] T10 — Deletion
-- [ ] T11 — Filtering and recovery
-- [ ] T12 — Local V1 verification
+- [x] T10 — Deletion
+- [x] T11 — Filtering and recovery
+- [x] T12 — Local V1 verification
 - [ ] T13 — Documentation and handoff
 - [ ] T14 — Sample-data deployment
 
@@ -288,4 +292,4 @@ Mark tasks complete only when their completion criteria have been verified.
 
 ## 9. Immediate next action
 
-T01-T09 are complete. The full transaction editing flow is verified locally with Express and disposable PostgreSQL. Ready for **T10 - Add transaction deletion**. T10 remains not started; DELETE persistence was not added. See [T09 verification](t09-verification.md). Integrated deployment remains T14.
+T01-T12 are complete. Final V1 verification passed backend/frontend quality gates, 429 browser checks, 47 zero-violation accessibility audits, fresh migrations/seed/permissions, exact money/date boundaries, clean-source builds/tests and restart persistence. See [T12 verification](t12-verification.md). Ready for **T13 - Documentation and handoff**; T13 has not started. Integrated deployment remains T14.

@@ -9,7 +9,7 @@ import { allowMethods } from "../middleware/request.js";
 export function createTransactionMethodRouter() {
   const router = Router();
   router.all("/transactions", allowMethods(["GET", "POST"]));
-  router.all("/transactions/:id", allowMethods(["GET", "PUT"]));
+  router.all("/transactions/:id", allowMethods(["GET", "PUT", "DELETE"]));
   router.all("/summary", allowMethods(["GET"]));
   return router;
 }
@@ -30,6 +30,12 @@ export function createTransactionRouter(service: TransactionService) {
       response.location(`/api/v1/transactions/${data.id}`).status(201).json({ data });
     });
   router.route("/transactions/:id")
+    .delete(async (request, response) => {
+      validateQuery(request.originalUrl);
+      const id = validateUuid(request.params.id);
+      if (!await service.delete(id)) throw new ApiError(404, "TRANSACTION_NOT_FOUND", "Transaction not found.");
+      response.status(204).end();
+    })
     .put(async (request, response) => {
       validateQuery(request.originalUrl);
       const id = validateUuid(request.params.id);

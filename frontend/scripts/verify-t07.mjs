@@ -12,7 +12,7 @@ if (!["127.0.0.1", "localhost"].includes(new URL(baseUrl).hostname)) throw new E
 const artifactDirectory = resolve("../.tmp-t07");
 mkdirSync(artifactDirectory, { recursive: true });
 const results = [];
-const session = "expense-t07";
+const session = process.argv[4] ?? "expense-t07";
 
 function browser(...args) {
   const input = args.at(-1)?.startsWith("INPUT:") ? args.pop().slice(6) : undefined;

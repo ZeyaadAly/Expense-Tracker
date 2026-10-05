@@ -36,7 +36,7 @@ test("T06 validation prevents every invalid request from querying the database",
       ["/transactions?category[]=food",{}], ["/summary?type=expense",{}],
       ["/transactions/bb664829-eddd-4a27-bddc-076e8c3bf6fe?category=food",{}],
     ]) { const {response,body}=await call(base,path,options);assert.equal(response.status,400);assert.equal(body.error.code,"VALIDATION_ERROR"); }
-    for(const [path,method,allow] of [["/transactions","DELETE","GET, POST"],["/transactions","PUT","GET, POST"],["/transactions/bb664829-eddd-4a27-bddc-076e8c3bf6fe","DELETE","GET, PUT"],["/summary","PATCH","GET"],["/summary","HEAD","GET"]]) {
+    for(const [path,method,allow] of [["/transactions","DELETE","GET, POST"],["/transactions","PUT","GET, POST"],["/transactions/bb664829-eddd-4a27-bddc-076e8c3bf6fe","PATCH","GET, PUT, DELETE"],["/summary","PATCH","GET"],["/summary","HEAD","GET"]]) {
       const options={method,...(method==="PUT"?{headers:{"Content-Type":"application/json"},body:"{}"}:{})};
       const {response,body}=await call(base,path,options);assert.equal(response.status,405);assert.equal(response.headers.get("allow"),allow);if(body)assert.equal(body.error.code,"METHOD_NOT_ALLOWED");
     }

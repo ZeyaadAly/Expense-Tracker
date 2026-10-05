@@ -67,3 +67,17 @@ test('T09 update timeout is uncertain and never retried',async()=>{
  let attempts=0;const c=createApiClient('http://localhost/api/v1',async(url,init)=>{attempts++;return new Promise((resolve,reject)=>init.signal.addEventListener('abort',()=>reject(Error('aborted')),{once:true}));},10);
  await assert.rejects(c.updateTransaction(record.id,record),e=>e.code==='TIMEOUT'&&e.uncertain);assert.equal(attempts,1);
 });
+
+test('T10 DELETE uses correct path without body and never parses 204 JSON',async()=>{
+ let calls=0;const c=createApiClient('http://localhost/api/v1',async(url,init)=>{calls++;assert.equal(url,`http://localhost/api/v1/transactions/${record.id}`);assert.equal(init.method,'DELETE');assert.equal(init.body,undefined);assert.equal(init.headers['Content-Type'],undefined);return {status:204,json:()=>{throw Error('must not parse');}};});assert.equal(await c.deleteTransaction(record.id),undefined);assert.equal(calls,1);
+});
+test('T10 DELETE parses rejections and never retries uncertain responses',async()=>{
+ for(const [status,code] of [[400,'VALIDATION_ERROR'],[404,'TRANSACTION_NOT_FOUND'],[503,'DATABASE_UNAVAILABLE']]){await assert.rejects(createApiClient('http://localhost/api/v1',async()=>json({error:{code,message:'SQL secret',details:[]}},status)).deleteTransaction(record.id),e=>e instanceof ApiError&&e.code===code&&e.status===status&&!e.uncertain&&!e.message.includes('secret'));}
+ for(const fetcher of [async()=>{throw Error('secret');},async()=>json({},200),async()=>new Response('bad',{status:500}),async()=>json({error:{code:'INTERNAL_ERROR',message:'secret',details:[]}},500)]){let calls=0;await assert.rejects(createApiClient('http://localhost/api/v1',async(...args)=>{calls++;return fetcher(...args);}).deleteTransaction(record.id),e=>e.uncertain&&!e.message.includes('secret'));assert.equal(calls,1);}
+ const c=createApiClient('http://localhost/api/v1',async(url,init)=>new Promise((resolve,reject)=>init.signal.addEventListener('abort',()=>reject(Error('aborted')))),10);await assert.rejects(c.deleteTransaction(record.id),e=>e.code==='TIMEOUT'&&e.uncertain);
+});
+
+test('T11 canceled response-body parsing stays cancellation instead of invalid/network error',async()=>{
+ const controller=new AbortController();const client=createApiClient('http://localhost/api/v1',async()=>({status:200,ok:true,json:async()=>{controller.abort();throw Error('Body read aborted');}}));
+ await assert.rejects(client.list(all,controller.signal),e=>e.name==='AbortError'&&!(e instanceof ApiError));
+});

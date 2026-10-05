@@ -10,6 +10,10 @@ const columns = `id, type, amount::text AS amount, description, category,
 
 export function createTransactionService(database: Pick<Pool, "query">) {
   return {
+    async delete(id: string) {
+      const result = await database.query("DELETE FROM expense_tracker.transactions WHERE id = $1 RETURNING id", [id]);
+      return result.rows.length > 0;
+    },
     async update(id: string, input: TransactionInput) {
       const result = await database.query<TransactionRow>(
         `UPDATE expense_tracker.transactions

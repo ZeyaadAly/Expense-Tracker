@@ -33,7 +33,7 @@ export function createApiClient(base = process.env.NEXT_PUBLIC_API_BASE_URL, fet
   }
   async function request(path: string, init: RequestInit, valid: (v: unknown) => boolean, expected: number): Promise<unknown> {
     const url = baseUrl() + path;
-    const write = init.method === "POST" || init.method === "PUT";
+    const write = init.method === "POST" || init.method === "PUT" || init.method === "DELETE";
     const controller = new AbortController();
     const abort = () => controller.abort();
     init.signal?.addEventListener("abort",abort,{once:true});
@@ -41,6 +41,7 @@ export function createApiClient(base = process.env.NEXT_PUBLIC_API_BASE_URL, fet
     const timer = setTimeout(abort,timeoutMs);
     try {
       const response = await fetcher(url,{...init,signal:controller.signal,cache:"no-store",credentials:"omit",headers:{Accept:"application/json",...init.headers}});
+      if (expected === 204 && response.status === 204) return undefined;
       let body: unknown;
       try { body = await response.json(); } catch { throw new ApiError("INVALID_RESPONSE",response.status,[],write); }
       if (!response.ok) {
@@ -52,12 +53,15 @@ export function createApiClient(base = process.env.NEXT_PUBLIC_API_BASE_URL, fet
       if (response.status !== expected || !valid(body)) throw new ApiError("INVALID_RESPONSE",response.status,[],write);
       return body;
     } catch(error) {
-      if (error instanceof ApiError) throw error;
       if (init.signal?.aborted) throw new DOMException("Read canceled","AbortError");
+      if (error instanceof ApiError) throw error;
       throw new ApiError(controller.signal.aborted ? "TIMEOUT" : "NETWORK_ERROR",0,[],write);
     } finally { clearTimeout(timer); init.signal?.removeEventListener("abort",abort); }
   }
   return {
+    async deleteTransaction(id: string): Promise<void> {
+      await request(`/transactions/${encodeURIComponent(id)}`,{method:"DELETE"},() => true,204);
+    },
     async updateTransaction(id: string, values: TransactionInput): Promise<Transaction> {
       const {type,amount,category,date,description} = values;
       const body = await request(`/transactions/${encodeURIComponent(id)}`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({type,amount,category,date,description})},v => object(v) && transaction(v.data) && v.data.id === id,200);

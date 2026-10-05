@@ -2,7 +2,7 @@
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** T04-T09 health/create/read/update/summary endpoints verified; DELETE remains planned
+**Status:** T04-T10 health/create/read/update/delete/summary endpoints verified
 **Related documents:** [Project brief](01-project-brief.md) · [Requirements](02-requirements.md) · [Database design](03-database-design.md)
 
 ## 1. Purpose and architecture
@@ -16,7 +16,7 @@ Development defaults:
 - API prefix: `/api/v1`.
 - Example base URL: `http://localhost:4000/api/v1`.
 
-Configure origins through environment variables. Hosting URLs are decided during deployment. Health, creation, list, single-record, and summary routes are implemented; PUT/DELETE remain planned. Because V1 is unauthenticated, any hosted demo uses sample data.
+Configure origins through environment variables. Hosting URLs are decided during deployment. Health, creation, list, single-record, update, delete, and summary routes are implemented. Because V1 is unauthenticated, any hosted demo uses sample data.
 
 ## 2. Endpoint overview
 
@@ -291,7 +291,7 @@ T06 results are recorded in [T06 verification](t06-verification.md). The checkli
 - [ ] Create a valid transaction; verify 201, Location, generated ID, normalized values, and persistence.
 - [ ] Read the record and list; verify field names and date/timestamp serialization.
 - [ ] Update all editable fields; verify preserved ID/creation time and changed update time.
-- [ ] Delete; verify 204 with no body, then 404 on a subsequent deletion.
+- [x] Delete; verified 204 with no body, then 404 on a subsequent deletion.
 - [ ] Reject incomplete PUT requests and confirm missing IDs are never upserted.
 - [ ] Reject numeric JSON amounts, invalid amount syntax, and values outside the allowed range.
 - [ ] Reject invalid dates, category/type combinations, blank descriptions, and unknown input fields.
@@ -305,4 +305,4 @@ T06 results are recorded in [T06 verification](t06-verification.md). The checkli
 
 ## 15. Next step
 
-T01-T09 are verified locally. PUT editing is complete; DELETE remains assigned to T10. See [T09 verification](t09-verification.md).
+T01-T10 are verified locally. PUT editing and DELETE persistence are complete. See [T10 verification](t10-verification.md). T11 has not started.

@@ -12,13 +12,13 @@ export function SummaryCard({ label, value, role, loading = false }: { label: st
   </div>;
 }
 
-export function SummarySection({ summary, loading = false, error = false, stale = false, updating = false, errorMessage, onRetry }: { summary?: Summary; loading?: boolean; error?: boolean; stale?: boolean; updating?: boolean; errorMessage?: string; onRetry: () => void }) {
+export function SummarySection({ summary, loading = false, error = false, stale = false, updating = false, staleMessage, errorMessage, onRetry }: { summary?: Summary; loading?: boolean; error?: boolean; stale?: boolean; updating?: boolean; staleMessage?: string; errorMessage?: string; onRetry: () => void }) {
   return <section aria-labelledby="summary-heading" aria-busy={loading} className="space-y-4 bg-surface">
     <h2 id="summary-heading" className="text-xl leading-7 font-semibold">Financial summary</h2>
     <p className="text-sm leading-5 text-muted">All transactions</p>
     {loading ? <p role="status" className="sr-only">Loading financial summary…</p> : null}
     {updating ? <p role="status" className="text-sm text-info">Updating…</p> : null}
-    {stale ? <div className="flex flex-wrap items-center gap-3"><p className="text-sm text-warning">Previously loaded totals; could not refresh.</p><button className="min-h-11 rounded-control px-3 text-primary underline" onClick={onRetry}>Retry summary</button></div> : null}
+    {stale ? <div className="flex flex-wrap items-center gap-3"><p role="status" className="text-sm text-warning">{staleMessage ?? "Previously loaded totals; could not refresh."}</p><button className="min-h-11 rounded-control px-3 text-primary underline" onClick={onRetry}>Retry summary</button></div> : null}
     {error ? <ErrorState title="Summary unavailable" message={errorMessage} onRetry={onRetry} /> : <div className="grid min-w-0 grid-cols-1 gap-3 md:grid-cols-3 md:gap-4 lg:gap-6">
       <SummaryCard label="Current Balance" value={summary?.balance ?? ""} role="balance" loading={loading || !summary} />
       <SummaryCard label="Total Income" value={summary?.totalIncome ?? ""} role="income" loading={loading || !summary} />

@@ -7,38 +7,65 @@ import { createApp } from '../../backend/dist/app.js';
 import { createTransactionService } from '../../backend/dist/services/transactions.js';
 import { ApiError } from '../../backend/dist/utils/api-error.js';
 const require = createRequire(new URL('../../backend/package.json',import.meta.url));
-const {Pool,Client} = require('pg'); const express = require('express');
+const {Pool} = require('pg'); const express = require('express');
 const url = new URL(process.env.T08_DISPOSABLE_DATABASE_URL || '');
 assert.ok(['127.0.0.1','localhost'].includes(url.hostname) && url.pathname==='/postgres');
-const admin=new Client({connectionString:url.toString()});await admin.connect();
+// Pools discard disconnected idle clients and reconnect after disposable DB restarts.
+const admin=new Pool({connectionString:url.toString(),max:1});
+admin.on('error',()=>console.error('Disposable admin connection interrupted'));
 url.username='expense_tracker_app';url.password='';
 const pool=new Pool({connectionString:url.toString(),max:3});
+pool.on('error',()=>console.error('Disposable application connection interrupted'));
 assert.equal((await pool.query('SELECT current_user')).rows[0].current_user,'expense_tracker_app');
 const service=createTransactionService(pool);
 let mode='normal';const calls=[];
+let listDelays={},summaryDelay=0,forcedSummaryCount,forceEmptyList=false;
 const failure = () => {throw new ApiError(503,'DATABASE_UNAVAILABLE','Database is unavailable. Please try again later.');};
 const wrapped={...service,
-  async list(filters) { if(['list-error','both-error'].includes(mode)) failure();const rows=await service.list(filters);if(mode==='slow'||mode==='loading') await new Promise(r=>setTimeout(r,mode==='loading'?1200:filters.type==='expense'?750:100));return rows; },
-  async summary() {if(['summary-error','both-error'].includes(mode)) failure();if(mode==='slow'||mode==='loading') await new Promise(r=>setTimeout(r,mode==='loading'?3000:500));return service.summary();},
+  async list(filters) {
+    if(['list-error','both-error'].includes(mode)) failure();
+    if(mode==='list-validation') throw new ApiError(400,'VALIDATION_ERROR','SQL secret',[{field:'category',message:'secret'}]);
+    const requestMode=mode,delay=listDelays[`${filters.type??'all'}:${filters.category??'all'}`] ?? 0;
+    const rows=forceEmptyList?[]:await service.list(filters);
+    if(delay) await new Promise(r=>setTimeout(r,delay));
+    if(requestMode==='slow-list-error') failure();
+    if(requestMode==='slow'||requestMode==='loading') await new Promise(r=>setTimeout(r,requestMode==='loading'?1200:filters.type==='expense'?750:100));
+    return rows;
+  },
+  async summary() {
+    if(['summary-error','both-error'].includes(mode)) failure();
+    const delay=summaryDelay,count=forcedSummaryCount,requestMode=mode;
+    const totals=await service.summary();
+    if(delay) await new Promise(r=>setTimeout(r,delay));
+    if(requestMode==='slow'||requestMode==='loading') await new Promise(r=>setTimeout(r,requestMode==='loading'?3000:500));
+    return count===undefined?totals:{...totals,transactionCount:count};
+  },
+  async delete(id) {
+    if(mode==='delete-pending') await new Promise(r=>setTimeout(r,1200));
+    if(mode==='delete-missing') return false;
+    if(mode==='delete-503') failure();
+    if(mode==='delete-500') throw new ApiError(500,'INTERNAL_ERROR','SQL secret');
+    const deleted=await service.delete(id);if(mode==='delete-refresh-error')mode='both-error';if(mode==='delete-refresh-list-error')mode='list-error';if(mode==='delete-refresh-summary-error')mode='summary-error';return deleted;
+  },
   async update(id,values) {
     if(mode==='put-pending') await new Promise(r=>setTimeout(r,1200));
     if(mode==='put-validation') throw new ApiError(400,'VALIDATION_ERROR','SQL secret',[{field:'amount',message:'secret'},{field:'body',message:'secret'}]);
     if(mode==='put-missing') return null;
     if(mode==='put-503') failure();
     if(mode==='put-500') throw new ApiError(500,'INTERNAL_ERROR','secret');
-    const saved=await service.update(id,values);if(mode==='put-refresh-error')mode='both-error';return saved;
+    const saved=await service.update(id,values);if(mode==='put-refresh-error')mode='both-error';if(mode==='post-refresh-list-error'||mode==='put-refresh-list-error')mode='list-error';if(mode==='post-refresh-summary-error'||mode==='put-refresh-summary-error')mode='summary-error';return saved;
   },
   async create(values) {
     if(mode==='pending') await new Promise(r=>setTimeout(r,1200));
     if(mode==='validation') throw new ApiError(400,'VALIDATION_ERROR','SQL secret message',[{field:'amount',message:'SQL secret field'},{field:'body',message:'secret body'}]);
     if(mode==='post-503') failure();
     if(mode==='post-500') throw new ApiError(500,'INTERNAL_ERROR','SQL secret');
-    const saved=await service.create(values);if(mode==='refresh-error')mode='both-error';return saved;
+    const saved=await service.create(values);if(mode==='refresh-error')mode='both-error';if(mode==='post-refresh-list-error'||mode==='put-refresh-list-error')mode='list-error';if(mode==='post-refresh-summary-error'||mode==='put-refresh-summary-error')mode='summary-error';return saved;
   },
 };
 const host=express();host.use(express.json());
 host.post('/__test',async(req,res)=> {
-  mode=req.body.mode ?? 'normal';if(req.body.empty) await admin.query('TRUNCATE expense_tracker.transactions');
+  mode=req.body.mode ?? 'normal';listDelays=req.body.listDelays??{};summaryDelay=req.body.summaryDelay??0;forcedSummaryCount=req.body.summaryCount;forceEmptyList=req.body.emptyList??false;if(req.body.empty) await admin.query('TRUNCATE expense_tracker.transactions');
   if(req.body.seed) {await admin.query('TRUNCATE expense_tracker.transactions');await admin.query(readFileSync(new URL('../../supabase/seed.sql',import.meta.url),'utf8'));}
   if(req.body.resetCalls)calls.length=0;res.json({mode});
 });
@@ -56,6 +83,11 @@ host.use(async(req,res,next)=>{
     await service.update(req.path.split('/').at(-1),req.body);
     res.writeHead(200,{'Content-Type':'application/json','Content-Length':'1000','Access-Control-Allow-Origin':'http://localhost:3000'});
     res.write('{"data":');setTimeout(()=>res.destroy(),50);return;
+  }
+  if(mode==='delete-lost'&&req.method==='DELETE'&&req.path.startsWith('/api/v1/transactions/')) {
+    await service.delete(req.path.split('/').at(-1));
+    res.writeHead(200,{'Content-Type':'application/json','Content-Length':'1000','Access-Control-Allow-Origin':'http://localhost:3000'});
+    res.write('{');setTimeout(()=>res.destroy(),50);return;
   }
   next();
 });
