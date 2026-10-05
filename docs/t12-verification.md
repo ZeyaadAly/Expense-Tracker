@@ -1,5 +1,8 @@
 # T12 Result — V1 validation and testing
 
+> **Historical checkpoint:** This report preserves the results and task/deployment state at its recorded date. Later-task and fixture-only statements are historical. Current local V1 evidence is in [T12 verification](t12-verification.md); current setup/status is in [handoff](07-handoff.md). T14 integrated deployment has not started.
+
+
 **Date:** 2026-10-05 (Africa/Cairo)  
 **Status:** ✅ Completed. All required local V1 gates pass; no unresolved critical issue. T13 has not started.
 

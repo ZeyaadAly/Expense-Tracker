@@ -1,4 +1,7 @@
-﻿# T09 — Transaction editing verification
+# T09 — Transaction editing verification
+
+> **Historical checkpoint:** This report preserves the results and task/deployment state at its recorded date. Later-task and fixture-only statements are historical. Current local V1 evidence is in [T12 verification](t12-verification.md); current setup/status is in [handoff](07-handoff.md). T14 integrated deployment has not started.
+
 
 **Date:** 2026-10-03  
 **Status:** Completed. T10 has not started.

@@ -1,10 +1,10 @@
 # Expense Tracker — Project Brief
 
-> T04 workflow verified (2026-10-03): Baseline `20261001144302` already matched the remote schema and was already recorded as applied; no baseline repair, `db pull`, or `db push` was needed. Separate role migration `20261003163341` is applied and recorded. Limited-role Session Pooler login with verified TLS, health success/failure, backend checks, and clean disposable PostgreSQL migration/seed checks passed. See [T04 verification](t04-verification.md). T04 is complete; T05 has not started.
+> **Current local baseline:** T01–T12 are complete and V1 passed [T12 verification](t12-verification.md). See [handoff](07-handoff.md) for current setup and maintenance. Earlier task checkpoints below are historical; T14 integrated deployment has not started.
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Stage:** Implementation - T04 complete
+**Stage:** Local V1 verified through T12; documentation handoff in T13
 **Owner:** Zeyad Aly Elghazaly
 
 ## 1. Project idea
@@ -53,7 +53,7 @@ V1 is for one person tracking their own money in local development. It has no ac
 - Supabase PostgreSQL stores transactions so they remain available after refreshing the page or restarting the app.
 - Use exact monetary storage and calculations; avoid rounding errors from floating-point values.
 
-These are starting decisions and can be refined in the requirements document.
+These V1 decisions are implemented and verified; detailed rules are in the requirements document.
 
 ## 5. Main user flow
 
@@ -88,7 +88,7 @@ Use ChatGPT Work plugins during the relevant project stages. Plugins assist deve
 
 ### Plugin decisions
 
-- Figma, Supabase, Vercel, and Notion skills are available in this workspace. Verify account access and the required capabilities when each stage begins.
+- Figma, Supabase, Vercel, and optional planning integrations were considered during implementation. Verify tool availability, account access and required capabilities for any future provider work.
 - Keep Next.js, Express, PostgreSQL, Tailwind, and TypeScript as the agreed stack.
 - Use Supabase PostgreSQL through Express. Keep application data and business rules behind Express; do not expose database credentials to the browser. Supabase Auth is outside V1.
 - Decide Express hosting separately during deployment planning. Do not assume frontend hosting also provides the required backend runtime.
@@ -129,4 +129,4 @@ Design the interface in Figma after requirements, then use it while implementing
 
 ## 11. Next step
 
-T04 is verified. Next is T05 - Validation and API foundations. T03 Figma design remains outstanding and independent.
+T03 design is approved and T01–T12 are complete. See [T12 verification](t12-verification.md) and [developer handoff](07-handoff.md). T14 is deployment and final sample-demo verification; it has not started.

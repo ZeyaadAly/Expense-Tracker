@@ -1,7 +1,9 @@
 # T03 Design Specification
 
 **Date:** 2026-10-03  
-**Status:** T03 completed externally and confirmed by the user on 2026-10-03; T07 fixture implementation follows this specification.
+**Status:** Approved T03 design reference; T07 implemented it and T08–T11 connected persistence/recovery. Local V1 is verified through T12.
+
+> This document retains the original design-stage decisions and T07 notes. Skeleton/fixture/later-task statements describe those checkpoints, not the current application. See [handoff](07-handoff.md) and [T12 verification](t12-verification.md) for current behavior.
 
 **Approved design:** [Expense Tracker in Figma](https://www.figma.com/design/GWgioRUOXX3XcaDLYWi8HA).
 **Deliverable:** UI specification; actual Figma creation occurred after this document was prepared. The implementation font remains Arial/Helvetica, with Inter used only as a Figma fallback.
@@ -10,7 +12,7 @@
 
 Read alongside [brief](01-project-brief.md), [requirements](02-requirements.md), [database design](03-database-design.md), [API design](04-api-design.md), and [implementation plan](05-implementation-plan.md). Requirements and API rules govern behavior; the layout and tokens below are proposed design decisions for Figma.
 
-The existing frontend is a Next.js 16.3.8 / React 19 / Tailwind 4 skeleton with Arial/Helvetica, one placeholder page, and no component library. `frontend/CLAUDE.md` points to `frontend/AGENTS.md`; that file requires consulting installed Next.js guides before code changes. No additional project frontend skill files were found. This specification preserves the existing font family and proposes mobile-first Tailwind-compatible rules without writing code.
+At the specification checkpoint, the frontend was a Next.js 16.3.8 / React 19 / Tailwind 4 skeleton with Arial/Helvetica, one placeholder page, and no component library. `frontend/CLAUDE.md` points to `frontend/AGENTS.md`; that file requires consulting installed Next.js guides before code changes. No additional project frontend skill files were found. This specification preserves the existing font family and proposes mobile-first Tailwind-compatible rules without writing code.
 
 V1 has one English dashboard, EGP only, a shared transaction collection, and no login. Include create, read, edit, delete, summary, and type/category filtering. Exclude charts, budgets, search, date filters, pagination, sorting controls, accounts, export, currency selection, category management, and extra navigation. PUT/DELETE are planned for T09/T10; their designs are required now but their endpoints are not implemented in T06.
 
@@ -96,7 +98,7 @@ Order: Type → Amount → Category → Date → Description → feedback → ac
 
 Amount syntax follows `^(0|[1-9][0-9]{0,8})(\.[0-9]{1,2})?$` plus the exact range check. Examples `10`, `10.5`, `10.50` are valid. Do not use a numeric input that accepts exponent notation or numeric JSON amounts. Do not rely on HTML maxlength alone for the Unicode description rule; allow correction and show a code-point counter.
 
-Edit prepopulates all five values from the selected record. Type changes apply the same category rules as creation. Reuse the form and validation, but title and submit label change. Edit sends all five fields to PUT `/transactions/:id` when T09 is implemented; no new row is created.
+Edit prepopulates all five values from the selected record. Type changes apply the same category rules as creation. Reuse the form and validation, but title and submit label change. The implemented Edit flow sends all five fields to PUT `/transactions/:id`; no new row is created.
 
 Footer: Cancel secondary, “Add transaction” primary (edit: “Save changes”). On mobile, primary is full width and Cancel follows below; keep DOM/tab order consistent with visual order. A labelled close button is available in the header. Escape/Cancel/Close close without saving when idle; backdrop clicks do not dismiss. While submitting, lock editable controls and dismissal, disable repeated submission, and label the primary action “Saving…” with spinner. Do not disable submit merely because untouched fields are invalid; a submit attempt should expose their errors.
 

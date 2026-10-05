@@ -2,7 +2,7 @@
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** V1 implementation baseline
+**Status:** Implemented V1 requirements; acceptance verified through T12
 **Related document:** [Project brief](01-project-brief.md)
 
 ## 1. Purpose and scope
@@ -198,7 +198,7 @@ Verify plugin account access when its stage begins. Provider plans, costs, and E
 
 ## 9. V1 verification checklist
 
-These checks will guide implementation verification; they have not been executed yet.
+These original acceptance scenarios describe expected behavior, not a current execution log. [T12 verification](t12-verification.md#requirements-traceability) maps the requirements to actual tests and records the executed seeded CRUD sequence. The unchecked scenario boxes below do not mean the features remain unimplemented, and do not claim that each illustrative numerical sequence was executed verbatim.
 
 - [ ] Add Income of 1,000.00 EGP and Expense of 250.50 EGP. Confirm totals of 1,000.00 income, 250.50 expenses, and 749.50 balance.
 - [ ] Edit the expense to 300.00 EGP. Confirm the balance becomes 700.00 EGP.
@@ -217,4 +217,4 @@ These checks will guide implementation verification; they have not been executed
 
 ## 10. Next step
 
-T04 is verified; see [T04 verification](t04-verification.md). Next is T05 - Validation and API foundations. Transaction routes belong to later tasks.
+Local V1 acceptance is complete through [T12](t12-verification.md). See [handoff](07-handoff.md) for setup, limitations and T14's remaining deployment work.

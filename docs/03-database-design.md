@@ -1,10 +1,10 @@
 # Expense Tracker — Database Design
 
-> T04 workflow verified (2026-10-03): Baseline `20261001144302` already matched the remote schema and was already recorded as applied; no baseline repair, `db pull`, or `db push` was needed. Separate role migration `20261003163341` is applied and recorded. Limited-role Session Pooler login with verified TLS, health success/failure, backend checks, and clean disposable PostgreSQL migration/seed checks passed. See [T04 verification](t04-verification.md). T04 is complete; T05 has not started.
+> **Current local baseline:** T01–T12 are complete and V1 passed [T12 verification](t12-verification.md). See [handoff](07-handoff.md) for current setup and maintenance. Earlier task checkpoints below are historical; T14 integrated deployment has not started.
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** T04 schema, migration history, limited role, connectivity, and disposable database checks verified
+**Status:** V1 schema/access contract; local database acceptance verified through T12
 **Related documents:** [Project brief](01-project-brief.md) · [Requirements](02-requirements.md)
 
 ## 1. Design overview
@@ -64,15 +64,15 @@ Store codes consistently in lowercase. The interface displays friendly labels. T
 | Amount | Validate original decimal string and exact range | Numeric range and scale checks |
 | Description | Trim JavaScript whitespace; count Unicode code points | Reject surrounding whitespace and enforce length |
 | Date | Validate strict format, real calendar date, and Cairo boundary | `date`, static lower-bound check, and write-time future-date trigger |
-| ID/timestamps | Generate ID; ignore no user-managed metadata—reject these input fields in API design | Primary key; database timestamp trigger |
+| ID/timestamps | Generate ID; reject caller-supplied ID/currency/timestamp fields | Primary key; database timestamp trigger |
 
 The 200-character limit counts Unicode code points, consistent with PostgreSQL `char_length`. JavaScript's default string length counts UTF-16 units; implementation must use a code-point-aware count.
 
 Future-date validation uses a trigger rather than a check constraint involving the current clock. Check constraints should express conditions that remain stable for a stored row. The database trigger checks the current Cairo date at write time; Express applies the same rule independently.
 
-## 6. Proposed schema SQL
+## 6. Baseline schema SQL
 
-This SQL records the design intent for comparison with the existing remote schema. The verified existing CLI-generated migration is the authoritative baseline. Do not run this reference SQL against the remote project again.
+This SQL matches the implemented baseline and records it for review. The verified existing CLI-generated migration is the authoritative baseline. Do not run this reference SQL against the remote project again.
 
 ```sql
 BEGIN;
@@ -191,12 +191,14 @@ WITH totals AS (
         COALESCE(SUM(amount) FILTER (WHERE type = 'income'), 0::numeric)
             AS total_income,
         COALESCE(SUM(amount) FILTER (WHERE type = 'expense'), 0::numeric)
-            AS total_expenses
+            AS total_expenses,
+        COUNT(*) AS transaction_count
     FROM expense_tracker.transactions
 )
 SELECT total_income::text AS total_income,
        total_expenses::text AS total_expenses,
-       (total_income - total_expenses)::text AS balance
+       (total_income - total_expenses)::text AS balance,
+       transaction_count::text AS transaction_count
 FROM totals;
 ```
 
@@ -213,9 +215,9 @@ Do not add list filters to the summary query. Totals may exceed the maximum amou
 
 ## 8. Connection and access design
 
-Use one reusable connection pool in Express with a server-only `DATABASE_URL`. Select pool size and provider connection mode during setup based on documented limits and the backend runtime. Use provider-required TLS settings and do not disable certificate checks as a workaround.
+Use one reusable connection pool in Express with a server-only `DATABASE_URL`. The implemented pool has max 5 connections, a 5-second connection timeout and a 30-second idle timeout. It verifies TLS certificates/hostname, supports a configured CA file, and rejects URL SSL overrides. The verified Supabase connection uses Session Pooler port 5432 and the limited role username. Reassess provider limits for T14 without weakening TLS.
 
-Separate migration access from application access. The application role needs schema usage and transaction-table SELECT, INSERT, UPDATE, and DELETE privileges; it does not need permission to create/drop tables or manage roles. Configure the trigger function's execution grants as part of the migration-role setup.
+Separate migration access from application access. The application role needs schema usage and transaction-table SELECT, INSERT, UPDATE, and DELETE privileges; it does not need permission to create/drop tables or manage roles. Migration `20261003163341_backend_application_role.sql` grants database CONNECT, schema USAGE, table SELECT/INSERT/UPDATE/DELETE and trigger-function EXECUTE. The role has no memberships, superuser, CREATEDB, CREATEROLE, REPLICATION, BYPASSRLS, application schema CREATE, table TRUNCATE or TRIGGER privileges. Provision its password privately; the migration never contains one.
 
 Keep `expense_tracker` outside Data API exposed schemas and verify that `anon` and `authenticated` have no access to it. Do not add the schema to the exposed list or create public access policies to solve connection errors. V1 has no user ownership model; the limited PostgreSQL role and Express API are the intended access path.
 
@@ -224,39 +226,40 @@ The frontend does not use a Supabase client or access this database schema direc
 ## 9. Migration and sample-data plan
 
 1. Confirm the existing CLI project link and compare remote catalogs against the existing baseline. Do not pull, push, or recreate the retained remote schema.
-2. Verify the remote migration history records that baseline as already applied before any future `db push`.
+2. Preserve the verified history: baseline `20261001144302` and role migration `20261003163341` were recorded remotely in T04. Any future migration work must first reconcile its intended target/history; onboarding does not pull/push the existing baseline.
 3. Configure a limited application role and the Express connection pool.
 4. Keep the CLI-generated migration in version control. Use the CLI for future migration filenames and maintain one authoritative history.
 5. Seed sample data separately from the schema migration, only in development/demo environments. Make seeding repeatable without duplicating rows.
 6. Test migrations on a disposable database before applying them to retained data. Do not automatically drop an existing database to rerun setup.
 
-Suggested sample records:
+Actual records in [seed.sql](../supabase/seed.sql):
 
 | Type | Amount (EGP) | Description | Category | Date |
 | --- | --- | --- | --- | --- |
 | `income` | 1000.00 | Freelance payment | `freelance` | 2026-09-29 |
 | `expense` | 250.50 | Grocery shopping | `food` | 2026-09-30 |
+| `expense` | 45.75 | Taxi fare | `transport` | 2026-09-28 |
 
-Expected summary: income 1,000.00 EGP, expenses 250.50 EGP, balance 749.50 EGP. Generate UUIDs during seeding; the table has no database ID default.
+On a clean database, exact totals are income **1000.00**, expenses **296.25**, balance **703.75** EGP. The seed contains fixed UUIDs and `ON CONFLICT (id) DO NOTHING`; running it again preserves three rows. The table has no database ID default. The two-record 749.50 balance used in historical Figma fixtures is a separate design example.
 
 ## 10. Verification checklist
 
-T04 checks actually executed are recorded in [T04 verification](t04-verification.md). The remaining checklist includes future API/integration checks and is not a blanket completion claim.
+[T12 verification](t12-verification.md) records the final local checks; [T04](t04-verification.md) records historical remote schema/history/Data API privilege inspection. Local T12 does not claim a new full remote audit.
 
 - [x] Compare the remote schema against the existing CLI-generated baseline and apply it successfully to a clean disposable database.
-- [ ] Insert both sample records and verify the expected summary.
-- [ ] Confirm 0.10 + 0.20 totals exactly 0.30.
-- [ ] Reject null fields, zero/negative/out-of-range amounts, excess scale, NaN, and infinity.
-- [ ] Reject unknown types and invalid category/type pairs.
-- [ ] Reject blank, surrounding-whitespace, and over-200-code-point descriptions.
-- [ ] Reject dates before 1900, future dates, and impossible calendar dates.
-- [ ] Verify today near Cairo midnight and preserve date-only values across driver/API handling.
-- [ ] Verify generated timestamps, immutable identifiers, and preserved creation timestamps after edits.
-- [ ] Verify descending ordering and every filter combination.
-- [ ] Verify empty summary results and totals larger than the per-transaction limit.
-- [ ] Verify missing-record updates/deletes and persistent data after app restart.
-- [ ] Verify the application role's intended access and lack of schema-management privileges.
-- [ ] Verify no anonymous/authenticated Data API access to this schema.
+- [x] Seed all three fixed sample records twice; verify count 3 and exact 1000.00 / 296.25 / 703.75 totals.
+- [x] Confirm 0.10 + 0.20 totals exactly 0.30.
+- [x] Reject null fields, zero/negative/out-of-range amounts, excess scale, NaN, and infinity.
+- [x] Reject unknown types and invalid category/type pairs.
+- [x] Reject blank, surrounding-whitespace, and over-200-code-point descriptions.
+- [x] Reject dates before 1900, future dates, and impossible calendar dates.
+- [x] Verify today near Cairo midnight and preserve date-only values across driver/API handling.
+- [x] Verify generated timestamps, immutable identifiers, and preserved creation timestamps after edits.
+- [x] Verify descending ordering and every filter combination.
+- [x] Verify empty summary results and totals larger than the per-transaction limit.
+- [x] Verify missing-record updates/deletes and persistent data after app restart.
+- [x] Verify the application role's intended access and lack of schema-management privileges.
+- [x] Historical T04 inspection verified no anonymous/authenticated schema access; no new remote audit is claimed.
 
 ## 11. References and next step
 
@@ -265,4 +268,4 @@ Reviewed PostgreSQL documentation:
 - [Numeric types](https://www.postgresql.org/docs/current/datatype-numeric.html): exact numeric storage and scale coercion.
 - [Constraints](https://www.postgresql.org/docs/current/ddl-constraints.html): stable checks and null handling.
 
-The API design exists. T04 is verified; next implement T05 API foundations without changing the agreed contracts.
+The final API is implemented and verified through T12. Follow [README database setup](../README.md#database-setup) and [handoff](07-handoff.md) for operations. Migrations require a fresh schema and absent cluster-wide application role; the role migration expects database `postgres`. Do not replay either migration against the retained project.

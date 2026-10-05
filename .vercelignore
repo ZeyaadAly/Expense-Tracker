@@ -1,0 +1,11 @@
+.git/
+.tmp*/
+.npm-cache/
+**/node_modules/
+**/.next/
+**/dist/
+**/.vercel/
+**/.env
+**/.env.*
+**/*.log
+**/*.tsbuildinfo

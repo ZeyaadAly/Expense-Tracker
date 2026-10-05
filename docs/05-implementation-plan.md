@@ -1,10 +1,10 @@
 # Expense Tracker — Implementation Plan
 
-> T04 workflow verified (2026-10-03): Baseline `20261001144302` already matched the remote schema and was already recorded as applied; no baseline repair, `db pull`, or `db push` was needed. Separate role migration `20261003163341` is applied and recorded. Limited-role Session Pooler login with verified TLS, health success/failure, backend checks, and clean disposable PostgreSQL migration/seed checks passed. See [T04 verification](t04-verification.md). T04 is complete; T05 has not started.
+> **Current local baseline:** T01–T13 are complete and V1 passed [T12 verification](t12-verification.md). See [handoff](07-handoff.md) for current setup and maintenance. Earlier task checkpoints below are historical; T14 deployment is blocked on owning-team access, as recorded in the current audit.
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** T01-T12 complete; local V1 acceptance verified; T13 not started. Historical Figma comparison limitation remains recorded in T07.
+**Status:** T01-T13 complete; local V1 acceptance and documentation verified; T14 blocked on Vercel owning-team access. Historical Figma comparison limitation remains recorded in T07.
 **Owner:** Zeyad Aly Elghazaly
 
 ## 1. Purpose
@@ -32,7 +32,7 @@ This file plans the work. It does not create repositories, connect accounts, exe
 
 Complete M4 before deployment. M5 is a separate hosting milestone; the unauthenticated demo uses sample data only.
 
-## 3. Proposed project organization
+## 3. Project organization
 
 | Path | Purpose |
 | --- | --- |
@@ -43,11 +43,11 @@ Complete M4 before deployment. M5 is a separate hosting milestone; the unauthent
 | `backend/src/db/` | Reusable PostgreSQL pool and database health check. |
 | `backend/src/routes/` | REST route handlers. |
 | `backend/src/validators/` | Request and query validation. |
-| `backend/src/services/` | Future database access with parameterized queries. |
+| `backend/src/services/` | Implemented database access with parameterized queries. |
 | `backend/src/middleware/` | Error handling and API middleware. |
 | `README.md` | Project explanation and reproducible local setup. |
 
-Choose one authoritative Supabase migration history when database setup begins. If Supabase CLI is selected, use its generated migration directory. Do not maintain duplicate migration histories.
+The authoritative SQL migration history is in `supabase/migrations/`; retain its CLI-generated versions and avoid duplicate histories.
 
 Use separate frontend and backend packages to keep the first project easy to understand. Start with a simple package manager workflow; a monorepo framework is unnecessary for V1.
 
@@ -116,7 +116,7 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 **Done when:** Focused checks verify amount syntax/range, impossible/future dates, Unicode description length, malformed JSON, field errors, and metadata rejection. Unexpected errors do not expose internals.
 
-**Verified:** Reusable validators, mapper, error middleware, request policy, and API router are implemented. Nine automated test groups, backend lint/type-check/build, live health success/failure, and disposable T04 database regression checks passed. See [T05 verification](t05-verification.md). No transaction CRUD endpoints were implemented.
+**Verified:** Reusable validators, mapper, error middleware, request policy, and API router are implemented. Nine automated test groups, backend lint/type-check/build, live health success/failure, and disposable T04 database regression checks passed. See [T05 verification](t05-verification.md). No transaction CRUD endpoints were implemented at the T05 checkpoint.
 
 ### T06 — Build create, read, and summary endpoints
 
@@ -130,7 +130,7 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 **Done when:** API checks can create and retrieve sample records, verify persistence, verify exact 0.10 + 0.20 totals, and distinguish empty data, invalid input, missing IDs, and database failures.
 
-**Verified:** Create/list/single/summary endpoints, documented list filters, exact aggregates, response contracts, and centralized errors passed 12 automated test groups including limited-role disposable PostgreSQL integration. T04/T05 regressions and persistence after a database restart passed. See [T06 verification](t06-verification.md). PUT/DELETE and frontend work remain unimplemented.
+**Verified:** Create/list/single/summary endpoints, documented list filters, exact aggregates, response contracts, and centralized errors passed 12 automated test groups including limited-role disposable PostgreSQL integration. T04/T05 regressions and persistence after a database restart passed. See [T06 verification](t06-verification.md). PUT/DELETE and frontend integration were not yet implemented at the T06 checkpoint.
 
 ### T07 — Build the dashboard layout
 
@@ -143,7 +143,7 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 **Done when:** Main controls and forms work by keyboard and layouts are usable at 360px, 768px, and 1440px widths. The page does not hide actions or require page-level horizontal scrolling.
 
-**✅ Completed (2026-10-03):** Dashboard, local fixture filtering/add/edit/delete, reusable dialogs, design tokens, loading/empty/error/success/stale states, and contract validation are implemented without API integration. Final frontend lint/type-check/build, domain checks, 69 browser checks including six zero-violation accessibility audits, and 16 supplemental dialog/specification checks passed. Corrected the amount field's missing EGP suffix and description textarea's 96px minimum height. Populated desktop/mobile/tablet Figma references were reviewed earlier. Retrying Add design context still returned the Starter-plan provider quota; unavailable additional dialog/state comparisons are a non-blocking external verification limitation under the user's explicit fallback instruction. Final verification used the approved T03 specification and existing reviewed references without claiming unavailable frame comparisons. Evidence is recorded in [T07 verification](t07-verification.md). T08 has not started.
+**✅ Completed (2026-10-03):** Dashboard, local fixture filtering/add/edit/delete, reusable dialogs, design tokens, loading/empty/error/success/stale states, and contract validation are implemented without API integration. Final frontend lint/type-check/build, domain checks, 69 browser checks including six zero-violation accessibility audits, and 16 supplemental dialog/specification checks passed. Corrected the amount field's missing EGP suffix and description textarea's 96px minimum height. Populated desktop/mobile/tablet Figma references were reviewed earlier. Retrying Add design context still returned the Starter-plan provider quota; unavailable additional dialog/state comparisons are a non-blocking external verification limitation under the user's explicit fallback instruction. Final verification used the approved T03 specification and existing reviewed references without claiming unavailable frame comparisons. Evidence is recorded in [T07 verification](t07-verification.md). T08 followed this checkpoint.
 
 ### T08 — Connect the first complete flow
 
@@ -157,7 +157,7 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 **Done when:** A browser form saves a PostgreSQL row, the dashboard displays it, totals update correctly, and a refresh/restart preserves it. Record this as the first completed full-stack milestone.
 
-**✅ Completed (2026-10-03):** The live dashboard now uses Express for list, unfiltered summary, supported filters, and creation. A typed client validates envelopes/meta and preserves exact decimal/date strings. Independent read states, scoped retries, stale-request cancellation, validation mapping, confirmed-success refetch, and read-only uncertain-write recovery are verified. Ten API-client test groups, 61 real browser/Express/disposable PostgreSQL checks, six live zero-violation accessibility audits, the 69-check T07 fixture regression suite, lint/type-check/build/domain checks, and persistence through frontend/Express/PostgreSQL restart passed. Remote data was not modified; CORS, production TLS, roles, schema, and backend source are unchanged. Edit/Delete remain clearly labelled UI-only placeholders. See [T08 verification](t08-verification.md). T09 and T10 have not started.
+**✅ Completed (2026-10-03):** The live dashboard now uses Express for list, unfiltered summary, supported filters, and creation. A typed client validates envelopes/meta and preserves exact decimal/date strings. Independent read states, scoped retries, stale-request cancellation, validation mapping, confirmed-success refetch, and read-only uncertain-write recovery are verified. Ten API-client test groups, 61 real browser/Express/disposable PostgreSQL checks, six live zero-violation accessibility audits, the 69-check T07 fixture regression suite, lint/type-check/build/domain checks, and persistence through frontend/Express/PostgreSQL restart passed. Remote data was not modified; CORS, production TLS, roles, schema, and backend source are unchanged. Edit/Delete were UI-only placeholders at that checkpoint; T09/T10 subsequently connected them. See [T08 verification](t08-verification.md). T09/T10 followed this checkpoint.
 
 ### T09 — Add editing
 
@@ -170,7 +170,7 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 **Done when:** Editing changes the same record and summary correctly; cancel changes nothing; invalid or missing-record updates do not create rows.
 
-**Completed (2026-10-03):** Full-body PUT validation, parameterized SQL and the existing timestamp trigger update the selected record. The prefilled form uses the typed client and authoritative filtered-list/global-summary refresh, preserving drafts on validation, missing-record and uncertain errors. Backend 16 groups, frontend 13 client groups, 58 T09 browser checks, 61 T08 and 69 T07 regression checks, lint/type-check/build, fresh migration/role/health checks and PostgreSQL restart persistence passed. See [T09 verification](t09-verification.md). T10 has not started.
+**Completed (2026-10-03):** Full-body PUT validation, parameterized SQL and the existing timestamp trigger update the selected record. The prefilled form uses the typed client and authoritative filtered-list/global-summary refresh, preserving drafts on validation, missing-record and uncertain errors. Backend 16 groups, frontend 13 client groups, 58 T09 browser checks, 61 T08 and 69 T07 regression checks, lint/type-check/build, fresh migration/role/health checks and PostgreSQL restart persistence passed. See [T09 verification](t09-verification.md). T10 followed this checkpoint.
 
 ### T10 — Add deletion
 
@@ -183,7 +183,7 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 **Done when:** Cancel preserves the row; confirm removes only the intended row; totals update; repeated deletion returns the documented not-found response.
 
-**Completed (2026-10-05):** DELETE validates UUIDs before parameterized deletion through the shared limited-role service and returns empty 204 or structured 404. The existing confirmation dialog handles pending locks, definite rejection, missing records, uncertain outcomes and read-only recovery. Active filters survive authoritative list/global-summary refresh. Backend 20 groups, frontend 15 client groups, 34 T10 browser checks, T07/T08/T09 regressions, quality checks, fresh migration/security/health checks and PostgreSQL restart persistence passed. See [T10 verification](t10-verification.md). T11 has not started.
+**Completed (2026-10-05):** DELETE validates UUIDs before parameterized deletion through the shared limited-role service and returns empty 204 or structured 404. The existing confirmation dialog handles pending locks, definite rejection, missing records, uncertain outcomes and read-only recovery. Active filters survive authoritative list/global-summary refresh. Backend 20 groups, frontend 15 client groups, 34 T10 browser checks, T07/T08/T09 regressions, quality checks, fresh migration/security/health checks and PostgreSQL restart persistence passed. See [T10 verification](t10-verification.md). T11 followed this checkpoint.
 
 ### T11 — Finish filtering and request recovery
 
@@ -198,7 +198,7 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 **Done when:** Filters behave as specified, hidden-by-filter saves remain valid, stale requests do not overwrite current results, and failures never falsely report success or trigger automatic write retries.
 
-**Completed (2026-10-05):** Audited and reused T06/T08 filtering and T09/T10 mutation recovery. Hardened stable current-filter loaders, cancellable request generations, shared in-flight retries, mutation-superseded reads, All-reset updating/focus, query error associations, conflicting count snapshots, dynamic hidden-record feedback and recovery-warning cleanup. Reduced motion is explicitly verified. Backend 23 groups, frontend 22 groups, 86 T11 browser checks with nine zero-violation audits, T07/T08/T09/T10 regressions, lint/typecheck/build, fresh migration/security and configured TLS health checks passed. See [T11 verification](t11-verification.md). T12 has not started.
+**Completed (2026-10-05):** Audited and reused T06/T08 filtering and T09/T10 mutation recovery. Hardened stable current-filter loaders, cancellable request generations, shared in-flight retries, mutation-superseded reads, All-reset updating/focus, query error associations, conflicting count snapshots, dynamic hidden-record feedback and recovery-warning cleanup. Reduced motion is explicitly verified. Backend 23 groups, frontend 22 groups, 86 T11 browser checks with nine zero-violation audits, T07/T08/T09/T10 regressions, lint/typecheck/build, fresh migration/security and configured TLS health checks passed. See [T11 verification](t11-verification.md). T12 followed this checkpoint.
 
 ### T12 — Verify local V1
 
@@ -213,6 +213,8 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 **Done when:** All V1 acceptance criteria pass, required checks pass, and no unresolved issue prevents create/read/update/delete, exact totals, or filtering.
 
+**Completed (2026-10-05):** T12's final acceptance gates passed: 24 backend groups, 22 frontend groups, 429 browser checks, 47 zero-violation accessibility audits, clean-source verification, fresh database constraints/permissions and exact restart persistence. See [T12 verification](t12-verification.md).
+
 ### T13 — Finish documentation and local handoff
 
 **Depends on:** T12.
@@ -220,12 +222,14 @@ Use separate frontend and backend packages to keep the first project easy to und
 - Complete README instructions for prerequisites, dependency installation, environment variables, migrations, seeding, development, and builds.
 - Explain the architecture, fixed currency, shared collection, and unauthenticated V1 limits.
 - Update planning documents if implementation changed a contract; avoid conflicting descriptions.
-- Verify setup from a clean checkout against a disposable database using the documented steps.
-- Commit coherent changes and make the repository available through the selected Git workflow.
+- Reference T12's clean-source/disposable-database verification and validate documented commands without repeating expensive suites for documentation-only changes.
+- Leave a coherent, reviewable documentation change for the selected Git workflow.
 
 **Done when:** Another developer can run the local app using the README without receiving undocumented secrets or manually guessing setup steps.
 
 ### T14 — Deploy a sample-data demo
+
+**Status:** Blocked after read-only deployment audit. Re-authenticate Vercel with access to `zeyadali408-1717s-projects`; hosted acceptance remains incomplete. See [T14 verification](t14-verification.md). T13 remains complete.
 
 **Depends on:** T13.
 
@@ -275,7 +279,7 @@ Mark tasks complete only when their completion criteria have been verified.
 - [x] T10 — Deletion
 - [x] T11 — Filtering and recovery
 - [x] T12 — Local V1 verification
-- [ ] T13 — Documentation and handoff
+- [x] T13 — Documentation and handoff
 - [ ] T14 — Sample-data deployment
 
 ## 8. Decisions to resolve during setup
@@ -292,4 +296,4 @@ Mark tasks complete only when their completion criteria have been verified.
 
 ## 9. Immediate next action
 
-T01-T12 are complete. Final V1 verification passed backend/frontend quality gates, 429 browser checks, 47 zero-violation accessibility audits, fresh migrations/seed/permissions, exact money/date boundaries, clean-source builds/tests and restart persistence. See [T12 verification](t12-verification.md). Ready for **T13 - Documentation and handoff**; T13 has not started. Integrated deployment remains T14.
+T01-T13 are complete. [T12 verification](t12-verification.md) remains the accepted local baseline. Restore Vercel owning-team access, then resume **T14 - Deployment and final demo verification** using the [current audit and remaining gates](t14-verification.md). T14 remains unchecked; no production configuration or deployment was changed.

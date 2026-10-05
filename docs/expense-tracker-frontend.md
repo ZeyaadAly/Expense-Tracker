@@ -1,4 +1,6 @@
-Expense Tracker Frontend
+# Expense Tracker Frontend
+
+These are implementation guidelines, not an onboarding guide or an approved replacement theme. Use [README](../README.md), [handoff](07-handoff.md) and the [approved T03 specification](06-t03-ui-specification.md) for current setup and design.
 Start from project decisions
 Read the relevant files in the project's docs directory: project brief, requirements, database design, API design, and implementation plan. Locate them in the active project instead of assuming a machine path. Follow the current user instructions and project contracts before these defaults. Keep V1 limited to transaction CRUD, summaries, filters, and responsive flows. V1 is unauthenticated.
 Technologies and boundaries

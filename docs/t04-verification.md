@@ -1,5 +1,8 @@
 # T04 verification — 2026-10-03
 
+> **Historical checkpoint:** This report preserves the results and task/deployment state at its recorded date. Later-task and fixture-only statements are historical. Current local V1 evidence is in [T12 verification](t12-verification.md); current setup/status is in [handoff](07-handoff.md). T14 integrated deployment has not started.
+
+
 Status: Completed. T05 has not started.
 
 ## Remote baseline and history

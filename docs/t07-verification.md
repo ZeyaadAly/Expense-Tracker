@@ -1,5 +1,8 @@
 # T07 — Dashboard layout verification
 
+> **Historical checkpoint:** This report preserves the results and task/deployment state at its recorded date. Later-task and fixture-only statements are historical. Current local V1 evidence is in [T12 verification](t12-verification.md); current setup/status is in [handoff](07-handoff.md). T14 integrated deployment has not started.
+
+
 This report records the completed T07 checkpoint. Following T08, the main dashboard uses Express; T07 fixtures remain available only through explicit development `?preview=populated` / state URLs. See [T08 verification](t08-verification.md) for the current integration checkpoint. The regression script selects the fixture preview explicitly.
 
 **Date:** 2026-10-03

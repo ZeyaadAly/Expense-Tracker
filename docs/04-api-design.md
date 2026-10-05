@@ -2,7 +2,7 @@
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** T04-T10 health/create/read/update/delete/summary endpoints verified
+**Status:** Final V1 contract; all implemented endpoints/recovery verified through T12
 **Related documents:** [Project brief](01-project-brief.md) · [Requirements](02-requirements.md) · [Database design](03-database-design.md)
 
 ## 1. Purpose and architecture
@@ -26,6 +26,7 @@ Paths below are relative to `/api/v1`.
 
 | Method | Path | Purpose | Success status |
 | --- | --- | --- | --- |
+| GET | `/health` | Read-only API/database health | 200; 503 when unavailable |
 | GET | `/transactions` | List transactions, optionally filtered | 200 |
 | GET | `/transactions/:id` | Retrieve one transaction | 200 |
 | POST | `/transactions` | Create a transaction | 201 |
@@ -218,7 +219,7 @@ Example 200 response:
 }
 ```
 
-Calculate sums, balance, and count over all rows in the shared collection in one database statement. Extend the database design's aggregate query with `COUNT(*)`; map its result to a nonnegative integer for this small V1 dataset. Totals remain unrestricted decimal strings and may exceed the per-transaction amount limit. Balance may be negative.
+The implemented service calculates sums, balance and `COUNT(*)` over all rows in one PostgreSQL statement. Map count to a nonnegative safe integer; monetary values stay strings. Totals remain unrestricted decimal strings and may exceed the per-transaction amount limit. Balance may be negative.
 
 An empty table returns `"0.00"` for all three monetary values and `transactionCount: 0`. A database failure returns an error rather than fabricated zeros.
 
@@ -286,23 +287,23 @@ This document creates no hosted resource or plugin connection.
 
 ## 14. API verification checklist
 
-T06 results are recorded in [T06 verification](t06-verification.md). The checklist below also includes later update/delete/frontend/recovery work and is not a claim that all V1 checks passed.
+Final contract verification is recorded in [T12](t12-verification.md#requirements-traceability), with detailed earlier reports retained as historical evidence. These checks passed in the accepted T12 baseline; they were not rerun during documentation handoff.
 
-- [ ] Create a valid transaction; verify 201, Location, generated ID, normalized values, and persistence.
-- [ ] Read the record and list; verify field names and date/timestamp serialization.
-- [ ] Update all editable fields; verify preserved ID/creation time and changed update time.
+- [x] Create a valid transaction; verify 201, Location, generated ID, normalized values, and persistence.
+- [x] Read the record and list; verify field names and date/timestamp serialization.
+- [x] Update all editable fields; verify preserved ID/creation time and changed update time.
 - [x] Delete; verified 204 with no body, then 404 on a subsequent deletion.
-- [ ] Reject incomplete PUT requests and confirm missing IDs are never upserted.
-- [ ] Reject numeric JSON amounts, invalid amount syntax, and values outside the allowed range.
-- [ ] Reject invalid dates, category/type combinations, blank descriptions, and unknown input fields.
-- [ ] Verify filters individually and together, Other across both types, empty lists, and deterministic ordering.
-- [ ] Reject duplicate/unknown query parameters, incompatible filters, and filters on summary.
-- [ ] Verify summary zeros, exact 0.10 + 0.20 arithmetic, negative balances, counts, and totals above the individual amount limit.
-- [ ] Verify malformed JSON, oversized payloads, wrong media types, unsupported methods, and unknown routes.
-- [ ] Simulate database errors and uncertain network outcomes without leaking internal details or reporting false success.
-- [ ] Verify configured CORS behavior and no-store response headers.
-- [ ] Complete the frontend → Express → PostgreSQL → response flow using sample data.
+- [x] Reject incomplete PUT requests and confirm missing IDs are never upserted.
+- [x] Reject numeric JSON amounts, invalid amount syntax, and values outside the allowed range.
+- [x] Reject invalid dates, category/type combinations, blank descriptions, and unknown input fields.
+- [x] Verify filters individually and together, Other across both types, empty lists, and deterministic ordering.
+- [x] Reject duplicate/unknown query parameters, incompatible filters, and filters on summary.
+- [x] Verify summary zeros, exact 0.10 + 0.20 arithmetic, negative balances, counts, and totals above the individual amount limit.
+- [x] Verify malformed JSON, oversized payloads, wrong media types, unsupported methods, and unknown routes.
+- [x] Simulate database errors and uncertain network outcomes without leaking internal details or reporting false success.
+- [x] Verify configured CORS behavior and no-store response headers.
+- [x] Complete the frontend → Express → PostgreSQL → response flow using sample data.
 
 ## 15. Next step
 
-T01-T10 are verified locally. PUT editing and DELETE persistence are complete. See [T10 verification](t10-verification.md). T11 has not started.
+Local V1 is verified through T12. See [handoff](07-handoff.md) for operations; integrated hosted verification belongs to T14, which has not started.
