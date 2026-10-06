@@ -9,11 +9,11 @@ export function validateAuthForm(route: AuthRoute, values: Record<string, string
   if (values.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) errors.email = "Enter a valid email address.";
   if (route !== "login" && values.password && values.password.length < 8) errors.password = "Use at least eight characters.\nChoose a password you do not use elsewhere.";
   if ((route === "register" || route === "reset-password") && values.confirm !== values.password) errors.confirm = "Passwords must match.";
-  if (route === "register" && (values.name?.trim().length ?? 0) > 100) errors.name = "Use no more than 100 characters.";
+  if (route === "register" && (Array.from(values.name?.trim() ?? "").length > 100 || Array.from(values.name ?? "").some(c => { const n=c.codePointAt(0)!; return n<32 || n===127 || (n>=0xD800 && n<=0xDFFF); }))) errors.name = "Use no more than 100 characters without control characters.";
   return errors;
 }
 export type SubmitOutcome = { kind: "ignored" } | { kind: "invalid"; errors: Record<string, string> } | { kind: "error"; error: AuthError } | { kind: "success"; redirect: boolean };
-export function createAuthFormSubmitter(service: AuthService) {
+export function createAuthFormSubmitter(service: AuthService, saveDraft: (userId: string, name: string) => void = () => {}) {
   let pending = false;
   return async (route: AuthRoute, values: Record<string, string>, recoveryReady = false): Promise<SubmitOutcome> => {
     if (pending) return { kind: "ignored" };
@@ -25,6 +25,7 @@ export function createAuthFormSubmitter(service: AuthService) {
       const email = values.email?.trim() ?? "";
       const result = route === "login" ? await service.signInWithEmail(email, values.password) : route === "register" ? await service.signUpWithEmail(email, values.password) : route === "forgot-password" ? await service.requestPasswordReset(email) : await service.updatePassword(values.password);
       if (result.error) return { kind: "error", error: result.error };
+      if (route === "register" && result.data && "user" in result.data && typeof result.data.user === "object" && result.data.user !== null && "id" in result.data.user && typeof result.data.user.id === "string") saveDraft(result.data.user.id, values.name.trim());
       if (route === "login" && !(result.data && "session" in result.data && result.data.session)) return { kind: "error", error: { code: "unexpected", message: "Sign in did not create a session. Please try again." } };
       return { kind: "success", redirect: route === "login" };
     } finally { pending = false; }

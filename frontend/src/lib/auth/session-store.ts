@@ -22,6 +22,7 @@ export function createSessionStore(service: ReturnType<typeof createAuthService>
     getSnapshot: () => state,
     getServerSnapshot: () => initial,
     subscribe: (listener: () => void) => { listeners.add(listener); return () => { listeners.delete(listener); }; },
+    invalidateSession: () => { revision++; publish(null, { expired: true, recovery: false, error: null }); },
     start: () => {
       const current = ++generation;
       const subscription = service.subscribe((event, session) => {

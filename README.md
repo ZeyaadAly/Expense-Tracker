@@ -195,6 +195,10 @@ psql "$MIGRATION_DATABASE_URL" -v ON_ERROR_STOP=1 -f supabase/seed.sql
 
 The seed uses three fixed IDs and `ON CONFLICT (id) DO NOTHING`: Freelance payment 1000.00, Grocery shopping 250.50 and Taxi fare 45.75. Running it twice retains three rows. Exact totals are **1000.00 income, 296.25 expenses, 703.75 balance**. Do not use the seed to reset retained data.
 
+V2 T12 reference categories are separate from the unchanged V1 sample seed. After applying T11 to a local/disposable database, run `psql "$MIGRATION_DATABASE_URL" -v ON_ERROR_STOP=1 -f supabase/seeds/v2-system-categories.sql`. Reruns preserve all existing category rows. Do not run this remotely at T12; production reference seeding belongs to the maintenance migration workflow. The backend now exposes authenticated `GET /api/v2/categories` (default active; optional kind/status); frontend fixtures remain unchanged. See [V2 T12 verification](docs/v2/t12-verification.md) for reproduction and isolation results.
+
+V2 T13 adds authenticated `POST /api/v2/profile/bootstrap` with `{}`, GET `/api/v2/profile`, and displayName-only PUT. Development V2 routes now wait for successful profile bootstrap before mounting their fictional financial UI. Local V2 verification needs an API with T11 applied and valid T09 Auth configuration; a verified Auth identity is the only owner input. Registration-name drafts are tab-local and applied after sign-in; Settings remains fixture-only until T49. No remote schema deployment or legacy ownership migration belongs to T13. See [V2 T13 verification](docs/v2/t13-verification.md).
+
 A plain local non-TLS database works with the isolated verification wrapper, not the normal TLS-enforced backend. For ordinary local app development, use the configured Supabase connection or a PostgreSQL server with correctly verified TLS.
 
 ## API

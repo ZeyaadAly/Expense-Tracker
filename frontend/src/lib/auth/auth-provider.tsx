@@ -14,7 +14,7 @@ function useSessionLayer() {
     document.addEventListener("visibilitychange", visible);
     return () => { stop(); window.removeEventListener("pageshow", recheck); document.removeEventListener("visibilitychange", visible); };
   }, [store]);
-  return { ...state, user: state.session?.user ?? null, signOut: store.signOut, refreshSession: store.recheck };
+  return { ...state, user: state.session?.user ?? null, signOut: store.signOut, refreshSession: store.recheck, invalidateSession: store.invalidateSession };
 }
 export function AuthProvider({ children }: { children: ReactNode }) { const value = useSessionLayer(); return <Context.Provider value={value}>{children}</Context.Provider>; }
 export function useAuth() { const context = useContext(Context); if (!context) throw new Error("V2 AuthProvider required"); return context; }

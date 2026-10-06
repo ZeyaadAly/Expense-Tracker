@@ -403,6 +403,8 @@ Returns `{data: {userId, displayName, preferredCurrency: "EGP", locale: "en", ti
 
 Body exactly `{displayName: "Zeyad"}`; nullable or trimmed 1–100 Unicode code points. Currency/locale/timezone are read-only P0. Return 200 profile; missing profile → 409 PROFILE_REQUIRED. No GET side-effect provisioning or auth.users read required.
 
+T13 bootstrap always starts displayName=null; Auth metadata is not imported. A validated registration draft, stored locally for its exact signup user UUID, may be applied through PUT after verified sign-in/bootstrap if the existing name is null. All profile routes reject query parameters; bootstrap requires exactly `{}`. PUT rejects unknown fields, including userId/email/preferences/timestamps, empty names, control characters and invalid Unicode. Unchanged PUT names, repeated bootstrap and GET preserve timestamps; actual changes use the existing T11 timestamp trigger and serialize UTC. A missing Auth FK during bootstrap is a sanitized 500 INTERNAL_ERROR; no Auth-table reads or admin credentials are needed. Frontend bootstrap failure keeps protected children unmounted with explicit Retry; 401 clears the session gate and redirects to login. Settings editing remains T49.
+
 ### Frozen authentication boundary
 
 Supabase Auth email/password with email confirmation enabled in production; reset redirects are allowlisted. Frontend uses one Supabase browser client with session persistence/automatic refresh, accesses its current token for each Express request, and sends Bearer authorization. Use a client protected layout/route guard with an initial loading gate: render no financial content or requests before session/bootstrap succeeds. P0 renders authenticated financial data client-side; no cookie-based Express auth or financial SSR cache is introduced. Root / redirects to dashboard or login after session resolution; only local allowlisted return paths are accepted.
@@ -1105,7 +1107,7 @@ Filters:
 - kind
 - status
 
-By default return system + owned categories in both active/archived states; forms request status=active. kind=income/expense includes both-kind categories; kind=both means both-kind only. Sort isSystem DESC then name ASC then id ASC; meta.count. Unknown kind/status400.
+Authenticated through T09 requireAuth. Return system + current verified user's owned categories; no profile is required for this read. Default status=active; status=archived explicitly selects archived rows only. kind=income/expense includes both-kind categories; kind=both means both-kind only; omitted kind includes all kinds. Sort isSystem DESC then name ASC (PostgreSQL C collation for environment-stable ordering) then id ASC; return `{data: CategoryResource[], meta: {count}}` without userId or timestamps. Unknown parameters, invalid/empty values, bracket notation and repeated parameters return 400 VALIDATION_ERROR. Identity comes only from req.auth.userId. GET only; authenticated unsupported methods return 405. No custom writes are enabled until T48.
 
 ---
 

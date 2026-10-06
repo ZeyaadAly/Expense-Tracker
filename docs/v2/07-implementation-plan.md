@@ -322,6 +322,8 @@ Seed stable repeatable system categories, including one both-kind Other; impleme
 
 Acceptance: stable IDs/idempotent seeds, compatibility kind checks, ownership isolation, no development financial seed in production. T48 later adds custom write/lifecycle support; shared schema validator may be built here.
 
+T12 implementation uses a separate repeatable reference seed, authenticated GET only, active-only default status, compatibility kind filters and deterministic system/name/id ordering. Frontend fixtures remain unchanged; no profile/account provisioning or ownership migration. See [T12 verification](t12-verification.md) for disposable seed/isolation/privilege and regression evidence.
+
 ---
 
 ## T13 — Provision Profiles and Build Profile API
@@ -331,6 +333,8 @@ Acceptance: stable IDs/idempotent seeds, compatibility kind checks, ownership is
 T13a: POST /profile/bootstrap idempotent insert-on-conflict verified-sub/defaults, no auth.users trigger/admin reads. T13b: GET/PUT /profile with displayName-only writes, PROFILE_REQUIRED recovery and migrated-owner provisioning. T13c: frontend session bootstrap before reads, registration-name draft PUT and parallel bootstrap/missing profile/failure tests.
 
 Acceptance: profile APIs typed/scoped; EGP/en/Cairo fixed; no signup-blocking database trigger; failure recovery observable.
+
+T13 completed with explicit POST bootstrap, read-only GET, displayName-only PUT, local user-bound registration drafts and profile preparation before protected fixture rendering. Settings/shell profile UI remains T49. Concurrent provisioning, cross-user isolation, real disposable PostgreSQL/JWT API requests, frontend retry/session invalidation and focused browser checks passed; see [T13 verification](t13-verification.md). No migrated-owner profile or legacy financial ownership was provisioned.
 
 ---
 
@@ -342,6 +346,8 @@ Disposable production-like copy only: operator-provided verified owner UUID, rea
 
 Acceptance: no lost/changed IDs, amounts/dates/descriptions/timestamps; no unknown categories, ownerless rows or duplicate backfill; no production writes performed here.
 
+T14 completed locally: explicit synthetic owner/frozen inventory, cash Main Account opening 0.00, literal T12 mappings, single-trigger transactional suppression, exact microsecond/row/money reconciliation, fail-closed preflight, no-op rerun, window A reversal and window B rollback refusal. All V1 financial maintenance paths and stale-runtime privilege denial were rehearsed; an old V1 write demonstrated NULL ownership. Final dataset is T15-ready, with ownership columns still nullable. See [T14 verification](t14-verification.md). No remote migration or T15 enforcement was performed.
+
 ---
 
 ## T15 — Prepare and Test Ownership Constraints
@@ -351,6 +357,8 @@ Acceptance: no lost/changed IDs, amounts/dates/descriptions/timestamps; no unkno
 Prepare/test stage E on disposable migrated copy: NOT NULL, composite owner FKs, category/type/link triggers, exact scale/bounds, deletion matrix, indexes, legacy category nullable/check transition and private grants. Confirm trigger/backfill timestamp preservation and runtime restrictions. Production enforcement belongs to T66 only after final reconciliation/maintenance.
 
 Acceptance: cross-owner/category-kind mutations rejected, archived lifecycle safe, retained V1 dates/totals exact, no public V1 compatibility expected.
+
+**Completed locally on 2026-10-06.** The atomic stage E migration passed 207 dedicated checks after the 64-check T14 fresh backfill; 15 preflight faults and a failure after ALTER rolled back safely. Required transaction references, eight native composite owner FKs, category ownership/kind checks, immutable owners/system categories, account opening locks and archive/pause rules are verified. Historical archived categories remain valid; future services block archived-category activity per the explicit T15 instruction. Legacy V1 reads remain compatible in the disposable probe; V1 POST fails required ownership. Financial rows/timestamps/totals are unchanged. See [T15 verification](t15-verification.md). Production enforcement remains T66; T16 and Accounts CRUD have not started.
 
 ---
 
@@ -1346,8 +1354,12 @@ Current checkpoint:
 - T09 ✅ Completed — Add Backend Auth Middleware
 - T10 ✅ Completed — Add Authenticated Frontend API Client
 - T11 ✅ Completed — Prepare V2 Additive Schema Migrations
-- T12 ⬜ Next — Add Default Category Seed and Early Category Reads
+- T12 ✅ Completed — Add Default Category Seed and Early Category Reads
+- T13 ✅ Completed — Provision Profiles and Build Profile API
+- T14 ✅ Completed — Rehearse V1 Data Migration
+- T15 ✅ Completed — Prepare and Test Ownership Constraints
+- T16 ⬜ Next — Expand Multi-User Isolation Tests
 
-The T04 visual approval gate is satisfied. T05 hosted configuration, T06 Auth helpers, T07 real Auth-page integration and T08 session protection are completed; see [T05 verification](t05-verification.md), [T06 verification](t06-verification.md), [T07 verification](t07-verification.md) and [T08 verification](t08-verification.md). T09 backend identity verification is completed; see [T09 verification](t09-verification.md). T10 is completed; see [T10 verification](t10-verification.md). T11 additive schema preparation and disposable verification are completed; see [T11 verification](t11-verification.md). T12 is next and has not started. No remote T11 application or ownership backfill was performed. The approved visual design is preserved; financial pages remain fictional and development-only. Profile/bootstrap gating remains deferred until T13.
+The T04 visual approval gate is satisfied. T05 hosted configuration, T06 Auth helpers, T07 real Auth-page integration and T08 session protection are completed; see [T05 verification](t05-verification.md), [T06 verification](t06-verification.md), [T07 verification](t07-verification.md) and [T08 verification](t08-verification.md). T09 backend identity verification is completed; see [T09 verification](t09-verification.md). T10 is completed; see [T10 verification](t10-verification.md). T11 additive schema preparation and disposable verification are completed; see [T11 verification](t11-verification.md). T12 reference seed and authenticated category reads are completed; see [T12 verification](t12-verification.md). T13 profile provisioning/API and frontend bootstrap gating are completed; see [T13 verification](t13-verification.md). T14 disposable migration rehearsal is completed; see [T14 verification](t14-verification.md). T15 local ownership enforcement preparation is completed; see [T15 verification](t15-verification.md). T16 is next and has not started. No remote schema/seed/backfill or final production ownership enforcement was performed. The approved visual design is preserved; financial pages remain fictional and development-only. Profile/bootstrap gating precedes protected fixture rendering; full Settings integration remains T49.
 
 ---

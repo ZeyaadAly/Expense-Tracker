@@ -196,6 +196,8 @@ Archiving an account **automatically pauses all its active recurring definitions
 
 Archived references remain in history and totals. Reject new transactions/transfers/recurring definitions or postings using archived references. Editing a transaction/transfer requires its resulting account/category references to be active; restore first for historical corrections. Hard deletion of owned historical transactions/transfers remains allowed even when parents are archived. Existing goal links to archived accounts remain metadata; assigning a link requires an owned active account. Category kind is immutable after any transaction, recurring definition or budget references it; category owner/system flag is always immutable.
 
+**T15 enforcement clarification (explicit task instruction, 2026-10-06):** category ownership/kind integrity in PostgreSQL accepts archived categories. Future write services must lock/check category status and reject new activity or corrections using archived categories; this preserves the product rule above without rejecting historical references during migration. Account active-use checks remain in both PostgreSQL and future services. Archive still pauses active definitions transactionally; restore does not resume them. No financial write service is introduced in T15.
+
 Use user-scoped SQL aggregates; join pre-aggregated transaction/transfer totals to avoid join multiplication. No current_balance persisted field or materialized view in P0.
 
 ---
@@ -277,6 +279,8 @@ Suggested expense defaults:
 - Other
 
 One stable system Other category with kind='both'; seed stable UUIDs for all defaults consistently across environments.
+
+T12 freezes the nine defaults above. `supabase/seeds/v2-system-categories.sql` contains their fixed UUID literals and inserts active, unowned system rows with null icon/color. Run separately from the V1 development transaction seed after T11. ON CONFLICT (id) DO NOTHING preserves existing rows/timestamps and never updates custom categories. Name conflicts under different IDs fail rather than silently accepting identity drift. This is reference data, not a financial sample/reset or ownership migration; remote execution remains under the later production maintenance workflow.
 
 ---
 
@@ -675,7 +679,7 @@ Express token verification and ownership-scoped authorization are mandatory P0 c
 
 Keep `expense_tracker` outside exposed Data API schemas. Revoke schema/table/function privileges from PUBLIC, anon and authenticated; browser publishable key is for Auth only. Grant the limited runtime role only required application DML/function privileges, including new objects explicitly; no DDL, role management, TRUNCATE, auth.users access or broad default grants. Any views stay private. Migrations run through the existing separate privileged workflow with project/history verification.
 
-Store user_id directly on transactions and every user-owned root/occurrence. Use unique (id,user_id) parent keys and composite ownership FKs for transaction/account, transfer source/destination, recurring/account, goal/account, occurrence/definition and generated transaction/definition. Targeted SECURITY INVOKER triggers plus service checks enforce system-or-same-user category ownership/kind, immutable ownership, generated occurrence identity and immutable category kind once referenced. System category iff is_system=true and user_id IS NULL; custom iff is_system=false and user_id IS NOT NULL. Archived-parent checks use row locks in services/triggers. Database integrity supplements, but does not replace, read authorization.
+Store user_id directly on transactions and every user-owned root/occurrence. Use unique (id,user_id) parent keys and composite ownership FKs for transaction/account, transfer source/destination, recurring/account, goal/account, occurrence/definition and generated transaction/definition. Targeted SECURITY INVOKER triggers plus service checks enforce system-or-same-user category ownership/kind, immutable ownership, generated occurrence identity and immutable category kind once referenced. System category iff is_system=true and user_id IS NULL; custom iff is_system=false and user_id IS NOT NULL. Archived-account checks use row locks in services/triggers; archived-category activity checks belong to services as clarified in §8. Database integrity supplements, but does not replace, read authorization.
 
 See [Supabase API security guidance](https://supabase.com/docs/guides/api/securing-your-api).
 
@@ -1186,3 +1190,13 @@ All former blocking choices are final: unrestricted NUMERIC with scale/range che
 Database planning remains frozen after T02. Next: code-first T03 design system/app shell and T04 P0 browser prototype using fixtures only. Database/API/Auth integration and migrations remain later tasks; none is performed by this documentation amendment.
 
 ---
+
+# 63. T15 Ownership Enforcement Mechanics
+
+Local stage E is prepared in `20261006171715_v2_ownership_constraints.sql`; production application remains T66. One transaction locks all nine core tables, runs explicit named/counting preflight queries, and then creates fully validated constraints/triggers. Straightforward immediate validation is appropriate for the rehearsed dataset and maintenance window; no NOT VALID constraints are left behind. Lock/statement timeouts fail closed. Preflight checks include all three transaction NULL fields, account/category/recurring ownership, transfer endpoints, occurrence definition/generated ownership, budget category kind/owner, goal account ownership, system/custom integrity, and unlocked accounts with posted activity. It never rejects history solely because a parent is archived.
+
+Transaction ownership/account/category become NOT NULL. Composite account and optional recurring-definition FKs replace simple account/definition FKs. A transaction `(id,user_id)` unique key supports occurrence generated-link ownership. The occurrence composite FK uses `ON DELETE SET NULL (generated_transaction_id)` so deleting a generated transaction preserves the required owner, posted marker, and definition/date uniqueness. T32 still owns paired generated fields, definition/date identity, terminal transitions and reservation lifecycle.
+
+Existing T11 transfer endpoint, recurring account, occurrence definition, and nullable goal linked-account composite keys are retained. Targeted invoker category triggers lock parents FOR SHARE and enforce system-or-same-owner plus income/expense/both compatibility, with expense/both only for budgets. Category owner/system flags and all row owners are immutable. System categories cannot be edited/deleted; referenced custom kinds cannot change. Accounts/categories archive rather than delete, and archive pauses active definitions in the same transaction. Account row locks serialize posting and opening-balance edits; first transaction/transfer permanently locks opening balance and card/asset semantics, including after deletion.
+
+Legacy category text is retained untouched for existing rows but becomes nullable and loses the V1 fixed-category CHECK. New V2 transactions use category_id without fabricating legacy strings. Existing date, exact numeric, identifier/timestamp and ordering guarantees remain. The migration performs no financial UPDATE and does not restore suspended V1 DML. New functions have fixed pg_catalog search paths, explicit runtime EXECUTE, and no PUBLIC/anon/authenticated EXECUTE. Core RLS and browser schema access remain unchanged. Evidence and rollback boundaries are in [T15 verification](t15-verification.md).

@@ -5,12 +5,20 @@ import { requestPolicy, routeNotFound } from "./middleware/request.js";
 import { createHealthRouter } from "./routes/health.js";
 import { createTransactionRouter, createTransactionMethodRouter } from "./routes/transactions.js";
 import type { TransactionService } from "./services/transactions.js";
+import type { CategoryService } from "./services/categories.js";
+import { createCategoryRouter } from "./routes/categories.js";
+import { createRequireAuth } from "./middleware/auth.js";
+import { createProfileRouter } from "./routes/profiles.js";
+import type { ProfileService } from "./services/profiles.js";
 
 export function createApp(options: {
   clientOrigin: string;
   databaseHealth: () => Promise<boolean>;
   additionalRoutes?: Router;
   transactions?: TransactionService;
+  categories?: CategoryService;
+  profiles?: ProfileService;
+  supabaseUrl?: string;
 }) {
   const app = express();
   app.disable("x-powered-by");
@@ -30,7 +38,10 @@ export function createApp(options: {
   v2.use((_request, response, next) => { response.set("Cache-Control", "no-store"); next(); });
   v2.use(cors({ origin: options.clientOrigin }));
   v2.use(requestPolicy);
+  v2.use(express.json({ limit: "16kb", strict: false }));
   v2.use(createHealthRouter(options.databaseHealth));
+  if (options.categories) v2.use(createCategoryRouter(options.categories, createRequireAuth(options.supabaseUrl)));
+  if (options.profiles) v2.use(createProfileRouter(options.profiles, createRequireAuth(options.supabaseUrl)));
   v2.use(routeNotFound);
   v2.use(errorHandler);
   app.use("/api/v2", v2);

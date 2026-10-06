@@ -8,6 +8,7 @@ import { useAuth } from "../../lib/auth/auth-provider";
 import { safeNext } from "../../lib/auth/redirects";
 import type { AuthError } from "../../lib/auth/types";
 import { createAuthFormSubmitter, validateAuthForm, type AuthRoute } from "./auth-form";
+import { profileDrafts } from "../../lib/auth/profile-draft";
 export type { AuthRoute } from "./auth-form";
 const titles = { login: "Sign in to your workspace", register: "Create your account", "forgot-password": "Reset your password", "reset-password": "Choose a new password" };
 export function AuthPage({ route }: { route: AuthRoute }) {
@@ -22,7 +23,7 @@ export function AuthPage({ route }: { route: AuthRoute }) {
   const recoveryReady = recovery && !recoveryRejected;
   const [success, setSuccess] = useState(false);
   const [notice, setNotice] = useState("");
-  const submitter = useRef(createAuthFormSubmitter(auth));
+  const submitter = useRef(createAuthFormSubmitter(auth, profileDrafts.save));
   const mutation = useRef(false);
   const mounted = useRef(false);
   const busy = pending || initializing;
