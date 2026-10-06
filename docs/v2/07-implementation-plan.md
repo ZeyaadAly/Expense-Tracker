@@ -1,7 +1,7 @@
 # Expense Tracker V2 — Implementation Plan
 
-**Version:** 2.0 Planning  
-**Status:** Draft for BMAD Implementation Planning  
+**Version:** 2.0 Planning — T02 decisions recorded
+**Status:** P0 planning frozen; T01–T11 ✅ Completed; T12 ⬜ Next — not started
 **Date:** 2026-10-06  
 **Project:** Expense Tracker  
 **Depends on:**  
@@ -11,6 +11,8 @@
 - `04-architecture.md`
 - `05-database-design.md`
 - `06-api-design.md`
+
+**Release rule:** Core completion requires P0 only. P1 sections are optional enhancement contracts; post-V2 features do not gate core release. Decisions are frozen as of 2026-10-06; future material changes follow change control.
 
 ---
 
@@ -25,7 +27,7 @@ It defines:
 - dependencies;
 - acceptance criteria;
 - migration safety;
-- Figma dependencies;
+- browser UI approval dependencies;
 - security gates;
 - testing gates;
 - deployment gates;
@@ -39,27 +41,15 @@ V2 should be implemented incrementally without destabilizing the existing V1 pro
 
 # 2. Delivery Strategy
 
-V2 should be built in staged milestones.
+**V2 Core Completion = P0 only.** P1 features are planned V2 enhancements after the core release and require explicit promotion to become core gates.
 
-Do not attempt to ship all V2 functionality at once.
+- P0: Supabase Auth/profile, protected app, user isolation, accounts, account-aware transactions, transfers, recurring definitions/occurrences/generation/upcoming, dashboard, analytics, monthly category budgets, manual-progress goals, custom categories, core settings, search/filter/cursor pagination, migration, financial/security/accessibility validation and production acceptance.
+- P1: notifications, reports/CSV/JSON export, recurring-pattern detection, deterministic insight cards, goal projections/history/detail, and account detail page.
+- Post-V2 / P2: user-identity deletion, budget rollover, account-linked automatic goal progress, email/push, PDF/Excel, advanced detection, richer debt products, bank sync, AI advice, OCR, investments, shared wallets and currency conversion.
 
-Recommended sequence:
+P0 shows budget warning states within budget/dashboard views; persistent notifications are P1. /reports, account-detail routes, notification controls and export sections are absent from P0 navigation. P1 tables/endpoints/browser states below describe enhancement contracts, not core requirements.
 
-1. lock product/design/architecture decisions;
-2. prepare safe additive database changes;
-3. add authentication;
-4. enforce per-user isolation;
-5. add accounts;
-6. migrate transactions to account-aware ownership;
-7. add transfers;
-8. add recurring finance;
-9. build analytics;
-10. add budgets;
-11. add goals;
-12. add categories/settings;
-13. add reports/export;
-14. complete hardening/testing;
-15. deploy and verify production.
+Task IDs T01–T75 are retained for traceability; IDs are not a strict execution order. §20 is the dependency map. Schema/task implementation takes place in disposable development environments first; production execution is T66, after rehearsal/security gates. P1 tasks are deferred by the approved P0-only rule, not silently marked implemented.
 
 ---
 
@@ -79,7 +69,7 @@ Every task must follow these rules.
 
 ## Money
 
-- PostgreSQL exact numeric types;
+- unrestricted NUMERIC with scale<=2/range checks, values max 999999999.99, signed opening balances;
 - API decimal strings;
 - no JavaScript floating-point financial calculations;
 - aggregates calculated in PostgreSQL/backend.
@@ -88,7 +78,7 @@ Every task must follow these rules.
 
 - financial dates use calendar-date semantics;
 - do not timezone-shift `YYYY-MM-DD`;
-- timestamps use UTC ISO 8601.
+- timestamps/infrastructure use UTC ISO8601; financial today uses fixed Africa/Cairo.
 
 ## Mutations
 
@@ -121,8 +111,8 @@ Every task must follow these rules.
 | M9 | Analytics |
 | M10 | Budgets |
 | M11 | Goals |
-| M12 | Categories, settings, notifications |
-| M13 | Reports and exports |
+| M12 | Categories/settings P0; notifications P1 |
+| M13 | Reports and exports — P1 only |
 | M14 | Full V2 verification |
 | M15 | Deployment and production acceptance |
 
@@ -132,96 +122,82 @@ Every task must follow these rules.
 
 ## T01 — Review and Freeze Planning Artifacts
 
-**Depends on:** none
+**Status:** Review completed; T01 found decisions/contradictions. T02 resolves them before freeze.
 
-Review:
+**Depends on:** none.
 
-- product brief;
-- PRD;
-- UX specification;
-- architecture;
-- database design;
-- API design;
-- implementation plan.
-
-### Acceptance Criteria
-
-- no major contradiction remains;
-- open architectural decisions are explicitly listed;
-- core V2 scope is approved;
-- post-V2 features remain excluded.
+Acceptance: all seven documents read and V1 compatibility reviewed; decision checklist recorded; no code/provider changes. T02 consistency pass supplies the final P0 planning freeze.
 
 ---
 
 ## T02 — Resolve Open Architecture Decisions
 
-Resolve before implementation:
+**Status:** Completed — 2026-10-06.
 
-- final numeric precision;
-- account balance convention;
-- credit-card balance convention;
-- transfer model;
-- recurring scheduler provider;
-- recurring occurrence table yes/no;
-- cursor structure;
-- RLS timing;
-- transaction hard-delete vs soft-delete;
-- account deletion policy;
-- goal progress model.
+**Depends on:** T01.
 
-### Acceptance Criteria
+Decisions frozen across all seven documents: P0-only core; bounded exact money; debt-positive cards; derived net worth; archive/restore and automatic schedule pause; dedicated transfers; daily Vercel Cron protected GET; durable occurrences and bounded catch-up; deletion matrix; manual goals; signed cursors; ES256 JWKS/session/bootstrap; Express/private-schema authorization with deferred RLS; owner-input maintenance cutover/two rollback windows; inclusive period/forecast calculations.
 
-- decisions recorded in architecture/database docs;
-- no implementation-critical ambiguity remains.
+Acceptance: final consistency pass, no blocking decisions, documentation-only changes. No migrations/Auth/Figma/code started.
 
 ---
 
-## T03 — Create V2 Figma Design System
+## T03 — Build V2 Code-First Design System & App Shell
 
-Create V2 Figma file with:
+**Status:** Completed — 2026-10-06. Reusable code-first foundation verified at `/v2/design-system`; see [T03 verification](t03-verification.md). T04 is completed with explicit user visual approval recorded on 2026-10-06.
 
-- Foundations;
-- Components;
-- Auth;
-- Dashboard;
-- Transactions;
-- Accounts;
-- Recurring;
-- Analytics;
-- Budgets;
-- Goals;
-- Reports;
-- Settings;
-- Responsive QA.
+**Depends on:** completed T01/T02 and this approved documentation amendment. No T05+ integration dependency.
+
+Build the real reusable visual foundation directly in the existing Next.js/React/TypeScript/Tailwind CSS 4 frontend, using static fixtures only. Browser implementation is authoritative for visual design; follow UX §§29–39.
+
+Deliver:
+
+- semantic CSS/Tailwind tokens, typography (Geist if practical), tabular numbers, spacing/radius/elevation and layout system;
+- responsive app shell, 220–240px desktop sidebar, mobile/tablet top bar and navigation drawer, PageHeader;
+- buttons, inputs (text/money/search/date/password), selects, textarea and compact choice controls;
+- accessible dialogs/drawers, confirmation/pending/error/uncertain-outcome patterns;
+- feedback banners, skeletons, empty/error/stale states;
+- MoneyDisplay, SummaryCard, AccountCard and TypeBadge with explicit card debt and neutral transfer semantics;
+- TransactionRow/TransactionCard, actions, filters and cursor-history pagination presentation;
+- account/transfer forms, recurring cards/forms/status/frequency/upcoming items;
+- budget and manual-goal components, category/profile/settings/auth presentation building blocks;
+- chart shells with title/period/legend, loading/empty states and text/table alternatives.
 
 ### Acceptance Criteria
 
-- design tokens defined;
-- reusable components defined;
-- desktop/tablet/mobile responsive behavior represented;
-- Figma URL recorded in docs.
+- components use semantic tokens and flexible CSS layout; no clipped text or uniform card-grid page prescription;
+- browser specimens at 360/768/1440 demonstrate responsive behavior, exact large values, 200-character descriptions, long names and multiline errors;
+- keyboard/focus, AA contrast, 44px targets where appropriate, dialog focus management, reduced motion and non-color financial meaning verified;
+- no API requests, Supabase/Auth connection, credentials, database/migration changes or V1 financial-service integration; static fixtures/local UI state only;
+- development-only review surface and component inventory/validation evidence recorded in UX/plan; fixture preview cannot expose production data;
+- P1 notifications/reports/suggestions/projections/detail are not required. Full page flows remain T04.
+
+**Verification:** lint, TypeScript, production build and 22 existing frontend tests pass. Browser checks at 360/768/1440 found no horizontal page overflow; axe audits reported zero violations. Keyboard modal focus/trap/Escape/return, pending/error/uncertain states, reduced motion and stress fixtures passed. V1 source/styles remain unchanged; the production showcase returns 404. No application dependency, API/Auth/backend/database change.
+
+Historical [Figma file](https://www.figma.com/design/05Flgth8HPK8evKrxwRtmf) is abandoned/non-authoritative. No further Figma work or access is required.
 
 ---
 
-## T04 — Complete Core Figma Flows
+## T04 — Build V2 P0 UI Prototype with Fixtures
 
-Prototype at minimum:
+**Status:** ✅ Completed — 2026-10-06. Browser verification is preserved in [T04 verification](t04-verification.md). The user explicitly reviewed and approved the code-first V2 prototype as the visual source of truth and instructed that the UI design remain unchanged. The visual approval gate is satisfied; T05/T06 are now completed.
 
-- register → login → dashboard → logout;
-- create account;
-- create/edit/delete transaction;
-- transfer;
-- create recurring;
-- pause/resume recurring;
-- create budget;
-- create goal;
-- analytics range change.
+**Depends on:** completed, verified T03 components/app shell. No real Auth/API integration.
+
+Build the actual browser pages using mock/fixture data only: /login, /register, /forgot-password, /reset-password, /dashboard, /transactions, /accounts, /recurring, /analytics, /budgets, /goals, /settings.
+
+Compose the editorial workspace, ledger, schedule/timeline, analytical summary, readable budgets and calm manual goals described in UX. Simulate register/verification/login/bootstrap/logout/reset/session expiry; first account and locked opening balance; transaction CRUD; transfers/card payment; recurring create/pause/resume/archive; budget CRUD; manual goal completion; settings/categories and analytics period changes. Use local fixture state; no financial floating-point math. Required browser states remain UX §§35–39.
 
 ### Acceptance Criteria
 
-- critical user journeys are reviewable;
-- loading/error/empty states exist;
-- accessibility considerations annotated.
+- all P0 routes/forms and critical fixture journeys are reviewable in the browser;
+- populated/loading/empty/error/stale/partial/pending/uncertain/session states are represented without claiming real authentication or persisted writes;
+- actual/forecast, archived history, debt/overpayment and manual goal semantics match frozen contracts;
+- responsive 360/768/1440, keyboard/accessibility and stress-content checks pass;
+- no Supabase Auth, V2/V1 API calls, database access or real financial data; keep fixture previews development-only until later authentication/integration gates;
+- browser review evidence and explicit UI approval are recorded before T05+ integration. Do not mark production domain/Auth tasks complete based on fixtures.
+
+Later T07/T19/T25/T28/T34/T37/T40/T44/T46/T49 integrate and finish these approved page implementations with real services instead of rebuilding them. Existing T05+ domain, security, migration and production acceptance requirements remain intact.
 
 ---
 
@@ -229,25 +205,19 @@ Prototype at minimum:
 
 ## T05 — Configure Supabase Auth for V2
 
-Configure:
+**Depends on:** T02; implementation begins after T03/T04 fixture browser UI approval.
 
-- email/password auth;
-- verification policy;
-- password reset flow;
-- redirect URLs;
-- production/local auth settings.
+Configure/test email/password, production email confirmation, password reset/verification allowlisted redirects, 15-minute access JWT lifetime and **ES256 asymmetric signing key**. Verify actual project capabilities/key/issuer/JWKS; do not assume current settings. Local/disposable test users only until production runbook.
 
-### Acceptance Criteria
+Acceptance: register/verify/sign-in/sign-out/reset work; ES256 token/JWKS verified before T09; public publishable key only in browser; no service-role/shared JWT secret in runtime.
 
-- test user can register;
-- sign in works;
-- sign out works;
-- reset flow works in test environment;
-- no admin/service keys exposed to frontend.
+**Status: ✅ Completed (2026-10-06).** Initial provider/JWKS audit plus user-reported manual verification confirm hosted redirects, Site URL, email/password with confirmation, ES256/JWKS contract, 900-second lifetime and dedicated-account flows. See [T05 verification](t05-verification.md) for evidence attribution.
 
 ---
 
 ## T06 — Add Frontend Auth Client
+
+**Status:** ✅ Completed — 2026-10-06. Isolated lazy browser client, typed helpers, normalized errors and subscription cleanup verified by automated tests, including SDK persisted-session restoration. Live account verification was not rerun because credentials were not supplied; safe manual steps are in [T06 verification](t06-verification.md). T06 added no page integration or guards; subsequent page integration is recorded under T07 below.
 
 Implement:
 
@@ -268,6 +238,8 @@ Implement:
 
 ## T07 — Build Auth Pages
 
+**Status:** ✅ Completed — 2026-10-06. Approved four Auth forms now use T06 helpers with safe validation/errors, duplicate blocking, confirmation and recovery handling. Lint/type/build and 44 tests pass; 30 browser responsive/accessibility audits pass at 360/768/1440. Browser provider responses are synthetic; no live credentials were supplied. See [T07 verification](t07-verification.md) for scope and optional manual live checks. Financial routes remain fixtures/development-only. The subsequent T08 checkpoint is recorded below.
+
 Implement:
 
 - `/login`;
@@ -277,7 +249,7 @@ Implement:
 
 ### Acceptance Criteria
 
-- matches approved Figma;
+- integrates the approved T04 browser UI;
 - validation works;
 - backend/Provider errors are safe;
 - keyboard/accessibility checks pass;
@@ -287,43 +259,29 @@ Implement:
 
 ## T08 — Protect Frontend Routes
 
-Protect all app routes:
+**Status:** ✅ Completed — 2026-10-06 (session-gated fixture checkpoint). A V2-only provider/shared boundary protects all eight financial routes with loading, safe return paths, real shell signout, expiry and refresh handling. Lint/type/build and 51 tests pass; representative browser checks pass at 360/768/1440. Production V2 remains disabled. See [T08 verification](t08-verification.md). Profile/bootstrap gating remains a mandatory T13-dependent extension before real financial integration; it is not implemented or claimed here. The subsequent T09 checkpoint is recorded below.
 
-- `/dashboard`;
-- `/transactions`;
-- `/accounts`;
-- `/recurring`;
-- `/analytics`;
-- `/budgets`;
-- `/goals`;
-- `/reports`;
-- `/settings`.
+**Depends on:** T06/T07; bootstrap portion requires T13.
 
-### Acceptance Criteria
-
-- unauthenticated users redirect to login;
-- valid session allows access;
-- sign-out removes protected data from UI.
+P0 client protected layout guards dashboard/transactions/accounts/recurring/analytics/budgets/goals/settings; / resolves after session. No financial render/fetch before session and profile bootstrap. Clear data/abort reads/cursor history on user change/sign-out/401; allowlisted return paths only. P1 reports/details get same protection when promoted. Acceptance: no protected stale-data flash or late prior-user response, valid session survives reload, session refresh safe.
 
 ---
 
 ## T09 — Add Backend Auth Middleware
 
-Implement token verification.
+**Status:** ✅ Completed — 2026-10-06. Pinned jose ES256 remote-JWKS verification, strict Bearer parsing, trusted typed context and safe 401/503 failures are reusable and verified. Public V2 health matches V1; no deployed Auth probe or financial V2 endpoint was added. Backend lint/type/build pass; 28 tests pass with four existing disposable-DB groups skipped, including eight new cryptographic/Auth groups. Public hosted JWKS was rechecked; live account-token verification remains optional/private because no token was supplied. See [T09 verification](t09-verification.md). T10 has not started.
 
-### Acceptance Criteria
+**Depends on:** T05.
 
-- missing token → 401;
-- invalid token → 401;
-- valid token yields trusted `userId`;
-- token claims validated;
-- frontend-supplied user IDs ignored.
+Use jose ES256 remote project JWKS, pin issuer/audience authenticated/algorithm, validate exp/nbf/UUID sub/authenticated role. Derive identity from verified sub; ignore/reject client owner claims, never user_metadata authorization. Fail closed on key/provider errors; no HS256 fallback. Test expired/invalid/signature/issuer/audience/unknown-kid/rotation and missing token.
 
 ---
 
 ## T10 — Add Authenticated API Client
 
-Extend frontend API client to:
+**Status:** ✅ Completed — 2026-10-06. Isolated V2 transport reuses the T06 current-token helper, parses typed errors/envelopes, supports cancellation and never retries writes. Test-only Express/JWKS integration verifies T09 trusted identity and auth failures. See [T10 verification](t10-verification.md).
+
+Provide a dedicated V2 frontend API client to:
 
 - attach Bearer token;
 - handle 401 centrally;
@@ -340,111 +298,67 @@ Extend frontend API client to:
 
 # 7. M3 — User Ownership and Safe Migration
 
-## T11 — Create V2 Additive Schema Migration
+## T11 — Prepare V2 Additive Schema Migrations
 
-Add initial V2 tables:
+**Status:** ✅ Completed — 2026-10-06. Four additive stage A/B migrations provide P0 tables, nullable V1 transaction references, indexes/timestamp triggers and private limited-role grants. Disposable PostgreSQL 17.11 apply/reversal/catalog/row/totals/security checks and the full backend suite against the migrated schema passed. No production application, backfill, category seed, Auth provisioning or P1 table was performed. See [T11 verification](t11-verification.md). T12 is next and has not started.
 
-- profiles;
-- accounts;
-- categories;
-- transfers;
-- recurring_transactions;
-- budgets;
-- goals;
-- notifications.
+**Depends on:** T02, V1 inventory/schema review. Execute here only on disposable development database.
 
-Add V2 ownership/account/category references required for transaction migration.
+Split into reviewable subtasks:
 
-### Acceptance Criteria
+- T11a: prepare stage A P0 tables/profiles/accounts/categories/transfers/recurring definitions/**occurrences**/budgets/goals and explicit private grants/revocations. No notifications/history tables required for P0.
+- T11b: prepare stage B nullable transaction user/account/category IDs; preserve transaction_date, legacy columns/checks, original SQL history and TLS/limited role.
+- T11c: disposable apply/reversal/catalog audit, exact money excess-scale rejection and limited-role tests.
 
-- migration applies cleanly to disposable V1 copy;
-- no V1 rows lost;
-- rollback documented;
-- runtime role has required but limited permissions.
+T11 creates the occurrence ledger's basic structure, uniqueness, state checks, same-owner definition FK and generated-link SET NULL FK. Transaction pair/link constraints and terminal-transition/generated-identity triggers specified in database §§12,19,20 remain under T32 before processor. Transaction ownership/category enforcement remains under T15. Acceptance: V1 fields retained, no lost rows, runtime no DDL/admin, no exposed financial schema. Production stages execute only in T66 maintenance.
 
 ---
 
-## T12 — Add Default Category Seed
+## T12 — Add Default Category Seed and Early Category Reads
 
-Seed stable system categories.
+**Depends on:** T11, T09 for authenticated API reads.
 
-### Acceptance Criteria
+Seed stable repeatable system categories, including one both-kind Other; implement authenticated GET /api/v2/categories returning system+owned categories with kind/status filters. This read contract moves ahead of all transaction/recurring/budget forms.
 
-- repeatable;
-- no duplicates;
-- stable IDs;
-- income/expense/both rules verified.
+Acceptance: stable IDs/idempotent seeds, compatibility kind checks, ownership isolation, no development financial seed in production. T48 later adds custom write/lifecycle support; shared schema validator may be built here.
 
 ---
 
-## T13 — Provision Profiles
+## T13 — Provision Profiles and Build Profile API
 
-Create profile provisioning flow.
+**Depends on:** T09/T11.
 
-### Acceptance Criteria
+T13a: POST /profile/bootstrap idempotent insert-on-conflict verified-sub/defaults, no auth.users trigger/admin reads. T13b: GET/PUT /profile with displayName-only writes, PROFILE_REQUIRED recovery and migrated-owner provisioning. T13c: frontend session bootstrap before reads, registration-name draft PUT and parallel bootstrap/missing profile/failure tests.
 
-- new auth user gets profile;
-- duplicate provisioning prevented;
-- failures observable;
-- existing users can be backfilled.
+Acceptance: profile APIs typed/scoped; EGP/en/Cairo fixed; no signup-blocking database trigger; failure recovery observable.
 
 ---
 
 ## T14 — Rehearse V1 Data Migration
 
-On disposable production-like copy:
+**Depends on:** T11/T12/T13.
 
-- create migration owner user;
-- create default `Main Account`;
-- map V1 categories to category IDs;
-- backfill `user_id`;
-- backfill `account_id`;
-- validate row counts/totals.
+Disposable production-like copy only: operator-provided verified owner UUID, real inventory input, cash Main Account opening 0.00 / locked if activity, explicit category map, final ownership backfill with timestamps preserved, exact row/field/totals reconciliation. Rehearse V1 financial maintenance before backfill, trigger suppression/restoration under privileged transaction and both rollback windows. Do not assume historical T14 counts.
 
-### Acceptance Criteria
-
-- V1 totals unchanged;
-- dates unchanged;
-- descriptions unchanged;
-- no duplicates;
-- every row has valid ownership/account/category.
+Acceptance: no lost/changed IDs, amounts/dates/descriptions/timestamps; no unknown categories, ownerless rows or duplicate backfill; no production writes performed here.
 
 ---
 
-## T15 — Enforce Ownership Constraints
+## T15 — Prepare and Test Ownership Constraints
 
-After successful rehearsal:
+**Depends on:** T14.
 
-- NOT NULL constraints;
-- ownership FKs;
-- indexes;
-- ownership consistency checks/triggers where needed.
+Prepare/test stage E on disposable migrated copy: NOT NULL, composite owner FKs, category/type/link triggers, exact scale/bounds, deletion matrix, indexes, legacy category nullable/check transition and private grants. Confirm trigger/backfill timestamp preservation and runtime restrictions. Production enforcement belongs to T66 only after final reconciliation/maintenance.
 
-### Acceptance Criteria
-
-- cross-owner references rejected;
-- valid rows still pass;
-- migrations remain reversible where practical.
+Acceptance: cross-owner/category-kind mutations rejected, archived lifecycle safe, retained V1 dates/totals exact, no public V1 compatibility expected.
 
 ---
 
-## T16 — Add Multi-User Isolation Tests
+## T16 — Establish Expanding Multi-User Isolation Suite
 
-Create User A/User B tests across:
+**Depends on:** T09/T11; each domain adds its cases before delivery.
 
-- accounts;
-- transactions;
-- transfers;
-- recurring;
-- budgets;
-- goals;
-- categories;
-- exports.
-
-### Acceptance Criteria
-
-- cross-user reads/writes fail safely;
-- no resource existence leakage beyond policy.
+Build User A/B fixtures and helpers now; expand with profiles/categories/accounts/transactions/transfers/recurring/occurrences/budgets/goals/analytics/dashboard as those domains land. P1 adds notification/report/export cases only when promoted. Test foreign referenced IDs, cursor scope, unsafe identity input, GET/PUT/DELETE and aggregate leakage. This task is a continuing gate, not a demand for unbuilt endpoints before T17. T59 is the final complete P0 acceptance.
 
 ---
 
@@ -459,7 +373,7 @@ Implement:
 - GET account by ID;
 - PUT account;
 - archive;
-- restore if included.
+- restore (required P0);
 
 ### Acceptance Criteria
 
@@ -472,25 +386,15 @@ Implement:
 
 ## T18 — Build Account Balance Queries
 
-Implement derived balance:
+**Depends on:** T17, prepared transaction/transfer schema.
 
-```text
-opening balance
-+ income
-- expense
-+ incoming transfers
-- outgoing transfers
-```
-
-### Acceptance Criteria
-
-- known fixture totals reconcile exactly;
-- no float conversion;
-- archived accounts still report historical balance.
+Assets = opening+income-expense+incoming-outgoing. Card debt = opening+expense-income+outgoing-incoming. Total Balance/net worth sums assets minus card debt including archived accounts, all-history. Query exact pre-aggregated SQL; no join multiplication/floats. Acceptance fixtures cover purchases/payments/cash advances/overpayment, archive inclusion and corrections/deletes. Final reconciliation expands after T21/T26.
 
 ---
 
 ## T19 — Build Accounts Page
+
+**Depends on:** T17/T18/T10/T08 and approved T04 P0 browser UI. Transfer panel completion is staged after T26/T27/T28; account detail is P1.
 
 Implement `/accounts`.
 
@@ -498,26 +402,17 @@ Implement `/accounts`.
 
 - account cards;
 - empty/loading/error states;
-- add/edit/archive flows;
+- add/edit/archive/restore and automatic recurring pause feedback;
 - responsive behavior;
 - accessibility checks pass.
 
 ---
 
-## T20 — Build Account Detail Experience
+## T20 — Build Account Detail Experience — P1 Optional
 
-If included in core V2:
+**Depends on:** T17/T18/T21/T26 and approved P1 browser UI states. Not a P0 gate.
 
-- account balance;
-- recent transactions;
-- account filters;
-- transfer action;
-- archive/edit.
-
-### Acceptance Criteria
-
-- no cross-user access;
-- matches Figma.
+Optional /accounts/[id] with balance, scoped recent transactions, analytics/transfer/archive actions. P0 account cards link to filtered /transactions and accounts transfer panel. Acceptance when promoted: ownership, complete dependency contracts and approved P1 browser UI.
 
 ---
 
@@ -525,22 +420,11 @@ If included in core V2:
 
 ## T21 — Upgrade Transaction Backend to V2 Ownership
 
-Implement `/api/v2/transactions`.
+**Depends on:** T09/T12/T15/T17.
 
-Required:
+Split T21a validator/create/read; T21b edit/hard-delete/generated-link preservation; T21c ownership/date/money/archived-state/reconciliation tests. Use transaction_date storage/API date, direct verified owner, active owned account, compatible owned/system category and no client recurring metadata. Account first activity permanently locks opening balance. Preserve durable occurrence on generated hard-delete.
 
-- account ownership;
-- category ownership/type compatibility;
-- exact money;
-- date rules;
-- recurring linkage;
-- user scoping.
-
-### Acceptance Criteria
-
-- create/read/update/delete pass;
-- cross-user IDs fail safely;
-- V1 behavior preserved during migration window if required.
+Acceptance: all CRUD/cross-user cases pass; V1 financial routes are blocked/retired, never left publicly operating against V2 data.
 
 ---
 
@@ -570,7 +454,7 @@ Support:
 - category;
 - from;
 - to;
-- recurring status if retained.
+- recurring generated/manual; omitted for all.
 
 ### Acceptance Criteria
 
@@ -581,21 +465,9 @@ Support:
 
 ## T24 — Add Cursor Pagination
 
-Implement stable cursor pagination.
+**Depends on:** T21–T23.
 
-Ordering:
-
-```text
-date DESC
-createdAt DESC
-id DESC
-```
-
-### Acceptance Criteria
-
-- no duplicate/missing rows during normal paging;
-- opaque cursor;
-- max limit enforced.
+Implement signed HMAC-SHA256/versioned 24h cursor bound to user/resource/filter/search/limit with ordering date DESC,createdAt DESC,id DESC. Default 25 / max 100; backend nextCursor only, frontend Previous through history; generic invalid-cursor400. Reuse for T26 transfers and P1 notifications. Tests cover inserted/deleted/edited records, malformed/tampered/expired/wrong-scope/user cursor, filters and frontend resets. Paging is not a historical snapshot.
 
 ---
 
@@ -618,40 +490,29 @@ Implement `/transactions`.
 
 # 10. M6 — Transfers
 
-## T26 — Build Transfer Backend
+## T26 — Build Atomic Transfer Backend
 
-Implement:
+**Depends on:** T09/T15/T17/T18/T21/T24.
 
-- POST transfer;
-- GET transfers;
-- GET transfer;
-- PUT if allowed;
-- DELETE if allowed.
+Dedicated transfers create/list/read/edit/hard-delete, positive exact money/manual dates/optional description, distinct owned active accounts for create/edit. Atomicity is mandatory in initial implementation, using one checked-out pg client and consistently ordered old/new account locks. Permanently lock opening balance on first activity; deletes against archived parents allowed. Lists use cursor contract.
 
-### Acceptance Criteria
-
-- source/destination owned;
-- source != destination;
-- exact money;
-- transfers excluded from income/expense totals.
+Acceptance includes T27 fault/concurrency checks before T26 is complete; no partial state, safe uncertain outcomes, card payment/overpayment reconcile, no income/expense transfer counting.
 
 ---
 
-## T27 — Enforce Transfer Atomicity
+## T27 — Verify Transfer Atomicity and Concurrency
 
-Use PostgreSQL transaction.
+**Depends on:** implemented T26 paths; mandatory delivery gate for T26, not later optional hardening.
 
-### Acceptance Criteria
-
-- partial transfer impossible;
-- simulated failure rolls back;
-- concurrent submission does not corrupt data.
+Simulate create/edit/delete failures, account archive/edit races, simultaneous first activity/opening edits and repeated submissions; verify rollback/reconciliation and no authorization bypass. Duplicate deliberate transfer requests remain separate records (no mandatory P0 idempotency header); no automatic write retry. T28 waits for T26+T27 acceptance.
 
 ---
 
 ## T28 — Build Transfer UI
 
-Implement transfer flow from accounts.
+**Depends on:** T26/T27/T19 and approved T04 P0 browser UI.
+
+Implement accounts transfer form, cursor list, edit and hard-delete confirmation.
 
 ### Acceptance Criteria
 
@@ -667,83 +528,47 @@ Implement transfer flow from accounts.
 
 ## T29 — Build Recurring Backend
 
-Implement CRUD/lifecycle:
+**Depends on:** T09/T12/T15/T17/**T30/T32**.
 
-- list;
-- create;
-- read;
-- edit;
-- pause;
-- resume;
-- archive.
+Create/list/read/edit/pause/resume/archive and upcoming projection. Use fixed startDate anchor, future/today initial occurrence (no past import), active parent validation, immutable generated history and durable terminal markers; nextOccurrence null for paused/archived/exhausted. Archive/account/category operations auto-pause as specified.
 
-### Acceptance Criteria
-
-- ownership enforced;
-- frequency rules validated;
-- future recurrence unaffected by historical rows.
+Acceptance: lifecycle/month-end/leap-year/past-start/end-date/ownership tests pass; client cannot set generated metadata. Split CRUD validation and lifecycle/projection into reviewable subtasks.
 
 ---
 
 ## T30 — Implement Recurrence Calculator
 
-Support:
+**Depends on:** T02; precedes T29.
 
-- daily;
-- weekly;
-- monthly;
-- yearly;
-- month-end;
-- leap year.
-
-### Acceptance Criteria
-
-- deterministic test suite;
-- Jan 31 behavior documented and verified;
-- no timezone drift.
+Daily/weekly/monthly/yearly anchored on startDate; ISO weekday1–7, month-end clamping preserves anchor, Feb29→Feb28 in nonleap years. First date on/after Cairo today, inclusive end/null exhausted, date upper-bound guard. Pure deterministic tests for creation, pause/resume/edit/forecast and catch-up; no timezone drift.
 
 ---
 
 ## T31 — Implement Recurring Processor
 
-Scheduled processor:
+**Depends on:** T29/T30/**T32**; provider security contract frozen before coding.
 
-- finds due definitions;
-- creates due transactions;
-- advances next occurrence.
+T31a durable pending claim/reservation; T31b locked atomic posting+occurrence link/status+next date; T31c rollback/failed recording/retry/observability. GET protected job handler, max 100 per definition / 1000 attempts global, deadline buffer; continue later, process other definitions despite failures.
 
-### Acceptance Criteria
-
-- transaction-safe;
-- duplicate-safe;
-- observable run result;
-- failures do not create partial state.
+Acceptance: duplicates/concurrent jobs/generated-delete replay impossible, archive race safe, no partial financial state, safe counts/hasRemaining and persistent backlog. T33 configures production-like scheduling only after reliability tests.
 
 ---
 
-## T32 — Add Recurring Idempotency Constraint
+## T32 — Implement Durable Occurrence Persistence
 
-Enforce unique recurring occurrence.
+**Depends on:** T11/T15; precedes T29/T31.
 
-### Acceptance Criteria
+Required recurring_occurrences unique definition/date, direct owner/composite FK, pending/posted/skipped/failed, immutable terminal markers, sanitized failure metadata, nullable generated link ON DELETE SET NULL and same-owner/definition/date validation. Supplemental generated-transaction unique partial index. Runtime cannot delete ledger markers.
 
-- duplicate cron execution creates no duplicate transaction;
-- concurrent processor test passes.
+Acceptance: posted marker survives generated transaction hard-delete/edit; no re-post; concurrent claim and failed retry pass. Persistence invariants implemented before processor delivery.
 
 ---
 
-## T33 — Configure Scheduled Execution
+## T33 — Configure Daily Vercel Scheduled Execution
 
-Choose and configure:
+**Depends on:** T31 reliability gate; provider is already decided in T02.
 
-- Vercel Cron; or
-- Supabase scheduling.
-
-### Acceptance Criteria
-
-- protected internal endpoint/job;
-- secret not exposed;
-- production-like test succeeds.
+Configure backend cron 0 3 * * * UTC, GET /internal/recurring/process, CRON_SECRET validation/no-store, function duration/safety buffer and bounded batch benchmarking. Hobby daily/hour-level precision sufficient, no exact-time guarantee/no assumed failure retry. Verify failed/backlog/operator retry and safe logs on production-like environment. Production cron disabled until T66–T71 validation/write-enable checkpoint, then T72.
 
 ---
 
@@ -762,7 +587,9 @@ Implement `/recurring`.
 
 ---
 
-## T35 — Add Recurring Suggestions
+## T35 — Add Recurring Suggestions — P1 Optional
+
+**Scope:** Deferred enhancement; does not gate P0 release. Requires explicit promotion and its domain/browser UI approval dependencies.
 
 Deterministic detection.
 
@@ -779,44 +606,19 @@ Deterministic detection.
 
 ## T36 — Build Dashboard Aggregate API
 
-Implement:
+**Depends on:** T18/T21/T29/**T38/T42/T43/T45**; can stage basic aggregate earlier, final P0 acceptance waits for these.
 
-```text
-GET /api/v2/dashboard
-```
+GET /api/v2/dashboard?period=this_month returns resolved period, summary, accounts, incomeVsExpenses chart series, recentTransactions, upcomingRecurring, current-month budgets and active goals in one consistent read-only REPEATABLE READ snapshot. P1 insights absent.
 
-Return:
-
-- summary;
-- accounts;
-- recent transactions;
-- upcoming recurring;
-- budgets;
-- goals;
-- insights.
-
-### Acceptance Criteria
-
-- user-scoped;
-- exact values;
-- avoids excessive request waterfall.
+Acceptance: user-scoped exact values/net-worth debt convention/period bounds, no waterfall, actual/forecast separated; full previews use completed domain calculations.
 
 ---
 
 ## T37 — Build V2 Dashboard UI
 
-Implement approved dashboard.
+**Depends on:** T36, T19/T25/T34/T44/T46 and approved T04 P0 browser UI. Basic shell/cards may be staged earlier.
 
-### Acceptance Criteria
-
-- summary cards;
-- account overview;
-- recent transactions;
-- recurring preview;
-- budget preview;
-- goal preview;
-- insights;
-- responsive behavior.
+P0 summary/net-worth cards, account overview, backend chart, recent transactions, recurring/budget/goal previews, period controls and new-user onboarding. No core insight/notification requirement. Acceptance: complete P0 data/empty/partial error/responsive/accessibility states; debt-positive cards and archived net-worth clearly labelled.
 
 ---
 
@@ -875,7 +677,9 @@ Implement `/analytics`.
 
 ---
 
-## T41 — Add Deterministic Financial Insights
+## T41 — Add Deterministic Financial Insights — P1 Optional
+
+**Scope:** Deferred enhancement; does not gate P0 release. Requires explicit promotion and its domain/browser UI approval dependencies.
 
 Examples:
 
@@ -924,7 +728,7 @@ Statuses:
 
 ### Acceptance Criteria
 
-- threshold logic tested;
+- default threshold90%, exact comparison before display rounding tested;
 - no manual spent field.
 
 ---
@@ -959,7 +763,7 @@ Implement:
 
 - exact money;
 - user-scoped;
-- valid lifecycle.
+- valid manual-progress/completion/archive lifecycle, linked-account metadata only, no core history;
 
 ---
 
@@ -977,9 +781,11 @@ Implement `/goals`.
 
 ---
 
-## T47 — Add Goal Projection
+## T47 — Add Goal Projection — P1 Optional
 
-If retained as P1:
+**Scope:** Deferred enhancement; does not gate P0 release. Requires explicit promotion and its domain/browser UI approval dependencies.
+
+When P1 is promoted:
 
 - estimate completion based on historical savings.
 
@@ -993,46 +799,25 @@ If retained as P1:
 
 # 16. M12 — Categories, Settings, Notifications
 
-## T48 — Build Category Backend
+## T48 — Build Custom Category Backend
 
-Implement:
+**Depends on:** T12/T15/T09. Moves before core entry forms needing custom-category create/manage; does not wait for goals/notifications.
 
-- list system + custom;
-- create custom;
-- update custom;
-- archive;
-- restore.
-
-### Acceptance Criteria
-
-- system categories immutable;
-- historical references preserved;
-- ownership enforced.
+T12 already supplies GET/system seeds. Add owned custom create/update/archive/restore; immutable system/owner flags, immutable referenced kind, exact same-user constraints, automatic pause of active definitions on archive and explicit resume after restore. Acceptance: history preserved, conflicts safe, two-user isolation tests.
 
 ---
 
-## T49 — Build Settings Page
+## T49 — Build Core Settings Page
 
-Implement `/settings`.
+**Depends on:** T13/T17/T48/T10 and approved T04 core Settings UI.
 
-Sections:
-
-- profile;
-- accounts;
-- categories;
-- security;
-- preferences;
-- export.
-
-### Acceptance Criteria
-
-- responsive;
-- safe destructive actions;
-- accessible.
+T49a profile displayName/read-only preferences; T49b account/archive/restore and categories; T49c password-reset/sign-out security UI and protected-data clearing. P0 omits export/notifications/user deletion. P1 export integration follows T55/T56 plus approved P1 browser UI. Acceptance: safe confirmations, accessible responsive states, bootstrap recovery and no provider/admin keys.
 
 ---
 
-## T50 — Build Notification Backend
+## T50 — Build Notification Backend — P1 Optional
+
+**Scope:** Deferred enhancement; does not gate P0 release. Requires explicit promotion and its domain/browser UI approval dependencies.
 
 Implement:
 
@@ -1048,7 +833,9 @@ Implement:
 
 ---
 
-## T51 — Build Notification UI
+## T51 — Build Notification UI — P1 Optional
+
+**Scope:** Deferred enhancement; does not gate P0 release. Requires explicit promotion and its domain/browser UI approval dependencies.
 
 Implement:
 
@@ -1064,9 +851,11 @@ Implement:
 
 ---
 
-## T52 — Generate Budget / Recurring Notifications
+## T52 — Generate Budget / Recurring / Goal Notifications — P1 Optional
 
-Create notification generation paths.
+**Scope:** Deferred enhancement; does not gate P0 release. Requires explicit promotion and its domain/browser UI approval dependencies.
+
+When P1 notifications are promoted, create budget/recurring/**goal-milestone** generation paths with persistent event-key deduplication. This work does not run in core.
 
 ### Acceptance Criteria
 
@@ -1078,7 +867,9 @@ Create notification generation paths.
 
 # 17. M13 — Reports and Export
 
-## T53 — Build Reports API
+## T53 — Build Reports API — P1 Optional
+
+**Scope:** Deferred enhancement; does not gate P0 release. Requires explicit promotion and its domain/browser UI approval dependencies.
 
 Implement:
 
@@ -1094,7 +885,9 @@ GET /api/v2/reports/summary
 
 ---
 
-## T54 — Build Reports Page
+## T54 — Build Reports Page — P1 Optional
+
+**Scope:** Deferred enhancement; does not gate P0 release. Requires explicit promotion and its domain/browser UI approval dependencies.
 
 Implement `/reports`.
 
@@ -1107,7 +900,9 @@ Implement `/reports`.
 
 ---
 
-## T55 — Add CSV Export
+## T55 — Add CSV Export — P1 Optional
+
+**Scope:** Deferred enhancement; does not gate P0 release. Requires explicit promotion and its domain/browser UI approval dependencies.
 
 ### Acceptance Criteria
 
@@ -1118,7 +913,9 @@ Implement `/reports`.
 
 ---
 
-## T56 — Add JSON Export
+## T56 — Add JSON Export — P1 Optional
+
+**Scope:** Deferred enhancement; does not gate P0 release. Requires explicit promotion and its domain/browser UI approval dependencies.
 
 ### Acceptance Criteria
 
@@ -1151,8 +948,7 @@ Verify:
 - budgets;
 - goals;
 - categories;
-- notifications;
-- reports.
+- notifications/reports only if P1 promoted.
 
 ---
 
@@ -1179,7 +975,7 @@ Attempt cross-user:
 - DELETE;
 - transfer;
 - analytics;
-- export.
+- export only if P1 promoted.
 
 ### Acceptance Criteria
 
@@ -1216,7 +1012,9 @@ Verify:
 - pause/resume;
 - missed occurrence;
 - end date;
-- concurrent runs.
+- concurrent runs;
+- generated transaction hard-delete/edit never erases occurrence idempotency;
+- archive/posting race and bounded backlog/deadline continuation.
 
 ---
 
@@ -1281,7 +1079,9 @@ On disposable production-like copy:
 - migrate;
 - validate;
 - run V2;
-- rollback rehearsal.
+- rollback rehearsal for both windows;
+- verified all-V1 financial maintenance before final backfill;
+- no reachable old backend deployment can expose V2 data.
 
 ### Acceptance Criteria
 
@@ -1293,38 +1093,29 @@ On disposable production-like copy:
 
 # 19. M15 — Deployment and Production Acceptance
 
-## T66 — Prepare Production Migration
+## T66 — Execute Production Migration and V1 Retirement
 
-Before execution:
+**Depends on:** all P0 implementation/validation T57–T65, operator verified project/inventory and controlled production window.
 
-- backup;
-- migration plan;
-- rollback plan;
-- maintenance/deployment order;
-- environment variables verified.
+T66a: final backup/runbook/env/artifact/history verification. T66b: deploy and verify maintenance blocking every V1 financial read/write/summary, including direct clients/old deployments; suspend old role SELECT/INSERT/UPDATE/DELETE when required. T66c: execute additive schema, operator owner/profile/Main Account provisioning, final timestamp-safe backfill, exact reconciliation, then constraints/private grants; fail closed before progressing. T66d: permanently retire V1 financial handlers/old deployment access; retain legacy columns only for offline rollback.
+
+Acceptance: inventory fields/counts/totals preserved, verified owner/composite references, no old deployment can bypass retirement. Backend deployment T67 and frontend T68 remain under maintenance until controlled T69–T71 gates pass. Document pre-write vs post-write checkpoint; daily cron only enabled afterward. Full sequence is architecture §45; do not restore old backup after V2 writes blindly.
 
 ---
 
-## T67 — Deploy V2 Backend
+## T67 — Deploy Authenticated V2 Backend
 
-### Acceptance Criteria
+**Depends on:** T66 production schema/reconciliation/constraints. Keep maintenance/write/cron gates during controlled verification.
 
-- `/api/v2/health` 200;
-- DB reachable;
-- auth validation works;
-- CORS correct;
-- secrets hidden.
+Verify v2 health 200, limited role/TLS/private grants, ES256 JWT/issuer/audience validation, CORS/no secrets, all V1 financial handlers removed/410 and older deployments inaccessible or unable to read/write financial data. Restore V2-required runtime DML only once old backend bypasses are neutralized.
 
 ---
 
 ## T68 — Deploy V2 Frontend
 
-### Acceptance Criteria
+**Depends on:** T67.
 
-- auth pages work;
-- protected app works;
-- correct API URL;
-- production build source verified.
+Deploy source-verified Next.js core frontend with production API/Auth public config. Confirm verified login/bootstrap/protected app, core navigation without unpromoted P1, no stale shared data. Keep maintenance/controlled access while T69–T71 execute; release public write gate only after those pass.
 
 ---
 
@@ -1359,7 +1150,7 @@ Verify:
 - budget;
 - goal;
 - analytics;
-- report/export.
+- report/export only if P1 promoted.
 
 Clean temporary records afterward.
 
@@ -1367,12 +1158,9 @@ Clean temporary records afterward.
 
 ## T72 — Production Recurring Job Verification
 
-Verify:
+**Depends on:** T66–T71 gates passed, documented V2 write-enable checkpoint.
 
-- scheduled job runs;
-- no duplicates;
-- protected internal endpoint;
-- observed result logged safely.
+Enable daily GET cron, verify actual invocation and protected credentials, posting/backlog counts/idempotency/deleted-generated marker retention and safe logs. Operator duplicate invocation uses same internal credential. Clean controlled financial test rows while retaining occurrence markers; no real user data disturbed.
 
 ---
 
@@ -1416,108 +1204,49 @@ Only when:
 - migration is stable;
 - no critical security issue remains;
 - financial reconciliation passes;
+- all P0 tasks/gates pass; unpromoted P1 recorded deferred;
 - docs are complete.
 
 ---
 
 # 20. Dependency Map
 
-High-level dependencies:
+Task numbers remain stable references, not strict chronology. Required edges:
 
-```text
-T01–T04
-   ↓
-T05–T10 Auth
-   ↓
-T11–T16 Ownership/Migration
-   ↓
-T17–T20 Accounts
-   ↓
-T21–T25 Transactions V2
-   ↓
-T26–T28 Transfers
-   ↓
-T29–T35 Recurring
-   ↓
-T36–T37 Dashboard
-   ↓
-T38–T41 Analytics
-   ↓
-T42–T44 Budgets
-   ↓
-T45–T47 Goals
-   ↓
-T48–T52 Settings/Notifications
-   ↓
-T53–T56 Reports
-   ↓
-T57–T65 Full Validation
-   ↓
-T66–T75 Production
-```
+| Work | Dependencies / order |
+|---|---|
+| Design | T01 review → T02 frozen → T03 → T04 P0 |
+| Auth | T05 → T06/T09; T06 → T07; T06/T09 → T10; T13 → final T08 bootstrap guard |
+| Schema/profile | T11 → T12 seeds; T09+T11 → T12 reads/T13; T11–T13 → T14 → T15 |
+| Security suite | T16 starts after T09/T11, expands with every implemented domain; T59 final P0 gate |
+| Categories | T12 read contract early; T09/T12/T15 → T48 custom backend before custom entry forms |
+| Accounts | T09/T15 → T17 → T18/T19; T48 before account-adjacent transaction forms |
+| Transactions | T09/T12/T15/T17 → T21 → T22/T23 → T24 → T25; forms also T48 |
+| Transfers | T17/T18/T21/T24 → T26 implementation → mandatory T27 gate → T28 |
+| Recurring | T02 → T30; T11/T15 → T32; T30/T32/T17/T12/T48 → T29 → T31 → T33; T29+T30 → T34 |
+| Analytics | T21/T26/T29/T30 → T38 → T39 → T40 |
+| Budgets | T21/T12/T48 → T42 → T43 → T44 |
+| Goals | T17 → T45 → T46 |
+| Dashboard | T18/T21/T29/T38/T42/T43/T45 → T36 → final T37; UI/domain previews as specified |
+| Settings | T13/T17/T48/T10 → T49 |
+| Final validation | all P0 domains + expanding T16 → T57–T64; complete cutover artifacts → T65 |
+| Production | T57–T65 → T66 maintenance/migration → T67 → T68 → T69–T71 controlled gates → write-enable/T72/T73 → T74 → T75 |
 
-Some UI work can proceed in parallel after Figma is approved, but schema/auth dependencies must be respected.
+T03/T04 fixture UI tasks require no auth client or route guard integration. Later UI integration tasks require approved T04 P0 browser UI plus the real auth client/route guard. Budgets, goals and analytics can proceed in parallel after their dependencies; templates/UI components can proceed after design approval. P1 dependencies: T20 after accounts/transactions/transfers, T35 after recurring/history, T41 after analytics, T47/history after goals/analytics, T50–T52 after source domains, T53–T56 after query/filter domains. Unpromoted P1 is outside the core critical path.
 
 ---
 
-# 21. Suggested Sprint Grouping
+# 21. Suggested Delivery Grouping
 
-## Sprint 1
-T01–T04
-
-## Sprint 2
-T05–T10
-
-## Sprint 3
-T11–T16
-
-## Sprint 4
-T17–T20
-
-## Sprint 5
-T21–T25
-
-## Sprint 6
-T26–T28
-
-## Sprint 7
-T29–T35
-
-## Sprint 8
-T36–T41
-
-## Sprint 9
-T42–T47
-
-## Sprint 10
-T48–T56
-
-## Sprint 11
-T57–T65
-
-## Sprint 12
-T66–T75
-
-Actual sprint size should be adjusted based on implementation complexity.
+Use §20 dependencies, not numeric blocks as a strict twelve-sprint schedule. Suggested groups: planning/core design; auth/schema/profile/category foundations; ownership/migration rehearsal/accounts; transactions/transfers; recurring calculator+ledger→CRUD→processor; parallel analytics/budgets/goals/settings; integrated dashboard; full P0 validation/cutover rehearsal; production migration/deploy/acceptance. P1 enhancements follow core release separately. Estimate capacity and split T11/T13/T21/T31/T49/T66 subtasks before assigning sprint size; no twelve-sprint promise.
 
 ---
 
-# 22. Figma Dependencies
+# 22. Browser UI Approval Dependencies
 
-Implementation should not begin for major new UI pages until relevant V2 Figma frames are approved.
+T03 establishes reusable code-first components/shell; T04 establishes fixture-only P0 pages and browser states (UX §§35–39). Both precede UI approval and T05+ real integration. Auth UI feeds T07; accounts T19/T28; transactions T25; recurring T34; dashboard T37; analytics T40; budgets T44; goals T46; categories/settings T49. Integration tasks reuse approved frontend work and still require their existing backend/auth dependencies and production tests.
 
-Required before frontend implementation:
-
-- auth screens → before T07;
-- accounts → before T19;
-- transactions → before T25;
-- recurring → before T34;
-- dashboard → before T37;
-- analytics → before T40;
-- budgets → before T44;
-- goals → before T46;
-- settings/notifications → before T49/T51;
-- reports → before T54.
+T03/T04 have no APIs or real authentication. Later T08/T09/T10 enforce actual route/token/transport boundaries; fixture session states must never be treated as authorization. P1 detail/history/projection/notifications/reports/export browser states require approval only when promoted. User deletion remains post-V2. No Figma dependency, file approval or quota remains on the critical path.
 
 ---
 
@@ -1532,7 +1261,9 @@ No production migration until all pass:
 - balance reconciliation;
 - category mapping verification;
 - ownership backfill verification;
-- rollback rehearsal.
+- rollback rehearsal for both windows;
+- verified all-V1 financial maintenance before final backfill;
+- no reachable old backend deployment can expose V2 data.
 
 ---
 
@@ -1590,39 +1321,33 @@ Do not silently let code become the new specification.
 
 ---
 
-# 28. V2 Completion Definition
+# 28. V2 Core Completion Definition
 
-Expense Tracker V2 is complete only when:
+Core V2 completes when every **P0** task/subtask and production gate is complete, including all P0 UX/API/security/migration/financial requirements. P1 T20/T35/T41/T47/T50–T56 are recorded **deferred by T02 P0-only scope**, not completed or necessary to ship. Account/goal detail/history follow the same rule.
 
-- T01–T75 are completed or intentionally descoped with documented approval;
-- production is authenticated;
-- multi-user isolation passes;
-- accounts work;
-- transactions are account-aware;
-- transfers reconcile;
-- recurring processing is reliable;
-- dashboard V2 works;
-- analytics reconcile;
-- budgets work;
-- goals work;
-- categories/settings/notifications work;
-- reports/export work;
-- V1 data migration is verified;
-- accessibility/responsive checks pass;
-- security review passes;
-- hosted acceptance passes;
-- final documentation is complete.
+Required: authenticated multi-user production; exact asset/card/net-worth reconciliation; account-aware transactions; atomic transfers; durable duplicate-safe recurrence; dashboard/chart/previews; analytics/period definitions; budgets/manual goals; core categories/settings; migration field/totals preservation; V1 retired before writes; responsive/accessibility/security/hosted checks; runbooks and handoff. T75 marks **core** complete, not all enhancements implemented. Unpromoted P1 routes/UI/tables/jobs cannot accidentally become required or publicly expose data.
 
 ---
 
 # 29. Recommended Immediate Next Step
 
-Do **not** start implementation yet.
+T01/T02/T03/T04 are complete; financial/product/security contracts remain frozen. **T04 — Build V2 P0 UI Prototype with Fixtures** received explicit user visual approval on 2026-10-06. The reviewed browser UI is the approved visual source of truth and its design must remain unchanged. All P0 routes, local interactions and verification evidence are documented in [T04 verification](t04-verification.md).
 
-The next practical step after reviewing this plan is:
+Current checkpoint:
 
-1. resolve the open architecture decisions from T02;
-2. create the V2 Figma design (T03–T04);
-3. then begin T05 — Supabase Auth configuration.
+- T01 ✅ Completed
+- T02 ✅ Completed
+- T03 ✅ Completed
+- T04 ✅ Completed
+- T05 ✅ Completed — Configure Supabase Auth for V2
+- T06 ✅ Completed — Add Frontend Auth Client
+- T07 ✅ Completed — Build Auth Pages with Real Supabase Auth
+- T08 ✅ Completed — Protect Frontend Routes
+- T09 ✅ Completed — Add Backend Auth Middleware
+- T10 ✅ Completed — Add Authenticated Frontend API Client
+- T11 ✅ Completed — Prepare V2 Additive Schema Migrations
+- T12 ⬜ Next — Add Default Category Seed and Early Category Reads
 
-This keeps V2 aligned with BMAD and avoids writing authentication/schema code before the product and technical decisions are locked.
+The T04 visual approval gate is satisfied. T05 hosted configuration, T06 Auth helpers, T07 real Auth-page integration and T08 session protection are completed; see [T05 verification](t05-verification.md), [T06 verification](t06-verification.md), [T07 verification](t07-verification.md) and [T08 verification](t08-verification.md). T09 backend identity verification is completed; see [T09 verification](t09-verification.md). T10 is completed; see [T10 verification](t10-verification.md). T11 additive schema preparation and disposable verification are completed; see [T11 verification](t11-verification.md). T12 is next and has not started. No remote T11 application or ownership backfill was performed. The approved visual design is preserved; financial pages remain fictional and development-only. Profile/bootstrap gating remains deferred until T13.
+
+---

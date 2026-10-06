@@ -1,0 +1,632 @@
+{
+  "date": "2026-10-06",
+  "matrix": [
+    {
+      "width": 360,
+      "route": "login",
+      "scroll": 360,
+      "h1": "Sign in to your workspace",
+      "violations": [],
+      "passes": 21
+    },
+    {
+      "width": 360,
+      "route": "register",
+      "scroll": 360,
+      "h1": "Create your account",
+      "violations": [],
+      "passes": 21
+    },
+    {
+      "width": 360,
+      "route": "forgot-password",
+      "scroll": 360,
+      "h1": "Reset your password",
+      "violations": [],
+      "passes": 21
+    },
+    {
+      "width": 360,
+      "route": "reset-password",
+      "scroll": 360,
+      "h1": "Choose a new password",
+      "violations": [],
+      "passes": 21
+    },
+    {
+      "width": 360,
+      "route": "dashboard",
+      "scroll": 360,
+      "h1": "Your money, in perspective",
+      "money": "Balance: 53,880.00EGP",
+      "violations": [],
+      "passes": 31
+    },
+    {
+      "width": 360,
+      "route": "transactions",
+      "scroll": 360,
+      "h1": "Transactions",
+      "money": "Expense: −322.86EGP",
+      "violations": [],
+      "passes": 29
+    },
+    {
+      "width": 360,
+      "route": "accounts",
+      "scroll": 360,
+      "h1": "Accounts",
+      "money": "Balance: 53,880.00EGP",
+      "violations": [],
+      "passes": 24
+    },
+    {
+      "width": 360,
+      "route": "recurring",
+      "scroll": 360,
+      "h1": "Recurring",
+      "money": "Income: +15,050.00EGP",
+      "violations": [],
+      "passes": 24
+    },
+    {
+      "width": 360,
+      "route": "analytics",
+      "scroll": 360,
+      "h1": "A closer look",
+      "money": "Income: +20,000.00EGP",
+      "violations": [],
+      "passes": 25
+    },
+    {
+      "width": 360,
+      "route": "budgets",
+      "scroll": 360,
+      "h1": "Budgets",
+      "money": "Balance: 2,260.00EGP",
+      "violations": [],
+      "passes": 29
+    },
+    {
+      "width": 360,
+      "route": "goals",
+      "scroll": 360,
+      "h1": "Goals",
+      "money": "Balance: 32,000.00EGP",
+      "violations": [],
+      "passes": 28
+    },
+    {
+      "width": 360,
+      "route": "settings",
+      "scroll": 360,
+      "h1": "Settings",
+      "violations": [],
+      "passes": 26
+    },
+    {
+      "width": 360,
+      "route": "design-system",
+      "scroll": 360,
+      "h1": "A considered financial workspace",
+      "money": "Balance: 21,200.00EGP",
+      "violations": [],
+      "passes": 37
+    },
+    {
+      "width": 768,
+      "route": "login",
+      "scroll": 768,
+      "h1": "Sign in to your workspace",
+      "violations": [],
+      "passes": 21
+    },
+    {
+      "width": 768,
+      "route": "register",
+      "scroll": 768,
+      "h1": "Create your account",
+      "violations": [],
+      "passes": 21
+    },
+    {
+      "width": 768,
+      "route": "forgot-password",
+      "scroll": 768,
+      "h1": "Reset your password",
+      "violations": [],
+      "passes": 21
+    },
+    {
+      "width": 768,
+      "route": "reset-password",
+      "scroll": 768,
+      "h1": "Choose a new password",
+      "violations": [],
+      "passes": 21
+    },
+    {
+      "width": 768,
+      "route": "dashboard",
+      "scroll": 768,
+      "h1": "Your money, in perspective",
+      "money": "Balance: 53,880.00EGP",
+      "violations": [],
+      "passes": 30
+    },
+    {
+      "width": 768,
+      "route": "transactions",
+      "scroll": 768,
+      "h1": "Transactions",
+      "money": "Expense: −322.86EGP",
+      "violations": [],
+      "passes": 28
+    },
+    {
+      "width": 768,
+      "route": "accounts",
+      "scroll": 768,
+      "h1": "Accounts",
+      "money": "Balance: 53,880.00EGP",
+      "violations": [],
+      "passes": 24
+    },
+    {
+      "width": 768,
+      "route": "recurring",
+      "scroll": 768,
+      "h1": "Recurring",
+      "money": "Income: +15,050.00EGP",
+      "violations": [],
+      "passes": 24
+    },
+    {
+      "width": 768,
+      "route": "analytics",
+      "scroll": 768,
+      "h1": "A closer look",
+      "money": "Income: +20,000.00EGP",
+      "violations": [],
+      "passes": 25
+    },
+    {
+      "width": 768,
+      "route": "budgets",
+      "scroll": 768,
+      "h1": "Budgets",
+      "money": "Balance: 2,260.00EGP",
+      "violations": [],
+      "passes": 29
+    },
+    {
+      "width": 768,
+      "route": "goals",
+      "scroll": 768,
+      "h1": "Goals",
+      "money": "Balance: 32,000.00EGP",
+      "violations": [],
+      "passes": 26
+    },
+    {
+      "width": 768,
+      "route": "settings",
+      "scroll": 768,
+      "h1": "Settings",
+      "violations": [],
+      "passes": 26
+    },
+    {
+      "width": 768,
+      "route": "design-system",
+      "scroll": 768,
+      "h1": "A considered financial workspace",
+      "money": "Balance: 21,200.00EGP",
+      "violations": [],
+      "passes": 37
+    },
+    {
+      "width": 1440,
+      "route": "login",
+      "scroll": 1440,
+      "h1": "Sign in to your workspace",
+      "violations": [],
+      "passes": 21
+    },
+    {
+      "width": 1440,
+      "route": "register",
+      "scroll": 1440,
+      "h1": "Create your account",
+      "violations": [],
+      "passes": 21
+    },
+    {
+      "width": 1440,
+      "route": "forgot-password",
+      "scroll": 1440,
+      "h1": "Reset your password",
+      "violations": [],
+      "passes": 21
+    },
+    {
+      "width": 1440,
+      "route": "reset-password",
+      "scroll": 1440,
+      "h1": "Choose a new password",
+      "violations": [],
+      "passes": 21
+    },
+    {
+      "width": 1440,
+      "route": "dashboard",
+      "scroll": 1440,
+      "h1": "Your money, in perspective",
+      "money": "Balance: 53,880.00EGP",
+      "violations": [],
+      "passes": 29
+    },
+    {
+      "width": 1440,
+      "route": "transactions",
+      "scroll": 1440,
+      "h1": "Transactions",
+      "money": "Expense: −322.86EGP",
+      "violations": [],
+      "passes": 33
+    },
+    {
+      "width": 1440,
+      "route": "accounts",
+      "scroll": 1440,
+      "h1": "Accounts",
+      "money": "Balance: 53,880.00EGP",
+      "violations": [],
+      "passes": 23
+    },
+    {
+      "width": 1440,
+      "route": "recurring",
+      "scroll": 1440,
+      "h1": "Recurring",
+      "money": "Income: +15,050.00EGP",
+      "violations": [],
+      "passes": 23
+    },
+    {
+      "width": 1440,
+      "route": "analytics",
+      "scroll": 1440,
+      "h1": "A closer look",
+      "money": "Income: +20,000.00EGP",
+      "violations": [],
+      "passes": 24
+    },
+    {
+      "width": 1440,
+      "route": "budgets",
+      "scroll": 1440,
+      "h1": "Budgets",
+      "money": "Balance: 2,260.00EGP",
+      "violations": [],
+      "passes": 28
+    },
+    {
+      "width": 1440,
+      "route": "goals",
+      "scroll": 1440,
+      "h1": "Goals",
+      "money": "Balance: 32,000.00EGP",
+      "violations": [],
+      "passes": 25
+    },
+    {
+      "width": 1440,
+      "route": "settings",
+      "scroll": 1440,
+      "h1": "Settings",
+      "violations": [],
+      "passes": 25
+    },
+    {
+      "width": 1440,
+      "route": "design-system",
+      "scroll": 1440,
+      "h1": "A considered financial workspace",
+      "money": "Balance: 21,200.00EGP",
+      "violations": [],
+      "passes": 41
+    }
+  ],
+  "states": [
+    {
+      "route": "dashboard",
+      "state": "loading",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "dashboard",
+      "state": "empty",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "dashboard",
+      "state": "error",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "dashboard",
+      "state": "stale",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "dashboard",
+      "state": "stress",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "transactions",
+      "state": "loading",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "transactions",
+      "state": "empty",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "transactions",
+      "state": "error",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "transactions",
+      "state": "stale",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "transactions",
+      "state": "stress",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "accounts",
+      "state": "loading",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "accounts",
+      "state": "empty",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "accounts",
+      "state": "error",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "accounts",
+      "state": "stale",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "accounts",
+      "state": "stress",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "recurring",
+      "state": "loading",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "recurring",
+      "state": "empty",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "recurring",
+      "state": "error",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "recurring",
+      "state": "stale",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "recurring",
+      "state": "stress",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "analytics",
+      "state": "loading",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "analytics",
+      "state": "empty",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "analytics",
+      "state": "error",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "analytics",
+      "state": "stale",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "analytics",
+      "state": "stress",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "budgets",
+      "state": "loading",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "budgets",
+      "state": "empty",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "budgets",
+      "state": "error",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "budgets",
+      "state": "stale",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "budgets",
+      "state": "stress",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "goals",
+      "state": "loading",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "goals",
+      "state": "empty",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "goals",
+      "state": "error",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "goals",
+      "state": "stale",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "goals",
+      "state": "stress",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "settings",
+      "state": "loading",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "settings",
+      "state": "empty",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "settings",
+      "state": "error",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "settings",
+      "state": "stale",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    },
+    {
+      "route": "settings",
+      "state": "stress",
+      "width": 360,
+      "scroll": 360,
+      "dialog": false
+    }
+  ],
+  "apiRequests": [],
+  "pageErrors": [],
+  "v1": {
+    "v2": false,
+    "groceries": true,
+    "token": ""
+  },
+  "additionalFlows": "account/recurring archive-restore-resume; account create-edit; transaction edit-delete; budget CRUD; category archive-restore; register-verification-resend; forgot-reset",
+  "tests": 27
+}

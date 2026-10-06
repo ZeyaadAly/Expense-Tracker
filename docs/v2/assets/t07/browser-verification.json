@@ -1,0 +1,186 @@
+{
+  "audits": [
+    {
+      "width": 360,
+      "route": "login",
+      "state": "default",
+      "axe": 0
+    },
+    {
+      "width": 360,
+      "route": "login",
+      "state": "validation",
+      "axe": 0
+    },
+    {
+      "width": 360,
+      "route": "register",
+      "state": "default",
+      "axe": 0
+    },
+    {
+      "width": 360,
+      "route": "register",
+      "state": "validation",
+      "axe": 0
+    },
+    {
+      "width": 360,
+      "route": "forgot-password",
+      "state": "default",
+      "axe": 0
+    },
+    {
+      "width": 360,
+      "route": "forgot-password",
+      "state": "validation",
+      "axe": 0
+    },
+    {
+      "width": 360,
+      "route": "reset-password",
+      "state": "default",
+      "axe": 0
+    },
+    {
+      "width": 360,
+      "route": "register",
+      "state": "success",
+      "axe": 0
+    },
+    {
+      "width": 360,
+      "route": "forgot-password",
+      "state": "success",
+      "axe": 0
+    },
+    {
+      "width": 360,
+      "route": "reset-password",
+      "state": "success",
+      "axe": 0
+    },
+    {
+      "width": 768,
+      "route": "login",
+      "state": "default",
+      "axe": 0
+    },
+    {
+      "width": 768,
+      "route": "login",
+      "state": "validation",
+      "axe": 0
+    },
+    {
+      "width": 768,
+      "route": "register",
+      "state": "default",
+      "axe": 0
+    },
+    {
+      "width": 768,
+      "route": "register",
+      "state": "validation",
+      "axe": 0
+    },
+    {
+      "width": 768,
+      "route": "forgot-password",
+      "state": "default",
+      "axe": 0
+    },
+    {
+      "width": 768,
+      "route": "forgot-password",
+      "state": "validation",
+      "axe": 0
+    },
+    {
+      "width": 768,
+      "route": "reset-password",
+      "state": "default",
+      "axe": 0
+    },
+    {
+      "width": 768,
+      "route": "register",
+      "state": "success",
+      "axe": 0
+    },
+    {
+      "width": 768,
+      "route": "forgot-password",
+      "state": "success",
+      "axe": 0
+    },
+    {
+      "width": 768,
+      "route": "reset-password",
+      "state": "success",
+      "axe": 0
+    },
+    {
+      "width": 1440,
+      "route": "login",
+      "state": "default",
+      "axe": 0
+    },
+    {
+      "width": 1440,
+      "route": "login",
+      "state": "validation",
+      "axe": 0
+    },
+    {
+      "width": 1440,
+      "route": "register",
+      "state": "default",
+      "axe": 0
+    },
+    {
+      "width": 1440,
+      "route": "register",
+      "state": "validation",
+      "axe": 0
+    },
+    {
+      "width": 1440,
+      "route": "forgot-password",
+      "state": "default",
+      "axe": 0
+    },
+    {
+      "width": 1440,
+      "route": "forgot-password",
+      "state": "validation",
+      "axe": 0
+    },
+    {
+      "width": 1440,
+      "route": "reset-password",
+      "state": "default",
+      "axe": 0
+    },
+    {
+      "width": 1440,
+      "route": "register",
+      "state": "success",
+      "axe": 0
+    },
+    {
+      "width": 1440,
+      "route": "forgot-password",
+      "state": "success",
+      "axe": 0
+    },
+    {
+      "width": 1440,
+      "route": "reset-password",
+      "state": "success",
+      "axe": 0
+    }
+  ],
+  "flows": "passed",
+  "v1": "passed"
+}

@@ -1,10 +1,12 @@
 # Expense Tracker V2 — Database Design
 
-**Version:** 2.0 Planning  
-**Status:** Draft for BMAD Database Design  
+**Version:** 2.0 Planning — T02 decisions recorded
+**Status:** P0 planning frozen with approved code-first design amendment; revised T03/T04 not started
 **Date:** 2026-10-06  
 **Project:** Expense Tracker  
 **Depends on:** `01-product-brief.md`, `02-prd.md`, `03-ux-specification.md`, `04-architecture.md`
+
+**Release rule:** Core completion requires P0 only. P1 sections are optional enhancement contracts; post-V2 features do not gate core release. Decisions are frozen as of 2026-10-06; future material changes follow change control.
 
 ---
 
@@ -57,74 +59,13 @@ Mandatory principles:
 
 # 3. Schema Overview
 
-Recommended application tables:
-
-```text
-auth.users                      Supabase-managed
-
-profiles
-accounts
-categories
-transactions
-transfers
-recurring_transactions
-budgets
-goals
-notifications
-```
-
-Optional/supporting tables that may be introduced if implementation requires them:
-
-```text
-recurring_occurrences
-goal_progress_events
-notification_preferences
-```
-
-Core relationship overview:
-
-```text
-auth.users
-   │
-   └── profiles
-   │
-   ├── accounts
-   │      ├── transactions
-   │      └── transfers
-   │
-   ├── categories
-   │      ├── transactions
-   │      ├── recurring_transactions
-   │      └── budgets
-   │
-   ├── recurring_transactions
-   │      └── generated transactions
-   │
-   ├── budgets
-   ├── goals
-   └── notifications
-```
+P0 private tables: profiles, accounts, categories, transactions, transfers, recurring_transactions, **recurring_occurrences**, budgets, goals. Supabase owns auth.users. P1 only: notifications, goal_progress_events (history), notification_preferences. P1 tables are not required in the initial core migration. Every user-owned row has user_id; reference data categories may be system-owned. Occurrences belong to recurring definitions and survive generated transaction deletion.
 
 ---
 
 # 4. Schema Namespace
 
-Keep application tables in the same application schema strategy already used by the project.
-
-Recommended schema:
-
-```text
-expense_tracker
-```
-
-Benefits:
-
-- separates application data from `public`;
-- clearer privileges;
-- easier migration management;
-- easier future RLS/security reviews.
-
-If the existing V1 schema already uses another application schema, V2 should extend that schema rather than creating needless fragmentation.
+Extend existing private **expense_tracker** schema. It stays outside Supabase Data API exposed schemas, with schema/table/function access revoked from PUBLIC/anon/authenticated. No second application schema or browser financial table access. Preserve existing migration history and limited expense_tracker_app role.
 
 ---
 
@@ -160,15 +101,15 @@ Purpose:
 
 Store application-specific user preferences separate from Supabase Auth.
 
-Suggested columns:
+Final columns (NOT NULL unless explicitly nullable; defaults are server-owned):
 
 | Column | Type | Rules |
 |---|---|---|
 | `user_id` | `uuid` | PK, FK → `auth.users(id)` |
 | `display_name` | `varchar(100)` | nullable initially |
 | `preferred_currency` | `char(3)` | default `EGP` |
-| `locale` | `varchar(20)` | default `en` or product-selected value |
-| `timezone` | `varchar(64)` | default `Africa/Cairo` |
+| `locale` | `varchar(20)` | default/check `en`, read-only in P0 |
+| `timezone` | `varchar(64)` | default/check `Africa/Cairo`, read-only in P0 |
 | `created_at` | `timestamptz` | default `now()` |
 | `updated_at` | `timestamptz` | default `now()` |
 
@@ -178,7 +119,7 @@ Constraints:
 preferred_currency = 'EGP'
 ```
 
-for core V2 if multi-currency remains deferred.
+for core V2. Only display_name is editable; ownership/default preferences are immutable in P0.
 
 ---
 
@@ -188,7 +129,7 @@ Purpose:
 
 Represent places where users hold or owe money.
 
-Suggested columns:
+Final columns (NOT NULL unless explicitly nullable; defaults are server-owned):
 
 | Column | Type | Rules |
 |---|---|---|
@@ -196,7 +137,8 @@ Suggested columns:
 | `user_id` | `uuid` | FK → `auth.users(id)`, required |
 | `name` | `varchar(100)` | required |
 | `type` | `varchar(32)` | required |
-| `opening_balance` | `numeric(14,2)` | required, default `0.00` |
+| `opening_balance` | `numeric` | required, default `0.00`; scale<=2 and ±999999999.99 |
+| `opening_balance_locked` | `boolean` | default false, permanently true on first posted activity |
 | `currency` | `char(3)` | default `EGP` |
 | `status` | `varchar(16)` | active/archived |
 | `created_at` | `timestamptz` | default `now()` |
@@ -220,13 +162,7 @@ active
 archived
 ```
 
-Recommended uniqueness:
-
-```text
-UNIQUE (user_id, lower(name))
-```
-
-If case-insensitive functional unique indexes are preferred.
+Required unique expression index on `(user_id, lower(name))` and UNIQUE(id,user_id) for composite ownership references. Name is trimmed, 1–100 Unicode code points. CHECK(currency=EGP); no optional account note column in P0.
 
 Notes:
 
@@ -236,38 +172,31 @@ Notes:
 
 ---
 
-# 8. Account Balance Definition
+# 8. Account Balance and Lifecycle Definition
 
-For an asset-like account:
+### Frozen balance and credit-card rules
 
-```text
-balance =
-opening_balance
-+ income
-- expenses
-+ incoming_transfers
-- outgoing_transfers
-```
+Asset-like accounts (cash/bank/savings/mobile_wallet/other):
 
-For credit card accounts, final sign semantics must be agreed before implementation.
+`currentBalance = openingBalance + income - expenses + incomingTransfers - outgoingTransfers`.
 
-Core V2 may initially treat all accounts using one consistent signed-balance model and document credit-card limitations.
+Credit cards use **debt-positive** balances:
 
-A database view may later expose calculated balances.
+`currentBalance = openingBalance + expenses - income + outgoingTransfers - incomingTransfers`.
 
-Example conceptual view:
+Purchases are expense transactions and increase debt. Refunds/credits recorded as income reduce debt (and count as income under this simple tracker model). A payment is a transfer from an asset account to the card: asset money falls and card debt falls; payment never counts as expense again. Transfers from cards model cash advances and increase debt. Overpayment is allowed and produces negative debt (credit owed to the user).
 
-```text
-account_balances
-```
+**Total Balance = net worth = SUM(asset balances) - SUM(card debt balances)**, including archived accounts; archiving cannot remove money/debt from net worth. Period income/expenses/netSavings are actual income/expense transactions only. Account balances are current all-history values, independent of selected dashboard/analytics period. No credit limit, statement cycle, interest or billing automation is included.
 
-This may aggregate:
+### Frozen account/category lifecycle
 
-- opening balance;
-- transaction totals;
-- transfer totals.
+Accounts support create/edit/archive/restore, never hard delete in P0. Opening balance and crossing between credit-card and asset semantics can be edited only while `opening_balance_locked = false`. Set that flag permanently on first transaction or transfer involving the account; deletion never unlocks it. Lock/check the account row atomically to prevent concurrent first activity and opening-balance edits. Name and asset-to-asset type edits remain allowed.
 
-Whether implemented as a view, query, or service-level aggregate should be decided during implementation based on query performance.
+Archiving an account **automatically pauses all its active recurring definitions** in the same database transaction. Archiving a custom category does the same for its definitions. Lock affected accounts/categories and definitions consistently so archive cannot race a posting. Restore does not auto-resume schedules; user resumes explicitly after both references are active. System categories cannot be edited/archived.
+
+Archived references remain in history and totals. Reject new transactions/transfers/recurring definitions or postings using archived references. Editing a transaction/transfer requires its resulting account/category references to be active; restore first for historical corrections. Hard deletion of owned historical transactions/transfers remains allowed even when parents are archived. Existing goal links to archived accounts remain metadata; assigning a link requires an owned active account. Category kind is immutable after any transaction, recurring definition or budget references it; category owner/system flag is always immutable.
+
+Use user-scoped SQL aggregates; join pre-aggregated transaction/transfer totals to avoid join multiplication. No current_balance persisted field or materialized view in P0.
 
 ---
 
@@ -277,7 +206,7 @@ Purpose:
 
 Support both system categories and user-created categories.
 
-Suggested columns:
+Final columns (NOT NULL unless explicitly nullable; defaults are server-owned):
 
 | Column | Type | Rules |
 |---|---|---|
@@ -312,7 +241,11 @@ Rules:
 - system categories have `is_system = true`;
 - user custom categories are owned by one user;
 - archived categories remain valid for historical records;
-- new transactions should not use archived categories.
+- archived categories reject new activity; archive auto-pauses active referenced schedules transactionally; restore never auto-resumes;
+- category owner/is_system are immutable; kind cannot change once referenced;
+- CHECK ((is_system AND user_id IS NULL) OR (NOT is_system AND user_id IS NOT NULL));
+- unique indexes: lower(name) for system rows, (user_id,lower(name)) for custom rows;
+- custom user_id FK → auth.users(id) ON DELETE RESTRICT.
 
 Recommended indexes:
 
@@ -343,9 +276,7 @@ Suggested expense defaults:
 - Entertainment
 - Other
 
-`Other` may be implemented once with `kind = 'both'`.
-
-System-category IDs should be stable across environments if seed design allows it.
+One stable system Other category with kind='both'; seed stable UUIDs for all defaults consistently across environments.
 
 ---
 
@@ -355,7 +286,7 @@ Purpose:
 
 Store actual posted income and expense records.
 
-Suggested columns:
+Final columns (NOT NULL unless explicitly nullable; defaults are server-owned):
 
 | Column | Type | Rules |
 |---|---|---|
@@ -364,9 +295,9 @@ Suggested columns:
 | `account_id` | `uuid` | FK → `accounts(id)`, required |
 | `category_id` | `uuid` | FK → `categories(id)`, required |
 | `type` | `varchar(16)` | income/expense |
-| `amount` | `numeric(14,2)` | > 0 |
+| `amount` | `numeric` | > 0 |
 | `description` | `varchar(200)` | required |
-| `date` | `date` | required |
+| `transaction_date` | `date` | required on transactions; maps to API date |
 | `recurring_transaction_id` | `uuid` | nullable FK |
 | `recurring_occurrence_date` | `date` | nullable |
 | `created_at` | `timestamptz` | default `now()` |
@@ -386,46 +317,16 @@ Constraints:
 ```text
 amount > 0
 description after trim is not empty
-date >= DATE '1900-01-01'
+transaction_date >= DATE '1900-01-01'
 ```
 
-Future dates:
-
-- normal manual transactions may keep V1 rule of not allowing future posting dates;
-- recurring definitions may project future expected dates separately.
-
-The exact future-date rule should remain consistent with API design.
+Manual and generated postings cannot be future dates: transaction_date <= Cairo today, enforced by validation/write trigger. Preserve V1 calendar rules, ID immutability and created_at preservation. Recurring forecasts remain separate. All monetary constraints follow §38. Description is trimmed, 1–200 Unicode code points.
 
 ---
 
 # 12. Transaction Ownership Consistency
 
-Even though `account_id` implies an owner, keeping `user_id` directly on `transactions` is recommended.
-
-Reasons:
-
-- simpler authorization queries;
-- simpler indexing;
-- simpler analytics;
-- explicit ownership.
-
-However, database consistency must prevent:
-
-```text
-transaction.user_id != account.user_id
-```
-
-and prevent user-owned category mismatches.
-
-Possible enforcement approaches:
-
-1. service-layer validation + tests;
-2. composite foreign keys;
-3. trigger-based ownership checks.
-
-Recommended final database design:
-
-Use service-layer checks plus database-level trigger constraints for ownership-sensitive cross-table validation where practical.
+Store transaction.user_id NOT NULL directly; FK → auth.users(id) RESTRICT. Accounts have UNIQUE(id,user_id); composite FK (account_id,user_id) → accounts(id,user_id) RESTRICT. Services scope all queries and lock parent rows; SECURITY INVOKER triggers validate category ownership/type/archive rules. Composite (recurring_transaction_id,user_id) FK → recurring_transactions(id,user_id) RESTRICT; CHECK recurring_transaction_id and recurring_occurrence_date are both null or both nonnull. Ownership and generated occurrence identity are immutable. Generated pair also references occurrence (recurring_transaction_id,occurrence_date); no public API writes those linkage fields.
 
 ---
 
@@ -453,10 +354,10 @@ An archived category may remain on existing history but should not be selectable
 Important indexes:
 
 ```text
-(user_id, date DESC, created_at DESC, id DESC)
-(user_id, type, date DESC)
-(user_id, account_id, date DESC)
-(user_id, category_id, date DESC)
+(user_id, transaction_date DESC, created_at DESC, id DESC)
+(user_id, type, transaction_date DESC)
+(user_id, account_id, transaction_date DESC)
+(user_id, category_id, transaction_date DESC)
 ```
 
 Search-related indexes may later include:
@@ -473,46 +374,13 @@ Do not create expensive search indexes until query design justifies them.
 
 # 15. `transfers`
 
-Purpose:
-
-Represent money movement between owned accounts without affecting income/expense totals.
-
-Suggested columns:
-
-| Column | Type | Rules |
-|---|---|---|
-| `id` | `uuid` | PK |
-| `user_id` | `uuid` | required |
-| `source_account_id` | `uuid` | required |
-| `destination_account_id` | `uuid` | required |
-| `amount` | `numeric(14,2)` | > 0 |
-| `date` | `date` | required |
-| `description` | `varchar(200)` | nullable |
-| `created_at` | `timestamptz` | default `now()` |
-| `updated_at` | `timestamptz` | default `now()` |
-
-Constraints:
-
-```text
-source_account_id <> destination_account_id
-amount > 0
-```
-
-Both accounts must belong to `user_id`.
-
-Transfers must be created/updated/deleted transactionally.
+Dedicated P0 table; columns: id UUID PK, user_id UUID NOT NULL FK auth.users RESTRICT, source_account_id/destination_account_id UUID NOT NULL, amount NUMERIC NOT NULL (scale<=2, 0.01–999999999.99), date DATE NOT NULL (1900-01-01 through Cairo today), description VARCHAR(200) nullable, created_at/updated_at TIMESTAMPTZ. ID and created_at immutable; updated_at trigger. CHECK distinct accounts; composite source/owner and destination/owner FKs → accounts(id,user_id) RESTRICT. Create/edit/hard-delete use one transaction, lock account rows in UUID order, validate ownership and active parents for create/edit. Delete may reference archived parents; no archive column. Blank/empty description normalizes to null.
 
 ---
 
 # 16. Transfer Indexes
 
-Recommended:
-
-```text
-(user_id, date DESC, created_at DESC, id DESC)
-(source_account_id, date DESC)
-(destination_account_id, date DESC)
-```
+Transfers use date (not transaction_date): indexes (user_id,date DESC,created_at DESC,id DESC), (source_account_id,date DESC), (destination_account_id,date DESC). Cursor order matches API §11.
 
 ---
 
@@ -522,7 +390,7 @@ Purpose:
 
 Store recurring income/expense schedule definitions.
 
-Suggested columns:
+Final columns (NOT NULL unless explicitly nullable; defaults are server-owned):
 
 | Column | Type | Rules |
 |---|---|---|
@@ -531,15 +399,13 @@ Suggested columns:
 | `account_id` | `uuid` | required |
 | `category_id` | `uuid` | required |
 | `type` | `varchar(16)` | income/expense |
-| `amount` | `numeric(14,2)` | > 0 |
+| `amount` | `numeric` | > 0 |
 | `description` | `varchar(200)` | required |
 | `frequency` | `varchar(16)` | daily/weekly/monthly/yearly |
 | `start_date` | `date` | required |
-| `next_occurrence` | `date` | required |
+| `next_occurrence` | `date` | nullable when paused/archived/exhausted |
 | `end_date` | `date` | nullable |
 | `status` | `varchar(16)` | active/paused/archived |
-| `day_of_month` | `smallint` | nullable |
-| `day_of_week` | `smallint` | nullable |
 | `created_at` | `timestamptz` | default `now()` |
 | `updated_at` | `timestamptz` | default `now()` |
 
@@ -565,109 +431,53 @@ Constraints:
 ```text
 amount > 0
 end_date IS NULL OR end_date >= start_date
-next_occurrence >= start_date
+next_occurrence IS NULL OR next_occurrence >= start_date
+next_occurrence IS NULL OR end_date IS NULL OR next_occurrence <= end_date
 ```
 
 ---
 
-# 18. Recurring Frequency Details
+# 18. Recurring Frequency and Lifecycle Rules
 
-### Daily
+### Frozen recurring execution
 
-No extra schedule field required.
+- Provider: **Vercel Cron**, one daily job on the Express backend project, `0 3 * * *` (03:00 UTC). Hobby's once-daily, hour-level precision is sufficient: P0 promises date-based daily posting, not midnight or minute precision. Infrastructure uses UTC; all financial due dates and manual-date validation use **Africa/Cairo**, fixed/read-only in P0. No auth/provider settings are changed by T02.
+- Endpoint: **GET /internal/recurring/process**, outside `/api/v2`, with server-only `Authorization: Bearer <CRON_SECRET>`; constant-time secret validation, no-store, no redirects, no browser credentials or user token authorization. Never authenticate by user-agent/header schedule alone.
+- Process active schedules oldest-due first, at most **100 occurrences per definition and 1000 attempts globally per invocation**; stop earlier with a safety buffer before the configured function deadline. Each occurrence commits independently. Return safe counts plus `hasRemaining`; unfinished/failed work continues next daily invocation or an operator's authenticated invocation of the same handler. Provider does not guarantee retries; log backlog/failures safely.
+- Creating a schedule anchors it to `startDate` but initializes `nextOccurrence` to the first anchored date **on or after Cairo today** (or startDate if future). No historic import/backfill occurs. Today's occurrence is due even if today's cron already ran; it posts on the next run using its original date.
+- Monthly recurrence uses the original start-date day, clamped to the last valid day each month (Jan 31 → Feb 28/29 → Mar 31). Weekly recurrence uses startDate's weekday (ISO Monday=1 … Sunday=7); yearly uses original month/day, with Feb 29 → Feb 28 in non-leap years and Feb 29 again in leap years. API accepts no independent weekday/month-day fields in P0.
+- Catch-up applies only to active schedules missed by the scheduler; occurrences are posted with their original dates. End date is inclusive. After the final occurrence, `nextOccurrence = null`; expose an exhausted flag without adding a new stored lifecycle status.
+- Pause clears nextOccurrence and marks any pending/failed unposted occurrence rows skipped. Resume finds the first anchored, nonterminal occurrence on or after today; paused history is not generated. Archive behaves like pause and is permanent in P0 (no recurring restore).
+- Definition edits lock the definition, retain posted/skipped occurrences and historical transactions unchanged, mark pending/failed unposted rows skipped, then recalculate the first unprocessed anchored date on or after today. Paused/archived definitions keep nextOccurrence null. Already terminal dates are never replayed, even after schedule edits or generated-transaction deletion.
+- Durable `recurring_occurrences` rows own idempotency. Claim/create pending occurrence under definition lock and commit; in a second transaction lock definition/occurrence, recheck active parents, create transaction, mark posted/link it, and advance schedule together. On failure roll back financial writes and record a sanitized failed occurrence separately under a fresh row lock, only if still nonterminal; never overwrite a concurrent posted/skipped status. Retain its due date for retry. Concurrent runners serialize on row locks; posted/skipped dates never generate again. Failures on one definition must not prevent attempting other definitions.
 
-### Weekly
-
-Store:
-
-```text
-day_of_week
-```
-
-Suggested range:
-
-```text
-0–6
-```
-
-or PostgreSQL-aligned convention to be finalized.
-
-### Monthly
-
-Store desired:
-
-```text
-day_of_month
-```
-
-Range:
-
-```text
-1–31
-```
-
-For shorter months:
-
-use the last valid day.
-
-### Yearly
-
-May derive month/day from `start_date` unless a separate schedule structure is preferred.
+Definition FK user_id → auth.users RESTRICT; UNIQUE(id,user_id); composite account_id/user_id FK RESTRICT; targeted category triggers enforce same-user/system/kind and active parents. start/end dates between 1900-01-01 and 9999-12-31; null next_occurrence for exhaustion and at calendar upper bound. Anchor derives exclusively from start_date, no independent day fields.
 
 ---
 
-# 19. Recurring Generated Transaction Link
+# 19. Generated Transaction Link
 
-Generated transactions should contain:
-
-```text
-recurring_transaction_id
-recurring_occurrence_date
-```
-
-Recommended uniqueness:
-
-```text
-UNIQUE (
-  recurring_transaction_id,
-  recurring_occurrence_date
-)
-WHERE recurring_transaction_id IS NOT NULL
-```
-
-This is the primary defense against duplicate cron processing.
+Generated transactions store recurring_transaction_id and recurring_occurrence_date as immutable metadata, together null/non-null. Partial unique index `(recurring_transaction_id,recurring_occurrence_date) WHERE recurring_transaction_id IS NOT NULL` supplements required occurrence uniqueness; this is not the durable source of idempotency. Generated transaction/owner FK enforces same owner. Recurring edit/archive never rewrites generated records.
 
 ---
 
-# 20. Optional `recurring_occurrences`
+# 20. Required `recurring_occurrences` — P0
 
-A separate occurrence table is optional.
+| Column | Type | Rules |
+|---|---|---|
+| id | uuid | PK |
+| user_id | uuid | NOT NULL, auth.users FK RESTRICT |
+| recurring_transaction_id | uuid | NOT NULL, composite definition/owner FK RESTRICT |
+| occurrence_date | date | NOT NULL |
+| status | varchar(16) | pending/posted/skipped/failed; NOT NULL |
+| generated_transaction_id | uuid | nullable unique FK → transactions(id) ON DELETE SET NULL |
+| created_at | timestamptz | NOT NULL default now() |
+| processed_at | timestamptz | nullable until posted/skipped/failed |
+| failure_code | varchar(40) | nullable sanitized code, never SQL/error payload |
 
-It may be useful if the product later needs:
+UNIQUE(recurring_transaction_id,occurrence_date); UNIQUE(id,user_id). Index (status,occurrence_date); due definitions index (next_occurrence,id) WHERE status='active' AND next_occurrence IS NOT NULL. Terminal posted/skipped markers cannot revert; posted with null generated_transaction_id means a historical generated transaction was deleted. CHECK failure_code only on failed; processed_at nonnull for terminal/failed, pending has null. skipped/pending/failed have no generated link. Targeted trigger verifies any linked transaction has the same owner, definition and occurrence date.
 
-- skipped occurrences;
-- failed generation state;
-- manually dismissed occurrences;
-- scheduled vs posted audit trail.
-
-Possible table:
-
-```text
-recurring_occurrences
-```
-
-Fields:
-
-- id;
-- recurring_transaction_id;
-- user_id;
-- occurrence_date;
-- status;
-- generated_transaction_id;
-- processed_at;
-- failure_code.
-
-For first implementation, the generated-transaction uniqueness approach may be enough.
+FK SET NULL clears only generated_transaction_id; user ownership remains NOT NULL. Definition/occurrence deletion is RESTRICT. Ledger DELETE is not granted to runtime role; archive/pause does not remove markers. Claim/processing/failure transactions follow architecture §20; reserve pending occurrence before transaction insertion so the generated pair FK can validate. Concurrency/retry/deleted-transaction tests are required before processor delivery.
 
 ---
 
@@ -677,17 +487,17 @@ Purpose:
 
 Store monthly category budgets.
 
-Suggested columns:
+Final columns (NOT NULL unless explicitly nullable; defaults are server-owned):
 
 | Column | Type | Rules |
 |---|---|---|
 | `id` | `uuid` | PK |
 | `user_id` | `uuid` | required |
 | `category_id` | `uuid` | required |
-| `amount` | `numeric(14,2)` | > 0 |
+| `amount` | `numeric` | > 0 |
 | `year` | `smallint` | required |
 | `month` | `smallint` | 1–12 |
-| `alert_threshold_percent` | `smallint` | nullable |
+| `alert_threshold_percent` | `smallint` | NOT NULL default 90; 1–100 |
 | `created_at` | `timestamptz` | default `now()` |
 | `updated_at` | `timestamptz` | default `now()` |
 
@@ -702,10 +512,11 @@ Constraints:
 ```text
 amount > 0
 month BETWEEN 1 AND 12
+year BETWEEN 1900 AND 9999
 alert_threshold_percent BETWEEN 1 AND 100
 ```
 
-Spent/remaining values should be calculated from actual transactions.
+Budget user_id references auth.users RESTRICT; category_id references categories RESTRICT, with trigger validation allowing expense/both system or same-user categories. Required exact-money constraints are in §38. Only expense transactions contribute. Hard-delete plan with confirmation; no cascade to financial records. Spent/remaining values are calculated from actual transactions.
 
 Do not store `spent` as authoritative mutable state.
 
@@ -721,7 +532,7 @@ SUM(expense transactions)
 WHERE:
 user_id matches
 category_id matches
-date is within month
+transaction_date is within month
 ```
 
 Then:
@@ -740,15 +551,15 @@ Purpose:
 
 Track personal financial goals.
 
-Suggested columns:
+Final columns (NOT NULL unless explicitly nullable; defaults are server-owned):
 
 | Column | Type | Rules |
 |---|---|---|
 | `id` | `uuid` | PK |
 | `user_id` | `uuid` | required |
 | `name` | `varchar(120)` | required |
-| `target_amount` | `numeric(14,2)` | > 0 |
-| `saved_amount` | `numeric(14,2)` | >= 0 |
+| `target_amount` | `numeric` | > 0 |
+| `saved_amount` | `numeric` | >= 0 |
 | `target_date` | `date` | nullable |
 | `linked_account_id` | `uuid` | nullable |
 | `status` | `varchar(16)` | active/completed/archived |
@@ -770,39 +581,25 @@ target_amount > 0
 saved_amount >= 0
 ```
 
-Whether `saved_amount` may exceed `target_amount` should remain allowed unless UX chooses to clamp display.
+saved_amount may exceed target_amount. CHECK(status <> 'completed' OR saved_amount >= target_amount); completed/archive lifecycle follows §24.
 
 ---
 
-# 24. Goal Progress History
+# 24. Goal Progress and P1 History
 
-Core V2 may initially store only current `saved_amount`.
+P0 goal progress is manually maintained `savedAmount`; `linkedAccountId` is optional owned-account metadata only and never changes progress. No progress-event table or detail page is required in P0. Saved amount may exceed target; percentComplete is not clamped, remainingAmount is `max(targetAmount - savedAmount, 0)`. At 100%+, suggest completion; only an explicit user transition sets status completed. Complete requires savedAmount >= targetAmount; reducing a completed goal below target requires an explicit transition back to active in the same update. Active/completed goals can be archived; archived goals are read-only in P0. Projection/history/detail are P1; automatic account-derived progress is post-V2.
 
-If progress history becomes necessary, add:
-
-```text
-goal_progress_events
-```
-
-with:
-
-- goal_id;
-- user_id;
-- amount_delta or resulting amount;
-- event date;
-- note.
-
-This is optional for first V2 implementation.
+Goal user_id FK auth.users RESTRICT; optional composite (linked_account_id,user_id) → accounts(id,user_id) RESTRICT. A null linked_account_id is valid; linked-account deletion is prevented, archived references remain. goal_progress_events is P1 only, with goal_id/user_id composite FK RESTRICT and no core migration requirement.
 
 ---
 
-# 25. `notifications`
+# 25. `notifications` — P1
 
 Purpose:
 
 Persistent in-app notification state.
 
-Suggested columns:
+Final columns (NOT NULL unless explicitly nullable; defaults are server-owned):
 
 | Column | Type | Rules |
 |---|---|---|
@@ -837,52 +634,15 @@ system
 
 ---
 
-# 26. Notification Deduplication
+# 26. Notification Deduplication — P1
 
-Some notifications should be unique per event.
-
-Example:
-
-Budget 90% warning should not be generated repeatedly for the same budget period.
-
-Possible unique event key:
-
-```text
-dedupe_key varchar(...)
-```
-
-Optional field:
-
-```text
-dedupe_key
-```
-
-with unique constraint per user:
-
-```text
-UNIQUE (user_id, dedupe_key)
-```
-
-This is recommended if scheduled notification generation is implemented.
+If notifications are promoted, require dedupe_key VARCHAR(200) NOT NULL and UNIQUE(user_id,dedupe_key), user_id FK auth.users RESTRICT. Index (user_id,created_at DESC,id DESC). Keys represent one threshold/milestone/occurrence event; no repeated alert spam. P1 is not part of the core schema or job release gates.
 
 ---
 
-# 27. `profiles` / User Creation Trigger
+# 27. Profile Provisioning — No Auth Trigger
 
-A profile row may be created:
-
-- application-side after signup; or
-- via database trigger on `auth.users`.
-
-Recommendation:
-
-Prefer a well-tested Supabase-compatible trigger or backend provisioning flow.
-
-If using a trigger:
-
-- keep it minimal;
-- avoid complex business logic;
-- ensure failures are observable.
+Use authenticated backend POST /profile/bootstrap: INSERT with verified sub/defaults ON CONFLICT(user_id) DO NOTHING. No database trigger on auth.users. FK references auth.users PK and is created by privileged migration; runtime requires no auth table SELECT. Missing GET/PUT profile returns 409 PROFILE_REQUIRED and client bootstraps. Operator provisions migrated profile; new users bootstrap before core reads. Test parallel bootstrap, database failure/retry and missing profile recovery.
 
 ---
 
@@ -909,53 +669,21 @@ Do not manually duplicate trigger functions per table unless necessary.
 
 ---
 
-# 29. Ownership Trigger / Validation
+# 29. Ownership and State Validation
 
-Cross-table ownership should be verified for operations such as:
+Express token verification and ownership-scoped authorization are mandatory P0 controls. **RLS is deferred to a dedicated post-core hardening milestone**, requiring transaction-local user context/reset and pooled-connection isolation tests before activation. Runtime role remains NOBYPASSRLS; no admin credentials are used for API/cron.
 
-- transaction.account_id;
-- transaction.category_id;
-- transfer source/destination;
-- recurring.account_id;
-- recurring.category_id;
-- budget.category_id;
-- goal.linked_account_id.
+Keep `expense_tracker` outside exposed Data API schemas. Revoke schema/table/function privileges from PUBLIC, anon and authenticated; browser publishable key is for Auth only. Grant the limited runtime role only required application DML/function privileges, including new objects explicitly; no DDL, role management, TRUNCATE, auth.users access or broad default grants. Any views stay private. Migrations run through the existing separate privileged workflow with project/history verification.
 
-Recommended approach:
+Store user_id directly on transactions and every user-owned root/occurrence. Use unique (id,user_id) parent keys and composite ownership FKs for transaction/account, transfer source/destination, recurring/account, goal/account, occurrence/definition and generated transaction/definition. Targeted SECURITY INVOKER triggers plus service checks enforce system-or-same-user category ownership/kind, immutable ownership, generated occurrence identity and immutable category kind once referenced. System category iff is_system=true and user_id IS NULL; custom iff is_system=false and user_id IS NOT NULL. Archived-parent checks use row locks in services/triggers. Database integrity supplements, but does not replace, read authorization.
 
-1. service-layer authorization checks;
-2. database constraints/triggers for critical ownership invariants where composite FKs are impractical.
+See [Supabase API security guidance](https://supabase.com/docs/guides/api/securing-your-api).
 
 ---
 
-# 30. Composite Foreign Key Option
+# 30. Composite Ownership Foreign Keys
 
-One way to enforce ownership at database level:
-
-Accounts can expose unique pair:
-
-```text
-UNIQUE (id, user_id)
-```
-
-Transactions then reference:
-
-```text
-(account_id, user_id)
-→ accounts(id, user_id)
-```
-
-This strongly enforces ownership without triggers.
-
-The same pattern can be used for:
-
-- transfers;
-- recurring;
-- linked goal account.
-
-Recommendation:
-
-Use composite ownership foreign keys where they stay understandable.
+Mandatory UNIQUE(id,user_id) on accounts, recurring_transactions, goals and other referenced user-owned parents. Transactions and recurring reference (account_id,user_id); transfers reference both (account_id,user_id) pairs; goals reference optional (linked_account_id,user_id); occurrences and generated transactions reference (recurring_transaction_id,user_id). All use ON DELETE RESTRICT. See §§12, 20, 44 for generated links; category system/custom logic uses targeted triggers.
 
 ---
 
@@ -965,7 +693,7 @@ System categories have no owning user.
 
 Therefore category validation cannot be expressed as one simple composite user FK.
 
-Possible rule:
+Required rule:
 
 A category is valid when:
 
@@ -974,22 +702,13 @@ is_system = true
 OR category.user_id = authenticated user
 ```
 
-This likely requires service checks and possibly a trigger.
+Service checks and a targeted SECURITY INVOKER trigger are mandatory, including ownership/kind/active state and immutable referenced category kind.
 
 ---
 
-# 32. Soft Delete / Archive
+# 32. Deletion and Archive Rules
 
-Recommended archival tables:
-
-- accounts;
-- categories;
-- recurring_transactions;
-- goals.
-
-Avoid physical deletion when historical records depend on them.
-
-Transactions and transfers may preserve actual delete behavior if product requirements keep V1 semantics.
+P0 accounts/custom categories/recurring/goals archive only. Account/category archive auto-pauses definitions and terminalizes unposted reservations; restore never resumes implicitly. Recurring archive is permanent in P0; archived goals read-only. Transactions/transfers/budgets hard-delete with explicit confirmation. Recurring ledger rows persist; deleting generated transaction keeps posted marker with null link. User deletion is post-V2; no accidental cascades allowed.
 
 ---
 
@@ -1023,46 +742,19 @@ Do not enable extensions until implementation proves need.
 
 # 34. Cursor Pagination Support
 
-Recommended transaction ordering:
+Transactions and transfers use cursor pagination ordered by **date DESC, createdAt DESC, id DESC** (transaction storage column is `transaction_date`). P1 notifications use **createdAt DESC, id DESC**. Default limit **25**, maximum **100**; integer limits only. Backend returns `meta: {limit, nextCursor, hasMore}`; no total-page count or previousCursor.
 
-```text
-date DESC,
-created_at DESC,
-id DESC
-```
+Opaque cursor is a versioned base64url payload plus HMAC-SHA256 signature using server-only `CURSOR_SIGNING_SECRET`. Payload binds resource, verified user ID, ordering tuple, normalized filter/search scope and limit; it expires after **24 hours**. Validate encoding, signature, version, types, expiry and scope before querying. Malformed, tampered, expired, wrong-user or wrong-scope cursors return **400 VALIDATION_ERROR** with a generic cursor field message. Scope excludes the cursor itself; omitted/default filters canonicalize identically.
 
-Cursor contains:
+Frontend keeps cursor history for Next/Previous, resets it on filter/search/limit changes and after financial mutations, and starts over on invalid cursor. Every page request still applies user scoping. Paging is keyset-based, not a historical snapshot: inserts do not shift already traversed pages, but edits/deletes can change membership; refresh resets the list.
 
-```text
-date
-created_at
-id
-```
-
-Required index:
-
-```text
-(user_id, date DESC, created_at DESC, id DESC)
-```
-
-This allows stable pagination.
+Required transaction index (user_id,transaction_date DESC,created_at DESC,id DESC); transfer index uses date. P1 notifications index uses created_at/id.
 
 ---
 
 # 35. Analytics Indexes
 
-Likely analytics queries need:
-
-```text
-(user_id, date)
-(user_id, type, date)
-(user_id, category_id, date)
-(user_id, account_id, date)
-```
-
-Avoid duplicate indexes if one composite index already serves a query.
-
-Final index set should be validated using `EXPLAIN ANALYZE` on realistic datasets.
+Use the transaction indexes in §14; transaction_date is the persisted calendar column. Composite indexes may serve multiple query patterns; do not duplicate equivalent user/date indexes. Validate final performance with EXPLAIN ANALYZE on disposable realistic data; begin ILIKE without trigram/full-text extension.
 
 ---
 
@@ -1104,27 +796,24 @@ Materialized views are not recommended initially unless analytics performance re
 
 ---
 
-# 38. Exact Money Types
+# 38. Exact Money Types and Bounds
 
-Recommended:
+### Frozen money contract
 
-```text
-numeric(14,2)
-```
+All persisted monetary columns use PostgreSQL **NUMERIC without a precision/scale typmod**, with explicit `scale(value) <= 2` and range CHECK constraints. This preserves V1's excess-scale rejection: `NUMERIC(11,2)` would round before a CHECK could inspect the original value. Effective per-value bounds are nine integer digits and two fractional digits; no monetary column uses float/double.
 
-for individual transaction/account/budget/goal values.
+| Value | Minimum | Maximum |
+|---|---|---|
+| Transaction, transfer, recurring amount | `0.01` | `999999999.99` |
+| Account opening balance (all types) | `-999999999.99` | `999999999.99` |
+| Budget amount, goal target | `0.01` | `999999999.99` |
+| Goal saved amount | `0.00` | `999999999.99` |
 
-This allows:
+Inputs are plain decimal strings with zero, one or two fractional digits; no exponent, whitespace, separators, plus sign or leading zeroes except zero itself. A minus sign is allowed only for opening balance; reject negative zero. Normalize accepted values to two fractional digits. Reject excess decimals (including trailing zeroes such as `1.230`) and out-of-range inputs with field validation; never round input.
 
-```text
-999999999999.99
-```
+Derived balances/SUM totals are unbounded exact NUMERIC and serialize as two-decimal strings. PostgreSQL rounds derived averages and percentages to two decimals, with ties away from zero (half-up for nonnegative values). Percentages are decimal strings, may exceed 100 or be negative where meaningful, and are null for zero denominators. Never calculate financial values with JS floating-point arithmetic.
 
-if needed depending on precision selection.
-
-If compatibility with V1's maximum is desired, a smaller precision may be chosen.
-
-The exact numeric precision should be standardized across V2 before migration.
+Apply scale/range CHECKs to every persisted monetary field in §§7, 11, 15, 17, 21, 23. Keep existing V1 amount NUMERIC/checks rather than recasting it to a rounding typmod. Derived views/queries also use NUMERIC without a limiting typmod.
 
 ---
 
@@ -1148,7 +837,7 @@ date
 
 for:
 
-- transaction date;
+- transaction_date (storage; API date);
 - transfer date;
 - recurring start/end/next occurrence;
 - goal target date.
@@ -1171,15 +860,7 @@ for:
 
 # 41. Timezone
 
-Application default:
-
-```text
-Africa/Cairo
-```
-
-Financial calendar dates remain independent of timezone.
-
-Scheduled notifications/job timestamps should use UTC internally and convert for user display.
+P0 profiles.timezone is fixed/read-only Africa/Cairo; profiles.locale=en and currency EGP. Infrastructure cron/timestamptz use UTC. Financial posting dates and today/due-date evaluation use Cairo calendar days, never timezone-shift persisted DATE.
 
 ---
 
@@ -1215,41 +896,30 @@ Do not rely on predictable integer IDs for user-owned records.
 
 ---
 
-# 44. Foreign Key Delete Behavior
+# 44. Frozen Foreign-Key Deletion Matrix
 
-Recommended patterns:
+| Child reference | ON DELETE | Reason |
+|---|---|---|
+| profiles.user_id and every user-owned user_id → auth.users | RESTRICT | User deletion post-V2; no silent financial cascade |
+| custom categories.user_id → auth.users | RESTRICT | System rows have null owner only |
+| transactions/account, category | RESTRICT | Parents archive; history stays valid |
+| transfers/source and destination account | RESTRICT | Parents archive |
+| recurring/account, category | RESTRICT | Parent archive pauses, does not delete |
+| transactions/recurring definition | RESTRICT | Definition archive preserves history |
+| transactions/(definition, occurrence_date) → occurrence unique pair | RESTRICT | Durable marker required for generated record |
+| occurrences/(definition,user_id) → definition | RESTRICT | No marker deletion through lifecycle |
+| occurrences.generated_transaction_id → transactions.id | SET NULL | Hard deletion preserves posted marker; clear only link |
+| budgets/category | RESTRICT | Budget delete never cascades to transactions |
+| goals/(linked_account_id,user_id) → accounts | RESTRICT | Optional metadata; parent archives |
+| P1 progress events/goal and notification user | RESTRICT | Enhancement parent history preserved |
 
-## `profiles.user_id`
-`ON DELETE CASCADE`
-
-## user-owned roots
-For accounts/categories/etc.:
-`ON DELETE CASCADE` may be appropriate only during full user account deletion.
-
-## transaction → account/category
-Prefer `RESTRICT` or archive parent entities so history remains valid.
-
-## recurring generated transaction link
-Potential:
-`ON DELETE SET NULL`
-or `RESTRICT` depending historical requirements.
-
-The exact deletion matrix should be finalized carefully.
+No CASCADE in P0 identity/financial parent relationships. Composite ownership FKs use RESTRICT. The simple occurrence→transaction SET NULL FK is supplemented by a same-owner/definition/date trigger, avoiding a SET NULL operation on NOT NULL user_id.
 
 ---
 
-# 45. User Account Deletion
+# 45. User Identity Deletion — Post-V2
 
-When deleting a user account:
-
-Recommended application flow:
-
-1. authenticate/reconfirm;
-2. optionally export;
-3. delete dependent application data;
-4. delete auth identity last.
-
-`ON DELETE CASCADE` can simplify full cleanup, but it must not allow normal account/category deletion to cascade unexpectedly.
+No user deletion API or auth cascade in P0/P1. Auth FK RESTRICT prevents operator deletion of an identity with retained app rows. A future explicit privileged cleanup must reconcile data/revoke sessions and remove auth identity last; retention/privacy workflow is outside frozen core scope.
 
 ---
 
@@ -1261,7 +931,8 @@ Likely:
 
 ```text
 USAGE ON SCHEMA expense_tracker
-SELECT, INSERT, UPDATE, DELETE on application tables
+SELECT, INSERT, UPDATE, DELETE on ordinary P0 domain tables
+SELECT, INSERT, UPDATE (no DELETE) on recurring_occurrences
 EXECUTE on required functions
 USAGE/SELECT on sequences if any
 ```
@@ -1274,7 +945,7 @@ Must not have:
 - role management;
 - database owner;
 - superuser;
-- bypass RLS unless intentionally required;
+- bypass RLS;
 - migration privileges.
 
 ---
@@ -1289,26 +960,9 @@ Runtime identity should come from verified JWT, not querying sensitive auth tabl
 
 ---
 
-# 48. RLS Preparation
+# 48. RLS Timing
 
-Even if Express authorization is primary, schema should be RLS-friendly.
-
-Recommended:
-
-- `user_id` on user-owned root tables;
-- ownership indexes;
-- predictable user UUID type;
-- avoid hidden ownership inference only through deep joins where possible.
-
-Potential future RLS policies can use:
-
-```text
-user_id = auth.uid()
-```
-
-if architecture later routes access through Supabase-compatible authenticated DB context.
-
-Do not enable RLS blindly for the current pooled backend role without a tested strategy.
+Deferred to dedicated post-core hardening. No RLS activation in core migrations. Express scoping/private schema/browser-role revocations remain mandatory and tested. Before future activation, design transaction-local user context and pooled isolation tests, keeping limited NOBYPASSRLS runtime role; do not assume auth.uid() exists in a normal shared pg connection.
 
 ---
 
@@ -1345,38 +999,29 @@ Prefer stable UUIDs so:
 
 # 51. V1 Migration Overview
 
-Existing V1 data includes transactions without authenticated ownership/account.
+### Frozen migration ownership and cutover
 
-Migration must:
+The migration operator supplies the **verified intended existing-data owner UUID** at execution time; no real UUID is hardcoded. Preserve **all retained V1 production records, including retained demo rows**, assign them to that owner and a cash `Main Account` with openingBalance `0.00`. Record actual IDs/counts/amounts/categories/dates/timestamps/totals from the production inventory at cutover; historical T14 counts are not a migration assumption. Unknown category mapping aborts; never seed or silently delete retained data.
 
-1. introduce V2 tables additively;
-2. create/identify migration owner user;
-3. create default account;
-4. map categories;
-5. add/backfill `user_id`;
-6. add/backfill `account_id`;
-7. preserve amount/date/description/type;
-8. enforce NOT NULL only after successful backfill.
+Choose a **maintenance-window cutover**, not dual public operation:
+
+1. Rehearse full migration/rollback on a disposable production-like copy, prepare source/environment rollback artifacts, and take a verified production backup.
+2. Deploy and verify maintenance enforcement for **all V1 financial reads/writes and summary routes**, across current and still-reachable older deployments; suspend old runtime SELECT/INSERT/UPDATE/DELETE grants if needed to neutralize old deployments. Public V1 health may remain. Verify direct HTTP requests are blocked before schema/backfill. No V2 financial writes or cron yet.
+3. Capture the frozen inventory; execute additive tables/nullable columns/reference seeds through the privileged versioned migration workflow.
+4. Operator creates/verifies the Auth owner and provisions profile; create default Main Account.
+5. Final backfill user_id/account_id/category_id, preserving IDs, amounts, descriptions, transaction_date, created_at and updated_at. Backfill bypasses only the timestamp-update trigger in the privileged maintenance transaction, restoring it afterward; normal runtime cannot bypass it.
+6. Reconcile every preserved field and exact totals, validate ownership/category mapping; only then apply NOT NULL, ownership FKs, checks and indexes.
+7. Deploy authenticated V2 backend while maintenance remains; verify auth/isolation and permanently remove V1 financial handlers. Restore only V2-required runtime grants once old deployments cannot bypass maintenance.
+8. Deploy V2 frontend, verify production under controlled access; run reconciliation/isolation/financial checks before enabling user access and daily cron.
+9. Close maintenance after gates pass. Verify `/api/v1` financial paths remain unavailable (maintenance 503, then 410 API_RETIRED with no data); protect/remove old backend deployments and public aliases. Retirement enforcement precedes the first V2 user write; never retain unauthenticated read-only compatibility against V2 data.
+
+Temporary compatibility consists only of retained legacy columns/backups and a maintenance response to old clients. P0 keeps `transaction_date` in storage and maps it to API `date`; no date-column rename. Retain legacy category text for rollback evidence, make it nullable/drop its V1-only category check after reconciliation, and map V2 categories by category_id; do not fabricate legacy values for new custom categories. Later column removal is a separate migration after stability, not part of first cutover.
 
 ---
 
 # 52. V1 Transaction Backfill
 
-Recommended migration target:
-
-```text
-existing V1 transaction
-→ migrated owner user
-→ default account "Main Account"
-```
-
-Default account:
-
-```text
-opening_balance = 0.00
-```
-
-This avoids double counting because V1 history already determines balance.
+Operator supplies verified owner UUID; preserve every retained row (demo included) under cash Main Account, opening_balance=0.00, opening_balance_locked=true when rows exist. Production inventory is read at cutover, not inferred from historical reports. Backfill user_id/account_id/category_id while preserving all other fields/timestamps; privileged controlled suppression/restoration of update timestamp trigger is required. Default account uniqueness/operator re-runs must be idempotent; no new demo transaction seed.
 
 ---
 
@@ -1398,27 +1043,16 @@ Migration should fail loudly if an unknown category appears unexpectedly rather 
 
 # 54. Migration Staging
 
-Recommended migration sequence:
+Versioned stages, rehearsed before production:
 
-### Migration A
-Create new V2 tables and category seeds.
+- A: P0 tables, durable occurrences, explicit runtime grants/revocations and stable system seeds.
+- B: nullable transaction owner/account/category-ID columns; keep transaction_date and legacy category column.
+- C: operator-owner/default-account final backfill under verified maintenance.
+- D: exact field/count/totals/ownership reconciliation.
+- E: NOT NULL, composite FKs, scale/range checks, integrity triggers and indexes; legacy category becomes nullable and its fixed V1 category check is removed, while retained legacy values remain.
+- F: optional legacy-column retirement after stable V2, outside initial core cutover.
 
-### Migration B
-Add nullable V2 ownership/account/category-ID columns to transactions.
-
-### Migration C
-Backfill existing rows.
-
-### Migration D
-Validate counts, totals, ownership.
-
-### Migration E
-Apply NOT NULL, foreign keys, indexes, and stricter constraints.
-
-### Migration F
-Retire old category/string columns only after V2 is stable.
-
-Keeping old columns temporarily may simplify rollback.
+Stages A–E execute only with all V1 financial access blocked. T11 prepares A/B, T14 rehearses C/D, T15 prepares/tests E, T66 executes under the final production runbook. Existing SQL baselines are not rewritten/replayed. Verify linked project/catalog/history first; privileged SQL and recorded migration history must agree.
 
 ---
 
@@ -1436,42 +1070,25 @@ Verify:
 - descriptions unchanged;
 - no duplicate rows;
 - all transactions have valid owner/account/category;
-- all FKs validate.
+- all FKs validate;
+- original IDs/created_at/updated_at are unchanged;
+- V1 reads/writes/summary and older deployment access are blocked before backfill.
 
 ---
 
 # 56. Rollback Strategy
 
-Before production migration:
+### Frozen rollback windows
 
-- create backup/snapshot;
-- record migration versions;
-- rehearse rollback on disposable database;
-- avoid destructive column drops during first rollout.
+**A — Before any V2 financial user/cron writes:** keep maintenance enforced; use the rehearsed compatibility rollback or verified backup to restore the V1 schema/data and deployment. Reconcile against frozen inventory before restoring V1 access/grants. Retain legacy columns; do not automatically delete newly created Auth identities. A return to public V1 is only valid if the restored dataset is still the original shared/demo-only baseline and no multi-user financial data is exposed.
 
-Prefer additive migrations until V2 is stable.
+**B — After any V2 financial user/cron writes:** keep authenticated V2 controls or maintenance in place; **forward-fix is preferred**. Never deploy an unguarded V1 backend or blindly restore the pre-cutover backup. Any point-in-time/data recovery requires a current snapshot, explicit reconciliation/replay of all post-cutover writes and operator approval of recovery/data-loss consequences. Schema rollback cannot erase new users/categories/transfers/occurrences. Record the write-enable checkpoint in the runbook.
 
 ---
 
-# 57. Candidate Schema DDL — Conceptual
+# 57. Migration Implementation Boundary
 
-This is illustrative, not final migration SQL.
-
-```sql
-CREATE TABLE expense_tracker.accounts (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid NOT NULL,
-  name varchar(100) NOT NULL,
-  type varchar(32) NOT NULL,
-  opening_balance numeric(14,2) NOT NULL DEFAULT 0.00,
-  currency char(3) NOT NULL DEFAULT 'EGP',
-  status varchar(16) NOT NULL DEFAULT 'active',
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now()
-);
-```
-
-Final SQL belongs in implementation migrations after review.
+This document is a frozen design, not executable migration SQL. No migration file/schema is created in T02. Future SQL must include all constraints, ownership/deletion rules, grants/revocations and timestamp-safe backfill above; use the existing privileged migration workflow and disposable rehearsal before production.
 
 ---
 
@@ -1481,7 +1098,7 @@ Mandatory database-level tests should cover:
 
 ## Users / Profiles
 - profile ownership;
-- cascade behavior.
+- RESTRICT identity deletion and bootstrap recovery.
 
 ## Accounts
 - valid type;
@@ -1536,7 +1153,7 @@ Test that User B cannot:
 - use User A custom category;
 - view User A budget;
 - view User A goal;
-- access User A export.
+- access User A export if P1 is promoted; P0 verifies enhancement endpoints are absent.
 
 ---
 
@@ -1553,50 +1170,19 @@ Database design is ready when:
 - migration path preserves V1 data;
 - runtime privileges remain limited;
 - user-deletion behavior is understood;
-- schema is compatible with future RLS hardening.
+- schema is compatible with future RLS hardening;
+- durable occurrence retention and both rollback windows have explicit mandatory future test coverage.
 
 ---
 
-# 61. Open Database Decisions
+# 61. Database Decisions Resolved in T02
 
-Before final migration implementation, confirm:
-
-1. final numeric precision;
-2. exact credit-card balance convention;
-3. whether `transactions.user_id` is duplicated alongside `account_id`;
-4. whether composite ownership FKs are used widely;
-5. whether recurring occurrences need a dedicated table in first V2 release;
-6. whether goal progress history is required immediately;
-7. exact account-delete/archive behavior;
-8. exact transaction hard-delete vs soft-delete policy;
-9. whether category search needs trigram/full-text indexes;
-10. whether RLS is introduced during V2 or deferred to hardening.
+All former blocking choices are final: unrestricted NUMERIC with scale/range checks; debt-positive credit cards; direct transaction.user_id; composite ownership FKs plus targeted category/link triggers; required durable recurring_occurrences; no P0 goal history; archive-only financial parents; transaction/transfer hard-delete; no core RLS; initial parameterized ILIKE search without extensions. Money (§38), lifecycle (§8), occurrence persistence (§20), FK deletion matrix (§44), migration/rollback (§§51–56) are normative. No implementation-blocking database decisions remain.
 
 ---
 
 # 62. BMAD Next Step
 
-Next artifact:
+Database planning remains frozen after T02. Next: code-first T03 design system/app shell and T04 P0 browser prototype using fixtures only. Database/API/Auth integration and migrations remain later tasks; none is performed by this documentation amendment.
 
-**`06-api-design.md`**
-
-It should define authenticated V2 API contracts for:
-
-- auth-adjacent profile operations;
-- dashboard;
-- accounts;
-- transactions;
-- transfers;
-- recurring;
-- analytics;
-- budgets;
-- goals;
-- categories;
-- notifications;
-- reports/export;
-- pagination;
-- errors;
-- authorization behavior;
-- exact money/date serialization.
-
-No V2 application implementation should begin yet.
+---

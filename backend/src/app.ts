@@ -26,6 +26,14 @@ export function createApp(options: {
   api.use(routeNotFound);
   api.use(errorHandler);
   app.use("/api/v1", api);
+  const v2 = Router();
+  v2.use((_request, response, next) => { response.set("Cache-Control", "no-store"); next(); });
+  v2.use(cors({ origin: options.clientOrigin }));
+  v2.use(requestPolicy);
+  v2.use(createHealthRouter(options.databaseHealth));
+  v2.use(routeNotFound);
+  v2.use(errorHandler);
+  app.use("/api/v2", v2);
   app.use(routeNotFound);
   app.use(errorHandler);
   return app;

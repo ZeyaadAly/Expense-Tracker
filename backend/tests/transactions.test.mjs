@@ -67,11 +67,12 @@ test("T06 HTTP endpoints integrate with disposable PostgreSQL as the limited rol
   try {
     assert.equal((await pool.query("SELECT current_user")).rows[0].current_user,"expense_tracker_app");
     // This explicit loopback disposable fixture is reset so the suite can be rerun.
-    await admin.query("TRUNCATE expense_tracker.transactions");
+    // DELETE also works after T11 adds the durable occurrence FK to transactions.
+    await admin.query("DELETE FROM expense_tracker.transactions");
     await admin.query(readFileSync(new URL("../../supabase/seed.sql",import.meta.url),"utf8"));
     await withServer(createTransactionService(pool),async base=>{
       const seeded=await call(base,"/summary");assert.deepEqual(seeded.body,{data:{totalIncome:"1000.00",totalExpenses:"296.25",balance:"703.75",currency:"EGP",transactionCount:3,scope:"all"}});
-      await admin.query("TRUNCATE expense_tracker.transactions");
+      await admin.query("DELETE FROM expense_tracker.transactions");
       assert.deepEqual((await call(base,"/summary")).body,{data:{totalIncome:"0.00",totalExpenses:"0.00",balance:"0.00",currency:"EGP",transactionCount:0,scope:"all"}});
       assert.deepEqual((await call(base,"/transactions")).body,{data:[],meta:{count:0,filters:{type:null,category:null}}});
       const created=await call(base,"/transactions",post(valid));assert.equal(created.response.status,201);

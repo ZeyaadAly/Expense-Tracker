@@ -10,6 +10,13 @@ const record = {id:'8d090605-20b3-4f87-a513-f487b705b7a2',type:'expense',amount:
 const totals = {totalIncome:'1000.00',totalExpenses:'0.30',balance:'999.70',currency:'EGP',scope:'all',transactionCount:2};
 const all = {type:'all',category:'all'};
 const json = (body,status=200) => new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json'}});
+test('V2 T10 leaves V1 requests unauthenticated with the existing prefix',async()=> {
+  const requests=[];
+  const c=createApiClient('http://localhost:4000/api/v1',async(url,init)=>{requests.push([url,init]);return url.endsWith('/summary')?json({data:totals}):json({data:record},201);});
+  await c.summary();await c.create(record);
+  assert.deepEqual(requests.map(([url])=>url),['http://localhost:4000/api/v1/summary','http://localhost:4000/api/v1/transactions']);
+  for(const [,init] of requests) assert.equal(new Headers(init.headers).has('Authorization'),false);
+});
 test('list envelopes, metadata, ordering and exact string amounts',async()=> {
   for (const amount of ['0.10','0.20','1000.00','999999999.99']) {
     const r = {...record,amount}; const c=createApiClient('http://localhost:4000/api/v1',async()=>json({data:[r,record],meta:{count:2,filters:{type:null,category:null}}}));

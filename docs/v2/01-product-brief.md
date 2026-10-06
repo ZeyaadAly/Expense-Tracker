@@ -1,10 +1,12 @@
 # Expense Tracker V2 — Product Brief
 
-**Version:** 2.0 Planning  
-**Status:** Draft for BMAD Product Discovery  
+**Version:** 2.0 Planning — T02 decisions recorded
+**Status:** P0 planning frozen with approved code-first design amendment; revised T03/T04 not started
 **Date:** 2026-10-06  
 **Project:** Expense Tracker  
 **Previous release:** V1 — completed and deployed
+
+**Release rule:** Core completion requires P0 only. P1 sections are optional enhancement contracts; post-V2 features do not gate core release. Decisions are frozen as of 2026-10-06; future material changes follow change control.
 
 ---
 
@@ -23,7 +25,7 @@ V2 expands that foundation into a broader personal finance product centered on:
 - analytics and financial insights;
 - budgets;
 - savings goals;
-- notifications and reminders;
+- notifications and reminders (P1);
 - dedicated pages instead of a single dashboard;
 - stronger user-specific data isolation and security.
 
@@ -115,29 +117,19 @@ V2 should:
 
 ---
 
-## 6. Non-Goals for Core V2
+## 6. Release Scope and Non-Goals
 
-The following features are intentionally outside the first V2 release and may be considered later:
+**V2 Core Completion = P0 only.** P1 features are planned V2 enhancements after the core release and require explicit promotion to become core gates.
 
-- direct bank account synchronization;
-- open-banking APIs;
-- investment portfolio tracking;
-- cryptocurrency tracking;
-- automatic currency conversion;
-- shared family wallets;
-- business accounting;
-- invoicing;
-- tax calculation;
-- receipt OCR;
-- AI financial advisor;
-- automatic bank-statement ingestion;
-- credit score integration.
+- P0: Supabase Auth/profile, protected app, user isolation, accounts, account-aware transactions, transfers, recurring definitions/occurrences/generation/upcoming, dashboard, analytics, monthly category budgets, manual-progress goals, custom categories, core settings, search/filter/cursor pagination, migration, financial/security/accessibility validation and production acceptance.
+- P1: notifications, reports/CSV/JSON export, recurring-pattern detection, deterministic insight cards, goal projections/history/detail, and account detail page.
+- Post-V2 / P2: user-identity deletion, budget rollover, account-linked automatic goal progress, email/push, PDF/Excel, advanced detection, richer debt products, bank sync, AI advice, OCR, investments, shared wallets and currency conversion.
 
-These features would significantly expand security, compliance, integration, and data requirements.
+P0 shows budget warning states within budget/dashboard views; persistent notifications are P1. /reports, account-detail routes, notification controls and export sections are absent from P0 navigation. P1 tables/endpoints/browser states below describe enhancement contracts, not core requirements.
 
 ---
 
-## 7. Core V2 Product Areas
+## 7. V2 Product Areas — P0 and P1
 
 ### 7.1 Authentication and User Profiles
 
@@ -150,12 +142,12 @@ Required capabilities:
 - sign out;
 - forgot password;
 - reset password;
-- email verification where configured;
+- production email verification required;
 - protected application routes;
 - user profile;
 - user-specific data ownership.
 
-Supabase Auth is the preferred authentication provider unless architecture analysis identifies a better fit.
+Supabase Auth is final; Express verifies ES256 JWTs using the configured project JWKS. Profiles bootstrap through the authenticated backend; see architecture §7.
 
 The browser should authenticate the user, while the Express backend should validate authenticated requests before reading or modifying financial data.
 
@@ -183,7 +175,7 @@ Initial account fields may include:
 - Created timestamp
 - Updated timestamp
 
-The first V2 release should remain EGP-only unless later planning explicitly changes this.
+P0 is EGP-only, with Africa/Cairo financial dates.
 
 ### 7.3 Transactions
 
@@ -223,12 +215,7 @@ Example:
 
 A transfer must not increase income or expenses.
 
-The architecture phase must decide whether transfers use:
-
-- a dedicated `transfers` model; or
-- linked transaction records.
-
-The choice must preserve correct account balances and analytics.
+Final: a dedicated `transfers` table with atomic create/edit/hard-delete; different owned active accounts, optional description, manual date rules, explicit delete confirmation. Transfers never affect income/expense analytics.
 
 ### 7.5 Recurring Income and Expenses
 
@@ -268,11 +255,11 @@ A recurring definition should support:
 - start date;
 - next occurrence;
 - optional end date;
-- active/inactive status.
+- active/paused/archived status; next occurrence nullable when paused/archived/exhausted.
 
 The implementation plan must distinguish between the recurring schedule definition and actual generated financial transactions.
 
-### 7.6 Recurring Pattern Detection
+### 7.6 Recurring Pattern Detection — P1
 
 A later V2 milestone may detect likely recurring activity from transaction history.
 
@@ -301,7 +288,7 @@ Suggested dashboard sections:
 - upcoming recurring transactions;
 - monthly budget status;
 - basic income vs expense chart;
-- financial insights.
+- financial insights (P1, omitted from core).
 
 The dashboard should link users to deeper pages rather than trying to contain every feature.
 
@@ -316,9 +303,8 @@ Initial analytics may include:
 - income sources;
 - monthly net savings;
 - account-level activity;
-- average daily/weekly/monthly spending;
-- largest expense;
-- highest spending category;
+- average daily spending (P0);
+- richer spending metrics, largest expense and highest spending category insights (P1);
 - spending trend;
 - recurring income total;
 - recurring expense total.
@@ -334,7 +320,7 @@ Time ranges may include:
 
 Financial totals should be calculated on the backend/database, not recomputed with unsafe JavaScript floating-point arithmetic.
 
-### 7.9 Financial Insights
+### 7.9 Financial Insights — P1
 
 V2 can generate deterministic insights such as:
 
@@ -391,7 +377,7 @@ A goal may include:
 
 The application may later estimate when a user could reach a goal based on savings history.
 
-### 7.12 Notifications and Alerts
+### 7.12 Notifications and Alerts — P1
 
 Initial V2 notifications should be in-app.
 
@@ -414,11 +400,11 @@ V2 should support:
 - income/expense applicability;
 - optional icon;
 - optional display color;
-- active/inactive state.
+- active/archived state.
 
-Deleting or disabling a category must not corrupt historical transaction data.
+Custom categories archive/restore only; historical references stay valid and archive pauses active schedules. System categories are immutable.
 
-### 7.14 Reports and Export
+### 7.14 Reports and Export — P1
 
 A later V2 milestone should support a dedicated `/reports` page.
 
@@ -459,7 +445,7 @@ PDF/Excel export may be added later if justified.
 - `/recurring`
 - `/budgets`
 - `/goals`
-- `/reports`
+- `/reports` (P1 only)
 - `/settings`
 
 ### Settings Areas
@@ -471,9 +457,9 @@ Potential settings sections:
 - Categories
 - Preferences
 - Security
-- Data export
+- Data export (P1)
 
-The final information architecture will be defined during UX specification.
+The information architecture is frozen in UX §3, with P1 navigation hidden in core.
 
 ---
 
@@ -509,7 +495,7 @@ The final information architecture will be defined during UX specification.
 
 1. User creates a savings goal.
 2. User assigns a target amount/date.
-3. User updates goal progress or links it to an account.
+3. User manually updates goal progress; an optional linked account is metadata only.
 4. Dashboard shows current percentage.
 5. Analytics can later estimate progress trend.
 
@@ -535,7 +521,7 @@ Suggested sections:
 
 ### Insights
 - Analytics
-- Reports
+- Reports (P1 only)
 
 ### Account
 - Settings
@@ -546,18 +532,19 @@ Mobile navigation should be designed separately during UX planning and must not 
 
 ## 11. High-Level Data Model
 
-The detailed database design is deferred, but the likely V2 domain includes:
+The frozen V2 domain (detailed in database design) includes:
 
 - Supabase `auth.users`
 - `profiles`
 - `accounts`
 - `categories`
 - `transactions`
-- `transfers` or equivalent linked-transfer structure
+- `transfers` (dedicated, final)
 - `recurring_transactions`
+- `recurring_occurrences` (durable P0 idempotency ledger)
 - `budgets`
 - `goals`
-- `notifications`
+- `notifications` (P1 only)
 
 Core ownership principle:
 
@@ -594,7 +581,7 @@ Important principles:
 - financial aggregates are calculated in PostgreSQL/backend;
 - date-only values preserve calendar-day meaning.
 
-The authentication/security architecture will be finalized in the architecture document.
+The authentication/security decisions are frozen in architecture §§7, 10.
 
 ---
 
@@ -622,19 +609,46 @@ Security testing must explicitly attempt cross-user access.
 
 ---
 
-## 14. Analytics and Money Rules
+## 14. Frozen Financial Rules
 
-V1 exact-money guarantees must remain.
+### Frozen money contract
 
-Rules:
+All persisted monetary columns use PostgreSQL **NUMERIC without a precision/scale typmod**, with explicit `scale(value) <= 2` and range CHECK constraints. This preserves V1's excess-scale rejection: `NUMERIC(11,2)` would round before a CHECK could inspect the original value. Effective per-value bounds are nine integer digits and two fractional digits; no monetary column uses float/double.
 
-- monetary API values remain decimal strings;
-- no JavaScript floating-point financial calculations;
-- totals come from PostgreSQL/backend;
-- account balances must have deterministic definitions;
-- transfer activity must not be counted as income/expense;
-- recurring schedule projections must be distinguished from actual posted transactions;
-- analytics must distinguish forecast data from historical actual data.
+| Value | Minimum | Maximum |
+|---|---|---|
+| Transaction, transfer, recurring amount | `0.01` | `999999999.99` |
+| Account opening balance (all types) | `-999999999.99` | `999999999.99` |
+| Budget amount, goal target | `0.01` | `999999999.99` |
+| Goal saved amount | `0.00` | `999999999.99` |
+
+Inputs are plain decimal strings with zero, one or two fractional digits; no exponent, whitespace, separators, plus sign or leading zeroes except zero itself. A minus sign is allowed only for opening balance; reject negative zero. Normalize accepted values to two fractional digits. Reject excess decimals (including trailing zeroes such as `1.230`) and out-of-range inputs with field validation; never round input.
+
+Derived balances/SUM totals are unbounded exact NUMERIC and serialize as two-decimal strings. PostgreSQL rounds derived averages and percentages to two decimals, with ties away from zero (half-up for nonnegative values). Percentages are decimal strings, may exceed 100 or be negative where meaningful, and are null for zero denominators. Never calculate financial values with JS floating-point arithmetic.
+
+### Frozen balance and credit-card rules
+
+Asset-like accounts (cash/bank/savings/mobile_wallet/other):
+
+`currentBalance = openingBalance + income - expenses + incomingTransfers - outgoingTransfers`.
+
+Credit cards use **debt-positive** balances:
+
+`currentBalance = openingBalance + expenses - income + outgoingTransfers - incomingTransfers`.
+
+Purchases are expense transactions and increase debt. Refunds/credits recorded as income reduce debt (and count as income under this simple tracker model). A payment is a transfer from an asset account to the card: asset money falls and card debt falls; payment never counts as expense again. Transfers from cards model cash advances and increase debt. Overpayment is allowed and produces negative debt (credit owed to the user).
+
+**Total Balance = net worth = SUM(asset balances) - SUM(card debt balances)**, including archived accounts; archiving cannot remove money/debt from net worth. Period income/expenses/netSavings are actual income/expense transactions only. Account balances are current all-history values, independent of selected dashboard/analytics period. No credit limit, statement cycle, interest or billing automation is included.
+
+### Frozen periods and aggregates
+
+P0 currency EGP, locale en, financial timezone **Africa/Cairo** (profile fields read-only). Dashboard default is `GET /api/v2/dashboard?period=this_month`; allowed enums: **this_month, last_month, 3_months, 6_months, 1_year**. this_month is first day of current Cairo month through today; last_month is the full previous month; other enums span the current month plus previous 2/5/11 calendar months through today. Return explicit resolved from/to.
+
+Analytics uses required explicit inclusive `from` and `to`; both valid dates from 1900-01-01 through 9999-12-31, from <= to, maximum **366 calendar days** per request. Actuals include only stored posted transactions; future range portions are allowed for forecast comparison and contain no future manual postings. Presets resolve 7/30 days inclusively ending today; 3/6/12 months start at first of month 2/5/11 months before current month. Transfer/manual transaction dates range 1900-01-01 through Cairo today.
+
+AverageDailyExpense = actual expenses / **number of calendar days represented in the inclusive requested range**, including zero-spend/future days. Dashboard current month is already month-to-date; label it accordingly. savingsRatePercent = netSavings / income * 100; return **null when income is zero**, display “Not applicable”, never fabricated zero/infinity. Category percent uses total corresponding income/expenses as denominator, null if zero. Budget default threshold is **90%**, near_limit when spent*100 >= threshold*allocated and spent <= allocated, exceeded when spent > allocated; compare exact values before display rounding, and zero spend is normal.
+
+Recurring commitments are the exact sum of **projected anchored occurrences within the selected range**, without weekly/yearly monthly normalization. Include only currently active schedules with active parents, respecting start/end dates; omit durable skipped dates. Posted occurrence dates use current definition amount as a forecast assumption, not an actual transaction total; deleted generated transactions are never reposted. Label forecast separately from actuals and explain that projections use the current schedule. Account balance is current all-history net worth (including archived accounts), not historical period income minus expenses.
 
 ---
 
@@ -677,7 +691,9 @@ V2 will be successful when an authenticated user can:
 
 ---
 
-## 17. Proposed V2 Milestones
+## 17. Product Milestones — Summary
+
+Milestone numbering here is a product-area summary; the executable task/milestone dependencies are authoritative in implementation plan §20. P1 bullets are not core gates.
 
 ### M1 — Discovery and Design
 - Product brief
@@ -686,7 +702,7 @@ V2 will be successful when an authenticated user can:
 - Architecture
 - Database design
 - API design
-- Figma V2
+- Code-first frontend design system/app shell and fixture UI prototype
 - Implementation plan
 
 ### M2 — Authentication and User Isolation
@@ -713,13 +729,13 @@ V2 will be successful when an authenticated user can:
 - recurring definitions
 - upcoming activity
 - schedule processing
-- recurring pattern suggestions
+- recurring pattern suggestions (P1)
 
 ### M6 — Analytics
 - analytical queries
 - analytics APIs
 - charts
-- deterministic insights
+- deterministic insights (P1)
 
 ### M7 — Budgets
 - monthly budgets
@@ -729,12 +745,12 @@ V2 will be successful when an authenticated user can:
 ### M8 — Goals
 - savings goals
 - progress tracking
-- projections
+- projections (P1)
 
 ### M9 — Settings / Categories / Reports
 - profile
 - custom categories
-- export/reporting
+- export/reporting (P1)
 
 ### M10 — V2 Quality and Deployment
 - full validation
@@ -745,64 +761,54 @@ V2 will be successful when an authenticated user can:
 
 ---
 
-## 18. Open Product Decisions
+## 18. Product Decisions Resolved in T02
 
-These questions should be resolved in the PRD/architecture phases:
+All former open questions are resolved: derived balances with debt-positive cards; dedicated transfers; automatic date-based daily recurrence with durable occurrences; archive-only parents; manual goal progress; server-side ILIKE search; cursor pagination; EGP/Cairo-only core; no budget rollover; P1 notifications; post-V2 identity deletion.
 
-1. Should account balances be derived entirely from transactions or store opening/current balance state?
-2. Should transfers use a dedicated table or paired transaction records?
-3. Should recurring schedules automatically create transactions, or require user confirmation?
-4. How will recurring generation work when the backend is serverless?
-5. Should user-created categories be removable or only archivable?
-6. Should savings goals be manually updated or linked to accounts/transactions?
-7. Should credit cards be modeled differently from asset accounts?
-8. Should search be server-side only?
-9. What pagination model should transactions use: cursor or offset?
-10. Which analytics periods must be supported in the first V2 release?
-11. Should budgets roll over unused amounts?
-12. Which notification types belong in core V2?
-13. Should account deletion immediately delete financial data or use a delayed deletion workflow?
-14. Should V2 remain EGP-only for the full release or prepare schema/API for future currencies?
-15. How should historical V1 data be migrated into authenticated user ownership?
+### Frozen account/category lifecycle
+
+Accounts support create/edit/archive/restore, never hard delete in P0. Opening balance and crossing between credit-card and asset semantics can be edited only while `opening_balance_locked = false`. Set that flag permanently on first transaction or transfer involving the account; deletion never unlocks it. Lock/check the account row atomically to prevent concurrent first activity and opening-balance edits. Name and asset-to-asset type edits remain allowed.
+
+Archiving an account **automatically pauses all its active recurring definitions** in the same database transaction. Archiving a custom category does the same for its definitions. Lock affected accounts/categories and definitions consistently so archive cannot race a posting. Restore does not auto-resume schedules; user resumes explicitly after both references are active. System categories cannot be edited/archived.
+
+Archived references remain in history and totals. Reject new transactions/transfers/recurring definitions or postings using archived references. Editing a transaction/transfer requires its resulting account/category references to be active; restore first for historical corrections. Hard deletion of owned historical transactions/transfers remains allowed even when parents are archived. Existing goal links to archived accounts remain metadata; assigning a link requires an owned active account. Category kind is immutable after any transaction, recurring definition or budget references it; category owner/system flag is always immutable.
+
+P0 goal progress is manually maintained `savedAmount`; `linkedAccountId` is optional owned-account metadata only and never changes progress. No progress-event table or detail page is required in P0. Saved amount may exceed target; percentComplete is not clamped, remainingAmount is `max(targetAmount - savedAmount, 0)`. At 100%+, suggest completion; only an explicit user transition sets status completed. Complete requires savedAmount >= targetAmount; reducing a completed goal below target requires an explicit transition back to active in the same update. Active/completed goals can be archived; archived goals are read-only in P0. Projection/history/detail are P1; automatic account-derived progress is post-V2.
+
+Recurring execution is final in architecture §§20–22; pagination/auth/RLS are final in §§7, 10, 32. Account detail and goal detail/history are P1. No implementation-blocking product decisions remain.
 
 ---
 
-## 19. V1 Migration Considerations
+## 19. Frozen V1 Migration Strategy
 
-V2 must not casually break the working V1 production data.
+### Frozen migration ownership and cutover
 
-Before authentication/user ownership is introduced, the implementation plan must define:
+The migration operator supplies the **verified intended existing-data owner UUID** at execution time; no real UUID is hardcoded. Preserve **all retained V1 production records, including retained demo rows**, assign them to that owner and a cash `Main Account` with openingBalance `0.00`. Record actual IDs/counts/amounts/categories/dates/timestamps/totals from the production inventory at cutover; historical T14 counts are not a migration assumption. Unknown category mapping aborts; never seed or silently delete retained data.
 
-- how existing transactions are assigned to a user;
-- whether existing sample/demo data is preserved;
-- whether V1 API routes remain temporarily available;
-- migration ordering;
-- rollback strategy;
-- production deployment sequencing;
-- how old clients are prevented from creating ownerless records.
+Choose a **maintenance-window cutover**, not dual public operation:
 
-Migration must be explicitly designed before any destructive schema changes.
+1. Rehearse full migration/rollback on a disposable production-like copy, prepare source/environment rollback artifacts, and take a verified production backup.
+2. Deploy and verify maintenance enforcement for **all V1 financial reads/writes and summary routes**, across current and still-reachable older deployments; suspend old runtime SELECT/INSERT/UPDATE/DELETE grants if needed to neutralize old deployments. Public V1 health may remain. Verify direct HTTP requests are blocked before schema/backfill. No V2 financial writes or cron yet.
+3. Capture the frozen inventory; execute additive tables/nullable columns/reference seeds through the privileged versioned migration workflow.
+4. Operator creates/verifies the Auth owner and provisions profile; create default Main Account.
+5. Final backfill user_id/account_id/category_id, preserving IDs, amounts, descriptions, transaction_date, created_at and updated_at. Backfill bypasses only the timestamp-update trigger in the privileged maintenance transaction, restoring it afterward; normal runtime cannot bypass it.
+6. Reconcile every preserved field and exact totals, validate ownership/category mapping; only then apply NOT NULL, ownership FKs, checks and indexes.
+7. Deploy authenticated V2 backend while maintenance remains; verify auth/isolation and permanently remove V1 financial handlers. Restore only V2-required runtime grants once old deployments cannot bypass maintenance.
+8. Deploy V2 frontend, verify production under controlled access; run reconciliation/isolation/financial checks before enabling user access and daily cron.
+9. Close maintenance after gates pass. Verify `/api/v1` financial paths remain unavailable (maintenance 503, then 410 API_RETIRED with no data); protect/remove old backend deployments and public aliases. Retirement enforcement precedes the first V2 user write; never retain unauthenticated read-only compatibility against V2 data.
+
+Temporary compatibility consists only of retained legacy columns/backups and a maintenance response to old clients. P0 keeps `transaction_date` in storage and maps it to API `date`; no date-column rename. Retain legacy category text for rollback evidence, make it nullable/drop its V1-only category check after reconciliation, and map V2 categories by category_id; do not fabricate legacy values for new custom categories. Later column removal is a separate migration after stability, not part of first cutover.
+
+### Frozen rollback windows
+
+**A — Before any V2 financial user/cron writes:** keep maintenance enforced; use the rehearsed compatibility rollback or verified backup to restore the V1 schema/data and deployment. Reconcile against frozen inventory before restoring V1 access/grants. Retain legacy columns; do not automatically delete newly created Auth identities. A return to public V1 is only valid if the restored dataset is still the original shared/demo-only baseline and no multi-user financial data is exposed.
+
+**B — After any V2 financial user/cron writes:** keep authenticated V2 controls or maintenance in place; **forward-fix is preferred**. Never deploy an unguarded V1 backend or blindly restore the pre-cutover backup. Any point-in-time/data recovery requires a current snapshot, explicit reconciliation/replay of all post-cutover writes and operator approval of recovery/data-loss consequences. Schema rollback cannot erase new users/categories/transfers/occurrences. Record the write-enable checkpoint in the runbook.
 
 ---
 
 ## 20. BMAD Next Step
 
-This product brief defines the initial V2 direction.
+T01/T02 are complete. The approved design-process amendment replaces Figma with Next.js/React/TypeScript/Tailwind CSS 4 browser implementation as the visual source of truth. Next: **T03 — Build V2 Code-First Design System & App Shell**, then **T04 — Build V2 P0 UI Prototype with Fixtures**. Both use static fixtures only, without API or authentication connections. UI approval precedes T05+ integration. This task changes documentation only; neither revised task has started.
 
-The next BMAD artifact is:
-
-**`02-prd.md` — Product Requirements Document**
-
-The PRD should turn this product direction into precise:
-
-- personas;
-- user stories;
-- feature requirements;
-- acceptance criteria;
-- permission rules;
-- functional requirements;
-- non-functional requirements;
-- scope boundaries;
-- V2 release priorities.
-
-No V2 application implementation should begin until the core planning artifacts have been reviewed.
+---

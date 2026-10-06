@@ -1,16 +1,18 @@
 # Expense Tracker V2 — UX Specification
 
-**Version:** 2.0 Planning  
-**Status:** Draft for BMAD UX Design  
+**Version:** 2.0 Planning — T02 decisions recorded
+**Status:** P0 planning frozen; T03 completed; T04 ✅ Completed — explicit user visual approval recorded on 2026-10-06; T05 next, not started
 **Date:** 2026-10-06  
 **Project:** Expense Tracker  
 **Depends on:** `01-product-brief.md`, `02-prd.md`
+
+**Release rule:** Core completion requires P0 only. P1 sections are optional enhancement contracts; post-V2 features do not gate core release. Decisions are frozen as of 2026-10-06; future material changes follow change control.
 
 ---
 
 # 1. Purpose
 
-This document defines the V2 user experience, information architecture, page structure, navigation, major interactions, responsive behavior, visual hierarchy, UI states, accessibility expectations, and Figma design requirements.
+This document defines the V2 user experience, information architecture, page structure, navigation, major interactions, responsive behavior, visual hierarchy, UI states, accessibility expectations, and code-first browser design requirements.
 
 It describes **how users move through and interact with the product**.
 
@@ -49,24 +51,17 @@ The interface should help users quickly answer:
 
 # 3. Information Architecture
 
-## Public / Authentication
+P0 public: /login, /register, /forgot-password, /reset-password. P0 protected: /dashboard, /transactions, /accounts, /recurring, /analytics, /budgets, /goals, /settings. Root / redirects after session resolution.
 
-- `/login`
-- `/register`
-- `/forgot-password`
-- `/reset-password`
+**V2 Core Completion = P0 only.** P1 features are planned V2 enhancements after the core release and require explicit promotion to become core gates.
 
-## Protected Application
+- P0: Supabase Auth/profile, protected app, user isolation, accounts, account-aware transactions, transfers, recurring definitions/occurrences/generation/upcoming, dashboard, analytics, monthly category budgets, manual-progress goals, custom categories, core settings, search/filter/cursor pagination, migration, financial/security/accessibility validation and production acceptance.
+- P1: notifications, reports/CSV/JSON export, recurring-pattern detection, deterministic insight cards, goal projections/history/detail, and account detail page.
+- Post-V2 / P2: user-identity deletion, budget rollover, account-linked automatic goal progress, email/push, PDF/Excel, advanced detection, richer debt products, bank sync, AI advice, OCR, investments, shared wallets and currency conversion.
 
-- `/dashboard`
-- `/transactions`
-- `/accounts`
-- `/recurring`
-- `/analytics`
-- `/budgets`
-- `/goals`
-- `/reports`
-- `/settings`
+P0 shows budget warning states within budget/dashboard views; persistent notifications are P1. /reports, account-detail routes, notification controls and export sections are absent from P0 navigation. P1 tables/endpoints/browser states below describe enhancement contracts, not core requirements.
+
+P1 route /accounts/[id] is optional account detail; goal detail can be a P1 expandable panel (no P0 route). Reports/export and notifications stay out of core navigation/header. The layout examples below show the eventual P1 slots, not P0 required controls.
 
 ---
 
@@ -74,7 +69,7 @@ The interface should help users quickly answer:
 
 ## Desktop
 
-Use a persistent left sidebar and a main content area.
+Use a persistent 220–240px dark sidebar and a main content area with 32px desktop gutters. Prefer flat sections, data rails and asymmetric composition over uniform card grids.
 
 Suggested layout:
 
@@ -90,7 +85,7 @@ Suggested layout:
 │  Budgets         │                                     │
 │  Goals           │                                     │
 │  Analytics       │                                     │
-│  Reports         │                                     │
+│  Analytics       │                                     │
 │                  │                                     │
 │  Settings        │                                     │
 └──────────────────┴─────────────────────────────────────┘
@@ -107,12 +102,7 @@ Sidebar behavior:
 
 ## Tablet
 
-Use either:
-
-- a compact collapsible sidebar; or
-- top header with drawer navigation.
-
-The final pattern should prioritize content width.
+Use top header with drawer navigation at 768–1023px, preserving content width. Desktop persistent sidebar begins at1024px.
 
 ## Mobile
 
@@ -146,7 +136,7 @@ Suggested grouping:
 
 ## Insights
 - Analytics
-- Reports
+- Reports (P1 only)
 
 ## Account
 - Settings
@@ -163,7 +153,7 @@ The protected application header should support:
 - optional page description;
 - primary action button;
 - user/profile menu;
-- notification button;
+- notification button (P1 only);
 - responsive navigation trigger on mobile.
 
 Examples:
@@ -250,7 +240,9 @@ Optional later:
 Success state:
 
 - account created;
-- verification message if email verification is required.
+- production email verification required; show “Check your email”, resend feedback and expired/invalid verification-link state;
+- do not expose protected data until verified sign-in/bootstrap succeeds;
+- retain registration display-name draft for validated profile PUT after sign-in.
 
 ---
 
@@ -264,7 +256,7 @@ Fields:
 
 - email.
 
-Success should avoid exposing whether the email exists if provider/security policy requires that.
+Success always uses generic email-sent feedback without exposing whether an address exists.
 
 ---
 
@@ -282,7 +274,9 @@ Fields:
 Success:
 
 - confirmation;
-- link/button back to sign in.
+- clear recovery session and return to sign in;
+- expired/invalid reset link has a new-reset-request action;
+- provider redirect allowlist and local return paths only.
 
 ---
 
@@ -299,7 +293,7 @@ The dashboard is the main financial overview.
 Suggested order:
 
 1. page header;
-2. date/period selector;
+2. date/period selector (default This month, month-to-date);
 3. primary financial summary;
 4. account overview;
 5. income vs expenses chart;
@@ -307,15 +301,17 @@ Suggested order:
 7. upcoming recurring activity;
 8. budget progress;
 9. goals preview;
-10. financial insights.
+10. financial insights (P1 only; omitted in core).
 
 ---
 
-## 8.2 Financial Summary Cards
+## 8.2 Financial Summary Hierarchy
 
-Show:
+Present one prominent Net Position area (the existing Total Balance/net-worth metric, including archived accounts), with Income, Expenses and Net Savings as subordinate figures integrated into the cash-flow section. These remain the existing API metrics; do not introduce a new balance calculation or a traditional four-equal-card row.
 
-- Total Balance
+Required figures:
+
+- Total Balance (net worth, including archived accounts)
 - Income
 - Expenses
 - Net Savings
@@ -362,7 +358,7 @@ Each card may show:
 - type;
 - current balance;
 - optional status;
-- link to account details.
+- P0 action to open Transactions filtered by account; P1 link to account detail.
 
 On desktop, use horizontal cards/grid.
 
@@ -378,9 +374,7 @@ Chart options:
 - line chart;
 - grouped columns.
 
-Default:
-
-- current month vs previous periods.
+P0 chart shows backend monthly series clipped to selected dashboard period. Default this_month means current month-to-date; do not invent a previous-period comparison. Allowed period labels: This month, Last month, 3 months, 6 months, 1 year (API §77).
 
 Requirements:
 
@@ -470,7 +464,7 @@ Action:
 
 ---
 
-## 8.9 Financial Insights
+## 8.9 Financial Insights — P1
 
 Use compact insight cards.
 
@@ -490,7 +484,7 @@ Route:
 
 `/transactions`
 
-This becomes the main financial entry and transaction-management page.
+This becomes the main financial entry and transaction-management page: a polished financial ledger with clear date/group hierarchy, dense readable rows, account/category context, exact signed values, desktop tables and mobile cards.
 
 ## 9.1 Layout
 
@@ -517,7 +511,7 @@ Should search:
 - category;
 - account.
 
-Use debounce or explicit submit according to final implementation choice.
+Use explicit search submit in P0; preserve query/filter state and reset cursor history on submission.
 
 ---
 
@@ -529,7 +523,7 @@ Filters:
 - account;
 - category;
 - date range;
-- recurring status.
+- recurring status: Generated/Manual; omit for All.
 
 Optional UI:
 
@@ -586,13 +580,7 @@ No horizontal scrolling required.
 
 ## 9.6 Pagination
 
-Show:
-
-- current page or cursor state;
-- next/previous;
-- optional page size later.
-
-Keep search/filter state when paging.
+Use default 25 records (maximum 100), Next and Previous based on frontend cursor history. Backend only returns nextCursor/hasMore; no total-page count. Disable Previous on first page. Reset history on query/filter changes and mutations; preserve filter state. Invalid/expired cursor offers refresh from first page; changing data may require refresh. Do not display fabricated total pages.
 
 ---
 
@@ -626,85 +614,27 @@ Validation:
 
 # 10. Accounts Page UX
 
-Route:
+P0 /accounts shows current balances for active/archived accounts, archived-inclusive Total Balance (net worth), create/edit/archive/restore and a paginated transfer list with edit/delete. Transactions link opens /transactions?accountId=...; no core account-detail route.
 
-`/accounts`
+Add/edit fields: name, type, openingBalance, read-only EGP. Assets label positive as money owned; card positive as “Amount owed”, negative as “Credit balance”. Explain payments use Transfer to avoid a duplicate expense. Current balances use all history, independent of dashboard period.
 
-## 10.1 Accounts Overview
+### Frozen account/category lifecycle
 
-Show:
+Accounts support create/edit/archive/restore, never hard delete in P0. Opening balance and crossing between credit-card and asset semantics can be edited only while `opening_balance_locked = false`. Set that flag permanently on first transaction or transfer involving the account; deletion never unlocks it. Lock/check the account row atomically to prevent concurrent first activity and opening-balance edits. Name and asset-to-asset type edits remain allowed.
 
-- total across accounts;
-- account cards;
-- account type;
-- current balance;
-- status.
+Archiving an account **automatically pauses all its active recurring definitions** in the same database transaction. Archiving a custom category does the same for its definitions. Lock affected accounts/categories and definitions consistently so archive cannot race a posting. Restore does not auto-resume schedules; user resumes explicitly after both references are active. System categories cannot be edited/archived.
 
-Suggested cards:
+Archived references remain in history and totals. Reject new transactions/transfers/recurring definitions or postings using archived references. Editing a transaction/transfer requires its resulting account/category references to be active; restore first for historical corrections. Hard deletion of owned historical transactions/transfers remains allowed even when parents are archived. Existing goal links to archived accounts remain metadata; assigning a link requires an owned active account. Category kind is immutable after any transaction, recurring definition or budget references it; category owner/system flag is always immutable.
 
-```text
-CIB Bank
-Bank account
-18,400.00 EGP
-```
+Opening balance/asset-card conversion controls disable permanently after first posted activity and explain why. Archive confirmation names how many active recurring items will pause; success reports paused count. Restore says schedules need explicit resume. New user has no seeded account/data: prompt Create your first account, offer cash Main Account with zero opening balance as form defaults only, then Add transaction. Existing migrated owner sees preserved Main Account.
 
----
-
-## 10.2 Add Account
-
-Fields:
-
-- account name;
-- type;
-- opening balance;
-- currency;
-- optional note.
-
-Core V2 currency remains EGP.
-
----
-
-## 10.3 Account Detail View
-
-Can be a dedicated route later:
-
-`/accounts/:id`
-
-Potential content:
-
-- account balance;
-- recent transactions;
-- account-specific analytics;
-- transfer action;
-- edit/archive action.
-
-Whether this route is required in first V2 implementation should be finalized in the implementation plan.
+Account detail /accounts/[id] is P1 only.
 
 ---
 
 # 11. Transfer UX
 
-Transfer can be launched from:
-
-- Accounts page;
-- account detail;
-- global action menu.
-
-Fields:
-
-- From account
-- To account
-- Amount
-- Date
-- Note
-
-Confirmation:
-
-- clearly state source and destination;
-- show exact amount;
-- warn if operation is pending.
-
-Do not show transfer as income or expense.
+P0 launched from Accounts page; P1 may launch from account detail. Fields: From, To, exact amount, date, optional note; select distinct active owned accounts. Show source/destination and amount in confirmation, pending and uncertain-outcome states. Transfer list supports cursor Next/Previous, edit and delete confirmation; hard deletion recomputes balances and is allowed for archived parent history. Card payment reduces asset balance and positive card debt, with no duplicate expense. Transfer is neutral labeling, never ordinary income/expense.
 
 ---
 
@@ -715,6 +645,8 @@ Route:
 `/recurring`
 
 ## 12.1 Main Sections
+
+Treat recurring finance as a schedule/timeline: distinguish expected income/expenses and upcoming occurrences from posted actuals, with active/paused schedules clearly labeled.
 
 Suggested tabs or segmented control:
 
@@ -742,7 +674,7 @@ Actions:
 
 - Edit
 - Pause/Resume
-- Delete/Archive according to final rules.
+- Archive (no hard delete/restore recurring in P0).
 
 ---
 
@@ -759,7 +691,7 @@ Fields:
 - start date;
 - end date optional.
 
-Dynamic frequency fields may be needed later.
+P0 frequency derives from startDate only; no independent weekday/day fields. Explain past startDate starts on the next anchored occurrence on/after Cairo today without imported history. Monthly month-end and yearly Feb29 use last valid day.
 
 ---
 
@@ -780,7 +712,7 @@ Oct 10
 
 ---
 
-## 12.5 Recurring Suggestion UX
+## 12.5 Recurring Suggestion UX — P1
 
 When a likely recurring pattern is detected:
 
@@ -804,7 +736,7 @@ Route:
 
 `/analytics`
 
-This page should feel data-rich but readable.
+Lead with a factual financial narrative/summary based on existing P0 values (for example savings rate, net savings and period), then supporting trends, category spending, account activity and recurring obligations. Avoid a wall of charts. This summary does not promote P1 deterministic insight cards into core.
 
 ## 13.1 Header Controls
 
@@ -817,10 +749,7 @@ Time range:
 - 1 year;
 - Custom.
 
-Optional filters:
-
-- account;
-- category.
+P0 optional filter: account. Category analytics filter is post-core until explicitly contracted.
 
 ---
 
@@ -862,7 +791,7 @@ Show:
 - recurring expenses;
 - remaining recurring cash flow.
 
-### Top Insights
+### Top Insights — P1
 
 Deterministic text cards.
 
@@ -884,6 +813,8 @@ Route:
 `/budgets`
 
 ## 14.1 Header
+
+Use readable progress with explicit near-limit/over-budget labels and values, not color alone.
 
 Controls:
 
@@ -936,47 +867,15 @@ Action:
 
 # 15. Goals Page UX
 
-Route:
+Keep the goals page calm and progress-oriented. P0 /goals cards: name, manual saved amount, target, remaining, percentage, optional target date and status. Create/edit dialog includes optional owned active linked account, explicitly labeled “Reference only; does not calculate savings”. Update progress uses this same dialog; no detail route/history required. Complete/archive actions require clear consequences and keyboard access.
 
-`/goals`
+P0 goal progress is manually maintained `savedAmount`; `linkedAccountId` is optional owned-account metadata only and never changes progress. No progress-event table or detail page is required in P0. Saved amount may exceed target; percentComplete is not clamped, remainingAmount is `max(targetAmount - savedAmount, 0)`. At 100%+, suggest completion; only an explicit user transition sets status completed. Complete requires savedAmount >= targetAmount; reducing a completed goal below target requires an explicit transition back to active in the same update. Active/completed goals can be archived; archived goals are read-only in P0. Projection/history/detail are P1; automatic account-derived progress is post-V2.
 
-## 15.1 Goal Cards
-
-Each:
-
-- name;
-- saved amount;
-- target amount;
-- progress percentage;
-- target date;
-- status.
+At 100%+ show a completion suggestion/action without changing status. Progress-bar fill may visually cap at 100%, but text shows true percentage and amount. P1 detail/history/projection browser states are optional and clearly labelled.
 
 ---
 
-## 15.2 Add Goal
-
-Fields:
-
-- name;
-- target amount;
-- current saved amount;
-- target date;
-- optional linked account.
-
----
-
-## 15.3 Goal Detail
-
-Potential detail page or expandable panel:
-
-- progress history;
-- estimated completion;
-- linked account;
-- update progress.
-
----
-
-# 16. Reports Page UX
+# 16. Reports Page UX — P1
 
 Route:
 
@@ -1028,7 +927,7 @@ Suggested tabs/sections:
 - Categories
 - Security
 - Preferences
-- Data & Export
+- Data & Export (P1 only)
 
 ---
 
@@ -1037,9 +936,10 @@ Suggested tabs/sections:
 Fields:
 
 - display name;
-- email (read-only or provider-managed);
-- locale;
-- timezone.
+- email (read-only/provider-managed);
+- locale en (read-only P0);
+- timezone Africa/Cairo (read-only P0);
+- currency EGP (read-only P0).
 
 ---
 
@@ -1065,12 +965,12 @@ Actions:
 Actions:
 
 - Change password;
-- Sign out all sessions if supported;
-- account deletion flow.
+- Sign out;
+- stronger all-session revocation and user-identity deletion are post-V2; no core deletion control.
 
 ---
 
-# 18. Notifications UX
+# 18. Notifications UX — P1
 
 Global bell icon in header.
 
@@ -1178,11 +1078,13 @@ Do not show protected stale financial data after logout/session invalidation.
 Destructive actions requiring confirmation:
 
 - delete transaction;
-- archive/delete account;
-- delete recurring definition;
-- delete goal;
-- archive category;
-- account deletion.
+- delete transfer/budget;
+- archive account (state automatic recurring pause);
+- archive recurring definition;
+- archive goal;
+- archive category (state automatic recurring pause).
+
+User-identity deletion is post-V2 and has no core confirmation state.
 
 Confirmation dialog should:
 
@@ -1276,15 +1178,15 @@ Tooltips are supplemental only.
 ## Tablet `768–1023px`
 
 - 24px gutters;
-- compact navigation;
+- header with drawer navigation;
 - two-column card layouts where useful;
 - tables remain possible if readable.
 
 ## Desktop `>=1024px`
 
-- persistent sidebar;
-- max content width around 1400px;
-- multi-column dashboards;
+- persistent 220–240px sidebar;
+- 32px page gutters and max content width around 1400px;
+- asymmetric composed workspaces, avoiding uniform card grids;
 - full tables;
 - side-by-side analytical panels.
 
@@ -1318,32 +1220,31 @@ Requirements:
 
 ---
 
-# 31. Design System Direction
+# 31. Code-First Design System Direction
 
-Use a modern finance dashboard visual style.
+The actual Next.js/React/TypeScript/Tailwind CSS 4 browser implementation is the visual source of truth. Build an original premium financial workspace with restrained editorial hierarchy: warm neutral canvas, strong typography, dense readable information, fine borders, minimal shadows, tabular numbers, intentional whitespace and asymmetric composition. Linear, Stripe, Ramp, Mercury and financial terminals may inform discipline; do not copy their designs.
 
-Suggested design characteristics:
+Starting semantic tokens (refine only for contrast/accessibility):
 
-- light theme first;
-- restrained neutral background;
-- white surfaces/cards;
-- strong typography;
-- semantic green for income/success;
-- semantic red for expense/danger;
-- blue primary actions;
-- amber warnings;
-- subtle borders/shadows;
-- rounded cards;
-- consistent spacing tokens.
+| Token | Value |
+|---|---|
+| canvas | #F5F6F2 |
+| surface | #FFFFFF |
+| sidebar | #11130F |
+| text-primary | #161914 |
+| text-secondary | #666B62 |
+| border | #DDE0D8 |
+| primary | #2457E6 |
+| income | #16845B |
+| expense | #CF3E46 |
+| warning | #B7791F |
+| transfer | #5564C9 |
 
-Avoid:
+Define CSS custom properties and Tailwind semantic mappings for base/text/borders/brand/financial/status colors, hover/focus/disabled states and subtle backgrounds. Verify foreground/background combinations for WCAG AA; a palette color is not automatically suitable for small text. Changes for contrast must be recorded with their reason.
 
-- heavy gradients;
-- overly decorative glassmorphism;
-- excessive shadows;
-- overly colorful charts.
+Prefer Geist when practical through the existing Next.js setup; it is not currently configured in the root layout. Otherwise use a high-quality available sans-serif. Define page-title/H1/H2/H3/body/small/label/helper/caption/financial/table typography; financial numbers use tabular numerals with visible decimals. Spacing scale: 4/8/12/16/20/24/32/40/48/64px. Restrained radius tokens: 6px small, 8px control, 12px card, 16px dialog, pill only for badges. Borders do most separation; elevation levels none/subtle/dropdown/modal.
 
-Dark mode may be considered later, but it is not required for initial V2.
+Use flat sections, dividers, small panels, data rails and structured tables; cards only where useful. No purple/random decorative gradients, heavy glassmorphism, giant rounded cards, excessive shadows, generic four-card SaaS grids, emoji icons or large welcome/hero sections. Light theme first; dark theme is not required. Use one consistent professional icon set, reusing an existing set or adding one lightweight library only when justified. Motion is limited to purposeful state transitions and respects prefers-reduced-motion.
 
 ---
 
@@ -1356,7 +1257,7 @@ Global:
 - MobileNavDrawer
 - PageHeader
 - UserMenu
-- NotificationButton
+- NotificationButton (P1)
 
 UI:
 
@@ -1389,104 +1290,56 @@ Finance:
 - RecurringCard
 - BudgetCard
 - GoalCard
-- InsightCard
+- InsightCard (P1)
 - FinancialChart
 
 ---
 
-# 33. Suggested Desktop Dashboard Layout
+# 33. Desktop Dashboard Composition
 
-```text
-┌─────────────────────────────────────────────────────────────┐
-│ Dashboard                           [ + Add Transaction ]   │
-├─────────────────────────────────────────────────────────────┤
-│ Total Balance │ Income │ Expenses │ Net Savings            │
-├─────────────────────────────────────────────────────────────┤
-│ Income vs Expenses Chart        │ Accounts                 │
-│                                 │ Cash                     │
-│                                 │ Bank                     │
-│                                 │ Savings                  │
-├─────────────────────────────────┼───────────────────────────┤
-│ Recent Transactions             │ Upcoming                 │
-├─────────────────────────────────┼───────────────────────────┤
-│ Budgets                         │ Goals                    │
-├─────────────────────────────────────────────────────────────┤
-│ Financial Insights                                        │
-└─────────────────────────────────────────────────────────────┘
-```
+Compose a financial workspace rather than a component-library demo. Lead with a large **Net Position** area (existing archived-inclusive Total Balance/net worth), pair an integrated cash-flow visualization and subordinate Income/Expenses/Net Savings figures with an account rail/panel, then organize recent activity, upcoming recurring timeline, budget progress and goals with unequal visual emphasis. Analytical summary describes existing P0 metrics and periods; P1 insight cards stay optional. Flat sections and fine dividers should carry most structure. Do not use a row of four equal balance/income/expense/savings cards followed by six equal panels.
+
+# 34. Mobile Dashboard Composition
+
+At 360px, stack Net Position, compact cash-flow figures/visualization, account overview, activity, upcoming schedule, budget progress and goals by importance. Use top bar plus navigation drawer, 16px gutters and readable exact numbers. Reflow rails and tables; no horizontal page overflow. Preserve financial hierarchy rather than shrinking the desktop composition. Tablet uses compact header/drawer navigation, 24px gutters and selective two-column regions.
 
 ---
 
-# 34. Mobile Dashboard Layout
+# 35. Required P0 UX Flows
 
-Suggested order:
+Auth: register → email verification/expired link → sign-in → bootstrap → dashboard → sign-out; forgot/reset success/expired link and session-expiry recovery.
 
-1. Header
-2. Total Balance
-3. Income / Expense / Savings cards
-4. Accounts
-5. Recent Transactions
-6. Upcoming
-7. Budget progress
-8. Goals
-9. Insights
-10. compact chart(s)
+New user: empty dashboard → create first account → add transaction.
 
-Prioritize scanability over displaying everything above the fold.
+Account: create → edit opening balance before activity → locked after activity → archive with automatic recurring pause → restore → explicit schedule resume.
 
----
+Transactions: create/edit/hard-delete generated/manual records, search/filters/cursor history and uncertain writes.
 
-# 35. Required UX Flows
+Transfers: create/card payment → balances, list/edit/delete with confirmation.
 
-Figma prototype should demonstrate at minimum:
+Recurring: past-start explanation → upcoming → daily posting/catch-up display → pause/resume → archive; exhausted and failed/pending states have safe labels.
 
-## Authentication
-Register → Sign in → Dashboard → Sign out
+Budgets: create/edit/delete → normal/near-limit/exceeded.
 
-## Account
-Create account → Account appears
+Goals: create → manual progress → 100%+ suggestion → explicit complete/archive.
 
-## Transaction
-Add transaction → success → edit → delete
-
-## Transfer
-Create transfer → account balances update
-
-## Recurring
-Create recurring item → upcoming list → pause/resume
-
-## Budget
-Create budget → progress → exceeded state
-
-## Goal
-Create goal → update progress
-
-## Analytics
-Change period → chart/data update
+Analytics/dashboard: change period → actual/forecast separately labelled; zero-income savings rate “Not applicable”. P1 flows do not gate T04.
 
 ---
 
-# 36. Figma File Structure
+# 36. Code-First Delivery and Historical Design Attempt
 
-Create one V2 Figma file with pages:
+**Approved decision:** do not use Figma. T03/T04 build real reusable frontend UI with Next.js, React, TypeScript and Tailwind CSS 4; the browser is the visual source of truth. T03 is completed and verified; T04 is completed following explicit user visual approval on 2026-10-06. The reviewed code-first V2 prototype is approved as the visual source of truth; preserve its UI design for later integration. The original amendment was documentation-only; T03 implements the component foundation.
 
-1. `Foundations`
-2. `Components`
-3. `Auth`
-4. `Dashboard`
-5. `Transactions`
-6. `Accounts`
-7. `Recurring`
-8. `Analytics`
-9. `Budgets`
-10. `Goals`
-11. `Reports`
-12. `Settings`
-13. `Responsive QA`
+**T03 — Build V2 Code-First Design System & App Shell:** semantic tokens, typography, layout, responsive shell/navigation and reusable P0 components, exercised through static component specimens. No API calls, Supabase/Auth clients, database access or integration with V1 financial services. Use exact-string fixtures and local presentation state only.
+
+**T04 — Build V2 P0 UI Prototype with Fixtures:** compose /login, /register, /forgot-password, /reset-password, /dashboard, /transactions, /accounts, /recurring, /analytics, /budgets, /goals and /settings with mock data. Simulate auth/session/bootstrap, mutations, filters/pagination, validation and recovery in browser state only. These previews provide no authentication or authorization. Keep fixture previews development-only and prevent accidental production exposure before the later real auth/isolation gates. Do not alter the deployed V1 experience for a prototype. UI approval gates T05+ integration.
+
+**Abandoned attempt:** [Expense Tracker — V2](https://www.figma.com/design/05Flgth8HPK8evKrxwRtmf) was created before the decision; quota prevented canvas construction. No custom foundation/components were completed. This file is non-authoritative and abandoned, not a dependency or quota blocker. Do not create, modify or resume it. No provider access is needed for the revised tasks.
 
 ---
 
-# 37. Required Figma Frames
+# 37. Browser UI States — P0 Required, P1 Optional
 
 ## Auth
 
@@ -1500,6 +1353,9 @@ Desktop + Mobile:
 - Forgot password
 - Reset password
 - Session expired
+- Verify email / resend / expired verification link
+- Reset link expired or invalid
+- Profile bootstrap pending/failure/retry
 
 ## Dashboard
 
@@ -1542,8 +1398,12 @@ Desktop + Mobile:
 - Accounts — empty
 - Add account
 - Edit account
-- Archive account confirmation
-- Account detail
+- Archive account confirmation with recurring pause count
+- Restore account / explicit schedule resume
+- Opening balance locked after first activity
+- Credit-card debt/payment/overpayment
+- Transfer list / edit / delete confirmation
+- Account detail (P1 optional)
 - Transfer form
 - Transfer confirmation/error
 
@@ -1557,7 +1417,10 @@ Desktop + Mobile:
 - Edit recurring
 - Pause confirmation
 - Upcoming timeline
-- Recurring suggestion
+- Past-start no-history explanation
+- Recurring exhausted / overdue / failed retry feedback
+- Archive confirmation
+- Recurring suggestion (P1 optional)
 
 ## Analytics
 
@@ -1585,15 +1448,17 @@ Desktop + Mobile:
 
 - Goals — populated
 - Goals — empty
-- Create goal
-- Goal detail
+- Create/edit goal / manual update progress
+- 100%+ completion suggestion / explicit completion
+- Archive confirmation
+- Goal detail/history/projection (P1 optional)
 - Completed goal
 
-## Reports
+## Reports — P1 Optional
 
-Desktop + Mobile:
+Desktop + Mobile, only when P1 is promoted:
 
-- Reports — default
+- Reports (P1 only) — default
 - Report — filtered period
 - Export state
 - Report — no data
@@ -1608,12 +1473,13 @@ Desktop + Mobile:
 - Add category
 - Archived category
 - Security
-- Export
-- Account deletion confirmation
+- Export (P1 optional)
+
+User-identity deletion confirmation is post-V2 and excluded from this checklist.
 
 ---
 
-# 38. Responsive QA Frames
+# 38. Browser Responsive QA
 
 At minimum:
 
@@ -1627,16 +1493,16 @@ At minimum:
 - long category/account names
 - multiline errors
 - empty charts
-- dense notifications
+- dense notifications (P1 optional)
 
 ---
 
 # 39. UX Acceptance Criteria
 
-The UX design is ready for implementation only when:
+T03/T04 browser UI is ready for later Auth/API integration only when:
 
-- all core routes have defined layouts;
-- all major forms are designed;
+- all P0 core routes have defined layouts;
+- all P0 major forms are designed;
 - auth states are covered;
 - user ownership implications are reflected in flows;
 - desktop/mobile navigation is clear;
@@ -1645,32 +1511,50 @@ The UX design is ready for implementation only when:
 - recurring/budget/goal workflows are complete;
 - analytics charts have accessible alternatives;
 - responsive behavior is documented;
-- Figma components are reusable;
-- critical prototype flows are linked.
+- frontend components are reusable with semantic tokens and responsive CSS layout;
+- critical P0 fixture flows are navigable and reviewable in the actual browser;
+- auth verification/reset/bootstrap, card payment/debt display, archive-induced pause/restore, cursor history, manual goal completion and zero-denominator states are covered;
+- P1 browser states/pages never block core acceptance;
+- 360/768/1440 browser and keyboard/stress checks are recorded;
+- fixture-only delivery has no Auth/API connections and UI approval is recorded before integration.
 
 ---
 
 # 40. BMAD Next Step
 
-Next artifact:
+T02 financial/product/security contracts remain frozen. **T03 — Build V2 Code-First Design System & App Shell** is completed. The development-only `/v2/design-system` route implements semantic tokens, responsive shell and reusable fixture components under isolated V2 styling. See [T03 verification](t03-verification.md) for the inventory, 360/768/1440 checks, keyboard/axe audits, exact-money stress cases and production 404 boundary. Local sans-serif typography and a consistent local outline SVG set require no new application dependencies.
 
-**`04-architecture.md`**
+**T04 — Build V2 P0 UI Prototype with Fixtures** is ✅ Completed, with all twelve P0 routes under `/v2`, using isolated fictional data and local React state at its approval checkpoint. The user explicitly approved the reviewed code-first prototype as the visual source of truth on 2026-10-06 and instructed that its UI design remain unchanged. See [T04 verification](t04-verification.md) for preserved browser evidence, state coverage and the approval record. `/v2/design-system` retains specimen navigation; application pages use a separate shell composed from the T03 primitives, icons and finance components. All V2 routes remain development-only until later release gates.
 
-It should decide:
+**T07 provider integration:** the four Auth pages now invoke real T06 Supabase helpers with the approved layout/components/styles. Copy distinguishes real authentication from fictional financial pages. Fake Auth-state selectors, simulated resend and bootstrap retry were removed; registration requires confirmation, forgot-password success remains neutral, and password update requires an actual recovery event/session. Login redirects a confirmed/existing session to the fixture dashboard; reset success attempts local signout and offers login. The development-only test signout control occupies the former preview-control area. No new visual design, financial data integration or global route guard was introduced. See [T07 verification](t07-verification.md). T01–T07 are complete; T08 is next and unstarted.
 
-- authentication architecture;
-- frontend/backend auth flow;
-- authorization strategy;
-- database access model;
-- whether RLS is used as defense-in-depth;
-- transfer model;
-- recurring scheduler;
-- account balance model;
-- pagination strategy;
-- caching;
-- analytics query strategy;
-- notification processing;
-- deployment implications;
-- migration strategy from V1.
+T04 uses a dominant net-position overview and account rail, desktop transaction ledger/mobile cards, recurring timeline, narrative analytics with lightweight bars and text equivalents, category budget rows, manual goal cards and sectioned settings. Period controls filter fixture records locally; account balances remain all-history. Review controls are collapsed by default; `?state=loading|empty|error|stale|stress` provides repeatable review surfaces. Form outcomes include success, rejection, pending and uncertain, with preserved drafts and no automatic retry. Opening balances stay permanently locked after posted activity; archive pauses schedules, restore requires explicit resume, and completed goals must explicitly reopen before saved progress falls below target. No auth provider, API, storage persistence or database connection is present.
 
-No V2 application implementation should begin yet.
+### Frozen money contract
+
+All persisted monetary columns use PostgreSQL **NUMERIC without a precision/scale typmod**, with explicit `scale(value) <= 2` and range CHECK constraints. This preserves V1's excess-scale rejection: `NUMERIC(11,2)` would round before a CHECK could inspect the original value. Effective per-value bounds are nine integer digits and two fractional digits; no monetary column uses float/double.
+
+| Value | Minimum | Maximum |
+|---|---|---|
+| Transaction, transfer, recurring amount | `0.01` | `999999999.99` |
+| Account opening balance (all types) | `-999999999.99` | `999999999.99` |
+| Budget amount, goal target | `0.01` | `999999999.99` |
+| Goal saved amount | `0.00` | `999999999.99` |
+
+Inputs are plain decimal strings with zero, one or two fractional digits; no exponent, whitespace, separators, plus sign or leading zeroes except zero itself. A minus sign is allowed only for opening balance; reject negative zero. Normalize accepted values to two fractional digits. Reject excess decimals (including trailing zeroes such as `1.230`) and out-of-range inputs with field validation; never round input.
+
+Derived balances/SUM totals are unbounded exact NUMERIC and serialize as two-decimal strings. PostgreSQL rounds derived averages and percentages to two decimals, with ties away from zero (half-up for nonnegative values). Percentages are decimal strings, may exceed 100 or be negative where meaningful, and are null for zero denominators. Never calculate financial values with JS floating-point arithmetic.
+
+### Frozen periods and aggregates
+
+P0 currency EGP, locale en, financial timezone **Africa/Cairo** (profile fields read-only). Dashboard default is `GET /api/v2/dashboard?period=this_month`; allowed enums: **this_month, last_month, 3_months, 6_months, 1_year**. this_month is first day of current Cairo month through today; last_month is the full previous month; other enums span the current month plus previous 2/5/11 calendar months through today. Return explicit resolved from/to.
+
+Analytics uses required explicit inclusive `from` and `to`; both valid dates from 1900-01-01 through 9999-12-31, from <= to, maximum **366 calendar days** per request. Actuals include only stored posted transactions; future range portions are allowed for forecast comparison and contain no future manual postings. Presets resolve 7/30 days inclusively ending today; 3/6/12 months start at first of month 2/5/11 months before current month. Transfer/manual transaction dates range 1900-01-01 through Cairo today.
+
+AverageDailyExpense = actual expenses / **number of calendar days represented in the inclusive requested range**, including zero-spend/future days. Dashboard current month is already month-to-date; label it accordingly. savingsRatePercent = netSavings / income * 100; return **null when income is zero**, display “Not applicable”, never fabricated zero/infinity. Category percent uses total corresponding income/expenses as denominator, null if zero. Budget default threshold is **90%**, near_limit when spent*100 >= threshold*allocated and spent <= allocated, exceeded when spent > allocated; compare exact values before display rounding, and zero spend is normal.
+
+Recurring commitments are the exact sum of **projected anchored occurrences within the selected range**, without weekly/yearly monthly normalization. Include only currently active schedules with active parents, respecting start/end dates; omit durable skipped dates. Posted occurrence dates use current definition amount as a forecast assumption, not an actual transaction total; deleted generated transactions are never reposted. Label forecast separately from actuals and explain that projections use the current schedule. Account balance is current all-history net worth (including archived accounts), not historical period income minus expenses.
+
+Recurring lifecycle is frozen in architecture §20; UX must label daily delayed posting, no historic creation backfill, skipped paused dates, failed retry and exhausted nextOccurrence.
+
+---
