@@ -1,11 +1,17 @@
 # Vercel deployment repair — 2026-10-03
 
-> **Historical checkpoint:** This report preserves the results and task/deployment state at its recorded date. Later-task and fixture-only statements are historical. Current local V1 evidence is in [T12 verification](t12-verification.md); current setup/status is in [handoff](07-handoff.md). T14 integrated deployment has not started.
+> **Historical checkpoint:** This report preserves the results and task/deployment state at its recorded date. Later-task and fixture-only statements are historical. Current local V1 evidence is in [T12 verification](t12-verification.md); current setup/status is in [handoff](07-handoff.md). T14 is now complete; see the current hosted verification.
 
 
-## Current audit — 2026-10-05
+## Current hosted result — 2026-10-06
 
-[T14 verification](t14-verification.md) supersedes this report for current deployment state. Production now serves commit `087c78f` in deployment `dpl_MtaeY1P7SqeRD8ysi3NV1iekf1E4`, not the older fixture source. The public page loads but summary/list report missing API configuration; the project environment list is empty and no backend URL was found. Team-scoped access returns 403 and requires re-authentication to `zeyadali408-1717s-projects`. No deployment/configuration change was made. The original repair evidence below is preserved.
+[T14 verification](t14-verification.md) supersedes the earlier blocker audit. Team access is restored. Both production deployments are READY from `b7e0d9f`, environment keys are configured, and hosted CRUD, persistence and cleanup passed.
+
+Frontend: https://expensetracker-inky-mu.vercel.app/
+
+Backend: https://expense-tracker-api-green.vercel.app/
+
+Responsive/accessibility and production network/security smoke checks passed. Original records and totals were restored. No deployment or configuration was changed during this verification. Historical repair evidence below is retained.
 
 ## Historical repair evidence
 

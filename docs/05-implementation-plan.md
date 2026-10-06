@@ -1,10 +1,10 @@
 # Expense Tracker — Implementation Plan
 
-> **Current local baseline:** T01–T13 are complete and V1 passed [T12 verification](t12-verification.md). See [handoff](07-handoff.md) for current setup and maintenance. Earlier task checkpoints below are historical; T14 deployment is blocked on owning-team access, as recorded in the current audit.
+> **Current local baseline:** T01–T13 are complete and V1 passed [T12 verification](t12-verification.md). See [handoff](07-handoff.md) for current setup and maintenance. Earlier task checkpoints below are historical; T14 hosted verification is complete as recorded in the current report.
 
 **Version:** 1.0  
 **Date:** 2026-10-01  
-**Status:** T01-T13 complete; local V1 acceptance and documentation verified; T14 blocked on Vercel owning-team access. Historical Figma comparison limitation remains recorded in T07.
+**Status:** T01-T14 complete; local V1, documentation and hosted acceptance verified. Historical Figma comparison limitation remains recorded in T07.
 **Owner:** Zeyad Aly Elghazaly
 
 ## 1. Purpose
@@ -229,7 +229,7 @@ Use separate frontend and backend packages to keep the first project easy to und
 
 ### T14 — Deploy a sample-data demo
 
-**Status:** Blocked after read-only deployment audit. Re-authenticate Vercel with access to `zeyadali408-1717s-projects`; hosted acceptance remains incomplete. See [T14 verification](t14-verification.md). T13 remains complete.
+**Status:** Completed (2026-10-06). Hosted UI CRUD, exact totals, filters, reload/new-session persistence, cleanup, responsive/accessibility and security smoke checks passed. See [T14 verification](t14-verification.md).
 
 **Depends on:** T13.
 
@@ -280,7 +280,7 @@ Mark tasks complete only when their completion criteria have been verified.
 - [x] T11 — Filtering and recovery
 - [x] T12 — Local V1 verification
 - [x] T13 — Documentation and handoff
-- [ ] T14 — Sample-data deployment
+- [x] T14 — Sample-data deployment
 
 ## 8. Decisions to resolve during setup
 
@@ -292,8 +292,8 @@ Mark tasks complete only when their completion criteria have been verified.
 | Authentication | V1 scope | None; hosted demos use sample data only. |
 | Migration workflow | T04 | One authoritative history, matching the chosen setup. |
 | Plugin account access | Relevant task | Verify individually; no connection assumed. |
-| Express hosting and provider costs | T14 | Undecided; must support the backend and database connection model. |
+| Express hosting and provider costs | T14 | Vercel Express project on the existing Hobby team; deployed in fra1. Operational usage/limits remain subject to provider policy. |
 
 ## 9. Immediate next action
 
-T01-T13 are complete. [T12 verification](t12-verification.md) remains the accepted local baseline. Restore Vercel owning-team access, then resume **T14 - Deployment and final demo verification** using the [current audit and remaining gates](t14-verification.md). T14 remains unchecked; no production configuration or deployment was changed.
+T01-T14 are complete. [T12 verification](t12-verification.md) remains the local baseline; [T14 verification](t14-verification.md) records hosted acceptance and cleanup. No remaining implementation/deployment task in the V1 plan.

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Expense Tracker V1 records income and expenses in EGP and shows the overall balance. The local application is verified through T12; documentation and handoff are T13. Deployment of the integrated application remains T14.
+Expense Tracker V1 records income and expenses in EGP and shows the overall balance. T01–T14 are complete: local V1, documentation/handoff, and hosted production CRUD verification.
 
 V1 has one shared transaction collection and no authentication. Use sample data for any hosted demonstration. Start with this README; [developer handoff](docs/07-handoff.md) records maintenance notes and remaining work.
 
@@ -275,11 +275,15 @@ CORS configures one browser origin but is not authentication and does not preven
 
 ## Deployment
 
-**The integrated full-stack V1 is not verified as deployed. T14 is blocked on Vercel owning-team access.** See [T14 deployment audit](docs/t14-verification.md).
+**T14 completed on 2026-10-06 (Africa/Cairo).** [Hosted verification](docs/t14-verification.md) records production CRUD, exact totals, cleanup, persistence, responsive/accessibility and security smoke checks.
 
-The [Vercel production page](https://expensetracker-inky-mu.vercel.app) now serves Git commit `087c78f` with the API-connected frontend, superseding the October 3 fixture build. The T14 read-only browser audit found missing API configuration: summary/list cannot load because `NEXT_PUBLIC_API_BASE_URL` is unset. No backend production URL was found. See [historical deployment verification](docs/vercel-deployment-verification.md) and the current T14 report.
+Frontend: https://expensetracker-inky-mu.vercel.app/
 
-T14 still needs to restore Vercel team access, confirm/configure Express hosting and provider limits, configure production frontend API URL and backend CORS/secrets/TLS, deploy sample data only, and verify deployed CRUD, filters, totals, persistence, accessibility and error recovery. Re-authenticate the Vercel connection with access to `zeyadali408-1717s-projects` before resuming. No deployment or production configuration was changed during the audit.
+Backend: https://expense-tracker-api-green.vercel.app/
+
+Both Vercel production deployments are READY from commit `b7e0d9f`; frontend API configuration and backend private environment are present. Direct health returns HTTP 200 with the database reachable. The frontend uses the hosted Express API. Production aliases are public; protected deployment aliases retain their existing protection.
+
+V1 has no authentication or ownership isolation. Use sample data only: anyone who can reach the API can access the shared collection. Temporary verification records were deleted and original IDs/count/totals restored. No application, schema, environment or deployment change was made during hosted verification.
 
 ## Design
 

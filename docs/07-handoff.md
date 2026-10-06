@@ -2,7 +2,7 @@
 
 ## Current status
 
-V1 is locally verified through T12; T13 documentation is complete. T14's audit is blocked on Vercel team access; hosted acceptance is incomplete. [README](../README.md) is the onboarding guide. [T12 verification](t12-verification.md) is the accepted functional baseline; [T13 verification](t13-verification.md) records documentation checks; [T14 audit](t14-verification.md) records current hosted state.
+T01–T14 are complete. Local verification, documentation, and hosted acceptance passed; T14 cleanup restored the baseline. [README](../README.md) is the onboarding guide. [T12 verification](t12-verification.md) is the accepted functional baseline; [T13 verification](t13-verification.md) records documentation checks; [T14 audit](t14-verification.md) records current hosted state.
 
 ## Architecture
 
@@ -84,8 +84,12 @@ The application role has table CRUD rights, not administrative or schema-changin
 
 EGP only; no authentication, search, pagination, budgets or charts. List and summary requests use independent snapshots. No idempotency keys or concurrent-edit conflict handling. Browser coverage uses Chrome device emulation, not native mobile keyboards/safe areas, Safari/Firefox or screen-reader sessions. Cairo midnight checks are synthetic. T12 clean-source verification used a source snapshot rather than a new clone of HEAD; startup of tooling whose install scripts were blocked was not separately verified.
 
-The current Vercel deployment serves commit `087c78f` but has no configured API base, so summary/list show configuration errors. No backend URL was found. Vercel owning-team access must be restored before deployment; see the T14 audit. No integrated hosted V1 has been verified.
+Frontend: https://expensetracker-inky-mu.vercel.app/
+
+Backend: https://expense-tracker-api-green.vercel.app/
+
+Both production deployments serve `b7e0d9f`. Hosted health, UI CRUD, filters, exact totals, reload/new-session persistence and baseline cleanup passed on 2026-10-06. Responsive checks at 360/768/1440 and 12 accessibility audits passed. See [T14 verification](t14-verification.md) for evidence and smoke-test limits.
 
 ## Next work
 
-T14 must verify hosting/account access, choose Express hosting, confirm provider costs and database connection limits, configure production API URL/origin and private secrets, deploy a sample-data frontend/backend, and verify hosted CRUD, filters, exact totals and persistence. Record actual demo URLs and limitations only after those gates pass. T13 performs none of that deployment work.
+No remaining T14 work. Maintain the unauthenticated demo with sample data only; keep server credentials private and verified TLS enabled. Run affected checks for future changes.

@@ -1,5 +1,51 @@
 # T14 — Deployment and final demo verification
 
+Date: 2026-10-06 (Africa/Cairo). **Status: Completed. T01–T14 are complete.**
+
+Frontend: https://expensetracker-inky-mu.vercel.app/
+
+Backend: https://expense-tracker-api-green.vercel.app/
+
+## Production configuration and access
+
+Owning-team access is restored for `team_SC9MDLwu1DYKW3boTQle18dl` (Hobby). Frontend project `expense_tracker` and backend `expense-tracker-api` have READY production deployments from Git main commit `b7e0d9f`: `dpl_6PWAVqqtwcwEutgzK8GTYTWTCYtD` and `dpl_HXhBhf2imouqR1hXUfwpeg6BXVoM`. Build logs confirm Next.js frontend and Express backend using `server.mjs`; exact root-directory/production-branch settings were not exposed by the connector, though source/layout/build evidence matches frontend/backend.
+
+Production frontend API base points to the hosted API. Backend DATABASE_URL is sensitive and was not decrypted; DATABASE_SSL_CA_FILE and CLIENT_ORIGIN are configured. Direct parameter-free health returns 200, {"data":{"api":"running","database":"reachable"}}, Cache-Control: no-store, exact frontend CORS origin and HSTS. Both production aliases are public. Existing deployment-alias authentication protection was preserved; no share bypass or _vercel_share acceptance was added. Supabase migration/limited-role evidence remains the earlier accepted baseline; this run did not inspect private credentials or repeat the database privilege/TLS identity audit.
+
+## Hosted UI CRUD and cleanup
+
+Baseline: 2 transactions; income **9500.00**, expenses **200.00**, balance **9300.00**, EGP. Original IDs were recorded privately; descriptions/data are omitted here.
+
+Created one uniquely named T14 expense through the UI, date 2026-10-06 (Cairo), category other, amount 1.23. POST returned 201; dialog closed, added feedback appeared, list/summary refreshed, exact amount persisted. Count became 3, expenses 201.23, balance 9298.77. Reload retained it.
+
+Edited the same record through the UI to 2.34 and an edited verification description. PUT returned 200; authoritative list/summary and reload retained the edited values. Expenses became 202.34, balance 9297.66; income stayed 9500.00.
+
+Server-backed expense/other filter included the record; income/other excluded it without stale rows. Summary remained global. Captured filtered GETs returned 200.
+
+UI delete confirmation identified the temporary record; DELETE returned 204, dialog closed, record disappeared and reads refreshed. Reload confirmed deletion. Final count, all totals and original ID set matched baseline exactly. Independent fresh Chrome session also showed restored baseline and successful summary/list GETs. No temporary record remains.
+
+The completed UI pass captured exactly one POST, one PUT and one DELETE, with no duplicates. An earlier pass stopped on a harness recorder assertion after create/edit/filter checks; its finally cleanup deleted that temporary record through the API and verified full restoration before the completed pass. This was a monitoring failure, not an application failure.
+
+## Production smoke checks
+
+- 360/768/1440px: no horizontal overflow; cards below 768 and table from 768; usable filters; Add/Edit/Delete dialogs fit, receive focus and cancel without writes; keyboard focus stays in Add and returns to its trigger.
+- **12 accessibility audits, zero violations**: dashboard and three dialogs at each width.
+- Browser console/error capture: no errors, hydration issues or unhandled exceptions. No CORS failures observed.
+- Browser HTTP traffic uses HTTPS; all Fetch requests target the hosted API. No localhost or direct Supabase requests. Data URLs used by browser controls/audit tooling were excluded from HTTP checks.
+- Seven page-loaded JavaScript bundles and captured URLs/headers had no recognized database URI/private-key/service-role credential patterns. No secrets printed. This is a smoke scan, not proof against every secret format or a source-map/log audit.
+- Unsupported health query returned sanitized structured 400 VALIDATION_ERROR and no-store, without SQL/stack/credential detail. Unrelated Origin received the exact frontend allow-origin, not a wildcard/reflected origin; HSTS present.
+
+## Scope, limitations and documentation
+
+T12/T13 were not rerun. No product code, feature, schema, environment variable or deployment was changed. Only temporary records explicitly requested for verification were written, and cleaned up. Existing records were preserved. The browser checks use Chrome viewport emulation; physical devices, other engines, forced provider restarts/cold starts and broad production error injection were not exercised. V1 remains unauthenticated and shared: retain sample data only.
+
+README, implementation plan, handoff, historical deployment report and this report updated. Ignored local evidence/runners are under `.tmp-t12/t14-*`; CRUD evidence includes request methods/statuses and private baseline IDs. Documentation checks are lightweight.
+
+## Historical blocked audit — 2026-10-05
+
+The following audit is historical and superseded by the completed result above.
+
+
 Date: 2026-10-05. **Status: Blocked on Vercel team access; hosted acceptance incomplete.** T01–T13 remain complete. T12 is the verified local baseline. No deployment, production environment mutation, database mutation, schema change, application change or expensive T12 rerun was performed.
 
 ## Starting audit
@@ -54,7 +100,7 @@ Backend private configuration: `DATABASE_URL` using `expense_tracker_app`, `DATA
 
 Frontend public production configuration: `NEXT_PUBLIC_API_BASE_URL=https://<verified-backend-host>/api/v1`. Set it before building/redeploying; do not use localhost. The origin value above is a proposed configuration, not an applied or verified CORS result.
 
-## Remaining acceptance gates
+## Historical remaining acceptance gates
 
 1. Restore owning-team access; confirm current build settings, account plan/cost and compatible backend hosting.
 2. Configure limited-role private backend environment and CA; deploy backend and verify HTTPS health 200, database reachability, sanitized JSON and `Cache-Control: no-store`.
