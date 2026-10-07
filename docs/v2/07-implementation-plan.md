@@ -368,6 +368,8 @@ Acceptance: cross-owner/category-kind mutations rejected, archived lifecycle saf
 
 Build User A/B fixtures and helpers now; expand with profiles/categories/accounts/transactions/transfers/recurring/occurrences/budgets/goals/analytics/dashboard as those domains land. P1 adds notification/report/export cases only when promoted. Test foreign referenced IDs, cursor scope, unsafe identity input, GET/PUT/DELETE and aggregate leakage. This task is a continuing gate, not a demand for unbuilt endpoints before T17. T59 is the final complete P0 acceptance.
 
+**Foundation completed locally on 2026-10-07.** Reusable A/B financial fixtures plus a third bootstrap user, local ES256/JWKS tokens, real Express/runtime PostgreSQL integration, strict owner-injection and category-filter checks, concurrency, snapshot-backed rejection and future hidden-resource assertions are verified. The fresh T16 suite passed 599 grouped checks, including 58 rejected ownership writes. T15/T14 and existing backend regressions passed separately. Current profile/category endpoint isolation is proven; other domains have DB integrity and explicit future query/endpoint hooks, not claimed endpoint coverage. Shared runtime SQL is not tenant-scoped; production V1 retirement and later domain authorization remain required. See [T16 verification](t16-verification.md). T17 has not started; no remote/RLS/application/frontend change was made.
+
 ---
 
 # 8. M4 — Accounts
@@ -390,6 +392,8 @@ Implement:
 - archived accounts handled correctly;
 - API matches design.
 
+**Completed locally on 2026-10-07.** Six authenticated account routes, strict full create/PUT validation, owner-scoped hidden resources, exact NUMERIC resource balances, permanent opening/card-conversion locks, transactional archive/recurring pause/reservation skip and explicit restore are verified. The extended T16 verifier passed its original 599 checks plus 263 account checks, four forced PostgreSQL races and two rollback faults. Backend quality checks, separate T15/T14/T11 verification and V1 regressions passed. See [T17 verification](t17-verification.md). No remote migration/deployment, frontend integration, V2 transaction CRUD or T18 work occurred.
+
 ---
 
 ## T18 — Build Account Balance Queries
@@ -397,6 +401,8 @@ Implement:
 **Depends on:** T17, prepared transaction/transfer schema.
 
 Assets = opening+income-expense+incoming-outgoing. Card debt = opening+expense-income+outgoing-incoming. Total Balance/net worth sums assets minus card debt including archived accounts, all-history. Query exact pre-aggregated SQL; no join multiplication/floats. Acceptance fixtures cover purchases/payments/cash advances/overpayment, archive inclusion and corrections/deletes. Final reconciliation expands after T21/T26.
+
+**Completed locally on 2026-10-07.** One authoritative grouped NUMERIC query layer supplies account list/detail/mutation responses and archived-inclusive net position. The fresh suite passed 191 balance checks plus all 263 T17 and 599 T16 checks, including four transfer combinations, exact large/negative values, recurring exclusion, corrections/deletes, snapshot visibility and one-query lists. Actual runtime EXPLAIN ANALYZE covered 5,000 additional transactions/2,000 transfers. The unchanged T14 history reconciles through the production repository at 1000000582.01; the extended T15 verifier passed 210 checks plus 64 T14 checks. Lint/typecheck/build and full backend suite passed. See [T18 verification](t18-verification.md). No remote/schema/grant/frontend/V1/API scope changes; T19 has not started.
 
 ---
 
@@ -413,6 +419,8 @@ Implement `/accounts`.
 - add/edit/archive/restore and automatic recurring pause feedback;
 - responsive behavior;
 - accessibility checks pass.
+
+**Completed locally on 2026-10-07.** The approved Accounts UI now uses the authenticated T10 client, T17 lifecycle endpoints and T18 backend balances/summary. Create/edit/archive/restore, safe write recovery, cancellation and A/B session isolation passed the real browser/API/PostgreSQL suite (85 checks, including 12 axe WCAG A/AA audits). Frontend lint/typecheck/build and all 78 tests passed; fresh backend regressions passed 599 isolation, 263 lifecycle and 198 balance/summary checks. V1 production preview remains 200 and V2 remains 404. See [T19 verification](t19-verification.md). No schema, remote deployment, transfer API, transaction CRUD or T20 work.
 
 ---
 
@@ -1358,8 +1366,11 @@ Current checkpoint:
 - T13 ✅ Completed — Provision Profiles and Build Profile API
 - T14 ✅ Completed — Rehearse V1 Data Migration
 - T15 ✅ Completed — Prepare and Test Ownership Constraints
-- T16 ⬜ Next — Expand Multi-User Isolation Tests
+- T16 ✅ Completed — Expand Multi-User Isolation Tests (foundation; expands with domains)
+- T17 ✅ Completed — Build Account Backend
+- T18 ✅ Completed — Build Account Balance Queries
+- T19 ✅ Completed — Build Accounts Page
 
-The T04 visual approval gate is satisfied. T05 hosted configuration, T06 Auth helpers, T07 real Auth-page integration and T08 session protection are completed; see [T05 verification](t05-verification.md), [T06 verification](t06-verification.md), [T07 verification](t07-verification.md) and [T08 verification](t08-verification.md). T09 backend identity verification is completed; see [T09 verification](t09-verification.md). T10 is completed; see [T10 verification](t10-verification.md). T11 additive schema preparation and disposable verification are completed; see [T11 verification](t11-verification.md). T12 reference seed and authenticated category reads are completed; see [T12 verification](t12-verification.md). T13 profile provisioning/API and frontend bootstrap gating are completed; see [T13 verification](t13-verification.md). T14 disposable migration rehearsal is completed; see [T14 verification](t14-verification.md). T15 local ownership enforcement preparation is completed; see [T15 verification](t15-verification.md). T16 is next and has not started. No remote schema/seed/backfill or final production ownership enforcement was performed. The approved visual design is preserved; financial pages remain fictional and development-only. Profile/bootstrap gating precedes protected fixture rendering; full Settings integration remains T49.
+The T04 visual approval gate is satisfied. T05 hosted configuration, T06 Auth helpers, T07 real Auth-page integration and T08 session protection are completed; see [T05 verification](t05-verification.md), [T06 verification](t06-verification.md), [T07 verification](t07-verification.md) and [T08 verification](t08-verification.md). T09 backend identity verification is completed; see [T09 verification](t09-verification.md). T10 is completed; see [T10 verification](t10-verification.md). T11 additive schema preparation and disposable verification are completed; see [T11 verification](t11-verification.md). T12 reference seed and authenticated category reads are completed; see [T12 verification](t12-verification.md). T13 profile provisioning/API and frontend bootstrap gating are completed; see [T13 verification](t13-verification.md). T14 disposable migration rehearsal is completed; see [T14 verification](t14-verification.md). T15 local ownership enforcement preparation is completed; see [T15 verification](t15-verification.md). T16 isolation-suite foundation is completed; see [T16 verification](t16-verification.md). T17 account backend is completed; see [T17 verification](t17-verification.md). T18 balance queries are completed; see [T18 verification](t18-verification.md). T19 Accounts page integration is completed; see [T19 verification](t19-verification.md). T20 remains unstarted and is the optional P1 account-detail task. No remote schema/seed/backfill or final production ownership enforcement was performed. The approved visual design is preserved; Accounts uses real authenticated data; other financial pages retain fixtures. All V2 pages remain development-only. Profile/bootstrap gating precedes protected fixture rendering; full Settings integration remains T49.
 
 ---

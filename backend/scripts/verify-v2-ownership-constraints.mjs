@@ -11,6 +11,7 @@ import {verifyT14} from './verify-v2-migration-rehearsal.mjs';
 import {captureInventory,categoryMap} from './v2-migration-rehearsal.mjs';
 import {createApp} from '../dist/app.js';
 import {createTransactionService} from '../dist/services/transactions.js';
+import {createAccountBalanceRepository} from '../dist/services/account-balances.js';
 
 const owner='a1500000-0000-4000-8000-000000000001'; // Disposable synthetic identity.
 const tables=['profiles','accounts','categories','transactions','transfers','recurring_transactions','recurring_occurrences','budgets','goals'];
@@ -145,7 +146,12 @@ export async function verifyT15(connectionString) {
     await reject('accounts archive only','DELETE FROM expense_tracker.accounts WHERE id=$1',[fresh],['23514']);
     await reject('categories archive only','DELETE FROM expense_tracker.categories WHERE id=$1',[ids.cb],['23514']);
     await runtime.query('ROLLBACK');await admin.query('DELETE FROM expense_tracker.profiles WHERE user_id=$1',[foreign]);check('all test fixtures reversed',await snapshot(),originalRows);check('final financial inventory',await captureInventory(admin),history);
-    const accountBalance=(await admin.query("SELECT (a.opening_balance+COALESCE(sum(CASE WHEN t.type='income' THEN t.amount ELSE -t.amount END),0))::text balance FROM expense_tracker.accounts a LEFT JOIN expense_tracker.transactions t ON t.account_id=a.id WHERE a.user_id=$1 GROUP BY a.id",[owner])).rows[0].balance;check('Main Account balance',accountBalance,t14.totals.balance);
+    const balanceRepository=createAccountBalanceRepository(runtime);
+    const mainAccounts=await balanceRepository.getAccountBalances(owner);
+    const accountBalance=mainAccounts[0].currentBalance;check('Main Account balance',accountBalance,t14.totals.balance);
+    check('Main Account opening counted once',mainAccounts[0].openingBalance,'0.00');
+    check('Main Account detail equals list',await balanceRepository.getAccountBalance(owner,mainAccounts[0].id),mainAccounts[0]);
+    check('Main Account net position',await balanceRepository.getNetPosition(owner),{netPosition:'1000000582.01',currency:'EGP'});
     for(const role of ['anon','authenticated'])check('private schema '+role,(await admin.query("SELECT has_schema_privilege($1,'expense_tracker','USAGE') allowed",[role])).rows[0].allowed,false);
     check('limited runtime',(await admin.query("SELECT rolsuper,rolcreaterole,rolcreatedb,rolbypassrls,rolinherit FROM pg_roles WHERE rolname='expense_tracker_app'")).rows[0],{rolsuper:false,rolcreaterole:false,rolcreatedb:false,rolbypassrls:false,rolinherit:false});
     await admin.query('REVOKE SELECT,INSERT,UPDATE,DELETE ON expense_tracker.transactions FROM expense_tracker_app');

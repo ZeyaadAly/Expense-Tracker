@@ -1530,6 +1530,14 @@ T02 financial/product/security contracts remain frozen. **T03 — Build V2 Code-
 
 T04 uses a dominant net-position overview and account rail, desktop transaction ledger/mobile cards, recurring timeline, narrative analytics with lightweight bars and text equivalents, category budget rows, manual goal cards and sectioned settings. Period controls filter fixture records locally; account balances remain all-history. Review controls are collapsed by default; `?state=loading|empty|error|stale|stress` provides repeatable review surfaces. Form outcomes include success, rejection, pending and uncertain, with preserved drafts and no automatic retry. Opening balances stay permanently locked after posted activity; archive pauses schedules, restore requires explicit resume, and completed goals must explicitly reopen before saved progress falls below target. No auth provider, API, storage persistence or database connection is present.
 
+### T19 connected Accounts behavior
+
+`/v2/accounts` now uses authenticated account resources and a backend-authoritative net-position summary while preserving the approved T04 shell, finance cards, controls and dialogs. Active/Archived tabs issue server filters. Initial reads show skeletons; empty active lists show “No accounts yet.” and “Add your first account”. Failed refreshes retain available previously loaded values with stale feedback; missing summary data never appears as a fabricated zero.
+
+Create/edit drafts retain exact signed decimal strings and backend field errors. Permanent API lock metadata disables opening-balance changes and credit-card/asset conversion after posted activity. Archive confirms retained history and automatic recurring pause; restore explains that recurring schedules require separate resume. Pending submissions are guarded; uncertain writes offer a read refresh and inspection without repeating the write. Confirmed saves followed by failed reads close the form and announce “Saved, but accounts could not refresh.” Retry performs reads only.
+
+Session changes unmount owner-specific state and cancel requests; 401 follows the existing protected boundary. Account preview selectors/fixtures are absent from this route. Transfers remain visibly disabled until their integration task. Other financial routes and design-system specimens retain their isolated fixtures. V2 remains development-only. See [T19 verification](t19-verification.md).
+
 ### Frozen money contract
 
 All persisted monetary columns use PostgreSQL **NUMERIC without a precision/scale typmod**, with explicit `scale(value) <= 2` and range CHECK constraints. This preserves V1's excess-scale rejection: `NUMERIC(11,2)` would round before a CHECK could inspect the original value. Effective per-value bounds are nine integer digits and two fractional digits; no monetary column uses float/double.

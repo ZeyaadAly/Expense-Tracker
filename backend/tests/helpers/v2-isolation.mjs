@@ -9,6 +9,7 @@ import {createApp} from '../../dist/app.js';
 import {createProfileService} from '../../dist/services/profiles.js';
 import {createCategoryService} from '../../dist/services/categories.js';
 import {createTransactionService} from '../../dist/services/transactions.js';
+import {createAccountService} from '../../dist/services/accounts.js';
 import {categoryMap} from '../../scripts/v2-migration-rehearsal.mjs';
 
 function fixture(prefix,name) {
@@ -73,6 +74,7 @@ export function expectApiError(result,status,code) {
   assert.equal(result.body.error.code,code);assert.ok(Array.isArray(result.body.error.details));assert.equal(typeof result.body.error.message,'string');
 }
 export async function expectForeignResourceHidden(request,{token,foreignPath,missingPath,ownPath,code='NOT_FOUND',method='GET',body}) {
+  if(code==='NOT_FOUND')assert.ok(ownPath,'Resource authorization checks require an existing owned route');
   if(ownPath)assert.equal((await request(token,ownPath,method,body)).status,200,'Future domain hook must verify the owned route exists');
   const foreign=await request(token,foreignPath,method,body),missing=await request(token,missingPath,method,body);
   expectApiError(foreign,404,code);expectApiError(missing,404,code);assert.deepEqual(foreign.body,missing.body,'Foreign and nonexistent resources must be indistinguishable');
@@ -82,16 +84,16 @@ export async function createTestAuthHarness(pool) {
   const key={...await exportJWK(pair.publicKey),kid:'t16-local',alg:'ES256',use:'sig'};
   const jwks=createServer((_request,response)=>{response.setHeader('Content-Type','application/json');response.end(JSON.stringify({keys:[key]}));}).listen(0,'127.0.0.1');await once(jwks,'listening');
   const origin=`http://127.0.0.1:${jwks.address().port}`;
-  const server=createApp({clientOrigin:'http://localhost:3000',databaseHealth:async()=>true,supabaseUrl:origin,profiles:createProfileService(pool),categories:createCategoryService(pool),transactions:createTransactionService(pool)}).listen(0,'127.0.0.1');await once(server,'listening');
+  const server=createApp({clientOrigin:'http://localhost:3000',databaseHealth:async()=>true,supabaseUrl:origin,profiles:createProfileService(pool),categories:createCategoryService(pool),accounts:createAccountService(pool),transactions:createTransactionService(pool)}).listen(0,'127.0.0.1');await once(server,'listening');
   async function createTestAuthToken(user,{issuer=origin+'/auth/v1',audience='authenticated',role='authenticated',wrongKey=false,expiration='15m',metadataOwner=isolationUsers.b.userId}={}) {
     return new SignJWT({sub:user.userId,role,user_metadata:{userId:metadataOwner,ownerId:metadataOwner}}).setProtectedHeader({alg:'ES256',kid:key.kid}).setIssuer(issuer).setAudience(audience).setExpirationTime(expiration).sign(wrongKey?foreignPair.privateKey:pair.privateKey);
   }
   async function request(token,path='/profile',method='GET',body) {
     const response=await globalThis.fetch(`http://127.0.0.1:${server.address().port}/api/v2${path}`,{method,headers:{...(token?{Authorization:'Bearer '+token}:{}),...(body===undefined?{}:{'Content-Type':'application/json'})},...(body===undefined?{}:{body:JSON.stringify(body)})});
-    return {status:response.status,body:await response.json(),cache:response.headers.get('Cache-Control')};
+    return {status:response.status,body:await response.json(),cache:response.headers.get('Cache-Control'),location:response.headers.get('Location'),allow:response.headers.get('Allow')};
   }
   async function v1Request(path,method='GET',body) {
     const response=await globalThis.fetch(`http://127.0.0.1:${server.address().port}/api/v1${path}`,{method,...(body===undefined?{}:{headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})});return {status:response.status,body:await response.json(),cache:response.headers.get('Cache-Control')};
   }
-  return {createTestAuthToken,request,v1Request,async close(){server.closeAllConnections();jwks.closeAllConnections();await Promise.all([new Promise(resolve=>server.close(resolve)),new Promise(resolve=>jwks.close(resolve))]);}};
+  return {origin,apiOrigin:`http://127.0.0.1:${server.address().port}`,createTestAuthToken,request,v1Request,async close(){server.closeAllConnections();jwks.closeAllConnections();await Promise.all([new Promise(resolve=>server.close(resolve)),new Promise(resolve=>jwks.close(resolve))]);}};
 }

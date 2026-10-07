@@ -40,3 +40,6 @@ supabase/.env.*.local
 .tmp-v2-t14/
 .tmp-v2-t15/
 .tmp-v2-t16/
+.tmp-v2-t17/
+.tmp-v2-t18/
+.tmp-v2-t19/

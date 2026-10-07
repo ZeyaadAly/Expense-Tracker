@@ -200,6 +200,8 @@ Archived references remain in history and totals. Reject new transactions/transf
 
 Use user-scoped SQL aggregates; join pre-aggregated transaction/transfer totals to avoid join multiplication. No current_balance persisted field or materialized view in P0.
 
+T18 implements this in `backend/src/services/account-balances.ts`: one parameterized statement scopes accounts by owner and optional ID/status, groups posted transaction deltas, groups signed transfer entries, then joins one aggregate row per account. The same account-balance CTE supplies resources and archived-inclusive net position. Reads use a statement snapshot without row locks and can run on the mutation's existing checked-out client. No view, function, migration, new index or grant is needed. Recurring definitions/reservations never enter this query; only persisted generated transactions affect balances.
+
 ---
 
 # 9. `categories`

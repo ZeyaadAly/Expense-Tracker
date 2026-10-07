@@ -10,6 +10,8 @@ import { createCategoryRouter } from "./routes/categories.js";
 import { createRequireAuth } from "./middleware/auth.js";
 import { createProfileRouter } from "./routes/profiles.js";
 import type { ProfileService } from "./services/profiles.js";
+import type { AccountService } from "./services/accounts.js";
+import { createAccountRouter } from "./routes/accounts.js";
 
 export function createApp(options: {
   clientOrigin: string;
@@ -18,6 +20,7 @@ export function createApp(options: {
   transactions?: TransactionService;
   categories?: CategoryService;
   profiles?: ProfileService;
+  accounts?: AccountService;
   supabaseUrl?: string;
 }) {
   const app = express();
@@ -42,6 +45,7 @@ export function createApp(options: {
   v2.use(createHealthRouter(options.databaseHealth));
   if (options.categories) v2.use(createCategoryRouter(options.categories, createRequireAuth(options.supabaseUrl)));
   if (options.profiles) v2.use(createProfileRouter(options.profiles, createRequireAuth(options.supabaseUrl)));
+  if (options.accounts) v2.use(createAccountRouter(options.accounts, createRequireAuth(options.supabaseUrl)));
   v2.use(routeNotFound);
   v2.use(errorHandler);
   app.use("/api/v2", v2);

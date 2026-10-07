@@ -29,7 +29,7 @@ const navigation: { title: string; items: [string, IconName][] }[] = [
   { title: "Insights", items: [["Analytics", "analytics"]] },
   { title: "Account", items: [["Settings", "settings"]] },
 ];
-export function PrototypeShell({ children }: { children: ReactNode }) {
+export function PrototypeShell({ children, liveAccounts = false }: { children: ReactNode; liveAccounts?:boolean }) {
   const path = usePathname();
   const { session } = usePrototype();
   const { user, signOut } = useAuth();
@@ -110,9 +110,9 @@ export function PrototypeShell({ children }: { children: ReactNode }) {
         </Button>
       </header>
       <main id="v2-main" className="v2-main" tabIndex={-1}>
-        <p className="p4-prototype-label">Prototype · fictional data</p>
+        <p className="p4-prototype-label">{liveAccounts ? "Development · connected accounts" : "Prototype · fictional data"}</p>
         {logoutError && <FeedbackBanner tone="error" title={logoutError} />}
-        {session ? (
+        {liveAccounts || session ? (
           children
         ) : (
           <section className="p4-panel">

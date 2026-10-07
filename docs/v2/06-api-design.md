@@ -462,6 +462,8 @@ Example:
 
 Returns authenticated user's accounts.
 
+T17 list behavior: default `status=active`; `status=archived` selects archived accounts only. Unknown, repeated, bracketed or empty filters return 400 VALIDATION_ERROR. Order is createdAt ASC then id ASC. No userId is returned.
+
 Optional query:
 
 ```text
@@ -493,6 +495,18 @@ Response:
 
 ---
 
+## T19: GET `/accounts/summary`
+
+Authenticated, owner-scoped, read-only account overview. No query parameters. Uses the existing T18 grouped NUMERIC balance repository; includes active and archived accounts, subtracting positive credit-card debt and adding negative card credit. Empty owners receive exact `0.00`. No browser financial arithmetic or dashboard endpoint is introduced.
+
+```json
+{"data":{"netPosition":"49.90","currency":"EGP"}}
+```
+
+Amounts are unbounded derived two-decimal strings. Shared auth, no-store and safe error envelopes apply. Unsupported methods return 405; unknown/repeated queries return 400. No schema or privilege changes.
+
+---
+
 # 20. POST `/accounts`
 
 Request:
@@ -513,6 +527,8 @@ Response:
 ```
 
 with created account. Name trimmed 1–100 code points; valid type, explicit openingBalance, currency EGP only, active status server-owned.
+
+T17 rejects controls, lone surrogates and names containing only whitespace/format characters. Names are unique per user through the existing PostgreSQL lower(name) index, including archived accounts; another user's name does not conflict. Duplicate names return 409 ACCOUNT_CONFLICT. Location identifies the created resource. Unknown fields are rejected on create and full PUT.
 
 ---
 
@@ -537,6 +553,10 @@ Full editable details: `{name, type, openingBalance}` with required values and c
 # 23. Account Archive and Restore
 
 **POST /accounts/:id/archive** and **POST /accounts/:id/restore**, empty body. Archive is idempotent, atomically pauses active associated recurring definitions and skips their unposted reservations; returns `{data: account, meta: {pausedRecurringCount}}`. Restore returns active account, never resumes schedules. Historical balances remain; no DELETE /accounts/:id in core. New activity requires active account; edits of historical transaction/transfer with archived resulting references require restore first.
+
+T17 actions use an empty JSON object `{}` under the existing POST Content-Type policy. Already archived/active actions and identical PUT preserve account updatedAt. Archive clears nextOccurrence for newly paused definitions, skips pending/failed unposted occurrences and clears their failureCode; posted/skipped history remains unchanged. Restoring changes account status only. Archived account metadata remains editable under the same permanent opening/type locks. Unsupported account DELETE returns 405 with Allow: GET, PUT.
+
+T18 centralizes currentBalance in the authoritative account-balance repository. List, detail and mutation responses use the same grouped exact PostgreSQL query over owned transactions/transfers, with the opposite activity sign for credit cards. Internal net-position queries reuse that calculation and include archived accounts. The public account response contract is unchanged; no net-position, dashboard or transfer endpoint is introduced here.
 
 ---
 
