@@ -26,6 +26,7 @@ export function createAccountService(database: Pick<Pool, "query" | "connect">) 
     return result.rows[0];
   }
   return {
+    getAccountSummary: (userId: string, id: string) => createAccountBalanceRepository(database).getAccountSummary(userId, id),
     getSummary: (userId: string) => createAccountBalanceRepository(database).getNetPosition(userId),
     listAccounts: (userId: string, status: AccountStatus) => createAccountBalanceRepository(database).getAccountBalances(userId, status),
     getAccount: (userId: string, id: string) => read(database, userId, id),

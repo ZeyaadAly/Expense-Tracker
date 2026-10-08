@@ -487,6 +487,8 @@ FK SET NULL clears only generated_transaction_id; user ownership remains NOT NUL
 
 ---
 
+T32 local implementation note for §20 (2026-10-08): `20261008135130_v2_occurrence_invariants.sql` adds the generated pair check/FK/partial unique index, immutable generated and occurrence identities, terminal-state guard and same-owner/definition/date link validation. A deferred generated-insert constraint trigger requires the transaction to be linked to its posted occurrence at commit, preventing orphan financial inserts. Only the existing FK's deletion-driven link clear is allowed on posted markers; processed timestamps and terminal status stay unchanged. Failed occurrences require explicit pending recovery before posting. Failure codes must be bounded uppercase identifiers; service writes use an internal allowlist. No new table, column or runtime grants; existing history is preflight-checked without repair. Prepared and verified only in disposable PostgreSQL; not applied remotely. See [T32 verification](t32-verification.md).
+
 # 21. `budgets`
 
 Purpose:
@@ -1022,6 +1024,8 @@ Choose a **maintenance-window cutover**, not dual public operation:
 9. Close maintenance after gates pass. Verify `/api/v1` financial paths remain unavailable (maintenance 503, then 410 API_RETIRED with no data); protect/remove old backend deployments and public aliases. Retirement enforcement precedes the first V2 user write; never retain unauthenticated read-only compatibility against V2 data.
 
 Temporary compatibility consists only of retained legacy columns/backups and a maintenance response to old clients. P0 keeps `transaction_date` in storage and maps it to API `date`; no date-column rename. Retain legacy category text for rollback evidence, make it nullable/drop its V1-only category check after reconciliation, and map V2 categories by category_id; do not fabricate legacy values for new custom categories. Later column removal is a separate migration after stability, not part of first cutover.
+
+T21 local implementation follows the explicit session exception preserving existing V1 handlers until production cutover. A read-only CASE projection maps stable system category IDs to V1 category keys and custom categories to Other; migrated rows use their category_id while retained raw category text stays untouched. New V2 rows leave legacy category NULL. V1 mutation SQL is unchanged; ownerless legacy creation remains rejected by T15 constraints. This does not retire or authenticate legacy handlers and is not authorization to expose multi-user data through them. The production maintenance/retirement gate above still applies.
 
 ---
 

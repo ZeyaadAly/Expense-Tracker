@@ -19,6 +19,9 @@ const tokens={a:await auth.createTestAuthToken(users.a),b:await auth.createTestA
 const service=createAccountService(pool);let mode='normal';const calls=[];
 const fail=()=>{throw new ApiError(503,'DATABASE_UNAVAILABLE','Database unavailable.');};
 const wrapped={...service,
+  async getAccount(user,id){calls.push({operation:'detail',user:user===users.a.userId?'a':'b'});const current=mode;if(current==='read-error')fail();const row=await service.getAccount(user,id);if(current==='slow')await new Promise(r=>setTimeout(r,1200));return row;},
+  async getAccountSummary(user,id){if(mode==='read-error')fail();return service.getAccountSummary(user,id);},
+  async updateAccount(user,id,input){if(mode==='mutation-503')fail();if(mode==='locked')throw new ApiError(409,'ACCOUNT_CONFLICT','Posted activity locked this account.');return service.updateAccount(user,id,input);},
   async listAccounts(user,status){calls.push({operation:'list',user:user===users.a.userId?'a':'b',status});const current=mode;if(current==='read-error')fail();const rows=await service.listAccounts(user,status);if(current==='slow')await new Promise(r=>setTimeout(r,1200));return rows;},
   async getSummary(user){if(mode==='read-error')fail();return service.getSummary(user);},
   async createAccount(user,input){calls.push({operation:'create',user:user===users.a.userId?'a':'b'});if(mode==='validation')throw new ApiError(400,'VALIDATION_ERROR','Check fields.',[{field:'name',message:'This account name is unavailable. Choose another name while keeping your draft. '.repeat(5)}]);if(mode==='mutation-503')fail();if(mode==='pending')await new Promise(r=>setTimeout(r,1200));const row=await service.createAccount(user,input);if(mode==='saved-refresh-error')mode='read-error';if(mode==='uncertain')throw new ApiError(500,'INTERNAL_ERROR','Sanitized failure.');return row;},

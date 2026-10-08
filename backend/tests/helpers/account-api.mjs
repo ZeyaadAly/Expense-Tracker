@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {Client} from 'pg';
+import {createGeneratedFixture} from './generated-fixture.mjs';
 import {setTimeout} from 'node:timers';
 import {isolationUsers,expectApiError,expectForeignResourceHidden,financialSnapshot} from './v2-isolation.mjs';
 
@@ -76,7 +77,9 @@ export async function verifyAccountApi({admin,runtime,auth,tokens}) {
   equal((await get(deleted.id)).openingBalanceEditable,false);error(await auth.request(tokens.a,base+deleted.id,'PUT',{...put(deleted),openingBalance:'1.00'}),409,'ACCOUNT_CONFLICT');
   const scheduleAccount=await create(tokens.a,payload('Schedule account'));
   const definition=(await runtime.query("INSERT INTO expense_tracker.recurring_transactions(user_id,account_id,category_id,type,amount,description,frequency,start_date,next_occurrence) VALUES($1,$2,$3,'expense',1.00,'T17 schedule','monthly','1900-01-01','1900-02-01') RETURNING id",[a.userId,scheduleAccount.id,a.expenseCategory])).rows[0].id;
-  for(const [date,status] of [['1900-02-01','pending'],['1900-03-01','failed'],['1900-04-01','posted'],['1900-05-01','skipped']])await runtime.query("INSERT INTO expense_tracker.recurring_occurrences(user_id,recurring_transaction_id,occurrence_date,status,processed_at,failure_code) VALUES($1,$2,$3,$4::text,CASE WHEN $4::text='pending' THEN NULL ELSE statement_timestamp() END,CASE WHEN $4::text='failed' THEN 'TEST_FAILURE' ELSE NULL END)",[a.userId,definition,date,status]);
+  for(const [date,status] of [['1900-02-01','pending'],['1900-03-01','failed'],['1900-05-01','skipped']])await runtime.query("INSERT INTO expense_tracker.recurring_occurrences(user_id,recurring_transaction_id,occurrence_date,status,processed_at,failure_code) VALUES($1,$2,$3,$4::text,CASE WHEN $4::text='pending' THEN NULL ELSE statement_timestamp() END,CASE WHEN $4::text='failed' THEN 'TEST_FAILURE' ELSE NULL END)",[a.userId,definition,date,status]);
+  const historical=await createGeneratedFixture(runtime,{userId:a.userId,accountId:scheduleAccount.id,categoryId:a.expenseCategory,type:'expense',amount:'1.00',description:'T17 historical deleted',date:'1900-04-01',definitionId:definition,occurrenceDate:'1900-04-01'});
+  await runtime.query('DELETE FROM expense_tracker.transactions WHERE id=$1',[historical.id]);
   const archive=await auth.request(tokens.a,base+scheduleAccount.id+'/archive','POST',{});equal(archive.status,200);equal(archive.body.meta.pausedRecurringCount,1);equal(archive.body.data.status,'archived');assert.ok(archive.body.data.updatedAt>scheduleAccount.updatedAt);checks++;
   equal((await runtime.query('SELECT status,next_occurrence FROM expense_tracker.recurring_transactions WHERE id=$1',[definition])).rows,[{status:'paused',next_occurrence:null}]);
   equal((await runtime.query('SELECT status,failure_code FROM expense_tracker.recurring_occurrences WHERE recurring_transaction_id=$1 ORDER BY occurrence_date',[definition])).rows,[{status:'skipped',failure_code:null},{status:'skipped',failure_code:null},{status:'posted',failure_code:null},{status:'skipped',failure_code:null}]);

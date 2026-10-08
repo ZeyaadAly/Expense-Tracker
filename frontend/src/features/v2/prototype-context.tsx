@@ -54,3 +54,6 @@ export function usePrototype() {
   if (!value) throw new Error("Prototype provider required");
   return value;
 }
+export function useOptionalPrototype() {
+  return useContext(Context);
+}

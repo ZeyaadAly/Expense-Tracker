@@ -5,7 +5,10 @@ import { usePathname } from "next/navigation";
 import { SidebarSection } from "../../components/v2/app-shell";
 import { Button, Drawer } from "../../components/v2/primitives";
 import { Icon, type IconName } from "../../components/v2/icon";
-import { usePrototype } from "./prototype-context";
+
+
+
+import { useOptionalPrototype } from "./prototype-context";
 import { useAuth } from "../../lib/auth/auth-provider";
 import { useRouter } from "next/navigation";
 import { FeedbackBanner } from "../../components/v2/primitives";
@@ -29,9 +32,9 @@ const navigation: { title: string; items: [string, IconName][] }[] = [
   { title: "Insights", items: [["Analytics", "analytics"]] },
   { title: "Account", items: [["Settings", "settings"]] },
 ];
-export function PrototypeShell({ children, liveAccounts = false }: { children: ReactNode; liveAccounts?:boolean }) {
+export function PrototypeShell({ children, liveAccounts = false, liveTransactions = false }: { children: ReactNode; liveAccounts?:boolean; liveTransactions?:boolean }) {
   const path = usePathname();
-  const { session } = usePrototype();
+  const session = useOptionalPrototype()?.session;
   const { user, signOut } = useAuth();
   const router = useRouter();
   const name = user?.email ?? "Signed-in user";
@@ -110,9 +113,9 @@ export function PrototypeShell({ children, liveAccounts = false }: { children: R
         </Button>
       </header>
       <main id="v2-main" className="v2-main" tabIndex={-1}>
-        <p className="p4-prototype-label">{liveAccounts ? "Development · connected accounts" : "Prototype · fictional data"}</p>
+        <p className="p4-prototype-label">{liveTransactions ? "Development · connected transactions" : liveAccounts ? "Development · connected accounts" : "Prototype · fictional data"}</p>
         {logoutError && <FeedbackBanner tone="error" title={logoutError} />}
-        {liveAccounts || session ? (
+        {liveAccounts || liveTransactions || session ? (
           children
         ) : (
           <section className="p4-panel">

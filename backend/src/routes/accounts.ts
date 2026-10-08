@@ -15,6 +15,7 @@ export function createAccountRouter(service: AccountService, requireAuth: Reques
   });
   router.all("/accounts", requireAuth, allowMethods(["GET", "POST"]));
   router.all("/accounts/:id", requireAuth, allowMethods(["GET", "PUT"]));
+  router.all("/accounts/:id/summary", requireAuth, allowMethods(["GET"]));
   router.all("/accounts/:id/archive", requireAuth, allowMethods(["POST"]));
   router.all("/accounts/:id/restore", requireAuth, allowMethods(["POST"]));
   const owner = (request: Parameters<RequestHandler>[0]) => {
@@ -24,6 +25,10 @@ export function createAccountRouter(service: AccountService, requireAuth: Reques
   router.get("/accounts", async (request, response) => {
     const data = await service.listAccounts(owner(request), validateAccountQuery(request.originalUrl));
     response.json({ data, meta: { count: data.length } });
+  });
+  router.get("/accounts/:id/summary", async (request, response) => {
+    validateQuery(request.originalUrl);
+    response.json({ data: await service.getAccountSummary(owner(request), validateUuid(request.params.id as string)) });
   });
   router.post("/accounts", async (request, response) => {
     validateQuery(request.originalUrl);

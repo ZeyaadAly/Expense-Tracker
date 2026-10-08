@@ -19,6 +19,10 @@ export function isCalendarDate(value: string): boolean {
   return day <= days[month - 1];
 }
 
+export function isPositiveTransactionAmount(value: string): boolean {
+  return /^(0|[1-9][0-9]{0,8})(\.[0-9]{1,2})?$/.test(value) && !/^0(?:\.0{1,2})?$/.test(value);
+}
+
 export function validateTransaction(input: unknown, now = new Date()): TransactionInput {
   if (typeof input !== "object" || input === null || Array.isArray(input)) {
     throw validationError([{ field: "body", message: "Provide a JSON object with all five editable fields." }]);
@@ -36,7 +40,7 @@ export function validateTransaction(input: unknown, now = new Date()): Transacti
   const typeValid = body.type === "income" || body.type === "expense";
   if (typeof body.type === "string" && !typeValid) errors.push({ field: "type", message: "Choose income or expense." });
   if (typeof body.amount === "string" &&
-    (!/^(0|[1-9][0-9]{0,8})(\.[0-9]{1,2})?$/.test(body.amount) || /^0(?:\.0{1,2})?$/.test(body.amount))) {
+    !isPositiveTransactionAmount(body.amount)) {
     errors.push({ field: "amount", message: "Enter a positive amount from 0.01 to 999999999.99 with at most two decimal places." });
   }
   const description = typeof body.description === "string" ? body.description.trim() : "";

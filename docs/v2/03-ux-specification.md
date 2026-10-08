@@ -63,6 +63,8 @@ P0 shows budget warning states within budget/dashboard views; persistent notific
 
 P1 route /accounts/[id] is optional account detail; goal detail can be a P1 expandable panel (no P0 route). Reports/export and notifications stay out of core navigation/header. The layout examples below show the eventual P1 slots, not P0 required controls.
 
+T20 promotes only the focused account detail experience to implemented P1 at `/v2/accounts/[id]` (2026-10-08). The T08 boundary protects the dynamic route. Real account metadata and a read-only account summary show authoritative T18 current/opening balances and all-history income, expenses, incoming/outgoing transfers in EGP. Cards explicitly show amount owed or credit/overpayment. T19 edit/archive/restore dialogs, locks, draft retention, confirmation, recurring pause feedback and safe write handling are shared. Archived details retain history and offer restore; schedules stay paused. Loading, generic not found, retry and retained stale states never fabricate balances. Account-scoped recent activity is intentionally deferred until T21; transfer and filtered transaction actions are omitted until implemented. No fixtures, analytics, forecasts, schema changes or production exposure are added. See [T20 verification](t20-verification.md).
+
 ---
 
 # 4. Global App Layout
@@ -580,7 +582,7 @@ No horizontal scrolling required.
 
 ## 9.6 Pagination
 
-Use default 25 records (maximum 100), Next and Previous based on frontend cursor history. Backend only returns nextCursor/hasMore; no total-page count. Disable Previous on first page. Reset history on query/filter changes and mutations; preserve filter state. Invalid/expired cursor offers refresh from first page; changing data may require refresh. Do not display fabricated total pages.
+Use default 25 records (maximum 100), Next and Previous based on frontend cursor history. Backend only returns nextCursor/hasMore; no total-page count. Disable Previous on first page. Reset history on submitted query/filter changes; preserve filter state through mutations. The explicit T25 integration instruction refines mutation navigation: create returns to page one, edit/delete refresh the current page when valid, and empty continuation pages move backward through local history. Invalid/expired cursor restarts once at page one with feedback and filters preserved. Do not display fabricated total pages. Restore pagination focus to an available local control.
 
 ---
 
@@ -633,6 +635,8 @@ Account detail /accounts/[id] is P1 only.
 ---
 
 # 11. Transfer UX
+
+T28 implements the approved transfer panel and cursor list on Accounts, shared with account-scoped detail history. Forms use real active accounts, explicit debt/credit labels and a From/To/amount/date review. Confirmed writes refresh authoritative T18 values; no browser balance arithmetic or optimistic transfer mutation. DATABASE_UNAVAILABLE 503 can follow COMMIT and is treated as uncertain for transfers. Retain draft/context, block resubmission, inspect with GETs and require explicit user review before a deliberate retry; similar creates are separate records. Historical archived references remain named, edits require active resulting accounts and deletion remains available. No dedicated transfer route or extra filter UI. See [T28 verification](t28-verification.md).
 
 P0 launched from Accounts page; P1 may launch from account detail. Fields: From, To, exact amount, date, optional note; select distinct active owned accounts. Show source/destination and amount in confirmation, pending and uncertain-outcome states. Transfer list supports cursor Next/Previous, edit and delete confirmation; hard deletion recomputes balances and is allowed for archived parent history. Card payment reduces asset balance and positive card debt, with no duplicate expense. Transfer is neutral labeling, never ordinary income/expense.
 
@@ -1537,6 +1541,14 @@ T04 uses a dominant net-position overview and account rail, desktop transaction 
 Create/edit drafts retain exact signed decimal strings and backend field errors. Permanent API lock metadata disables opening-balance changes and credit-card/asset conversion after posted activity. Archive confirms retained history and automatic recurring pause; restore explains that recurring schedules require separate resume. Pending submissions are guarded; uncertain writes offer a read refresh and inspection without repeating the write. Confirmed saves followed by failed reads close the form and announce “Saved, but accounts could not refresh.” Retry performs reads only.
 
 Session changes unmount owner-specific state and cancel requests; 401 follows the existing protected boundary. Account preview selectors/fixtures are absent from this route. Transfers remain visibly disabled until their integration task. Other financial routes and design-system specimens retain their isolated fixtures. V2 remains development-only. See [T19 verification](t19-verification.md).
+
+### T25 connected Transactions behavior
+
+`/v2/transactions` uses real T10/T21–T24 authenticated data and bypasses fixture state, preserving the approved desktop ledger, mobile cards and dialog styling. Explicit search submission and active chips represent server query state. All/Income/Expense, owned active/archived historical accounts/categories, inclusive date bounds and All/Manual/Generated compose on the server. Mobile filters use the existing drawer. No page-size selector, browser totals or URL synchronization is added.
+
+Initial loading/error never fabricates transactions. Later reads retain known rows with loading/stale feedback and suspend row actions until the current scope is confirmed. No transactions and no matching filters have distinct empty actions. Exact string amount/date-only drafts use Cairo today and active compatible form choices; archived current references remain visible but must be replaced/restored before an edit can save. Generated posting edits/deletes retain the existing schedule/occurrence policy.
+
+Pending writes block repeats/dismissal. Validation focuses the first invalid field and preserves drafts. Confirmed writes remain successful if their subsequent list read fails; retries read only. Uncertain writes preserve context and disable resubmission while offering read-only inspection. Owner/session changes discard rows, options, cursors and dialogs before new-owner loading; 401 delegates to T08. See [T25 verification](t25-verification.md).
 
 ### Frozen money contract
 

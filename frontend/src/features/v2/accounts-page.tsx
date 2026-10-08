@@ -1,15 +1,19 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { useAuth } from "../../lib/auth/auth-provider";
 import { createAccountClient, validateAccountInput, accountTypes, type Account, type AccountInput, type AccountStatus } from "../../lib/api/accounts";
 import { createAccountsStore } from "../../lib/accounts-store";
 import { PrototypeShell } from "./shell";
+import { TransfersPanel } from "./transfers-panel";
 import { PageHeader } from "../../components/v2/app-shell";
 import { AccountCard, SummaryCard } from "../../components/v2/finance";
 import { Button, DialogShell, EmptyState, ErrorState, FeedbackBanner, FormField, MoneyInput, SegmentedControl, Select, Skeleton, StaleIndicator, TextInput } from "../../components/v2/primitives";
 
-const labels={cash:'Cash',bank:'Bank',savings:'Savings',credit_card:'Credit card',mobile_wallet:'Mobile wallet',other:'Other'};
-type Action={kind:'create'|'edit'|'archive'|'restore';account?:Account};
+export const accountTypeLabels={cash:'Cash',bank:'Bank',savings:'Savings',credit_card:'Credit card',mobile_wallet:'Mobile wallet',other:'Other'};
+const labels=accountTypeLabels;
+export type AccountAction={kind:'create'|'edit'|'archive'|'restore';account?:Account};
+type Action=AccountAction;
 export function AccountsPage() {
   const {user}=useAuth();return user?<ConnectedAccounts key={user.id} userId={user.id}/>:null;
 }
@@ -33,12 +37,12 @@ function ConnectedAccounts({userId}:{userId:string}) {
     {state.summary?<SummaryCard label="Net position" value={state.summary.netPosition} emphasis caption="Includes archived accounts. Positive credit-card balance is debt; negative card balance is a credit."/>:state.loading?<Skeleton variant="metric"/>:<p className="v2-helper">Net position is unavailable.</p>}
     <SegmentedControl label="Account status" options={['Active','Archived']} value={state.status==='active'?'Active':'Archived'} onChange={value=>{if(!state.pending)void store.refresh(value.toLowerCase() as AccountStatus);}}/>
     {state.loading&&<p role="status">Loading accounts…</p>}
-    {state.accounts===null?state.loading?<div className="p4-account-grid"><Skeleton variant="account"/><Skeleton variant="account"/></div>:null:state.accounts.length===0?<EmptyState title={state.status==='active'?'No accounts yet.':'No archived accounts.'} description={state.status==='active'?'Add an account to start your financial picture.':'Archived accounts remain in history and net position.'} action={state.status==='active'?<Button onClick={()=>open({kind:'create'})}>Add your first account</Button>:undefined}/>:<div className="p4-account-grid">{state.accounts.map(account=><div key={account.id}><AccountCard account={{id:account.id,name:account.name,type:account.type,balance:account.currentBalance,archived:account.status==='archived'}}/><div className="v2-actions"><Button variant="text" disabled={state.pending} onClick={()=>open({kind:'edit',account})}>Edit<span className="v2-sr-only"> {account.name}</span></Button><Button variant="text" disabled={state.pending} onClick={()=>open({kind:account.status==='active'?'archive':'restore',account})}>{account.status==='active'?'Archive':'Restore'}<span className="v2-sr-only"> {account.name}</span></Button></div></div>)}</div>}
-    <section className="p4-panel"><h2>Transfers</h2><Button disabled>New transfer</Button><p className="v2-helper">Transfers are not available yet. Account balances reflect posted activity only.</p></section>
+    {state.accounts===null?state.loading?<div className="p4-account-grid"><Skeleton variant="account"/><Skeleton variant="account"/></div>:null:state.accounts.length===0?<EmptyState title={state.status==='active'?'No accounts yet.':'No archived accounts.'} description={state.status==='active'?'Add an account to start your financial picture.':'Archived accounts remain in history and net position.'} action={state.status==='active'?<Button onClick={()=>open({kind:'create'})}>Add your first account</Button>:undefined}/>:<div className="p4-account-grid">{state.accounts.map(account=><div key={account.id}><AccountCard account={{id:account.id,name:account.name,type:account.type,balance:account.currentBalance,archived:account.status==='archived'}}/><div className="v2-actions"><Link href={`/v2/accounts/${account.id}`}>View account<span className="v2-sr-only"> {account.name}</span></Link><Button variant="text" disabled={state.pending} onClick={()=>open({kind:'edit',account})}>Edit<span className="v2-sr-only"> {account.name}</span></Button><Button variant="text" disabled={state.pending} onClick={()=>open({kind:account.status==='active'?'archive':'restore',account})}>{account.status==='active'?'Archive':'Restore'}<span className="v2-sr-only"> {account.name}</span></Button></div></div>)}</div>}
+    <TransfersPanel userId={userId} refreshBalances={()=>store.refresh()} disabled={state.pending}/>
     {action&&<AccountDialog key={action.kind+action.account?.id} action={action} state={state} store={store} client={client} close={close}/>}
   </PrototypeShell>;
 }
-function AccountDialog({action,state,store,client,close}:{action:Action;state:ReturnType<ReturnType<typeof createAccountsStore>['getSnapshot']>;store:ReturnType<typeof createAccountsStore>;client:ReturnType<typeof createAccountClient>;close:()=>void}) {
+export function AccountDialog({action,state,store,client,close}:{action:Action;state:ReturnType<ReturnType<typeof createAccountsStore>['getSnapshot']>;store:ReturnType<typeof createAccountsStore>;client:ReturnType<typeof createAccountClient>;close:()=>void}) {
   const prefix=useId(),account=action.account,editing=action.kind==='edit',form=editing||action.kind==='create';
   const [draft,setDraft]=useState<AccountInput>({name:account?.name??'',type:account?.type??'cash',openingBalance:account?.openingBalance??'0.00'});
   const [errors,setErrors]=useState<Record<string,string>>({});

@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "checks": 8,
+  "results": [
+    "mobile Next and focus after terminal page",
+    "mobile Previous and focus on first page",
+    "mobile real filter resets cursor scope",
+    "mobile account and category composition",
+    "submitted search resets page history",
+    "overlapping stale browser read suppressed",
+    "V1 public page and compatibility reads stay available without V2 Authorization",
+    "no focused browser runtime errors"
+  ],
+  "realApi": true,
+  "realPostgres": true,
+  "remoteTouched": false
+}

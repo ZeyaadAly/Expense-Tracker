@@ -7,9 +7,15 @@ import {Client,Pool} from 'pg';
 import {categoryMap} from './v2-migration-rehearsal.mjs';
 import {verifyAccountApi} from '../tests/helpers/account-api.mjs';
 import {verifyAccountBalances} from '../tests/helpers/account-balances.mjs';
+import {verifyV2Transactions} from '../tests/helpers/v2-transactions.mjs';
+import {verifyV2Search} from '../tests/helpers/v2-search.mjs';
+import {verifyV2Filters} from '../tests/helpers/v2-filters.mjs';
+import {verifyV2Pagination} from '../tests/helpers/v2-pagination.mjs';
+import {verifyV2Transfers} from '../tests/helpers/v2-transfers.mjs';
+import {verifyTransferConcurrency} from '../tests/helpers/transfer-concurrency.mjs';
 import {isolationUsers,disposableIsolationUrl,prepareIsolationDatabase,createTestUser,createOwnedFixtures,financialSnapshot,expectOwnershipRejected,expectApiError,expectForeignResourceHidden,createTestAuthHarness} from '../tests/helpers/v2-isolation.mjs';
 
-export async function verifyIsolation(connectionString) {
+export async function verifyIsolation(connectionString,options={}) {
   const url=disposableIsolationUrl(connectionString),admin=new Client({connectionString:url.href});await admin.connect();
   let runtime,pool,auth;const logs=[],originalError=console.error;
   const counts={api:0,dbRejections:0,positiveDb:0,boundary:0,concurrent:0};
@@ -128,7 +134,13 @@ export async function verifyIsolation(connectionString) {
     for(const secret of [...Object.values(tokens),missingToken,a.userId,b.userId,'Denied cross-owner payload','Old V1 probe'])assert.ok(!logs.join('\n').includes(secret));counts.boundary++;
     const accounts=await verifyAccountApi({admin,runtime,pool,auth,tokens});
     const balances=await verifyAccountBalances({admin,runtime,pool,auth});
-    return {counts,totalChecks:Object.values(counts).reduce((sum,n)=>sum+n,0),accounts,balances,failures:0,migrations,users:3,financialTotals:{count:4,income:'30.00',expenses:'10.00',balance:'20.00'},financialStateUnchangedBeforeAccountLifecycle:true,realJwtMiddleware:true,remoteTouched:false};
+    const transactions=await verifyV2Transactions({admin,runtime,pool,auth});
+    const search=await verifyV2Search({admin,runtime,pool,auth});
+    const filters=await verifyV2Filters({admin,runtime,pool,auth});
+    const pagination=await verifyV2Pagination({admin,runtime,pool,auth});
+    const transfers=await verifyV2Transfers({admin,runtime,pool,auth});
+    const transferConcurrency=options.transferConcurrency?await verifyTransferConcurrency({admin,runtime,pool,auth}):undefined;
+    return {counts,totalChecks:Object.values(counts).reduce((sum,n)=>sum+n,0),accounts,balances,transactions,search,filters,pagination,transfers,...(transferConcurrency?{transferConcurrency}:{}),failures:0,migrations,users:(await admin.query('SELECT count(*)::int n FROM auth.users')).rows[0].n,financialTotals:{count:4,income:'30.00',expenses:'10.00',balance:'20.00'},financialStateUnchangedBeforeAccountLifecycle:true,realJwtMiddleware:true,remoteTouched:false};
   } finally {
     console.error=originalError;if(runtime){await runtime.query('ROLLBACK').catch(()=>{});await runtime.end();}await admin.query('ROLLBACK').catch(()=>{});if(auth)await auth.close();if(pool)await pool.end();await admin.end();
   }

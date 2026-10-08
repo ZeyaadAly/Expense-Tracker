@@ -12,12 +12,18 @@ import { createProfileRouter } from "./routes/profiles.js";
 import type { ProfileService } from "./services/profiles.js";
 import type { AccountService } from "./services/accounts.js";
 import { createAccountRouter } from "./routes/accounts.js";
+import type {V2TransactionService} from "./services/v2-transactions.js";
+import {createV2TransactionRouter} from "./routes/v2-transactions.js";
+import type {TransferService} from "./services/transfers.js";
+import {createTransferRouter} from "./routes/transfers.js";
 
 export function createApp(options: {
   clientOrigin: string;
   databaseHealth: () => Promise<boolean>;
   additionalRoutes?: Router;
   transactions?: TransactionService;
+  v2Transactions?: V2TransactionService;
+  transfers?: TransferService;
   categories?: CategoryService;
   profiles?: ProfileService;
   accounts?: AccountService;
@@ -46,6 +52,8 @@ export function createApp(options: {
   if (options.categories) v2.use(createCategoryRouter(options.categories, createRequireAuth(options.supabaseUrl)));
   if (options.profiles) v2.use(createProfileRouter(options.profiles, createRequireAuth(options.supabaseUrl)));
   if (options.accounts) v2.use(createAccountRouter(options.accounts, createRequireAuth(options.supabaseUrl)));
+  if (options.v2Transactions) v2.use(createV2TransactionRouter(options.v2Transactions, createRequireAuth(options.supabaseUrl)));
+  if (options.transfers) v2.use(createTransferRouter(options.transfers, createRequireAuth(options.supabaseUrl)));
   v2.use(routeNotFound);
   v2.use(errorHandler);
   app.use("/api/v2", v2);

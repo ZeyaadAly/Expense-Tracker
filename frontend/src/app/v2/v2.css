@@ -11,6 +11,27 @@
   --color-v2-border: var(--v2-border);
 }
 
+/* T28 shares the approved transfer panel, fields and review; long history wraps. */
+.transfers-connected { min-width: 0; }
+.transfer-history-row > div { min-width: 0; }
+.transfer-history-row h3, .transfer-history-row p, .transfer-review dd,
+.transfer-review p, .transfer-inspection dd, .transfer-inspection p { overflow-wrap: anywhere; }
+.transfer-history-row { align-items: start; gap: var(--v2-space-4); }
+.transfer-review, .transfer-inspection { margin-top: var(--v2-space-4); }
+.transfer-inspection .v2-transfer-summary { margin-bottom: var(--v2-space-4); }
+@media (max-width: 767px) {
+  .transfer-history-row { flex-wrap: wrap; }
+  .transfer-history-row > div:first-child { flex-basis: 100%; }
+}
+
+/* T25 uses the approved filters, with the existing mobile drawer presentation. */
+.v2-theme .t25-mobile-filters { display: none; }
+.transactions-connected .v2-filter-chip { max-width: 100%; overflow-wrap: anywhere; white-space: normal; }
+@media (max-width: 767px) {
+  .v2-theme .t25-mobile-filters { display: inline-flex; }
+  .t25-desktop-filters { display: none; }
+}
+
 /* All V2 variables/selectors are isolated: no changes to :root, body or V1. */
 .v2-theme {
   --v2-canvas: #f5f6f2;
@@ -1390,3 +1411,12 @@
 }
 .v2-mobile-brand, .v2-brand { min-height: 44px; display: flex; align-items: center; }
 .v2-form-group { min-width: 0; margin: 0; padding: 0; border: 0; }
+
+.account-detail { min-width: 0; display: grid; gap: 24px; }
+.account-detail .v2-page-header h1 { overflow-wrap: anywhere; }
+.account-detail-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.account-detail-summary > * { min-width: 0; overflow-wrap: anywhere; }
+.account-detail-metadata { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.account-detail-metadata dd { margin: 4px 0 0; overflow-wrap: anywhere; }
+@media (max-width: 900px) { .account-detail-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 500px) { .account-detail-summary, .account-detail-metadata { grid-template-columns: minmax(0, 1fr); } }

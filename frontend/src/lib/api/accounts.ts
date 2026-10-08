@@ -8,6 +8,7 @@ export type AccountStatus = "active" | "archived";
 export type AccountInput = {name:string; type:AccountType; openingBalance:string};
 export type Account = AccountInput & {id:string; currentBalance:string; openingBalanceEditable:boolean; currency:"EGP"; status:AccountStatus; createdAt:string; updatedAt:string};
 export type AccountSummary = {netPosition:string; currency:"EGP"};
+export type AccountDetailSummary = {currentBalance:string;openingBalance:string;totalIncome:string;totalExpenses:string;incomingTransfers:string;outgoingTransfers:string;currency:"EGP"};
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const decimal = /^-?(0|[1-9]\d*)\.\d{2}$/;
 const object = (value:unknown): value is Record<string,unknown> => typeof value==='object' && value!==null && !Array.isArray(value);
@@ -34,6 +35,13 @@ export function createAccountClient(expectedUserId:string,transport=createV2ApiC
   function resource(envelope:V2Envelope<unknown>|undefined,write=false,id?:string) {const value=parseAccount(envelope?.data,write);if(id&&value.id!==id)throw invalid(write);return value;}
   function path(id:string) {if(!uuid.test(id))throw new V2ApiError(0,'INVALID_REQUEST','unexpected');return '/accounts/'+id;}
   return {
+    getAccount:async(id:string,options?:V2RequestOptions)=>resource(await transport.get(path(id),options),false,id),
+    async getAccountSummary(id:string,options?:V2RequestOptions):Promise<AccountDetailSummary> {
+      const value=(await transport.get(path(id)+'/summary',options))?.data;
+      const keys=['currentBalance','openingBalance','totalIncome','totalExpenses','incomingTransfers','outgoingTransfers'];
+      if(!object(value)||value.currency!=='EGP'||keys.some(key=>typeof value[key]!=='string'||!decimal.test(value[key] as string))||Object.keys(value).some(key=>!keys.includes(key)&&key!=='currency'))throw invalid();
+      return value as AccountDetailSummary;
+    },
     async listAccounts(status:AccountStatus='active',options?:V2RequestOptions) {
       const result=await transport.get<unknown,{count:number}>('/accounts',{...options,query:{status}});
       if(!Array.isArray(result?.data)||result.meta?.count!==result.data.length)throw invalid();

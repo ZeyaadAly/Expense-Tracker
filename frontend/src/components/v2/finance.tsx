@@ -204,6 +204,7 @@ export type TransactionFixture = {
   type: "income" | "expense";
   amount: string;
   historical?: boolean;
+  generated?: boolean;
 };
 function dateLabel(date: string) {
   const [year, month, day] = date.split("-");
@@ -274,6 +275,7 @@ export function TransactionRow({
       </td>
       <td>
         <strong>{transaction.description}</strong>
+        {transaction.generated && <span className="v2-helper">Generated transaction</span>}
         {transaction.historical ? (
           <span className="v2-helper">
             Archived account/category · historical record
@@ -314,6 +316,7 @@ export function TransactionCard({
         <time dateTime={transaction.date}>{dateLabel(transaction.date)}</time>
       </header>
       <h3>{transaction.description}</h3>
+      {transaction.generated && <p className="v2-helper">Generated transaction</p>}
       <p className="v2-helper">
         {transaction.category} · {transaction.account}
         {transaction.historical ? " · Archived history" : ""}

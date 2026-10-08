@@ -536,6 +536,14 @@ T17 rejects controls, lone surrogates and names containing only whitespace/forma
 
 Returns one owned account.
 
+### T20: GET `/accounts/:id/summary`
+
+Authenticated, read-only, no query parameters, GET only, `Cache-Control: no-store`. The ID must be a UUID. Scope exclusively by verified `req.auth.userId`; missing and foreign accounts both return the existing `404 NOT_FOUND` envelope. No ownership fields are returned.
+
+Response `data`: `{currentBalance, openingBalance, totalIncome, totalExpenses, incomingTransfers, outgoingTransfers, currency: "EGP"}`. Every monetary field is an exact two-decimal string; derived values are unrestricted. All persisted owned transaction/transfer history is included, including archived accounts. Income/expenses are transaction amounts; incoming/outgoing totals reflect transfer direction and are not transaction income/expense. Credit-card `currentBalance` retains debt-positive/credit-negative semantics.
+
+One parameterized statement reuses T18's scoped grouped balance CTE and sole balance formula. Additional grouped totals cannot multiply transactions by transfers. Reads neither lock nor mutate rows. The frontend checks agreement of separately fetched resource/summary current and opening balances before publishing; a concurrent-write mismatch retains the previous consistent view with retry. No activity API, mutation, schema, analytics or transfer endpoint is introduced.
+
 Cross-user/unknown resource:
 
 ```text
@@ -588,7 +596,25 @@ Do not expose `userId`. Include recurringOccurrenceDate as nullable date-only ou
 
 # 25. GET `/transactions`
 
-Queries: type income/expense, accountId/categoryId UUID, inclusive from/to, q, recurring generated/manual, limit/cursor. Omit recurring for all; `all` is invalid. Server-side description/account/category name search; empty q normalizes to omitted; trim q up to 200 Unicode code points. Normalize scope before cursor comparison. Result includes only verified user records; invisible referenced filter IDs return 404 NOT_FOUND, no existence leakage. Date range may include future boundaries for search but manual writes cannot be future; invalid from>to rejected.
+T24 implemented stage: authenticated `/api/v2/transactions` accepts exactly `q`, `type`, `accountId`, `categoryId`, `from`, `to`, `recurring`, `limit`, and `cursor`. Return `{data, meta: {limit, nextCursor, hasMore}}`, ordered date DESC, createdAt DESC, id DESC. Default limit 25, maximum 100; fetch limit+1 to determine continuation. No count, total-count query, offset, page number or previousCursor. All supplied filters combine with AND; the three-field search OR group remains parenthesized within that conjunction.
+
+| Parameter | Current behavior |
+|---|---|
+| q | Optional case-insensitive literal substring across description/account name/category name; trim outer whitespace; blank means omitted; maximum 200 Unicode code points. Bound ILIKE patterns escape `%`, `_`, and `!` using `ESCAPE '!'`; backslashes and quotes are literal. No Unicode normalization or accent removal; case behavior follows PostgreSQL locale. |
+| type | Exactly lowercase `income` or `expense`; omit for both. |
+| accountId | Canonical hyphenated UUID, case-insensitive syntax normalized lowercase. Reference must belong to the verified user, including archived accounts. |
+| categoryId | Canonical hyphenated UUID, normalized lowercase. System categories or the verified user's custom categories are visible, including archived history. |
+| from | Optional inclusive lower date bound, real YYYY-MM-DD from 1900-01-01 through 9999-12-31. |
+| to | Optional inclusive upper date bound with the same format/range; when both are supplied, from must be <= to. |
+| recurring | Exactly `manual` (recurring_transaction_id IS NULL) or `generated` (IS NOT NULL). Omit for both; explicit `all` is invalid. Lists posted transactions, never forecasts or definitions. |
+| limit | Optional canonical decimal integer 1–100, default 25 only when omitted; reject blank, whitespace, leading zeroes, signs, decimals, exponent forms and repeated values. |
+| cursor | Optional versioned URL-safe HMAC-SHA256 token, maximum 2,048 characters. Blank/malformed/tampered/expired/wrong-user/resource/scope cursors return 400 VALIDATION_ERROR with a generic cursor field message. |
+
+Validate the original URL so repeated scalar keys and bracket/object/array notation are rejected. Unknown keys, blank non-q values, invalid enum/UUID/calendar values, reversed ranges, overlong q and null characters return 400 VALIDATION_ERROR before SQL. URL values are strings, so q=null searches the literal word. Malformed encoding in typed filters fails their format checks; q retains T22 URLSearchParams decoding semantics. Query validation does not apply write-time future-date restrictions: future read ranges are valid and can return empty results without timezone shifting dates.
+
+Invisible account/category filter references return 404 NOT_FOUND, exactly the same status/code/message/details as a nonexistent reference. Validation uses owner-scoped reference queries; no global lookup, owner/name exposure or 403. Visible references with no matching transactions return a normal empty 200 list; a visible expense-only category combined with type=income also returns empty, without cross-filter kind inference. Account/category visibility checks deliberately precede other result predicates, even if those predicates would otherwise yield no rows. No active-status restriction applies to historical references.
+
+The transaction SQL itself always binds authenticated ownership and preserves ownership-safe joins; search does not inspect money, IDs, ownership, JWT claims or unrelated metadata. Resource fields and exact-money mapping are unchanged. Detail and mutation routes still reject all query parameters. T24 cursor scope is SHA-256 of fixed-order normalized q/type/accountId/categoryId/from/to/recurring/limit, excluding the cursor. Trimmed q, blank/omitted q, normalized UUID case and omitted/explicit default limit canonicalize consistently; other scope changes require a fresh first page. The signed version-1 payload binds the transactions resource, verified owner, last returned date/createdAt/id, scope hash and issuance/24-hour expiry. Signature protection is not encryption. Never embed descriptions, names, tokens or secrets. Validate cursor before reference lookup or transaction SQL. Continuation compares `(transaction_date, created_at, id) < (cursorDate, cursorCreatedAt, cursorId)` with typed bound parameters; cursor timestamps preserve all six PostgreSQL microsecond digits in UTC, while public timestamps retain existing mapping. Empty/final pages return nextCursor=null and hasMore=false. A deleted anchor still permits continuation; newer insertions do not shift traversed pages. Edits/deletes can change membership; paging is not an immutable snapshot. Secret rotation invalidates old cursors; restart from the first page. Frontend integration remains T25.
 
 ---
 
@@ -666,6 +692,8 @@ Returns one owned transaction.
 
 # 29. PUT `/transactions/:id`
 
+T21 requires all six editable fields, identical to POST; unknown fields including owner, currency, timestamps and recurring linkage are rejected. POST returns 201 with Location; PUT returns 200. Both require an owned active account and a visible active compatible category, even when the resulting references are unchanged. Archived references return 409 ACCOUNT_ARCHIVED/CATEGORY_ARCHIVED; invisible references return the same 404 as missing references. Financial fields on generated rows may change; ID, createdAt, owner, retained legacy category and generated occurrence identity remain unchanged. Description trims to 1–200 Unicode code points; amount is a decimal string from 0.01 through 999999999.99. No JavaScript money arithmetic is used.
+
 Full update body:
 
 ```json
@@ -719,6 +747,10 @@ Example:
 
 Optional accountId (either side), inclusive from/to, limit/cursor. Same signed cursor/meta as §11, with resource/filter scope bound. Sort date DESC, createdAt DESC, id DESC. Return transfer resource array; invisible account filter ID → 404 NOT_FOUND. P0 accounts page includes a transfer list/edit/delete flow without requiring account detail route.
 
+T26 implements this authenticated list with exactly `accountId`, `from`, `to`, `limit`, `cursor`; search/type/category/recurring and all other parameters are rejected. Account UUID syntax, repeated/bracketed scalar rejection, inclusive one-sided real date bounds (1900-01-01–9999-12-31), limit 1–100/default 25 and cursor length/encoding reuse T23/T24 validation. Read ranges may be future dates. Account filtering matches either direction, combines with dates using AND and permits archived history. Foreign and missing filter references return identical 404 NOT_FOUND responses before result predicates, even for an otherwise empty range.
+
+T24's signing codec is reused with the explicit `transfers` resource. The fixed-order scope hash covers normalized accountId/from/to/limit; omitted and explicit default limit canonicalize identically. Decode/signature/user/resource/24-hour expiry/scope validation precedes reference lookup or transfer SQL. Keyset comparison preserves all six PostgreSQL timestamp fractional digits; public timestamps remain UTC ISO strings. Fetch limit+1; return only `{limit,nextCursor,hasMore}` metadata, with null continuation on empty/final pages. No count/offset/previous cursor. Missing/malformed server-only CURSOR_SIGNING_SECRET returns safe 503 CURSOR_UNAVAILABLE for transfer listing without SQL; CRUD and public health remain available. Rotation invalidates existing cursors. Paging is not a historical snapshot; deleted anchors still permit continuation.
+
 ---
 
 # 33. POST `/transfers`
@@ -753,6 +785,10 @@ Response:
 
 Transfer creation must be atomic.
 
+T26 POST and full PUT accept only required sourceAccountId/destinationAccountId/amount/date and optional description. Omitted/null/blank description becomes null; supplied text trims to at most 200 Unicode code points, rejecting null bytes and invalid Unicode without truncation. Amount uses the existing exact-positive decimal-string validator and normalizes to two decimals; JSON numbers/exponents/excess scale/zero/negative/out-of-range values fail. IDs normalize lowercase. Same-account input returns 400 VALIDATION_ERROR with a destinationAccountId field error. All owner, currency, ID, timestamps and unknown fields are rejected. POST returns 201 with Location; public resources expose exactly §31 fields, including current owned account names and no userId.
+
+Account checks use owner-scoped row locks. Visibility of both endpoints is checked before status: foreign/missing references have the same generic 404 NOT_FOUND, including when the other owned account is archived. Owned archived resulting references return 409 ACCOUNT_ARCHIVED. No client identity is trusted; every read/lock/write scopes the T09 verified req.auth.userId.
+
 ---
 
 # 34. GET `/transfers/:id`
@@ -764,6 +800,10 @@ Returns owned transfer.
 # 35. PUT `/transfers/:id`
 
 Supported in P0. Full create semantic fields; description optional/null. Require distinct owned active resulting accounts, exact amount/manual date. Lock old and new accounts consistently; mutation atomic, derived balances recomputed. Return 200 transfer resource.
+
+T26 requires active resulting references even when their IDs are unchanged. Restore first or replace archived endpoints with distinct active owned accounts; historical GET/list remain visible with one or both parents archived. PUT preserves ID/owner/createdAt and updates updatedAt through the existing trigger. Omitted description clears the note, matching full update semantics.
+
+Create/PUT/DELETE use one checked-out pg client for BEGIN/COMMIT/ROLLBACK. PUT/DELETE first lock the owned transfer row to serialize edits/deletion and discover current old references; then lock the distinct union of old/new owned accounts in UUID order. Create locks both accounts in that same order. T17 account lifecycle operations do not lock transfer children, so there is no reverse parent-to-transfer edge. Hold locks through commit; archive that wins first prevents create/PUT, whereas archive after a committed mutation leaves valid history. The unchanged T15 trigger permanently locks opening balances/card conversion on first activity, including after deletion. T18 is the sole derived balance calculation; no balance reversal writes or paired income/expense transactions exist. Failures roll back row/timestamp/first-activity effects; rollback connection failure discards that client. Connection/commit outcomes may be uncertain: sanitized errors and no automatic mutation retry preserve the existing recovery contract.
 
 ---
 

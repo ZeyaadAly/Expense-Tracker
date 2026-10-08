@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "checks": 10,
+  "results": [
+    "keyboard trap reduced motion 360",
+    "edit draft 360",
+    "edit review 360",
+    "keyboard trap reduced motion 768",
+    "edit draft 768",
+    "edit review 768",
+    "keyboard trap reduced motion 1440",
+    "edit draft 1440",
+    "edit review 1440",
+    "deleted trigger returns focus to surviving Refresh transfers"
+  ],
+  "reducedMotion": true,
+  "realApi": true,
+  "realPostgres": true,
+  "remoteTouched": false
+}

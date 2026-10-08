@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
+import {createGeneratedFixture} from './generated-fixture.mjs';
 import {createAccountBalanceRepository} from '../../dist/services/account-balances.js';
 import {createTestUser,financialSnapshot,expectApiError} from './v2-isolation.mjs';
 
@@ -14,6 +15,7 @@ export async function verifyAccountBalances({admin,runtime,pool,auth}) {
     const result=await runtime.query('INSERT INTO expense_tracker.accounts(user_id,name,type,opening_balance) VALUES($1,$2,$3,$4) RETURNING id',[user.userId,name,type,opening]);return result.rows[0].id;
   }
   async function transaction(id,type,amount,user=owner,extra={}) {
+    if(extra.definition)return (await createGeneratedFixture(runtime,{userId:user.userId,accountId:id,categoryId:type==='income'?'c1200000-0000-4000-8000-000000000001':'c1200000-0000-4000-8000-000000000004',type,amount,description:'T18 posted fixture',date:'1900-01-01',definitionId:extra.definition,occurrenceDate:extra.date})).id;
     const result=await runtime.query(`INSERT INTO expense_tracker.transactions(id,user_id,account_id,category_id,type,amount,description,transaction_date,recurring_transaction_id,recurring_occurrence_date)
       VALUES($1,$2,$3,$4,$5,$6,'T18 posted fixture','1900-01-01',$7,$8) RETURNING id`,[randomUUID(),user.userId,id,type==='income'?'c1200000-0000-4000-8000-000000000001':'c1200000-0000-4000-8000-000000000004',type,amount,extra.definition??null,extra.date??null]);return result.rows[0].id;
   }
@@ -49,7 +51,7 @@ export async function verifyAccountBalances({admin,runtime,pool,auth}) {
   await runtime.query('UPDATE expense_tracker.transfers SET amount=4.00 WHERE id=$1',[removedTransfer]);equal(await balance(mixed),'121.00');await runtime.query('DELETE FROM expense_tracker.transfers WHERE id=$1',[removedTransfer]);equal(await balance(mixed),'117.00');
   const recurring=await account('Recurring reservations','bank');
   const definition=(await runtime.query("INSERT INTO expense_tracker.recurring_transactions(user_id,account_id,category_id,type,amount,description,frequency,start_date) VALUES($1,$2,'c1200000-0000-4000-8000-000000000001','income',999999999.99,'Not posted','monthly','1900-01-01') RETURNING id",[owner.userId,recurring])).rows[0].id;
-  for(const [date,status] of [['1900-01-01','pending'],['1900-02-01','failed'],['1900-03-01','skipped'],['1900-04-01','posted']])await runtime.query("INSERT INTO expense_tracker.recurring_occurrences(user_id,recurring_transaction_id,occurrence_date,status,processed_at) VALUES($1,$2,$3,$4::text,CASE WHEN $4::text='pending' THEN NULL ELSE statement_timestamp() END)",[owner.userId,definition,date,status]);
+  for(const [date,status] of [['1900-01-01','pending'],['1900-02-01','failed'],['1900-03-01','skipped']])await runtime.query("INSERT INTO expense_tracker.recurring_occurrences(user_id,recurring_transaction_id,occurrence_date,status,processed_at) VALUES($1,$2,$3,$4::text,CASE WHEN $4::text='pending' THEN NULL ELSE statement_timestamp() END)",[owner.userId,definition,date,status]);
   equal(await balance(recurring),'0.00');const generated=await transaction(recurring,'income','0.30',owner,{definition,date:'1900-04-01'});
   await runtime.query("UPDATE expense_tracker.recurring_occurrences SET generated_transaction_id=$1 WHERE recurring_transaction_id=$2 AND occurrence_date='1900-04-01'",[generated,definition]);equal(await balance(recurring),'0.30');await runtime.query('DELETE FROM expense_tracker.transactions WHERE id=$1',[generated]);equal(await balance(recurring),'0.00');
   const netAssets=await account('Net bank','bank','100.00',netUser),netNegative=await account('Net negative','cash','-20.00',netUser),netDebt=await account('Net debt','credit_card','40.00',netUser),netCredit=await account('Net credit','credit_card','-10.00',netUser);
@@ -71,6 +73,15 @@ export async function verifyAccountBalances({admin,runtime,pool,auth}) {
   for(const id of [netNegative,netDebt,netCredit])await runtime.query("UPDATE expense_tracker.accounts SET status='archived' WHERE id=$1",[id]);equal(await repo.getNetPosition(netUser.userId),{netPosition:'49.90',currency:'EGP'});
   const foreign=await account('Foreign huge balance','credit_card','999999999.99',other);await transaction(foreign,'expense','999999999.99',other);
   const snapshot=await financialSnapshot(admin);
+  equal(await repo.getAccountSummary(owner.userId,mixed),{currentBalance:'117.00',openingBalance:'100.00',totalIncome:'30.00',totalExpenses:'0.00',incomingTransfers:'2.00',outgoingTransfers:'15.00',currency:'EGP'});
+  equal((await auth.request(token,'/accounts/'+mixed+'/summary')).body.data,await repo.getAccountSummary(owner.userId,mixed));
+  for(const id of [foreign,'00000000-0000-4000-8000-000000000000']) {
+    expectApiError(await auth.request(token,'/accounts/'+id+'/summary'),404,'NOT_FOUND');checks++;
+    await assert.rejects(repo.getAccountSummary(owner.userId,id),e=>e.status===404&&e.code==='NOT_FOUND');checks++;
+  }
+  expectApiError(await auth.request(null,'/accounts/'+mixed+'/summary'),401,'AUTH_REQUIRED');checks++;
+  expectApiError(await auth.request(token,'/accounts/'+mixed+'/summary?userId='+other.userId),400,'VALIDATION_ERROR');checks++;
+  expectApiError(await auth.request(token,'/accounts/'+mixed+'/summary','POST',{}),405,'METHOD_NOT_ALLOWED');checks++;
   equal(await repo.getNetPosition(other.userId),{netPosition:'-1999999999.98',currency:'EGP'});equal(await repo.getNetPosition(owner.userId),netBefore);
   equal((await auth.request(netToken,'/accounts/summary')).body.data,{netPosition:'49.90',currency:'EGP'});
   equal((await auth.request(otherToken,'/accounts/summary')).body.data,{netPosition:'-1999999999.98',currency:'EGP'});
@@ -81,6 +92,7 @@ export async function verifyAccountBalances({admin,runtime,pool,auth}) {
       const list=await auth.request(userToken,'/accounts?status='+status);equal(list.status,200);equal(list.body.data,await repo.getAccountBalances(user.userId,status));
       for(const row of list.body.data) {
         equal((await auth.request(userToken,'/accounts/'+row.id)).body.data,row);equal(await repo.getAccountBalance(user.userId,row.id),row);
+        const detailSummary=await auth.request(userToken,'/accounts/'+row.id+'/summary');equal(detailSummary.status,200);equal(detailSummary.body.data.currentBalance,row.currentBalance);equal(detailSummary.body.data.openingBalance,row.openingBalance);
         equal(Object.keys(row).sort(),['id','name','type','currency','status','openingBalance','currentBalance','openingBalanceEditable','createdAt','updatedAt'].sort());assert.match(row.currentBalance,/^-?\d+\.\d{2}$/);checks++;
       }
     }

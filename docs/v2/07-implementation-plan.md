@@ -1,7 +1,7 @@
 # Expense Tracker V2 — Implementation Plan
 
 **Version:** 2.0 Planning — T02 decisions recorded
-**Status:** P0 planning frozen; T01–T11 ✅ Completed; T12 ⬜ Next — not started
+**Status:** P0 planning frozen; T01–T28, T30 and T32 ✅ Completed locally; T20 focused P1 promoted; T29 ⬜ Next — dependencies satisfied locally; not started
 **Date:** 2026-10-06  
 **Project:** Expense Tracker  
 **Depends on:**  
@@ -426,9 +426,9 @@ Implement `/accounts`.
 
 ## T20 — Build Account Detail Experience — P1 Optional
 
-**Depends on:** T17/T18/T21/T26 and approved P1 browser UI states. Not a P0 gate.
+**Focused P1 promotion:** T17/T18/T19/T10/T08. Activity remains deferred to T21; transfers remain deferred to T26. Not a P0 gate.
 
-Optional /accounts/[id] with balance, scoped recent transactions, analytics/transfer/archive actions. P0 account cards link to filtered /transactions and accounts transfer panel. Acceptance when promoted: ownership, complete dependency contracts and approved P1 browser UI.
+**Completed locally on 2026-10-08.** `/v2/accounts/[id]` uses authenticated real account resources and a minimal read-only summary endpoint reusing the sole T18 balance CTE. Six authoritative monetary values, metadata, debt/credit semantics, active/archived states and shared T19 edit/archive/restore flows are implemented. No activity fixtures, transaction CRUD, transfer API, analytics, forecast, schema change or remote deployment. Dynamic routes extend T08 protection and safe sign-in return paths. Real disposable JWT/API/PostgreSQL checks passed 599 T16, 263 T17 and 285 balance/summary checks. Frontend tests and real browser acceptance cover session cancellation/isolation, safe errors and responsive/accessibility behavior at 360/768/1440. See [T20 verification](t20-verification.md). T21 is ready and unstarted.
 
 ---
 
@@ -440,7 +440,9 @@ Optional /accounts/[id] with balance, scoped recent transactions, analytics/tran
 
 Split T21a validator/create/read; T21b edit/hard-delete/generated-link preservation; T21c ownership/date/money/archived-state/reconciliation tests. Use transaction_date storage/API date, direct verified owner, active owned account, compatible owned/system category and no client recurring metadata. Account first activity permanently locks opening balance. Preserve durable occurrence on generated hard-delete.
 
-Acceptance: all CRUD/cross-user cases pass; V1 financial routes are blocked/retired, never left publicly operating against V2 data.
+Acceptance: all CRUD/cross-user cases pass. T21 session scope explicitly preserves V1 reads and write compatibility; V1 retirement remains the production maintenance/cutover gate and is not performed here. Public legacy handlers must be retired before any hosted multi-user financial writes.
+
+**Completed locally (2026-10-08):** authenticated five-endpoint transaction CRUD, exact validation, active-reference locking, deterministic basic list, generated marker preservation and read-only V1 category projection. Fresh disposable verification passed 244 transaction checks, four concurrency races and three rollback faults, alongside 599 T16, 263 T17 and 285 balance checks. See [T21 verification](t21-verification.md). T22 is completed locally; see [T22 verification](t22-verification.md). T23 is completed locally; see [T23 verification](t23-verification.md). T24 is completed locally; see [T24 verification](t24-verification.md). T25 is completed locally; see [T25 verification](t25-verification.md). T26 is completed locally; see [T26 verification](t26-verification.md). T27 is completed locally; see [T27 verification](t27-verification.md). T28 is completed locally; see [T28 verification](t28-verification.md). T29 is next and unstarted.
 
 ---
 
@@ -458,6 +460,7 @@ Search:
 - user-scoped;
 - empty query safe;
 - realistic dataset performance acceptable.
+**Completed locally (2026-10-08):** optional q-only authenticated list search, trimmed 0–200 Unicode code points, case-insensitive literal description/account/category matching, parameterized ILIKE and explicit wildcard escaping. Archived history and deterministic ordering are preserved. Fresh disposable verification passed 263 search checks plus all 599 T16, 263 account, 285 balance/summary and 244 T21 checks. Runtime EXPLAIN ANALYZE with 10,000 additional transactions per owner measured 15–28 ms locally; no schema/index/extension change was needed. Backend lint, typecheck, build and full selected suite passed. See [T22 verification](t22-verification.md). No remote changes or frontend integration; T23 filters are now completed below; T24 cursors remain unstarted.
 
 ---
 
@@ -477,6 +480,7 @@ Support:
 - filters compose correctly;
 - invalid combinations rejected safely.
 
+**Completed locally (2026-10-08):** all seven frozen pre-pagination filters, strict scalar validation, inclusive one-sided/future date ranges, manual/generated posted rows and AND composition with T22 search. Owner-scoped reference checks return indistinguishable 404s for foreign/missing filter IDs as required by the frozen API. Archived history remains filterable; visible type/category mismatches return empty lists. Fresh integration passed 3,263 T23 grouped checks across all 128 filter subsets, plus 599 T16, 263 account, 285 balance/summary, 244 T21 and 263 T22 checks. Runtime EXPLAIN on the reused 20k scale fixture measured 2.4–13.6 ms using existing indexes; no schema changes. Backend lint/typecheck/build and full suite passed (53 passed, 0 failed, 14 environment-gated skips). See [T23 verification](t23-verification.md). Nothing applied remotely. T24 cursors and T25 frontend integration remain unstarted.
 ---
 
 ## T24 — Add Cursor Pagination
@@ -485,9 +489,12 @@ Support:
 
 Implement signed HMAC-SHA256/versioned 24h cursor bound to user/resource/filter/search/limit with ordering date DESC,createdAt DESC,id DESC. Default 25 / max 100; backend nextCursor only, frontend Previous through history; generic invalid-cursor400. Reuse for T26 transfers and P1 notifications. Tests cover inserted/deleted/edited records, malformed/tampered/expired/wrong-scope/user cursor, filters and frontend resets. Paging is not a historical snapshot.
 
+**Completed locally (2026-10-08):** bounded keyset pages (default 25/max 100), limit+1 continuation, strict signed version-1 24-hour user/resource/filter/limit-bound cursors and generic validation failures. Full PostgreSQL microseconds preserve tied timestamp boundaries. Dedicated server-only configuration fails safely for listing while V1/health/CRUD remain staged-compatible. Fresh integration passed 6,065 T24 grouped checks, exact traversal of 10,023 rows across 101 pages, and all T16–T23 checks. Existing indexes handled first/deep pages at about 0.39/0.46 ms locally, with search 11–14 ms and account/date pages 0.24–0.27 ms. Backend lint/typecheck/build and full suite passed (58 passed, 0 failed, 15 environment-gated skips). See [T24 verification](t24-verification.md). No remote/schema/frontend changes. T25 is completed locally; see [T25 verification](t25-verification.md). T26 is completed locally; see [T26 verification](t26-verification.md). T27 is completed locally; see [T27 verification](t27-verification.md). T28 is completed locally; see [T28 verification](t28-verification.md). T29 is next and unstarted.
 ---
 
 ## T25 — Build Transactions Page
+
+**Completed locally (2026-10-08):** real T10/T21–T24 authenticated list/search/AND filters/cursor history and CRUD, real account/category choices, exact amount/date drafts, bounded cursor recovery, stale-read/mutation recovery and owner-session isolation. Approved ledger/cards/dialogs preserved; Transactions bypasses fixture state. Frontend lint/typecheck/build and 101 tests pass; 65 primary plus 8 focused local browser checks pass with zero audited axe violations/overflow at 360/768/1440. Full disposable T16–T24 backend regression passes. No remote/schema/transfer/recurring backend changes. See [T25 verification](t25-verification.md). T26 and T27 are completed locally; T28 is completed locally; see [T28 verification](t28-verification.md). T29 is next and unstarted.
 
 Implement `/transactions`.
 
@@ -508,6 +515,8 @@ Implement `/transactions`.
 
 ## T26 — Build Atomic Transfer Backend
 
+**Completed locally (2026-10-08):** five authenticated transfer routes, strict exact-money/manual-date/optional-note validation, ownership-safe mapping and signed resource/scope-bound cursor lists. Mutations serialize the owned transfer and lock all old/new accounts in UUID order on one client; archived history remains readable/deletable, edits require active resulting references. Fresh limited-role JWT/PostgreSQL integration passed **917 grouped transfer checks, 11 forced locking races and 11 rollback faults**, with all four asset/card combinations, exact net-position preservation and unchanged income/expense/V1 summaries. Full backend suite: **79 tests, 63 passed, zero failed, 16 environment-gated skips**, including the complete shared T16–T24 regression. Lint/typecheck/build pass. See [T26 verification](t26-verification.md). No frontend/schema/grant/remote changes. The initial atomicity checks required by T26 passed within this task; the separate T27 focused verification task is now completed; see [T27 verification](t27-verification.md). T28 integration is completed locally; see [T28 verification](t28-verification.md). T29 is next and unstarted.
+
 **Depends on:** T09/T15/T17/T18/T21/T24.
 
 Dedicated transfers create/list/read/edit/hard-delete, positive exact money/manual dates/optional description, distinct owned active accounts for create/edit. Atomicity is mandatory in initial implementation, using one checked-out pg client and consistently ordered old/new account locks. Permanently lock opening balance on first activity; deletes against archived parents allowed. Lists use cursor contract.
@@ -518,6 +527,8 @@ Acceptance includes T27 fault/concurrency checks before T26 is complete; no part
 
 ## T27 — Verify Transfer Atomicity and Concurrency
 
+**Completed locally (2026-10-08):** existing T26 implementation passed focused gap verification with 4,833 grouped checks, 29 forced races, six rollback faults and 180 opposing-account stress mutations with zero observed deadlocks. Actual mutations use READ COMMITTED under the unchanged limited runtime role; uncertain COMMIT produces one committed row without automatic retry. Unchanged T26 and shared T16–T24 regressions pass. Full backend suite: 81 tests, 64 passed, zero failed, 17 environment-gated skips; lint/typecheck/build pass. No production/frontend/schema/grant/remote changes. See [T27 verification](t27-verification.md). T28 is completed locally; see [T28 verification](t28-verification.md). T29 is next and unstarted.
+
 **Depends on:** implemented T26 paths; mandatory delivery gate for T26, not later optional hardening.
 
 Simulate create/edit/delete failures, account archive/edit races, simultaneous first activity/opening edits and repeated submissions; verify rollback/reconciliation and no authorization bypass. Duplicate deliberate transfer requests remain separate records (no mandatory P0 idempotency header); no automatic write retry. T28 waits for T26+T27 acceptance.
@@ -525,6 +536,8 @@ Simulate create/edit/delete failures, account archive/edit races, simultaneous f
 ---
 
 ## T28 — Build Transfer UI
+
+**Completed locally (2026-10-08):** Accounts and account detail share real T10/T26 transfer create/review/edit/delete, active account choices with debt/credit semantics, signed cursor history, GET-only uncertain-write inspection and authoritative T18 balance/net refresh. Actual POST/PUT/DELETE lost-COMMIT acknowledgement, duplicate clicks, archive races, session isolation and persistence pass. Frontend lint/typecheck/build and 116 tests pass; browser 53 main + 10 focused checks include 32 axe audits with zero violations/overflow at 360/768/1440. Fresh unchanged backend regression passes T16–T27. No backend/schema/grant/remote changes; V2 stays development-only. See [T28 verification](t28-verification.md). T29 is next and unstarted.
 
 **Depends on:** T26/T27/T19 and approved T04 P0 browser UI.
 
@@ -546,6 +559,10 @@ Implement accounts transfer form, cursor list, edit and hard-delete confirmation
 
 **Depends on:** T09/T12/T15/T17/**T30/T32**.
 
+**Dependency review (2026-10-08): Blocked; implementation not started.** T30's shared recurrence calculator and T32's durable terminal-marker/reservation invariants must be completed before T29. Existing T11/T15 schema coverage does not complete T32. Execute T30 next, then T32, then return to T29; do not substitute a temporary calculator or weaken lifecycle/history guarantees. See [T29 dependency verification](t29-verification.md).
+
+**Subsequent checkpoint (2026-10-08):** T30 and T32 are now completed locally. The dependency blocker is resolved; return to T29 next. T29 implementation remains unstarted. See [T30 verification](t30-verification.md) and [T32 verification](t32-verification.md).
+
 Create/list/read/edit/pause/resume/archive and upcoming projection. Use fixed startDate anchor, future/today initial occurrence (no past import), active parent validation, immutable generated history and durable terminal markers; nextOccurrence null for paused/archived/exhausted. Archive/account/category operations auto-pause as specified.
 
 Acceptance: lifecycle/month-end/leap-year/past-start/end-date/ownership tests pass; client cannot set generated metadata. Split CRUD validation and lifecycle/projection into reviewable subtasks.
@@ -555,6 +572,8 @@ Acceptance: lifecycle/month-end/leap-year/past-start/end-date/ownership tests pa
 ## T30 — Implement Recurrence Calculator
 
 **Depends on:** T02; precedes T29.
+
+**Completed locally (2026-10-08):** Authoritative pure `backend/src/domain/recurrence.ts` provides on-or-after and strictly-after selection for daily/weekly/monthly/yearly schedules. Original anchors survive month-end/leap-day clamping; inclusive ends and the 9999 upper bound return null when exhausted. Integer calendar arithmetic uses explicit date references without clocks, timezone conversions or dependencies. All 14 recurrence tests pass; backend lint/typecheck/build pass and full backend suite reports 77 passed, 18 disposable-database tests skipped, zero failures. No API/schema/financial/production changes. See [T30 verification](t30-verification.md). T32 is next and unstarted; T29 remains blocked on T32.
 
 Daily/weekly/monthly/yearly anchored on startDate; ISO weekday1–7, month-end clamping preserves anchor, Feb29→Feb28 in nonleap years. First date on/after Cairo today, inclusive end/null exhausted, date upper-bound guard. Pure deterministic tests for creation, pause/resume/edit/forecast and catch-up; no timezone drift.
 
@@ -573,6 +592,8 @@ Acceptance: duplicates/concurrent jobs/generated-delete replay impossible, archi
 ## T32 — Implement Durable Occurrence Persistence
 
 **Depends on:** T11/T15; precedes T29/T31.
+
+**Completed locally (2026-10-08):** Internal occurrence service supports durable idempotent reservation, locked atomic posting, explicit failed recovery and terminal skips. T32 additive migration enforces paired/immutable generated identity, occurrence FK/unique generated pair, terminal history and same-owner/definition/date linkage, with deferred orphan prevention. Forced double-reserve/double-post waits, lost commit acknowledgement, reconnect, six rollback faults, T21 generated edit/delete and T18 exact reconciliation pass. Full backend suite: 79 passed, 18 gated skips, zero failures; T32 focused integration: 103 checks. Fresh T16–T27 regressions also pass with T32 installed and compliant generated fixtures. No public routes, scheduler/frontend, grants or remote production changes. See [T32 verification](t32-verification.md). Return to T29 next; do not start it automatically.
 
 Required recurring_occurrences unique definition/date, direct owner/composite FK, pending/posted/skipped/failed, immutable terminal markers, sanitized failure metadata, nullable generated link ON DELETE SET NULL and same-owner/definition/date validation. Supplemental generated-transaction unique partial index. Runtime cannot delete ledger markers.
 
@@ -1248,7 +1269,7 @@ Task numbers remain stable references, not strict chronology. Required edges:
 | Final validation | all P0 domains + expanding T16 → T57–T64; complete cutover artifacts → T65 |
 | Production | T57–T65 → T66 maintenance/migration → T67 → T68 → T69–T71 controlled gates → write-enable/T72/T73 → T74 → T75 |
 
-T03/T04 fixture UI tasks require no auth client or route guard integration. Later UI integration tasks require approved T04 P0 browser UI plus the real auth client/route guard. Budgets, goals and analytics can proceed in parallel after their dependencies; templates/UI components can proceed after design approval. P1 dependencies: T20 after accounts/transactions/transfers, T35 after recurring/history, T41 after analytics, T47/history after goals/analytics, T50–T52 after source domains, T53–T56 after query/filter domains. Unpromoted P1 is outside the core critical path.
+T03/T04 fixture UI tasks require no auth client or route guard integration. Later UI integration tasks require approved T04 P0 browser UI plus the real auth client/route guard. Budgets, goals and analytics can proceed in parallel after their dependencies; templates/UI components can proceed after design approval. P1 dependencies: focused T20 after accounts/auth (implemented; activity/transfer extensions deferred), T35 after recurring/history, T41 after analytics, T47/history after goals/analytics, T50–T52 after source domains, T53–T56 after query/filter domains. Unpromoted P1 is outside the core critical path.
 
 ---
 
@@ -1339,7 +1360,7 @@ Do not silently let code become the new specification.
 
 # 28. V2 Core Completion Definition
 
-Core V2 completes when every **P0** task/subtask and production gate is complete, including all P0 UX/API/security/migration/financial requirements. P1 T20/T35/T41/T47/T50–T56 are recorded **deferred by T02 P0-only scope**, not completed or necessary to ship. Account/goal detail/history follow the same rule.
+Core V2 completes when every **P0** task/subtask and production gate is complete, including all P0 UX/API/security/migration/financial requirements. P1 T35/T41/T47/T50–T56 remain **deferred by T02 P0-only scope** and are not necessary to ship. T20 is explicitly promoted and completed as focused account detail; its activity/transfer extensions and other P1 enhancements remain deferred.
 
 Required: authenticated multi-user production; exact asset/card/net-worth reconciliation; account-aware transactions; atomic transfers; durable duplicate-safe recurrence; dashboard/chart/previews; analytics/period definitions; budgets/manual goals; core categories/settings; migration field/totals preservation; V1 retired before writes; responsive/accessibility/security/hosted checks; runbooks and handoff. T75 marks **core** complete, not all enhancements implemented. Unpromoted P1 routes/UI/tables/jobs cannot accidentally become required or publicly expose data.
 
@@ -1370,7 +1391,19 @@ Current checkpoint:
 - T17 ✅ Completed — Build Account Backend
 - T18 ✅ Completed — Build Account Balance Queries
 - T19 ✅ Completed — Build Accounts Page
+- T20 ✅ Completed — Focused Account Detail Experience (promoted P1; activity/transfers deferred)
+- T21 ✅ Completed — Upgrade Transaction Backend to V2 Ownership
+- T22 ✅ Completed — Add Server-Side Search
+- T23 ✅ Completed — Add Advanced Filters
+- T24 ✅ Completed — Add Cursor Pagination
+- T25 ✅ Completed — Build Transactions Page
+- T26 ✅ Completed — Build Atomic Transfer Backend
+- T27 ✅ Completed — Verify Transfer Atomicity and Concurrency
+- T28 ✅ Completed — Build Transfer UI
+- T29 ⬜ Next — dependencies satisfied locally; implementation not started
+- T30 ✅ Completed — Implement Recurrence Calculator
+- T32 ✅ Completed locally — Durable Occurrence Persistence
 
-The T04 visual approval gate is satisfied. T05 hosted configuration, T06 Auth helpers, T07 real Auth-page integration and T08 session protection are completed; see [T05 verification](t05-verification.md), [T06 verification](t06-verification.md), [T07 verification](t07-verification.md) and [T08 verification](t08-verification.md). T09 backend identity verification is completed; see [T09 verification](t09-verification.md). T10 is completed; see [T10 verification](t10-verification.md). T11 additive schema preparation and disposable verification are completed; see [T11 verification](t11-verification.md). T12 reference seed and authenticated category reads are completed; see [T12 verification](t12-verification.md). T13 profile provisioning/API and frontend bootstrap gating are completed; see [T13 verification](t13-verification.md). T14 disposable migration rehearsal is completed; see [T14 verification](t14-verification.md). T15 local ownership enforcement preparation is completed; see [T15 verification](t15-verification.md). T16 isolation-suite foundation is completed; see [T16 verification](t16-verification.md). T17 account backend is completed; see [T17 verification](t17-verification.md). T18 balance queries are completed; see [T18 verification](t18-verification.md). T19 Accounts page integration is completed; see [T19 verification](t19-verification.md). T20 remains unstarted and is the optional P1 account-detail task. No remote schema/seed/backfill or final production ownership enforcement was performed. The approved visual design is preserved; Accounts uses real authenticated data; other financial pages retain fixtures. All V2 pages remain development-only. Profile/bootstrap gating precedes protected fixture rendering; full Settings integration remains T49.
+The T04 visual approval gate is satisfied. T05 hosted configuration, T06 Auth helpers, T07 real Auth-page integration and T08 session protection are completed; see [T05 verification](t05-verification.md), [T06 verification](t06-verification.md), [T07 verification](t07-verification.md) and [T08 verification](t08-verification.md). T09 backend identity verification is completed; see [T09 verification](t09-verification.md). T10 is completed; see [T10 verification](t10-verification.md). T11 additive schema preparation and disposable verification are completed; see [T11 verification](t11-verification.md). T12 reference seed and authenticated category reads are completed; see [T12 verification](t12-verification.md). T13 profile provisioning/API and frontend bootstrap gating are completed; see [T13 verification](t13-verification.md). T14 disposable migration rehearsal is completed; see [T14 verification](t14-verification.md). T15 local ownership enforcement preparation is completed; see [T15 verification](t15-verification.md). T16 isolation-suite foundation is completed; see [T16 verification](t16-verification.md). T17 account backend is completed; see [T17 verification](t17-verification.md). T18 balance queries are completed; see [T18 verification](t18-verification.md). T19 Accounts page integration is completed; see [T19 verification](t19-verification.md). T20 is completed as focused promoted P1; see [T20 verification](t20-verification.md). T21 is completed locally; see [T21 verification](t21-verification.md). T22 is completed locally; see [T22 verification](t22-verification.md). T23 is completed locally; see [T23 verification](t23-verification.md). T24 is completed locally; see [T24 verification](t24-verification.md). T25 is completed locally; see [T25 verification](t25-verification.md). T26 is completed locally; see [T26 verification](t26-verification.md). T27 is completed locally; see [T27 verification](t27-verification.md). T28 is completed locally; see [T28 verification](t28-verification.md). T30 is completed locally; see [T30 verification](t30-verification.md). T32 is completed locally; see [T32 verification](t32-verification.md). T29 dependencies are satisfied locally; return to T29 next, with implementation unstarted. No remote schema/seed/backfill or final production ownership enforcement was performed. The approved visual design is preserved; Accounts and Transactions use real authenticated data; other financial pages retain fixtures. All V2 pages remain development-only. Profile/bootstrap gating precedes protected fixture rendering; full Settings integration remains T49.
 
 ---

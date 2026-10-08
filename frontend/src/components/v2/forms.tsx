@@ -1,7 +1,9 @@
 "use client";
 
 import { useId, useState, type ReactNode } from "react";
-import { AccountTypeBadge, MoneyDisplay, TransferBadge } from "./finance";
+import { AccountTypeBadge, MoneyDisplay, TransferBadge, formatDecimal } from "./finance";
+import type { Account } from "../../lib/api/accounts";
+import type { TransferInput } from "../../lib/api/transfers";
 import {
   Button,
   Checkbox,
@@ -156,7 +158,46 @@ export function EditAccountForm({
     </FixtureForm>
   );
 }
-export function TransferForm({ onSubmit }: { onSubmit?: () => void }) {
+export function transferAccountLabel(account: Account) {
+  const money = formatDecimal(account.currentBalance);
+  return `${account.name} — ${account.type === "credit_card" ? money.magnitude + (money.negative ? " EGP credit" : " EGP owed") : (money.negative ? "−" : "") + money.magnitude + " EGP"}${account.status === "archived" ? " (Archived)" : ""}`;
+}
+type LiveTransferForm = { prefix: string; draft: TransferInput; accounts: Account[]; fields: Record<string, string>; disabled: boolean; onChange: (draft: TransferInput) => void };
+export function TransferForm({ onSubmit, live }: { onSubmit?: () => void; live?: LiveTransferForm }) {
+  if (live) {
+    const { prefix, draft, accounts, fields, disabled, onChange } = live;
+    const control = (field: string) => ({ id: `${prefix}-${field}`, disabled, "aria-invalid": !!fields[field], "aria-describedby": fields[field] ? `${prefix}-${field}-error` : undefined });
+    const active = accounts.filter(account => account.status === "active");
+    return <form className="v2-form" aria-label="Transfer" noValidate onSubmit={event => { event.preventDefault(); onSubmit?.(); }}>
+      <TransferBadge />
+      <div className="v2-form-columns">
+        <FormField id={`${prefix}-sourceAccountId`} label="From account" required error={fields.sourceAccountId}>
+          <Select {...control("sourceAccountId")} data-initial-focus value={draft.sourceAccountId} onChange={event => onChange({ ...draft, sourceAccountId: event.target.value, destinationAccountId: draft.destinationAccountId === event.target.value ? "" : draft.destinationAccountId })}>
+            <option value="">Choose From account</option>
+            {accounts.filter(account => account.status === "archived" && account.id === draft.sourceAccountId).map(account => <option key={account.id} value={account.id} disabled>{transferAccountLabel(account)}</option>)}
+            {active.map(account => <option key={account.id} value={account.id}>{transferAccountLabel(account)}</option>)}
+          </Select>
+        </FormField>
+        <FormField id={`${prefix}-destinationAccountId`} label="To account" required error={fields.destinationAccountId}>
+          <Select {...control("destinationAccountId")} value={draft.destinationAccountId} onChange={event => onChange({ ...draft, destinationAccountId: event.target.value })}>
+            <option value="">Choose To account</option>
+            {accounts.filter(account => account.status === "archived" && account.id === draft.destinationAccountId).map(account => <option key={account.id} value={account.id} disabled>{transferAccountLabel(account)}</option>)}
+            {active.filter(account => account.id !== draft.sourceAccountId).map(account => <option key={account.id} value={account.id}>{transferAccountLabel(account)}</option>)}
+          </Select>
+        </FormField>
+      </div>
+      <FormField id={`${prefix}-amount`} label="Amount" required error={fields.amount} hint="EGP. Transfers move money between accounts; they are not income or expense.">
+        <MoneyInput {...control("amount")} aria-describedby={[`${prefix}-amount-hint`, fields.amount ? `${prefix}-amount-error` : ""].filter(Boolean).join(" ")} value={draft.amount} onChange={event => onChange({ ...draft, amount: event.target.value })}/>
+      </FormField>
+      <FormField id={`${prefix}-date`} label="Date" required error={fields.date} hint="Calendar date in Cairo.">
+        <DateInput {...control("date")} aria-describedby={[`${prefix}-date-hint`, fields.date ? `${prefix}-date-error` : ""].filter(Boolean).join(" ")} min="1900-01-01" value={draft.date} onChange={event => onChange({ ...draft, date: event.target.value })}/>
+      </FormField>
+      <FormField id={`${prefix}-description`} label="Description (optional)" error={fields.description} hint="Up to 200 characters.">
+        <Textarea {...control("description")} aria-describedby={[`${prefix}-description-hint`, fields.description ? `${prefix}-description-error` : ""].filter(Boolean).join(" ")} rows={3} value={draft.description ?? ""} onChange={event => onChange({ ...draft, description: event.target.value })}/>
+      </FormField>
+      <Button type="submit" disabled={disabled}>Review transfer</Button>
+    </form>;
+  }
   return (
     <FixtureForm label="Transfer" onSubmit={onSubmit}>
       <TransferBadge />
@@ -196,10 +237,14 @@ export function TransferSummary({
   from,
   to,
   amount,
+  date,
+  description,
 }: {
   from: string;
   to: string;
   amount: string;
+  date?: string;
+  description?: string | null;
 }) {
   return (
     <div className="v2-transfer-summary">
@@ -215,6 +260,8 @@ export function TransferSummary({
         </div>
       </dl>
       <MoneyDisplay value={amount} kind="transfer" />
+      {date && <p><time dateTime={date}>{date}</time></p>}
+      {description && <p>{description}</p>}
       <p className="v2-helper">
         Card payments reduce debt; they do not add an expense.
       </p>
