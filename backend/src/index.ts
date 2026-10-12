@@ -13,7 +13,7 @@ import {createRecurringService} from "./services/recurring.js";
 import {createRecurringProcessor} from "./services/recurring-processor.js";
 
 const app = createApp({ clientOrigin: env.clientOrigin, databaseHealth: isDatabaseReachable, recurringCron:{processor:createRecurringProcessor(pool)}, dashboard:createDashboardService(pool), recurring:createRecurringService(pool), transfers:createTransferService(pool,{cursorSigningSecret:process.env.CURSOR_SIGNING_SECRET}),
-  transactions: createTransactionService(pool), v2Transactions:createV2TransactionService(pool,{cursorSigningSecret:process.env.CURSOR_SIGNING_SECRET}), categories: createCategoryService(pool), profiles: createProfileService(pool), accounts: createAccountService(pool), supabaseUrl: process.env.SUPABASE_URL });
+  financialMode: "maintenance", transactions: createTransactionService(pool), v2Transactions:createV2TransactionService(pool,{cursorSigningSecret:process.env.CURSOR_SIGNING_SECRET}), categories: createCategoryService(pool), profiles: createProfileService(pool), accounts: createAccountService(pool), supabaseUrl: process.env.SUPABASE_URL });
 
 app.listen(env.port, () => {
   console.log(`Expense Tracker API listening on http://localhost:${env.port}`);

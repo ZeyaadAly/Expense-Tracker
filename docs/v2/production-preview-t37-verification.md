@@ -1,6 +1,20 @@
 # T37 production-preview release attempt
 
-Date: 2026-10-12 (Africa/Cairo). **Status: Blocked at Phase 7 — backup/recovery verification.** This is a partial release attempt, not hosted V2 acceptance or whole-project completion. T38 was not started.
+Date: 2026-10-12 (Africa/Cairo). **Current status: Recovery gate passed; ordered production cutover in progress.** This remains a partial release attempt, not hosted V2 acceptance or whole-project completion. T38 was not started. The initial blocked attempt below is historical; the resumption evidence supersedes its recovery/owner status.
+
+## Resumption — verified logical application recovery
+
+Administrative access used only BACKUP_DATABASE_URL from ignored backend/.env.local, with libpq verify-full and the packaged CA. psql 17.11 confirmed the intended project/database/admin identity and client TLS 1.3, TLS_AES_256_GCM_SHA384. Pooler server-side pg_stat_ssl reported false for its separate database hop; this is not the client TLS result.
+
+Full-database pg_dump 17.11 completed with exit 0, custom format, source PostgreSQL 17.11. Artifact: ignored `.tmp-v2-t37/production-backups/20261012T115846Z.dump`, created 2026-10-12 11:58:46 UTC, 423887 bytes, SHA-256 `6fa8267d84be92c93ac7a413edec3aea536d3afb440706e7ca3f377eae27dba0`. pg_restore --list confirmed application objects/data plus Auth and migration-history dependencies. No backup or private snapshot is committed.
+
+The archive's complete expense_tracker schema/data, supabase_migrations history and real auth.users table/data/primary key restored into fresh local t37_restore_20261012 on the guarded ignored loopback cluster. pg_restore used --exit-on-error --single-transaction --no-owner --no-privileges and an explicit archive TOC selection, exit 0. No application restore failure was ignored. Provider-managed services/extensions were deliberately excluded from this local application recovery test; a full Supabase platform disaster recovery is not claimed. The full archive is retained. Role definitions/passwords, provider configuration and Storage object bytes require separate recovery handling; privileges/ownership were not replayed locally and must be reapplied from reviewed migration/catalog evidence on a real recovery target.
+
+All nine application tables' complete row JSON matched production exactly, including original IDs, type, exact amount, description, legacy category, date and microsecond timestamps. Column definitions, indexes, functions, triggers and migration-history rows matched. Seventeen CHECK definitions had normal PostgreSQL dump/reparse representation changes (AND association and array cast placement); adding the original CHECK expressions transactionally in the isolated database produced exactly the restored definitions, then rolled back. All remaining constraints matched directly. The legacy fingerprint equals the original `434c087400fa7760625c24b75bfc4021`; count 1, income 9500.00, expenses 0.00, balance 9500.00. Production backup/validation sessions were read-only.
+
+Production now has one confirmed Auth user. The user explicitly designated that sole confirmed account as the historical-data owner during this resumption. No UUID or sensitive identity is placed in Git. Auth user count also matches the restored archive; identity credentials/session contents were not printed. Financial baseline remains unchanged.
+
+Maintenance enforcement is being prepared before any production backfill: both runtime entry points select maintenance mode; V1/V2 application routes and internal recurring execution return no-store 503, while public health remains available. Retirement mode permanently returns no-store 410 for V1 financial routes when V2 is later enabled. Hosted deployment and privilege enforcement must still pass before mutation.
 
 ## Git and release gate
 

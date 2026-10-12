@@ -36,13 +36,27 @@ export function createApp(options: {
   profiles?: ProfileService;
   accounts?: AccountService;
   supabaseUrl?: string;
+  financialMode?: "maintenance" | "v2";
 }) {
   const app = express();
   app.disable("x-powered-by");
+  const maintenanceResponse = (_request: express.Request, response: express.Response) => {
+    response.set("Cache-Control", "no-store").status(503).json({ error: {
+      code: "MAINTENANCE", message: "Financial services are temporarily unavailable.", details: [],
+    } });
+  };
+  if (options.financialMode === "maintenance") app.all("/internal/recurring/process", maintenanceResponse);
   if (options.recurringCron) app.use(createRecurringCronRouter(options.recurringCron));
   const api = Router();
   api.use((_request, response, next) => { response.set("Cache-Control", "no-store"); next(); });
   api.use(cors({ origin: options.clientOrigin }));
+  if (options.financialMode) api.use((request, response, next) => {
+    if (request.path === "/health") return next();
+    if (options.financialMode === "maintenance") return maintenanceResponse(request, response);
+    response.status(410).json({ error: {
+      code: "API_RETIRED", message: "This financial API has been retired. Use the authenticated V2 application.", details: [],
+    } });
+  });
   if (options.transactions) api.use(createTransactionMethodRouter());
   api.use(requestPolicy);
   api.use(express.json({ limit: "16kb", strict: false }));
@@ -55,6 +69,10 @@ export function createApp(options: {
   const v2 = Router();
   v2.use((_request, response, next) => { response.set("Cache-Control", "no-store"); next(); });
   v2.use(cors({ origin: options.clientOrigin }));
+  if (options.financialMode === "maintenance") v2.use((request, response, next) => {
+    if (request.path === "/health") return next();
+    return maintenanceResponse(request, response);
+  });
   v2.use(requestPolicy);
   v2.use(express.json({ limit: "16kb", strict: false }));
   v2.use(createHealthRouter(options.databaseHealth));
