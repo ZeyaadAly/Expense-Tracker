@@ -17,6 +17,12 @@ const selection=`SELECT t.id,t.account_id AS "accountId",a.name AS "accountName"
   WHERE t.user_id=$1`;
 const missing=()=>new ApiError(404,"NOT_FOUND","Transaction not found.");
 
+// Small global preview; same resource projection/order as the cursor list, no cursor configuration required.
+export async function getRecentTransactions(database:Pick<Pool,"query">,userId:string) {
+  const result=await database.query<V2TransactionRow>(selection+" ORDER BY t.transaction_date DESC,t.created_at DESC,t.id DESC LIMIT 5",[userId]);
+  return result.rows.map(mapV2Transaction);
+}
+
 export function createV2TransactionService(database:Pick<Pool,"query"|"connect">,options:{cursorSigningSecret?:string;now?:()=>number}={}) {
   const cursors=createTransactionCursorCodec(options.cursorSigningSecret,options.now);
   async function transaction<T>(work:(client:PoolClient)=>Promise<T>):Promise<T> {

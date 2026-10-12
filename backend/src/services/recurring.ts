@@ -19,6 +19,27 @@ const conflict = () => new ApiError(409,"CONFLICT","Recurring definition cannot 
 const schedule = (row: RecurrenceDefinition): RecurrenceDefinition => ({startDate:row.startDate,frequency:row.frequency,endDate:row.endDate});
 const map = (row:Row):RecurringResource => ({...row,amount:formatDecimal(row.amount),exhausted:row.status === "active" && row.nextOccurrence === null,createdAt:row.createdAt.toISOString(),updatedAt:row.updatedAt.toISOString()});
 
+// Composable T29 projection: caller owns the consistent snapshot. Limit bounds per-definition output.
+export async function getUpcomingRecurring(client:Pick<Pool,"query">,userId:string,from:string,days:number,limit=Infinity) {
+  // Calendar range arithmetic is delegated to PostgreSQL; recurrence selection stays in T30.
+  const to = (await client.query<{date:string}>("SELECT to_char(LEAST($1::date+($2::int-1),DATE '9999-12-31'),'YYYY-MM-DD') AS date",[from,days])).rows[0].date;
+  const definitions = await client.query<Row>(`SELECT ${projection} ${source} WHERE r.user_id=$1 AND r.status='active' AND a.status='active' AND c.status='active'`,[userId]);
+  const terminal = await client.query<{id:string;date:string}>(`SELECT recurring_transaction_id AS id,to_char(occurrence_date,'YYYY-MM-DD') AS date FROM expense_tracker.recurring_occurrences
+    WHERE user_id=$1 AND status IN ('posted','skipped') AND occurrence_date BETWEEN $2 AND $3`,[userId,from,to]);
+  const markers = new Set(terminal.rows.map(row=>`${row.id}:${row.date}`));
+  const data: {recurringTransactionId:string;description:string;type:string;amount:string;currency:"EGP";occurrenceDate:string;accountName:string}[] = [];
+  for (const row of definitions.rows) {
+    let date = getFirstOccurrenceOnOrAfter(schedule(row),from);
+    let emitted = 0;
+    while (date && date <= to && emitted < limit) {
+      if (!markers.has(`${row.id}:${date}`)) { emitted++; data.push({recurringTransactionId:row.id,description:row.description,type:row.type,amount:formatDecimal(row.amount),currency:"EGP",occurrenceDate:date,accountName:row.accountName}); }
+      date = getNextOccurrenceAfter(schedule(row),date);
+    }
+  }
+  data.sort((a,b)=>a.occurrenceDate.localeCompare(b.occurrenceDate)||a.recurringTransactionId.localeCompare(b.recurringTransactionId));
+  return {data:data.slice(0,limit),meta:{from,to}};
+}
+
 export function createRecurringService(database:Pick<Pool,"query"|"connect">,options:{now?:()=>Date}={}) {
   const ledger = createRecurringOccurrenceService(database);
   const today = () => cairoToday(options.now?.() ?? new Date());
@@ -104,22 +125,7 @@ export function createRecurringService(database:Pick<Pool,"query"|"connect">,opt
     upcomingRecurring: (userId:string,days:number) => transaction(async client => {
       await client.query("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY");
       const from = today();
-      // Calendar range arithmetic is delegated to PostgreSQL; recurrence selection stays in T30.
-      const to = (await client.query<{date:string}>("SELECT to_char(LEAST($1::date+($2::int-1),DATE '9999-12-31'),'YYYY-MM-DD') AS date",[from,days])).rows[0].date;
-      const definitions = await client.query<Row>(`SELECT ${projection} ${source} WHERE r.user_id=$1 AND r.status='active' AND a.status='active' AND c.status='active'`,[userId]);
-      const terminal = await client.query<{id:string;date:string}>(`SELECT recurring_transaction_id AS id,to_char(occurrence_date,'YYYY-MM-DD') AS date FROM expense_tracker.recurring_occurrences
-        WHERE user_id=$1 AND status IN ('posted','skipped') AND occurrence_date BETWEEN $2 AND $3`,[userId,from,to]);
-      const markers = new Set(terminal.rows.map(row=>`${row.id}:${row.date}`));
-      const data: {recurringTransactionId:string;description:string;type:string;amount:string;currency:"EGP";occurrenceDate:string;accountName:string}[] = [];
-      for (const row of definitions.rows) {
-        let date = getFirstOccurrenceOnOrAfter(schedule(row),from);
-        while (date && date <= to) {
-          if (!markers.has(`${row.id}:${date}`)) data.push({recurringTransactionId:row.id,description:row.description,type:row.type,amount:formatDecimal(row.amount),currency:"EGP",occurrenceDate:date,accountName:row.accountName});
-          date = getNextOccurrenceAfter(schedule(row),date);
-        }
-      }
-      data.sort((a,b)=>a.occurrenceDate.localeCompare(b.occurrenceDate)||a.recurringTransactionId.localeCompare(b.recurringTransactionId));
-      return {data,meta:{from,to}};
+      return getUpcomingRecurring(client,userId,from,days);
     }),
   };
 }

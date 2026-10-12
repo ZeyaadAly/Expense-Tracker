@@ -45,7 +45,9 @@ const resources = `${balances}
     NOT opening_balance_locked AS "openingBalanceEditable",created_at AS "createdAt",updated_at AS "updatedAt",
     balance::text AS "currentBalance" FROM account_balances ORDER BY created_at ASC,id ASC`;
 const netPosition = `${balances}
-  SELECT COALESCE(sum(CASE WHEN type='credit_card' THEN -balance ELSE balance END),0::numeric)::text AS "netPosition"
+  SELECT COALESCE(sum(CASE WHEN type='credit_card' THEN -balance ELSE balance END),0::numeric)::text AS "netPosition",
+    COALESCE(sum(balance) FILTER (WHERE type<>'credit_card'),0::numeric)::text AS assets,
+    COALESCE(sum(balance) FILTER (WHERE type='credit_card'),0::numeric)::text AS "cardDebt"
   FROM account_balances`;
 const map = (row: AccountRow): AccountResource => ({
   id: row.id, name: row.name, type: row.type, currency: row.currency, status: row.status,
@@ -58,6 +60,11 @@ const map = (row: AccountRow): AccountResource => ({
 // These reads acquire no account row locks and never write financial state.
 export function createAccountBalanceRepository(database: Pick<Pool, "query">) {
   return {
+    async getFinancialPosition(userId: string) {
+      const result = await database.query<{netPosition:string;assets:string;cardDebt:string}>(netPosition,[userId,null,null]);
+      const row = result.rows[0];
+      return {totalBalance:formatDecimal(row.netPosition),assets:formatDecimal(row.assets),cardDebt:formatDecimal(row.cardDebt)};
+    },
     async getAccountSummary(userId: string, accountId: string) {
       const result = await database.query<{currentBalance:string;openingBalance:string;totalIncome:string;totalExpenses:string;incomingTransfers:string;outgoingTransfers:string}>(`${balances}
         SELECT balance::text AS "currentBalance",opening_balance::text AS "openingBalance",

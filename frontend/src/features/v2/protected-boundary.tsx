@@ -44,5 +44,5 @@ export function ProtectedBoundary({ children }: { children: ReactNode }) {
   if (!protectedRoute) return children;
   if (!ready) return <main className="v2-main"><h1>Preparing your workspace</h1><p role="status">{loading ? "Checking your session…" : expired ? "Your session expired. Sign in again." : "Returning to sign in…"}</p><Skeleton variant="chart" /></main>;
   // Unmount fixture state on sign-out/user changes; token refresh keeps it intact.
-  return <ProfileGate key={`${session!.user.id}:${epoch}`} userId={session!.user.id}>{path === '/v2/transactions' ? children : <PrototypeProvider>{children}</PrototypeProvider>}</ProfileGate>;
+  return <ProfileGate key={`${session!.user.id}:${epoch}`} userId={session!.user.id}>{['/v2/transactions', '/v2/recurring', '/v2/dashboard'].includes(path) ? children : <PrototypeProvider>{children}</PrototypeProvider>}</ProfileGate>;
 }

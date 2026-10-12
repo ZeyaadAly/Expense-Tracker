@@ -19,6 +19,8 @@ import {createTransferRouter} from "./routes/transfers.js";
 import type { RecurringService } from "./services/recurring.js";
 import { createRecurringRouter } from "./routes/recurring.js";
 import { createRecurringCronRouter, type RecurringCronOptions } from "./routes/recurring-cron.js";
+import type { DashboardService } from "./services/dashboard.js";
+import { createDashboardRouter } from "./routes/dashboard.js";
 
 export function createApp(options: {
   clientOrigin: string;
@@ -28,6 +30,7 @@ export function createApp(options: {
   v2Transactions?: V2TransactionService;
   transfers?: TransferService;
   recurring?: RecurringService;
+  dashboard?: DashboardService;
   recurringCron?: RecurringCronOptions;
   categories?: CategoryService;
   profiles?: ProfileService;
@@ -61,6 +64,7 @@ export function createApp(options: {
   if (options.v2Transactions) v2.use(createV2TransactionRouter(options.v2Transactions, createRequireAuth(options.supabaseUrl)));
   if (options.transfers) v2.use(createTransferRouter(options.transfers, createRequireAuth(options.supabaseUrl)));
   if (options.recurring) v2.use(createRecurringRouter(options.recurring, createRequireAuth(options.supabaseUrl)));
+  if (options.dashboard) v2.use(createDashboardRouter(options.dashboard, createRequireAuth(options.supabaseUrl)));
   v2.use(routeNotFound);
   v2.use(errorHandler);
   app.use("/api/v2", v2);

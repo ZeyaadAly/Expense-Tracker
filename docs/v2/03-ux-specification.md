@@ -284,6 +284,8 @@ Success:
 
 # 8. Dashboard UX
 
+T37 connected-stage clarification (2026-10-12): `/v2/dashboard` uses the authenticated T36 core response and T10 session-bound transport, retaining the approved editorial composition and dominant Net Position. Net Position renders summary.totalBalance; assets, signed card debt and period actuals are displayed without browser arithmetic. Five frozen period options refresh the API; displayed dates and the displayed period label always describe the returned snapshot, including retained stale values. The account rail displays T36's active and archived resources with status and existing account-detail links, making archived inclusion in net worth explicit. Recent activity uses five global owned transactions; Coming up uses T29's bounded expected occurrences and backend horizon. Chart, budget and goal previews and their unfinished destination links are hidden on this connected dashboard until their real services arrive. No fixture percentages, money or analytical series render. Empty/loading/error/stale states and GET-only retry are supported. Session changes unmount all owned dashboard state; a 401 clears protected data through existing Auth behavior. See [T37 verification](t37-verification.md).
+
 Route:
 
 `/dashboard`
@@ -715,6 +717,8 @@ Oct 10
 ```
 
 ---
+
+T34 connected-page clarification (2026-10-12): `/v2/recurring` now uses authenticated T29 data, preserving the approved schedule/timeline layout and reusable form/dialog controls. Five server-supported filters (status, type, account, category, frequency) apply to the unpaginated schedule list only. The independently recoverable 30-day upcoming timeline renders T29 occurrenceDate values and its authoritative from/to range; it is labeled expected activity, separate from posted transactions. Fixture forecast totals and fixture controls are absent from this connected page. Archived references remain visible, with active compatible choices required for future changes. Null nextOccurrence renders Schedule complete for exhausted active definitions or No future occurrence otherwise. Archive is permanent; pause/resume messages explain skipped history and no backfill. Confirmed saves refresh both views without resetting filters; uncertain writes preserve the draft and offer read-only inspection without resubmission. Pending dialogs announce progress and retain keyboard access to their scrollable content. No scheduler or processing controls appear. See [T34 verification](t34-verification.md).
 
 ## 12.5 Recurring Suggestion UX — P1
 

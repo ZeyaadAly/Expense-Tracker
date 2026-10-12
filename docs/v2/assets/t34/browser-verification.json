@@ -1,0 +1,14 @@
+{
+  "task": "T34",
+  "checks": 77,
+  "axeAudits": 45,
+  "axeViolations": 0,
+  "widths": [
+    360,
+    768,
+    1440
+  ],
+  "generatedTransactions": 1,
+  "definitions": 7,
+  "remoteTouched": false
+}

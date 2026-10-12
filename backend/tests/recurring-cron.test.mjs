@@ -9,6 +9,7 @@ import {URL} from 'node:url';
 import process from 'node:process';
 import {setTimeout} from 'node:timers';
 import {performance} from 'node:perf_hooks';
+import {spawnSync} from 'node:child_process';
 import console from 'node:console';
 import {Client,Pool} from 'pg';
 import {createApp} from '../dist/app.js';
@@ -78,6 +79,33 @@ test('T33 Vercel release gate, schedule, entry-point and runtime contract',()=>{
   assert.deepEqual(active.crons,[]);assert.deepEqual(ready.crons,[{path:RECURRING_CRON_PATH,schedule:'0 3 * * *'}]);
   for(const config of [active,ready]){assert.equal(config.framework,'express');assert.equal(config.buildCommand,'npm run build');assert.equal(config.functions['server.mjs'].maxDuration,60);assert.ok(RECURRING_CRON_BUDGET_MS<config.functions['server.mjs'].maxDuration*1000);assert.equal(config.functions['server.mjs'].includeFiles,'certs/supabase-ca.crt');}
   assert.match(read('server.mjs'),/export default createApp/);assert.match(read('server.mjs'),/recurringCron: \{processor: createRecurringProcessor\(pool\)\}/);assert.match(read('src/index.ts'),/recurringCron:\{processor:createRecurringProcessor\(pool\)\}/);assert.match(read('.env.example'),/^CRON_SECRET=$/m);
+});
+
+test('T33 actual Vercel entry initializes in a fresh process with lazy secret protection',()=>{
+  const run=spawnSync(process.execPath,['--input-type=module','-e',`
+    import assert from 'node:assert/strict';
+    import {once} from 'node:events';
+    import app from './server.mjs';
+    import {pool} from './dist/db/pool.js';
+    const server=app.listen(0,'127.0.0.1');await once(server,'listening');
+    const origin='http://127.0.0.1:'+server.address().port;
+    try {
+      const run=authorization=>fetch(origin+'/internal/recurring/process',{headers:authorization?{Authorization:authorization}:{}});
+      assert.equal((await run()).status,503);
+      process.env.CRON_SECRET='isolated-test-only-secret-for-fresh-process';
+      assert.equal((await run()).status,401);
+      const unavailable=await run('Bearer '+process.env.CRON_SECRET);
+      assert.equal(unavailable.status,503);
+      assert.equal((await unavailable.json()).error.code,'DATABASE_UNAVAILABLE');
+      assert.equal(unavailable.headers.get('cache-control'),'no-store');
+    } finally {server.closeAllConnections();await new Promise(resolve=>server.close(resolve));await pool.end();}
+  `],{
+    cwd:new URL('../',import.meta.url),encoding:'utf8',timeout:15_000,
+    env:{...process.env,DATABASE_URL:'postgresql://postgres@127.0.0.1:55452/postgres',DATABASE_SSL_CA_FILE:'',CRON_SECRET:'',CURSOR_SIGNING_SECRET:'',SUPABASE_URL:''},
+  });
+  assert.equal(run.error,undefined);
+  assert.equal(run.status,0,'Fresh Vercel entry smoke test failed');
+  assert.ok(!run.stdout.includes('isolated-test-only-secret'));
 });
 
 test('T33 limited-role real HTTP repeated/overlapping/cold/lost-response/bounded processing and T18 reconciliation',{

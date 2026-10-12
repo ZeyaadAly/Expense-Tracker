@@ -434,6 +434,34 @@ References checked 2026-10-06: [Supabase JWT verification](https://supabase.com/
 
 Each financial query scopes verified user; use read-only REPEATABLE READ snapshot. Empty collections are arrays; summary values are "0.00" except totalBalance may reflect opening balance. P1 insights may later extend response; core has no insight requirement. Dashboard charts reuse backend analytics, never frontend totals.
 
+### T36 staged core contract (2026-10-12)
+
+The authenticated `GET /api/v2/dashboard` now implements the authoritative core below. The final target above remains dependent on T38/T42/T43/T45. Unknown/repeated query keys, empty/invalid period values and explicit dates are rejected with 400 VALIDATION_ERROR. The only accepted query is optional `period`, default `this_month`. All responses use no-store and the shared safe error envelope; identity comes exclusively from T09 verified req.auth.userId.
+
+```json
+{
+  "data": {
+    "period": {"key":"this_month","from":"2026-10-01","to":"2026-10-12","timezone":"Africa/Cairo"},
+    "summary": {"totalBalance":"50.00","assets":"80.00","cardDebt":"30.00","income":"0.30","expenses":"0.40","netSavings":"-0.10","currency":"EGP"},
+    "accounts": [],
+    "recentTransactions": [],
+    "upcomingRecurring": []
+  },
+  "meta": {
+    "stage":"core",
+    "deferred":["incomeVsExpenses","budgets","goals"],
+    "upcoming":{"from":"2026-10-12","to":"2026-11-10","limit":5},
+    "recentTransactions":{"limit":5,"scope":"all_history"}
+  }
+}
+```
+
+The example collections abbreviate real public account/transaction/T29 occurrence resources. `totalBalance` is the existing T18 net position (no second alias/formula). `assets` sums signed non-card balances; `cardDebt` sums signed card balances, including negative overpayment. Both include archived accounts. Thus net position equals assets minus signed card debt. All account resources (active and archived) retain T18 createdAt ASC/id ASC order and all-history balances, regardless of period. Income/expenses/netSavings are NUMERIC period actuals only; transfers, definitions and reservations do not count. Generated persisted transactions count once; deleting one removes its financial effect without removing its terminal occurrence marker.
+
+Recent transactions are global owned history, independent of selected period, limited to 5 and ordered transaction date DESC, created_at DESC, id DESC using the T21 resource projection. No cursor secret is required for this bounded preview. Upcoming is expected activity, independent of period, using the same T29/T30 projection for Cairo today through today+29 inclusive; take the first 5 ordered occurrenceDate ASC/recurringTransactionId ASC. Only active schedules with active owned/visible parents qualify; terminal posted/skipped dates are omitted, including deleted generated postings. Upcoming metadata declares the horizon.
+
+`incomeVsExpenses`, `budgets`, and `goals` are omitted, explicitly named in `meta.deferred`; empty fake previews or client-calculated financial values are forbidden. Chart calculations await T38, budget previews T42/T43, goal previews T45. Savings rate/averages are not fields in this staged summary; their frozen null-denominator/SQL rounding rules still apply when introduced. Full P0 acceptance and full T37 UI acceptance remain dependent on those services. See [T36 verification](t36-verification.md).
+
 ---
 
 # 18. Account Resource Shape

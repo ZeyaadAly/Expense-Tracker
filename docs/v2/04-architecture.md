@@ -559,7 +559,7 @@ Success returns data with processed=true, referenceDate, requestId and an explic
 
 The daily `0 3 * * *` configuration is prepared in backend/vercel.cron-ready.json. The recognized backend/vercel.json deliberately has crons=[] until the T66-T71 validation/write-enable gate, then T72. Vercel has no per-cron enabled field in this JSON contract; do not invent one or deploy the ready template early. At release, merge only the prepared cron entry into the reviewed active config, privately set the distinct CRON_SECRET and verify backend project root/production protection/duration before deploying. No remote scheduler/environment/schema/deployment was changed by T33. See [T33 verification](t33-verification.md).
 
-Current official references checked 2026-10-09: [cron GET and UTC](https://vercel.com/docs/cron-jobs), [Bearer authentication and delivery behavior](https://vercel.com/docs/cron-jobs/manage-cron-jobs), [Express entry points](https://vercel.com/docs/frameworks/backend/express), [function duration configuration](https://vercel.com/docs/functions/configuring-functions/duration). Existing Express support takes precedence over outdated generic skill advice suggesting Express must be replaced.
+Current official references checked 2026-10-12: [cron GET and UTC](https://vercel.com/docs/cron-jobs), [Bearer authentication and delivery behavior](https://vercel.com/docs/cron-jobs/manage-cron-jobs), [Express entry points](https://vercel.com/docs/frameworks/backend/express), [function duration configuration](https://vercel.com/docs/functions/configuring-functions/duration). Existing Express support takes precedence over outdated generic skill advice suggesting Express must be replaced.
 
 # 21. Recurring Idempotency
 
@@ -712,6 +712,8 @@ Other endpoints can be split where caching/performance warrants it.
 # 30. Dashboard Data Strategy
 
 GET /api/v2/dashboard?period=this_month returns resolved period, summary, accounts, incomeVsExpenses series, recentTransactions, upcomingRecurring, budgets and goals. P0 excludes insights; P1 may add them explicitly. Run a small set of efficient user-scoped SQL queries in a read-only REPEATABLE READ transaction on one pg client for a consistent snapshot. Reuse analytics/budget/goal calculations; no request waterfall. Final acceptance depends on T38, T42/T43, T45 as well as accounts/transactions/recurring.
+
+T36 now implements the staged authoritative core documented in API section 17. One checked-out client owns BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY, range resolution, T18 position/accounts, reusable V2 transaction totals, bounded T21 recent projection and the extracted T29 upcoming projection, then COMMIT. PostgreSQL statements execute sequentially on that one connection; there are no internal HTTP calls, additional domain pool checkouts, row locks, writes or financial JavaScript calculations. Cairo today is captured once per request. Failures roll back, preserve the safe error handler and discard the client if rollback fails; reads are never retried. Full analytics/budget/goal sections are explicitly deferred rather than simulated. No schema/index/cache or V1 changes are needed.
 
 ### Frozen periods and aggregates
 

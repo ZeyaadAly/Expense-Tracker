@@ -66,7 +66,7 @@ export function validateTransactionInput(input: TransactionInput, today = cairoT
     errors.description = "Enter a description of 1–200 characters.";
   return errors;
 }
-function parseTransaction(value: unknown, write = false, id?: string): Transaction {
+export function parseTransaction(value: unknown, write = false, id?: string): Transaction {
   const keys = [
     "id",
     "accountId",

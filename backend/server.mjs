@@ -1,3 +1,4 @@
+import {createDashboardService} from "./dist/services/dashboard.js";
 // Vercel detects this root entry before the reusable src/app.ts factory.
 import "express";
 import process from "node:process";
@@ -20,6 +21,7 @@ export default createApp({
   transactions: createTransactionService(pool),
   v2Transactions: createV2TransactionService(pool,{cursorSigningSecret:process.env.CURSOR_SIGNING_SECRET}),
   transfers: createTransferService(pool,{cursorSigningSecret:process.env.CURSOR_SIGNING_SECRET}),
+  dashboard: createDashboardService(pool),
   recurring: createRecurringService(pool),
   recurringCron: {processor: createRecurringProcessor(pool)},
   categories: createCategoryService(pool),

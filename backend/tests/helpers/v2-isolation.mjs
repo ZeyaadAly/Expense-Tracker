@@ -1,3 +1,4 @@
+import {createDashboardService} from "../../dist/services/dashboard.js";
 // Test-only helpers. Never load application .env or use hosted Auth credentials.
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync} from 'node:fs';
@@ -90,7 +91,7 @@ export async function createTestAuthHarness(pool,options={cursorSigningSecret:ra
   const key={...await exportJWK(pair.publicKey),kid:'t16-local',alg:'ES256',use:'sig'};
   const jwks=createServer((_request,response)=>{response.setHeader('Content-Type','application/json');response.end(JSON.stringify({keys:[key]}));}).listen(0,'127.0.0.1');await once(jwks,'listening');
   const origin=`http://127.0.0.1:${jwks.address().port}`;
-  const server=createApp({clientOrigin:'http://localhost:3000',databaseHealth:async()=>true,supabaseUrl:origin,recurringCron:options.recurringCron,recurring:createRecurringService(pool,options),profiles:createProfileService(pool),categories:createCategoryService(pool),accounts:createAccountService(pool),transactions:createTransactionService(pool),v2Transactions:createV2TransactionService(pool,options),transfers:createTransferService(pool,options)}).listen(0,'127.0.0.1');await once(server,'listening');
+  const server=createApp({clientOrigin:'http://localhost:3000',databaseHealth:async()=>true,supabaseUrl:origin,dashboard:options.dashboard??createDashboardService(pool,options.dashboardOptions),recurringCron:options.recurringCron,recurring:createRecurringService(pool,options),profiles:createProfileService(pool),categories:createCategoryService(pool),accounts:createAccountService(pool),transactions:createTransactionService(pool),v2Transactions:createV2TransactionService(pool,options),transfers:createTransferService(pool,options)}).listen(0,'127.0.0.1');await once(server,'listening');
   async function createTestAuthToken(user,{issuer=origin+'/auth/v1',audience='authenticated',role='authenticated',wrongKey=false,expiration='15m',metadataOwner=isolationUsers.b.userId}={}) {
     return new SignJWT({sub:user.userId,role,user_metadata:{userId:metadataOwner,ownerId:metadataOwner}}).setProtectedHeader({alg:'ES256',kid:key.kid}).setIssuer(issuer).setAudience(audience).setExpirationTime(expiration).sign(wrongKey?foreignPair.privateKey:pair.privateKey);
   }

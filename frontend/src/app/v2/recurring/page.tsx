@@ -1,11 +1,4 @@
 ﻿import type { Metadata } from "next";
-import { PrototypePage } from "../../../features/v2/pages";
+import { RecurringPage } from "../../../features/v2/recurring-page";
 export const metadata: Metadata = { title: "recurring · Expense Tracker V2" };
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<{ state?: string }>;
-}) {
-  const query = await searchParams;
-  return <PrototypePage route="recurring" initialState={query.state} />;
-}
+export default function Page() { return <RecurringPage />; }

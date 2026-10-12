@@ -368,7 +368,7 @@ export function RecurringStatusBadge({ status }: { status: RecurringStatus }) {
     </span>
   );
 }
-export function UpcomingItem({ item }: { item: RecurringFixture }) {
+export function UpcomingItem({ item }: { item: Pick<RecurringFixture, "name" | "amount" | "type" | "date" | "account"> }) {
   return (
     <div className="v2-upcoming">
       <span className="v2-timeline-point" aria-hidden="true" />

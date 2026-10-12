@@ -1,0 +1,17 @@
+{
+  "task": "T37",
+  "checks": 447,
+  "axeAudits": 20,
+  "axeViolations": 0,
+  "widths": [
+    360,
+    768,
+    1440
+  ],
+  "realJwt": true,
+  "runtimeRole": "expense_tracker_app",
+  "allFivePeriods": true,
+  "generatedDeletionMarkerPreserved": true,
+  "userSwitch": true,
+  "remoteTouched": false
+}

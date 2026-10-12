@@ -13,7 +13,7 @@ const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const decimal = /^-?(0|[1-9]\d*)\.\d{2}$/;
 const object = (value:unknown): value is Record<string,unknown> => typeof value==='object' && value!==null && !Array.isArray(value);
 const invalid = (write=false) => new V2ApiError(200,"INVALID_RESPONSE","unexpected",[],write);
-function parseAccount(value:unknown,write=false):Account {
+export function parseAccount(value:unknown,write=false):Account {
   if(!object(value)||typeof value.id!=='string'||!uuid.test(value.id)||typeof value.name!=='string'||!value.name.trim()||Array.from(value.name).length>100||
     !accountTypes.includes(value.type as AccountType)||typeof value.openingBalance!=='string'||!decimal.test(value.openingBalance)||typeof value.currentBalance!=='string'||!decimal.test(value.currentBalance)||
     typeof value.openingBalanceEditable!=='boolean'||value.currency!=='EGP'||!['active','archived'].includes(value.status as string)||
