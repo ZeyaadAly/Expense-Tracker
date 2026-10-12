@@ -1,0 +1,81 @@
+{
+  "audits": [
+    {
+      "width": 360,
+      "path": "dashboard",
+      "state": "authenticated",
+      "axe": 0
+    },
+    {
+      "width": 360,
+      "path": "transactions",
+      "state": "authenticated",
+      "axe": 0
+    },
+    {
+      "width": 360,
+      "path": "dashboard",
+      "state": "loading",
+      "axe": 0
+    },
+    {
+      "width": 768,
+      "path": "dashboard",
+      "state": "authenticated",
+      "axe": 0
+    },
+    {
+      "width": 768,
+      "path": "transactions",
+      "state": "authenticated",
+      "axe": 0
+    },
+    {
+      "width": 768,
+      "path": "dashboard",
+      "state": "loading",
+      "axe": 0
+    },
+    {
+      "width": 1440,
+      "path": "dashboard",
+      "state": "authenticated",
+      "axe": 0
+    },
+    {
+      "width": 1440,
+      "path": "transactions",
+      "state": "authenticated",
+      "axe": 0
+    },
+    {
+      "width": 1440,
+      "path": "dashboard",
+      "state": "loading",
+      "axe": 0
+    },
+    {
+      "width": 360,
+      "path": "login",
+      "state": "after-expiry",
+      "axe": 0
+    },
+    {
+      "width": 768,
+      "path": "login",
+      "state": "after-expiry",
+      "axe": 0
+    },
+    {
+      "width": 1440,
+      "path": "login",
+      "state": "after-expiry",
+      "axe": 0
+    }
+  ],
+  "allEightSignedOut": "passed",
+  "refreshAndUserChange": "passed",
+  "expiryAndSignout": "passed",
+  "redirectsAndRecovery": "passed",
+  "v1": "passed"
+}

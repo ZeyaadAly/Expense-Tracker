@@ -1,10 +1,12 @@
 # Expense Tracker V2 — Architecture
 
-**Version:** 2.0 Planning  
-**Status:** Draft for BMAD Architecture  
+**Version:** 2.0 Planning — T02 decisions recorded
+**Status:** P0 planning frozen with approved code-first design amendment; revised T03/T04 not started
 **Date:** 2026-10-06  
 **Project:** Expense Tracker  
 **Depends on:** `01-product-brief.md`, `02-prd.md`, `03-ux-specification.md`
+
+**Release rule:** Core completion requires P0 only. P1 sections are optional enhancement contracts; post-V2 features do not gate core release. Decisions are frozen as of 2026-10-06; future material changes follow change control.
 
 ---
 
@@ -118,7 +120,7 @@ Proposed architecture:
 │ Budgets                   │
 │ Goals                     │
 │ Categories                │
-│ Notifications             │
+│ Notifications (P1)        │
 └───────────────────────────┘
 ```
 
@@ -199,7 +201,7 @@ All financial amounts must continue using exact decimal semantics.
 
 Rules:
 
-- PostgreSQL `numeric`;
+- PostgreSQL unrestricted `NUMERIC` with scale/range checks (database §38);
 - API decimal strings;
 - no JavaScript floating-point calculations for financial totals;
 - aggregate calculations performed in PostgreSQL/backend;
@@ -282,118 +284,23 @@ Frontend must not:
 
 # 7. Authentication Architecture
 
-## 7.1 Preferred Authentication Provider
+### Frozen authentication boundary
 
-Use Supabase Auth.
+Supabase Auth email/password with email confirmation enabled in production; reset redirects are allowlisted. Frontend uses one Supabase browser client with session persistence/automatic refresh, accesses its current token for each Express request, and sends Bearer authorization. Use a client protected layout/route guard with an initial loading gate: render no financial content or requests before session/bootstrap succeeds. P0 renders authenticated financial data client-side; no cookie-based Express auth or financial SSR cache is introduced. Root / redirects to dashboard or login after session resolution; only local allowlisted return paths are accepted.
 
-Reasons:
+Backend uses **jose remote JWKS verification**, as described by Supabase's official JWT guidance, against the configured project `/auth/v1/.well-known/jwks.json`. T05 must verify/select an asymmetric **ES256 signing key** before T09 verification tests; do not assume the current project already has one. Pin allowed algorithm ES256, exact issuer `<SUPABASE_URL>/auth/v1`, audience `authenticated`, expiration, nbf when present, nonempty UUID sub and authenticated role. Identity is verified sub, never user metadata or body/query userId. Fail closed on verification/JWKS failure; no legacy HS256 fallback/shared JWT secret. Cache remote keys through the library and test rotation/unknown kid.
 
-- already using Supabase;
-- supports email/password;
-- supports password reset;
-- supports session persistence;
-- supports JWT access tokens;
-- avoids building password storage/security manually.
+Profile provisioning uses authenticated **POST /api/v2/profile/bootstrap** with empty JSON body: idempotent insert-on-conflict using verified sub, defaults EGP/en/Africa/Cairo and no auth-schema reads or admin key. Signup display name remains a draft until verified sign-in; PUT /profile writes validated displayName. Bootstrap runs after authenticated session resolution and before financial reads. GET/PUT /profile returns **409 PROFILE_REQUIRED** if missing; client re-runs bootstrap safely. This avoids an auth.users trigger failure blocking signup; profiles also backfill through the operator migration flow. Only displayName is editable in P0; currency/locale/timezone are returned read-only.
 
----
+On sign-out/user change/auth invalidation, clear financial data and cursor history, abort pending reads and suppress late responses from the old session. Supabase refreshes sessions; on API 401 block operations, clear protected UI and redirect to login without retrying uncertain writes. Supabase sign-out does not instantly revoke locally verified access tokens; authorization lasts until JWT expiry. Configure access-token lifetime **15 minutes** in T05. Strong session revocation and identity deletion require separate post-V2 design.
 
-## 7.2 Auth Flow
-
-### Sign In
-
-```text
-Browser
-  ↓
-Supabase Auth sign-in
-  ↓
-Access token/session
-  ↓
-Browser calls Express with Bearer token
-  ↓
-Express verifies token
-  ↓
-Trusted user identity attached to request
-```
-
----
-
-## 7.3 Token Verification Strategy
-
-Preferred architecture:
-
-- Express verifies Supabase JWTs using provider-supported verification;
-- use JWKS/public key verification if supported by the configured Supabase project;
-- avoid calling Supabase Auth for every API request if local verification is safe and supported;
-- verify issuer, audience, expiration, and signature;
-- reject invalid/expired tokens.
-
-Implementation details should be finalized during backend task design.
-
----
-
-## 7.4 Auth Middleware
-
-Proposed middleware responsibility:
-
-```text
-authenticateRequest
-```
-
-It should:
-
-1. read Bearer token;
-2. verify token;
-3. extract authenticated Supabase user ID;
-4. attach trusted auth context;
-5. reject unauthenticated requests with 401.
-
-Example trusted context:
-
-```ts
-type AuthContext = {
-  userId: string;
-  email?: string;
-};
-```
-
----
-
-## 7.5 Protected API Policy
-
-All V2 financial endpoints should require authentication.
-
-Potential exceptions:
-
-- `/api/v2/health`
-- public metadata if ever needed.
+References checked 2026-10-06: [Supabase JWT verification](https://supabase.com/docs/guides/auth/jwts), [user provisioning and trigger failure behavior](https://supabase.com/docs/guides/auth/managing-user-data).
 
 ---
 
 # 8. User Profile Architecture
 
-Supabase Auth owns authentication identities.
-
-Application-specific profile data should live in:
-
-```text
-profiles
-```
-
-Likely relation:
-
-```text
-auth.users.id
-   ↓
-profiles.user_id
-```
-
-Profile can store:
-
-- display name;
-- locale;
-- timezone;
-- preferred currency;
-- created/updated timestamps.
+Supabase owns auth identity; private `expense_tracker.profiles.user_id` references auth.users(id). Provision via authenticated POST /api/v2/profile/bootstrap, not an auth trigger. GET/PUT /profile enforce verified sub and recover missing rows through bootstrap. P0 currency EGP, locale en and timezone Africa/Cairo are read-only; validated displayName is editable.
 
 ---
 
@@ -430,49 +337,15 @@ This prevents accidental cross-user access.
 
 ---
 
-# 10. RLS Strategy
+# 10. RLS Timing and Integrity Enforcement
 
-Recommended: use **Express authorization as primary enforcement** and consider **PostgreSQL Row Level Security as defense-in-depth**.
+Express token verification and ownership-scoped authorization are mandatory P0 controls. **RLS is deferred to a dedicated post-core hardening milestone**, requiring transaction-local user context/reset and pooled-connection isolation tests before activation. Runtime role remains NOBYPASSRLS; no admin credentials are used for API/cron.
 
-However, because the backend currently uses a shared database role, RLS requires careful session/user-context design.
+Keep `expense_tracker` outside exposed Data API schemas. Revoke schema/table/function privileges from PUBLIC, anon and authenticated; browser publishable key is for Auth only. Grant the limited runtime role only required application DML/function privileges, including new objects explicitly; no DDL, role management, TRUNCATE, auth.users access or broad default grants. Any views stay private. Migrations run through the existing separate privileged workflow with project/history verification.
 
-Two options:
+Store user_id directly on transactions and every user-owned root/occurrence. Use unique (id,user_id) parent keys and composite ownership FKs for transaction/account, transfer source/destination, recurring/account, goal/account, occurrence/definition and generated transaction/definition. Targeted SECURITY INVOKER triggers plus service checks enforce system-or-same-user category ownership/kind, immutable ownership, generated occurrence identity and immutable category kind once referenced. System category iff is_system=true and user_id IS NULL; custom iff is_system=false and user_id IS NOT NULL. Archived-parent checks use row locks in services/triggers. Database integrity supplements, but does not replace, read authorization.
 
-## Option A — Express-Only Authorization
-
-Pros:
-
-- simpler;
-- easier with pooled connections;
-- straightforward repository queries.
-
-Cons:
-
-- database trusts application queries;
-- authorization bugs could expose data.
-
-## Option B — Express + RLS Defense-in-Depth
-
-Pros:
-
-- additional data isolation;
-- database-level protection.
-
-Cons:
-
-- more complex with pooled connections;
-- requires trusted session context or JWT integration;
-- easy to misconfigure.
-
-### Recommendation
-
-Start V2 architecture with:
-
-**Express authorization as mandatory primary control.**
-
-Evaluate RLS as a separate hardening milestone after the data model and auth integration are stable.
-
-Do not assume RLS automatically solves authorization.
+See [Supabase API security guidance](https://supabase.com/docs/guides/api/securing-your-api).
 
 ---
 
@@ -529,23 +402,7 @@ Responsibilities:
 
 # 12. API Versioning
 
-Recommended V2 route prefix:
-
-```text
-/api/v2
-```
-
-Keep V1 temporarily available during migration if necessary:
-
-```text
-/api/v1
-```
-
-Do not remove V1 until:
-
-- V2 frontend is deployed;
-- migration is complete;
-- rollback window is closed.
+V2 uses `/api/v2`. V1 financial routes are blocked by maintenance before additive migration and permanently return 410 API_RETIRED after cutover. No public V1 read/write compatibility against multi-user V2 data. `/api/v1/health` may remain public and sanitized; protect/remove older deployments that could bypass retirement.
 
 ---
 
@@ -560,6 +417,7 @@ Likely attributes:
 - name;
 - type;
 - opening_balance;
+- opening_balance_locked (permanent after first posted activity);
 - currency;
 - status;
 - created_at;
@@ -569,103 +427,62 @@ Likely attributes:
 
 # 14. Account Balance Strategy
 
-This is a critical architecture decision.
+### Frozen balance and credit-card rules
 
-Recommended approach:
+Asset-like accounts (cash/bank/savings/mobile_wallet/other):
 
-**Do not store mutable current balance as the primary source of truth.**
+`currentBalance = openingBalance + income - expenses + incomingTransfers - outgoingTransfers`.
 
-Store:
+Credit cards use **debt-positive** balances:
 
-- opening balance;
-- transactions;
-- transfers.
+`currentBalance = openingBalance + expenses - income + outgoingTransfers - incomingTransfers`.
 
-Then calculate current balance from financial activity.
+Purchases are expense transactions and increase debt. Refunds/credits recorded as income reduce debt (and count as income under this simple tracker model). A payment is a transfer from an asset account to the card: asset money falls and card debt falls; payment never counts as expense again. Transfers from cards model cash advances and increase debt. Overpayment is allowed and produces negative debt (credit owed to the user).
 
-Example:
+**Total Balance = net worth = SUM(asset balances) - SUM(card debt balances)**, including archived accounts; archiving cannot remove money/debt from net worth. Period income/expenses/netSavings are actual income/expense transactions only. Account balances are current all-history values, independent of selected dashboard/analytics period. No credit limit, statement cycle, interest or billing automation is included.
 
-```text
-Current Balance =
-Opening Balance
-+ Income
-- Expenses
-+ Incoming Transfers
-- Outgoing Transfers
-```
+Derived queries are authoritative; no mutable current-balance source or materialized cache in P0.
 
-Benefits:
+### Frozen money contract
 
-- auditable;
-- fewer synchronization bugs;
-- historical reconstruction;
-- easier correction.
+All persisted monetary columns use PostgreSQL **NUMERIC without a precision/scale typmod**, with explicit `scale(value) <= 2` and range CHECK constraints. This preserves V1's excess-scale rejection: `NUMERIC(11,2)` would round before a CHECK could inspect the original value. Effective per-value bounds are nine integer digits and two fractional digits; no monetary column uses float/double.
 
-For performance, a materialized/cache strategy may be added later if necessary.
+| Value | Minimum | Maximum |
+|---|---|---|
+| Transaction, transfer, recurring amount | `0.01` | `999999999.99` |
+| Account opening balance (all types) | `-999999999.99` | `999999999.99` |
+| Budget amount, goal target | `0.01` | `999999999.99` |
+| Goal saved amount | `0.00` | `999999999.99` |
+
+Inputs are plain decimal strings with zero, one or two fractional digits; no exponent, whitespace, separators, plus sign or leading zeroes except zero itself. A minus sign is allowed only for opening balance; reject negative zero. Normalize accepted values to two fractional digits. Reject excess decimals (including trailing zeroes such as `1.230`) and out-of-range inputs with field validation; never round input.
+
+Derived balances/SUM totals are unbounded exact NUMERIC and serialize as two-decimal strings. PostgreSQL rounds derived averages and percentages to two decimals, with ties away from zero (half-up for nonnegative values). Percentages are decimal strings, may exceed 100 or be negative where meaningful, and are null for zero denominators. Never calculate financial values with JS floating-point arithmetic.
 
 ---
 
-# 15. Credit Card Consideration
+# 15. Credit Card and Account Lifecycle
 
-Credit cards behave differently from cash/assets.
+### Frozen account/category lifecycle
 
-Core V2 can initially model them as an account type with a signed balance convention, but this must be documented carefully.
+Accounts support create/edit/archive/restore, never hard delete in P0. Opening balance and crossing between credit-card and asset semantics can be edited only while `opening_balance_locked = false`. Set that flag permanently on first transaction or transfer involving the account; deletion never unlocks it. Lock/check the account row atomically to prevent concurrent first activity and opening-balance edits. Name and asset-to-asset type edits remain allowed.
 
-If debt-specific behavior becomes complex, credit cards can be expanded later.
+Archiving an account **automatically pauses all its active recurring definitions** in the same database transaction. Archiving a custom category does the same for its definitions. Lock affected accounts/categories and definitions consistently so archive cannot race a posting. Restore does not auto-resume schedules; user resumes explicitly after both references are active. System categories cannot be edited/archived.
 
-Do not let credit-card complexity block the initial account architecture.
+Archived references remain in history and totals. Reject new transactions/transfers/recurring definitions or postings using archived references. Editing a transaction/transfer requires its resulting account/category references to be active; restore first for historical corrections. Hard deletion of owned historical transactions/transfers remains allowed even when parents are archived. Existing goal links to archived accounts remain metadata; assigning a link requires an owned active account. Category kind is immutable after any transaction, recurring definition or budget references it; category owner/system flag is always immutable.
+
+Debt-positive cards and net-worth formula are defined in §14; statements/limits/interest remain post-V2.
 
 ---
 
 # 16. Transfer Architecture
 
-Recommended model:
-
-Use a dedicated `transfers` table rather than pretending transfers are ordinary income/expense transactions.
-
-Proposed conceptual structure:
-
-```text
-transfers
-- id
-- user_id
-- source_account_id
-- destination_account_id
-- amount
-- date
-- description
-- created_at
-- updated_at
-```
-
-Benefits:
-
-- transfer semantics are explicit;
-- avoids double counting in analytics;
-- easier account balance calculation;
-- easier transfer editing/deletion.
-
-Transfer creation must occur inside a PostgreSQL transaction.
+Dedicated `expense_tracker.transfers` is final. Fields: id/user_id/source_account_id/destination_account_id/amount/date/optional description/created_at/updated_at. Create/read/edit/hard-delete in P0; no archival. Positive amount, distinct owned active accounts for create/edit, 1900-01-01 through Cairo today, optional trimmed note up to 200 code points. Delete is allowed with archived parents and confirmation. Lock owned account rows in UUID order and use one checked-out pg client for BEGIN/COMMIT/ROLLBACK. Derived balances recompute effects; no paired income/expense rows. Atomicity is part of initial backend delivery.
 
 ---
 
 # 17. Transaction Architecture
 
-Transactions represent real income or expense.
-
-Likely ownership:
-
-```text
-transaction
-  ↓
-account
-  ↓
-user
-```
-
-Transactions may still store `user_id` directly for simpler indexing and authorization, even if ownership is derivable through account.
-
-That decision should be finalized in database design.
+Transactions represent posted income/expense with direct user_id plus account_id and category_id. Keep V1 `transaction_date` and API `date` mapping. Composite account/owner FK, category ownership/type triggers and user-scoped services are mandatory. Manual create/edit dates run 1900-01-01 through Cairo today. Hard-delete with confirmation; generated transaction deletion clears occurrence link but preserves terminal posted ledger and never regenerates it. Generated recurring IDs/occurrence dates are server-owned immutable metadata, not accepted in manual bodies.
 
 ---
 
@@ -698,107 +515,65 @@ Historical transactions should retain category references even if category becom
 
 # 19. Recurring Transaction Architecture
 
-Recurring activity should be modeled separately from posted transactions.
-
-Concept:
-
-```text
-recurring_transactions
-```
-
-Stores schedule definition.
-
-Generated real transactions are written into:
-
-```text
-transactions
-```
-
-Each generated transaction should reference its recurring definition and occurrence date.
+Core tables: recurring_transactions (definition), recurring_occurrences (durable per-date processing ledger), transactions (actuals). The occurrence ledger persists independently of transaction deletion. All three have verified user ownership; generated transactions reference the definition and occurrence date. Final columns/FKs are in database §§17–20.
 
 ---
 
 # 20. Recurring Generation Strategy
 
-Vercel/Serverless architecture means recurring work cannot depend on an always-running process.
+### Frozen recurring execution
 
-Recommended strategy:
+- Provider: **Vercel Cron**, one daily job on the Express backend project, `0 3 * * *` (03:00 UTC). Hobby's once-daily, hour-level precision is sufficient: P0 promises date-based daily posting, not midnight or minute precision. Infrastructure uses UTC; all financial due dates and manual-date validation use **Africa/Cairo**, fixed/read-only in P0. No auth/provider settings are changed by T02.
+- Endpoint: **GET /internal/recurring/process**, outside `/api/v2`, with server-only `Authorization: Bearer <CRON_SECRET>`; constant-time secret validation, no-store, no redirects, no browser credentials or user token authorization. Never authenticate by user-agent/header schedule alone.
+- Process active schedules oldest-due first, at most **100 occurrences per definition and 1000 attempts globally per invocation**; stop earlier with a safety buffer before the configured function deadline. Each occurrence commits independently. Return safe counts plus `hasRemaining`; unfinished/failed work continues next daily invocation or an operator's authenticated invocation of the same handler. Provider does not guarantee retries; log backlog/failures safely.
+- Creating a schedule anchors it to `startDate` but initializes `nextOccurrence` to the first anchored date **on or after Cairo today** (or startDate if future). No historic import/backfill occurs. Today's occurrence is due even if today's cron already ran; it posts on the next run using its original date.
+- Monthly recurrence uses the original start-date day, clamped to the last valid day each month (Jan 31 → Feb 28/29 → Mar 31). Weekly recurrence uses startDate's weekday (ISO Monday=1 … Sunday=7); yearly uses original month/day, with Feb 29 → Feb 28 in non-leap years and Feb 29 again in leap years. API accepts no independent weekday/month-day fields in P0.
+- Catch-up applies only to active schedules missed by the scheduler; occurrences are posted with their original dates. End date is inclusive. After the final occurrence, `nextOccurrence = null`; expose an exhausted flag without adding a new stored lifecycle status.
+- Pause clears nextOccurrence and marks any pending/failed unposted occurrence rows skipped. Resume finds the first anchored, nonterminal occurrence on or after today; paused history is not generated. Archive behaves like pause and is permanent in P0 (no recurring restore).
+- Definition edits lock the definition, retain posted/skipped occurrences and historical transactions unchanged, mark pending/failed unposted rows skipped, then recalculate the first unprocessed anchored date on or after today. Paused/archived definitions keep nextOccurrence null. Already terminal dates are never replayed, even after schedule edits or generated-transaction deletion.
+- Durable `recurring_occurrences` rows own idempotency. Claim/create pending occurrence under definition lock and commit; in a second transaction lock definition/occurrence, recheck active parents, create transaction, mark posted/link it, and advance schedule together. On failure roll back financial writes and record a sanitized failed occurrence separately under a fresh row lock, only if still nonterminal; never overwrite a concurrent posted/skipped status. Retain its due date for retry. Concurrent runners serialize on row locks; posted/skipped dates never generate again. Failures on one definition must not prevent attempting other definitions.
 
-```text
-Scheduled job / Cron
-   ↓
-POST internal recurring processor
-   ↓
-Find due recurring definitions
-   ↓
-Create missing occurrences transactionally
-   ↓
-Advance next occurrence
-```
+### T31 processor mechanics (local implementation)
 
-Possible scheduler:
+`createRecurringProcessor(database).processDueRecurring({referenceDate, userId?, definitionId?, maxPerDefinition?, maxAttempts?, shouldStop?})` is an internal service. Its caller supplies a validated Cairo business date and optional deadline predicate; the core reads no clock. The future protected HTTP handler, CRON_SECRET and scheduling are deferred to T33 under the explicit T31 task boundary. No processor is wired into public routes or app startup.
 
-- Vercel Cron;
-- Supabase scheduled function/cron;
-- another trusted scheduler.
+Discover at most the invocation attempt limit of active due definitions, ordered by persisted next_occurrence then ID, with optional owner/definition scopes. Only the stored cursor is processed; no dates before it are reconstructed. Caps are positive integers no greater than 100 per definition and 1000 per invocation. Attempts include reservation/revalidation failures and terminal/failed cursor inspection. A deadline may stop after reservation; pending state remains durable. Return counter/boolean statistics and a scoped hasRemaining query, with no IDs, descriptions, raw errors or credentials.
 
-### Recommendation
+Each occurrence has two short transactions: (1) lock/check the definition and reserve its persisted due date through T32, then commit; (2) use T32's parent-first locked posting path and atomically update next_occurrence before committing. T32 checks the expected persisted cursor; T30 advances from the original anchor and excludes existing terminal dates through the T32 ledger helper. Exhaustion sets the cursor null. Lifecycle changes cannot be overwritten by stale advancement. Terminal rows require no financial write, even after a generated transaction is deleted.
 
-Prefer a provider-supported scheduled job that calls a protected internal backend route or job handler.
+Existing pending occurrences resume through the same T32 post path without a timeout or second reservation. Existing failed occurrences retain their cursor and require an explicit T32 retry; T31 never performs fail→pending recovery automatically. Posting failures roll back all financial/advancement writes. A fresh transaction records a sanitized T32 failure code only while the same active cursor and pending marker remain; lifecycle changes, concurrent posted/skipped markers and uncertain successful commits win over delayed failure recording. Invalid active parent references yield INVALID_REFERENCE; account/category archival normally pauses the schedule instead, so the processor cannot post or overwrite its lifecycle outcome. Other failures on one definition do not prevent attempts on later selected definitions.
+
+A reservation acknowledgement loss leaves any committed reservation pending. A posting acknowledgement loss may have committed both financial posting and cursor advancement: T31 does not automatically retry the uncertain write, and a later invocation follows durable state. Statistics count acknowledged outcomes, so an uncertain committed post may appear as a failed attempt rather than posted. If failure recording itself cannot commit, report failureRecordingErrors and leave durable pending state recoverable. Existing database Cairo future-date guards remain unchanged; an explicit test/reference date is not permission to write future financial transactions.
+
+References checked 2026-10-06: [Vercel Cron HTTP GET and UTC](https://vercel.com/docs/cron-jobs), [Hobby cadence and precision](https://vercel.com/docs/cron-jobs/usage-and-pricing), [secret, failure and duration behavior](https://vercel.com/docs/cron-jobs/manage-cron-jobs).
 
 ---
+
+### T33 protected orchestration (local implementation)
+
+GET `/internal/recurring/process` is mounted independently of both API routers in local and Vercel entry points. Lazy CRON_SECRET validation fails closed with safe 503 CRON_UNAVAILABLE; the dedicated printable non-whitespace secret must be at least 32 characters, generated from at least 32 random bytes. Authentication compares fixed-length SHA-256 digests using timingSafeEqual. Missing/incorrect/duplicate Authorization gives 401. User JWTs, origins, user-agent and schedule headers do not authorize execution. Other methods including HEAD return 405 Allow: GET after authentication. Query strings, bodies and trailing-slash variants return 400; no HTTP owner/date/limit controls exist. All handled responses have no-store and a server-generated X-Request-ID. Existing API CORS is unchanged; this route supplies no browser CORS headers or redirects.
+
+At each authorized invocation, the existing cairoToday utility derives the explicit reference date from Africa/Cairo. One call to the unchanged T31 processor sets 100 per-definition/1000 global attempts and a monotonic-clock shouldStop predicate at 45 seconds. backend/vercel.json explicitly configures the single server.mjs function for 60 seconds. The remaining 15 seconds is a cooperative safety buffer, not cancellation of an in-flight SQL statement; a platform interruption still relies on T31/T32 durable state. No recursive calls, background posting or automatic failed-marker recovery. Date/clock test injection exists only in the application factory, never in HTTP input.
+
+Success returns data with processed=true, referenceDate, requestId and an explicit projection of all T31 counters/flags. hasRemaining/limitReached/deadlineReached remain visible; bounded interruption alone is HTTP 200. Any failed attempt or failureRecordingErrors returns 500 PROCESSING_FAILED with the same safe summary under meta (processed=false). A thrown database-availability error uses the shared existing classification and returns 503 DATABASE_UNAVAILABLE; other thrown errors give 500 INTERNAL_ERROR. T31 does not expose per-attempt driver errors, so aggregated failed attempts are 500 even if a database failure contributed. Counts represent acknowledged work, not an audit ledger. Safe completion/failure logs contain timestamp/date, request ID, duration, counters and fixed outcome class only; no raw errors, SQL, descriptions, ownership IDs or credentials.
+
+The daily `0 3 * * *` configuration is prepared in backend/vercel.cron-ready.json. The recognized backend/vercel.json deliberately has crons=[] until the T66-T71 validation/write-enable gate, then T72. Vercel has no per-cron enabled field in this JSON contract; do not invent one or deploy the ready template early. At release, merge only the prepared cron entry into the reviewed active config, privately set the distinct CRON_SECRET and verify backend project root/production protection/duration before deploying. No remote scheduler/environment/schema/deployment was changed by T33. See [T33 verification](t33-verification.md).
+
+Current official references checked 2026-10-12: [cron GET and UTC](https://vercel.com/docs/cron-jobs), [Bearer authentication and delivery behavior](https://vercel.com/docs/cron-jobs/manage-cron-jobs), [Express entry points](https://vercel.com/docs/frameworks/backend/express), [function duration configuration](https://vercel.com/docs/functions/configuring-functions/duration). Existing Express support takes precedence over outdated generic skill advice suggesting Express must be replaced.
 
 # 21. Recurring Idempotency
 
-Recurring generation must be duplicate-safe.
-
-Recommended technique:
-
-Unique occurrence key such as:
-
-```text
-(recurring_transaction_id, occurrence_date)
-```
-
-Generated transactions should include:
-
-- recurring_definition_id;
-- occurrence_date.
-
-A unique constraint prevents duplicate posting.
+Required `recurring_occurrences` ledger with UNIQUE(recurring_transaction_id, occurrence_date), owner FK, pending/posted/skipped/failed statuses and nullable generated_transaction_id. Posted/skipped are terminal. Transaction deletion leaves posted marker and clears link via FK; processor never infers missing work from transaction absence. Generated transactions additionally have a unique partial index on definition/date. T32 persistence and T30 calculator precede processor T31.
 
 ---
 
-# 22. Monthly Recurrence Rules
+# 22. Recurrence Calendar Rules
 
-Monthly schedules need clear rules.
-
-Example issue:
-
-A recurring item starts on January 31.
-
-What happens in February?
-
-Recommendation:
-
-Define explicit behavior such as:
-
-- use the last valid day of shorter months.
-
-Example:
-
-```text
-Jan 31
-Feb 28/29
-Mar 31
-Apr 30
-```
-
-This rule must be captured in database/domain design and tests.
+Use original startDate anchor and monthly clamping without drift; yearly Feb 29 clamps to Feb 28 in non-leap years. Weekly uses ISO weekday 1–7. End date inclusive; exhausted nextOccurrence null. Full pause/resume/edit/catch-up rules are frozen in §20. No schedule pattern changes rewrite posted history.
 
 ---
 
-# 23. Recurring Pattern Detection Architecture
+# 23. Recurring Pattern Detection Architecture — P1
 
 Pattern detection should be deterministic initially.
 
@@ -841,29 +616,11 @@ SUM(expense transactions for category and period)
 
 # 25. Goal Architecture
 
-Goals are planning entities.
-
-They should not distort transaction accounting.
-
-Two possible models:
-
-## Manual Progress
-
-User directly updates saved amount.
-
-## Linked Account Progress
-
-Progress derives from selected account balance.
-
-### Recommendation
-
-Start with manual saved amount plus optional linked account metadata.
-
-Avoid automatically interpreting every account deposit as goal progress until rules are clearer.
+P0 goal progress is manually maintained `savedAmount`; `linkedAccountId` is optional owned-account metadata only and never changes progress. No progress-event table or detail page is required in P0. Saved amount may exceed target; percentComplete is not clamped, remainingAmount is `max(targetAmount - savedAmount, 0)`. At 100%+, suggest completion; only an explicit user transition sets status completed. Complete requires savedAmount >= targetAmount; reducing a completed goal below target requires an explicit transition back to active in the same update. Active/completed goals can be archived; archived goals are read-only in P0. Projection/history/detail are P1; automatic account-derived progress is post-V2.
 
 ---
 
-# 26. Notification Architecture
+# 26. Notification Architecture — P1
 
 Use a persistent notifications table for in-app notifications.
 
@@ -954,31 +711,19 @@ Other endpoints can be split where caching/performance warrants it.
 
 # 30. Dashboard Data Strategy
 
-Avoid excessive waterfall requests.
+GET /api/v2/dashboard?period=this_month returns resolved period, summary, accounts, incomeVsExpenses series, recentTransactions, upcomingRecurring, budgets and goals. P0 excludes insights; P1 may add them explicitly. Run a small set of efficient user-scoped SQL queries in a read-only REPEATABLE READ transaction on one pg client for a consistent snapshot. Reuse analytics/budget/goal calculations; no request waterfall. Final acceptance depends on T38, T42/T43, T45 as well as accounts/transactions/recurring.
 
-Potential design:
+T36 now implements the staged authoritative core documented in API section 17. One checked-out client owns BEGIN ISOLATION LEVEL REPEATABLE READ READ ONLY, range resolution, T18 position/accounts, reusable V2 transaction totals, bounded T21 recent projection and the extracted T29 upcoming projection, then COMMIT. PostgreSQL statements execute sequentially on that one connection; there are no internal HTTP calls, additional domain pool checkouts, row locks, writes or financial JavaScript calculations. Cairo today is captured once per request. Failures roll back, preserve the safe error handler and discard the client if rollback fails; reads are never retried. Full analytics/budget/goal sections are explicitly deferred rather than simulated. No schema/index/cache or V1 changes are needed.
 
-```text
-GET /api/v2/dashboard
-```
+### Frozen periods and aggregates
 
-Returns:
+P0 currency EGP, locale en, financial timezone **Africa/Cairo** (profile fields read-only). Dashboard default is `GET /api/v2/dashboard?period=this_month`; allowed enums: **this_month, last_month, 3_months, 6_months, 1_year**. this_month is first day of current Cairo month through today; last_month is the full previous month; other enums span the current month plus previous 2/5/11 calendar months through today. Return explicit resolved from/to.
 
-- summary;
-- account balances;
-- recent transactions;
-- upcoming recurring;
-- budget highlights;
-- goal highlights;
-- insights.
+Analytics uses required explicit inclusive `from` and `to`; both valid dates from 1900-01-01 through 9999-12-31, from <= to, maximum **366 calendar days** per request. Actuals include only stored posted transactions; future range portions are allowed for forecast comparison and contain no future manual postings. Presets resolve 7/30 days inclusively ending today; 3/6/12 months start at first of month 2/5/11 months before current month. Transfer/manual transaction dates range 1900-01-01 through Cairo today.
 
-Benefits:
+AverageDailyExpense = actual expenses / **number of calendar days represented in the inclusive requested range**, including zero-spend/future days. Dashboard current month is already month-to-date; label it accordingly. savingsRatePercent = netSavings / income * 100; return **null when income is zero**, display “Not applicable”, never fabricated zero/infinity. Category percent uses total corresponding income/expenses as denominator, null if zero. Budget default threshold is **90%**, near_limit when spent*100 >= threshold*allocated and spent <= allocated, exceeded when spent > allocated; compare exact values before display rounding, and zero spend is normal.
 
-- fewer requests;
-- consistent snapshot;
-- simpler loading state.
-
-Detailed pages continue using dedicated endpoints.
+Recurring commitments are the exact sum of **projected anchored occurrences within the selected range**, without weekly/yearly monthly normalization. Include only currently active schedules with active parents, respecting start/end dates; omit durable skipped dates. Posted occurrence dates use current definition amount as a forecast assumption, not an actual transaction total; deleted generated transactions are never reposted. Label forecast separately from actuals and explain that projections use the current schedule. Account balance is current all-history net worth (including archived accounts), not historical period income minus expenses.
 
 ---
 
@@ -1004,27 +749,11 @@ Do not add Elasticsearch-like infrastructure initially.
 
 # 32. Pagination Strategy
 
-Recommended:
+Transactions and transfers use cursor pagination ordered by **date DESC, createdAt DESC, id DESC** (transaction storage column is `transaction_date`). P1 notifications use **createdAt DESC, id DESC**. Default limit **25**, maximum **100**; integer limits only. Backend returns `meta: {limit, nextCursor, hasMore}`; no total-page count or previousCursor.
 
-**Cursor pagination** for transaction history.
+Opaque cursor is a versioned base64url payload plus HMAC-SHA256 signature using server-only `CURSOR_SIGNING_SECRET`. Payload binds resource, verified user ID, ordering tuple, normalized filter/search scope and limit; it expires after **24 hours**. Validate encoding, signature, version, types, expiry and scope before querying. Malformed, tampered, expired, wrong-user or wrong-scope cursors return **400 VALIDATION_ERROR** with a generic cursor field message. Scope excludes the cursor itself; omitted/default filters canonicalize identically.
 
-Reason:
-
-- stable under inserts;
-- better for large histories;
-- works well with deterministic sort keys.
-
-Potential ordering:
-
-```text
-date DESC,
-created_at DESC,
-id DESC
-```
-
-Cursor contains the ordering tuple.
-
-Offset pagination remains acceptable for simpler admin/report-like pages.
+Frontend keeps cursor history for Next/Previous, resets it on filter/search/limit changes and after financial mutations, and starts over on invalid cursor. T24 backend configuration accepts a dedicated 32-byte random CURSOR_SIGNING_SECRET encoded as exactly 64 hexadecimal characters, shared across all instances. Missing/malformed configuration returns safe 503 CURSOR_UNAVAILABLE only for authenticated transaction listing, with no database query; V1-only startup, health and existing CRUD remain available. Do not generate a random fallback key. Rotate the single configured key deliberately; old cursors become invalid and clients restart from page one. Cursor continuation stores the full six-digit UTC PostgreSQL timestamp rather than the public JS millisecond timestamp. Every page request still applies user scoping. Paging is keyset-based, not a historical snapshot: inserts do not shift already traversed pages, but edits/deletes can change membership; refresh resets the list.
 
 ---
 
@@ -1131,14 +860,7 @@ A dedicated data library may be considered later if complexity grows.
 
 # 37. Auth Session on Frontend
 
-Frontend should maintain access to Supabase auth session.
-
-Requirements:
-
-- protected pages redirect if unauthenticated;
-- API client obtains current access token;
-- expired token handled safely;
-- auth state changes clear protected cached data.
+Use the single Supabase browser client/protected layout specified in §7. Resolve session and profile bootstrap before protected fetches/rendering. Subscribe to auth changes, clear all protected data/history and abort requests on identity change/sign-out; fail closed on 401. No financial data in SSR or shared cache.
 
 ---
 
@@ -1150,7 +872,7 @@ Recommended:
 
 - no long-lived browser cache for mutation-sensitive financial data;
 - use controlled revalidation;
-- summary/dashboard may use short-lived caching if explicitly invalidated;
+- P0 API responses use Cache-Control no-store; private short-lived caching is a later measured change;
 - mutation success should invalidate affected reads.
 
 Do not cache authentication-sensitive responses publicly.
@@ -1251,104 +973,45 @@ Application runtime should not have:
 
 # 45. V1-to-V2 Migration Architecture
 
-Migration is high risk and should be staged.
+### Frozen migration ownership and cutover
 
-Recommended sequence:
+The migration operator supplies the **verified intended existing-data owner UUID** at execution time; no real UUID is hardcoded. Preserve **all retained V1 production records, including retained demo rows**, assign them to that owner and a cash `Main Account` with openingBalance `0.00`. Record actual IDs/counts/amounts/categories/dates/timestamps/totals from the production inventory at cutover; historical T14 counts are not a migration assumption. Unknown category mapping aborts; never seed or silently delete retained data.
 
-## Phase 1 — Additive Schema
+Choose a **maintenance-window cutover**, not dual public operation:
 
-Add:
+1. Rehearse full migration/rollback on a disposable production-like copy, prepare source/environment rollback artifacts, and take a verified production backup.
+2. Deploy and verify maintenance enforcement for **all V1 financial reads/writes and summary routes**, across current and still-reachable older deployments; suspend old runtime SELECT/INSERT/UPDATE/DELETE grants if needed to neutralize old deployments. Public V1 health may remain. Verify direct HTTP requests are blocked before schema/backfill. No V2 financial writes or cron yet.
+3. Capture the frozen inventory; execute additive tables/nullable columns/reference seeds through the privileged versioned migration workflow.
+4. Operator creates/verifies the Auth owner and provisions profile; create default Main Account.
+5. Final backfill user_id/account_id/category_id, preserving IDs, amounts, descriptions, transaction_date, created_at and updated_at. Backfill bypasses only the timestamp-update trigger in the privileged maintenance transaction, restoring it afterward; normal runtime cannot bypass it.
+6. Reconcile every preserved field and exact totals, validate ownership/category mapping; only then apply NOT NULL, ownership FKs, checks and indexes.
+7. Deploy authenticated V2 backend while maintenance remains; verify auth/isolation and permanently remove V1 financial handlers. Restore only V2-required runtime grants once old deployments cannot bypass maintenance.
+8. Deploy V2 frontend, verify production under controlled access; run reconciliation/isolation/financial checks before enabling user access and daily cron.
+9. Close maintenance after gates pass. Verify `/api/v1` financial paths remain unavailable (maintenance 503, then 410 API_RETIRED with no data); protect/remove old backend deployments and public aliases. Retirement enforcement precedes the first V2 user write; never retain unauthenticated read-only compatibility against V2 data.
 
-- profiles;
-- accounts;
-- ownership columns;
-- V2 tables.
-
-Do not break V1 immediately.
-
-## Phase 2 — Create Initial User
-
-Create/authenticate the intended owner for existing V1 production data.
-
-## Phase 3 — Backfill Ownership
-
-Assign existing V1 transactions to:
-
-- one user;
-- one default account.
-
-Example default account:
-
-```text
-Main Account
-```
-
-## Phase 4 — Deploy V2 Backend Compatibility
-
-Backend supports new ownership-aware schema.
-
-## Phase 5 — Deploy V2 Frontend
-
-Authentication required.
-
-## Phase 6 — Retire V1 Behavior
-
-Disable ownerless writes and old unauthenticated API routes.
+Temporary compatibility consists only of retained legacy columns/backups and a maintenance response to old clients. P0 keeps `transaction_date` in storage and maps it to API `date`; no date-column rename. Retain legacy category text for rollback evidence, make it nullable/drop its V1-only category check after reconciliation, and map V2 categories by category_id; do not fabricate legacy values for new custom categories. Later column removal is a separate migration after stability, not part of first cutover.
 
 ---
 
 # 46. Migration Rollback
 
-Before migration:
+### Frozen rollback windows
 
-- create database backup;
-- test migration on disposable copy;
-- verify row counts/totals;
-- document rollback commands.
+**A — Before any V2 financial user/cron writes:** keep maintenance enforced; use the rehearsed compatibility rollback or verified backup to restore the V1 schema/data and deployment. Reconcile against frozen inventory before restoring V1 access/grants. Retain legacy columns; do not automatically delete newly created Auth identities. A return to public V1 is only valid if the restored dataset is still the original shared/demo-only baseline and no multi-user financial data is exposed.
 
-Migration must not silently change historical amounts/dates/categories.
+**B — After any V2 financial user/cron writes:** keep authenticated V2 controls or maintenance in place; **forward-fix is preferred**. Never deploy an unguarded V1 backend or blindly restore the pre-cutover backup. Any point-in-time/data recovery requires a current snapshot, explicit reconciliation/replay of all post-cutover writes and operator approval of recovery/data-loss consequences. Schema rollback cannot erase new users/categories/transfers/occurrences. Record the write-enable checkpoint in the runbook.
 
 ---
 
 # 47. Default Account Migration
 
-Existing V1 transactions need an account.
-
-Recommended:
-
-Create one default account for the migrated owner:
-
-```text
-Main Account
-```
-
-Opening balance should be chosen carefully to avoid double counting.
-
-Preferred migration:
-
-- opening balance = 0;
-- existing transactions recreate current historical balance.
+Preserve retained V1 data under the operator-provided verified Auth owner, create cash Main Account with opening_balance=0.00 and set opening_balance_locked=true if migrated activity exists. Map every legacy category to stable system ID; unknown values abort. Keep transaction_date and original IDs/timestamps. New users create their own first account; no automatic demo/default financial data for new users.
 
 ---
 
 # 48. Authentication Migration
 
-Current V1 is public.
-
-V2 deployment must avoid a long window where:
-
-- V2 schema requires user IDs;
-- V1 frontend still sends unauthenticated writes.
-
-Deployment order must ensure compatibility.
-
-Potential temporary backend:
-
-- V1 endpoints remain read-only briefly;
-- or maintenance window;
-- or coordinated frontend/backend release.
-
-Final implementation plan should choose one.
+Maintenance blocks all V1 financial endpoints before schema execution; V2 backend removes them before write-enable. No read-only V1 access to V2 data. Old clients receive 503 maintenance then 410 API_RETIRED; rollback windows §46 do not authorize exposing V2 data through V1.
 
 ---
 
@@ -1435,11 +1098,11 @@ If API authentication uses Bearer tokens in Authorization headers, classic cooki
 
 If cookie-based auth is introduced, CSRF defenses become mandatory.
 
-The final auth transport must be documented before implementation.
+P0 transport is Bearer token only (see §7); cookie API auth would require a new approved decision.
 
 ---
 
-# 55. Reporting / Export Architecture
+# 55. Reporting / Export Architecture — P1
 
 Reports should query backend.
 
@@ -1471,7 +1134,7 @@ Do not add storage infrastructure yet.
 
 ---
 
-# 57. Notification Processing
+# 57. Notification Processing — P1
 
 Budget notifications may be generated:
 
@@ -1494,7 +1157,7 @@ V2 needs multiple levels.
 - recurrence calculations;
 - money helpers;
 - pagination cursors;
-- insight calculations.
+- insight calculations when P1 is promoted.
 
 ## Integration Tests
 
@@ -1529,7 +1192,7 @@ Mandatory scenarios:
 3. User B attempts update.
 4. User B attempts delete.
 5. User B attempts analytics access.
-6. User B attempts export.
+6. User B attempts export if P1 is promoted; P0 verifies that unimplemented P1 routes expose no data.
 
 All must fail safely.
 
@@ -1601,66 +1264,25 @@ This builds on the proven V1 deployment architecture.
 
 # 64. Environment Variables
 
-Frontend likely needs:
-
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `NEXT_PUBLIC_API_BASE_URL`
-
-Backend likely needs:
-
-- `DATABASE_URL`
-- `DATABASE_SSL_CA_FILE`
-- `CLIENT_ORIGIN`
-- Supabase auth verification configuration as required.
-
-Do not expose service-role/admin keys to frontend.
+P0 frontend public configuration: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, NEXT_PUBLIC_API_BASE_URL. Backend private configuration: DATABASE_URL (limited role Session Pooler), DATABASE_SSL_CA_FILE, CLIENT_ORIGIN, SUPABASE_URL (issuer/JWKS configuration), CRON_SECRET, CURSOR_SIGNING_SECRET. Pin issuer/audience/ES256 in backend config. No service-role key/shared JWT secret is required. Cron and cursor secrets are server-only; rotate under a documented runbook. Preserve TLS CA bundling and max-five pool per process.
 
 ---
 
 # 65. Supabase Keys
 
-Frontend may use the public/anon key for authentication client operations.
-
-Backend should not use a service-role key unless a specific trusted admin operation requires it.
-
-Prefer JWT verification without broad Supabase administrative privileges.
+Frontend uses a publishable key for Auth only; do not grant financial Data API privileges. No service-role/admin key in frontend, backend API or cron. JWKS public keys verify asymmetric ES256 tokens; only privileged migration/operator workflows manage schema/Auth owner configuration.
 
 ---
 
 # 66. Scheduled Job Deployment
 
-If Vercel Cron is used:
-
-```text
-Vercel Cron
-  ↓
-Protected internal job route
-  ↓
-Recurring service
-  ↓
-PostgreSQL transaction
-```
-
-Internal route should require a scheduler secret or provider-authenticated mechanism.
-
-Do not leave scheduler endpoints publicly executable.
+Vercel backend project owns one daily UTC cron at 0 3 * * * targeting GET /internal/recurring/process. Configure function deadline and safe per-run budget in T33; benchmark bounded batches against actual plan limits. Keep cron disabled until migration and authenticated production acceptance pass. No always-running worker or Supabase scheduler in core.
 
 ---
 
 # 67. Internal Job Security
 
-A job route should verify a separate internal credential.
-
-Example:
-
-```text
-Authorization: Bearer <cron-secret>
-```
-
-The exact mechanism depends on provider capabilities.
-
-This secret must not be exposed to browser code.
+Require exact server CRON_SECRET Bearer credential, fail closed if absent, constant-time comparison, Cache-Control no-store, no sensitive job payload/logs. User JWTs and browser access cannot execute the job. Idempotent row-lock/ledger design handles duplicated operator/provider invocation.
 
 ---
 
@@ -1692,43 +1314,26 @@ Avoid creating needless abstraction layers beyond what each domain needs.
 
 Use PostgreSQL transactions for operations involving multiple writes.
 
-Mandatory candidates:
+Mandatory operations (all on one checked-out pg client):
 
 - transfer creation;
 - transfer update/delete;
 - recurring occurrence creation + next-date update;
-- account deletion/archive workflows where multiple records change.
+- account/category archive and recurring auto-pause workflows where multiple records change.
+
+Use one consistent lock hierarchy: account rows by UUID, category rows by UUID, recurring definitions by UUID, then occurrence rows by date/id. Initial pending claims lock only definitions/occurrences and commit before posting acquires parent locks. Re-read/revalidate state after locks; never acquire a parent lock while holding a later-level lock. Lock-order/concurrent archive/posting tests are mandatory.
 
 ---
 
-# 70. Soft Delete / Archive Strategy
+# 70. Deletion and Archive Strategy
 
-Recommended archive behavior for:
-
-- accounts;
-- categories;
-- recurring definitions;
-- goals where history matters.
-
-Transactions should generally use actual deletion only if V2 product policy keeps V1 semantics.
-
-A future audit-history feature may change this.
+Transactions/transfers/budgets hard-delete with explicit confirmation (budget deletion removes plan, never transactions). Accounts/custom categories/recurring definitions/goals archive only in P0. System categories immutable. Occurrence markers never delete through public API; posted marker survives generated transaction deletion. Archive auto-pauses affected schedules as §15. Exact FK deletion matrix in database §44; no destructive cascades from normal parents.
 
 ---
 
-# 71. Account Deletion
+# 71. User Identity Deletion — Post-V2
 
-User account deletion is dangerous.
-
-Recommended architecture:
-
-1. explicit confirmation;
-2. recent authentication check if provider supports it;
-3. delete/export warning;
-4. cleanup application data;
-5. delete auth identity last.
-
-Exact retention rules should be defined before implementation.
+No user-identity deletion endpoint/control/task/frame in P0 or P1. A later design must handle recent authentication, revocation/remaining JWT validity, retention/export, application cleanup, auth identity last, and audited recovery. P0 auth-owner FKs use RESTRICT so deleting a retained Auth identity cannot silently cascade financial data. Deferring this feature leaves no implementation-blocking P0 policy.
 
 ---
 
@@ -1799,39 +1404,36 @@ Assume:
 
 - modest users;
 - thousands to tens of thousands of transactions per user;
-- recurring jobs daily/hourly depending on design;
+- recurring jobs once daily with bounded catch-up;
 - analytics over personal datasets.
 
 Architecture should scale cleanly but remain simple.
 
 ---
 
-# 77. Architecture Decision Summary
+# 77. Frozen Architecture Decision Summary
 
-Current recommended decisions:
-
-| Topic | Decision |
+| Topic | Final rule |
 |---|---|
-| Authentication | Supabase Auth |
-| Financial API | Express remains authoritative |
-| User identity | Verified token-derived user ID |
-| Authorization | Express ownership checks |
-| RLS | Evaluate as defense-in-depth later |
-| Accounts | First-class entities |
-| Balance | Derived from opening balance + activity |
-| Transfers | Dedicated transfer model |
-| Recurring | Definition + generated transaction records |
-| Scheduling | Provider-supported cron/job |
-| Recurring duplicates | Unique occurrence constraint |
-| Analytics | PostgreSQL/backend aggregates |
-| Dashboard | Aggregated dashboard endpoint |
-| Search | PostgreSQL server-side |
-| Pagination | Cursor-based for transactions |
-| Money | PostgreSQL numeric + decimal strings |
-| Dates | Date-only semantics |
-| API | `/api/v2` |
-| Deployment | Separate Vercel frontend/backend + Supabase |
-| Writes | No automatic uncertain-write retry |
+| Release | P0-only core; P1 optional |
+| Stack | Next.js + Express + private Supabase PostgreSQL; separate Vercel projects |
+| Auth | Supabase browser session; Bearer; jose/ES256 project JWKS; verified sub |
+| Profile | Idempotent authenticated backend bootstrap; no auth trigger |
+| Authorization | Express ownership scoping; composite FKs/targeted integrity triggers |
+| RLS | Dedicated post-core hardening; private schema/no browser grants in P0 |
+| Money | Unrestricted NUMERIC, scale<=2, explicit bounds; reject input rounding |
+| Balance | Derived asset balances; debt-positive cards; archived-inclusive net worth |
+| Transfers | Dedicated table; atomic create/edit/hard-delete |
+| Recurring | Definition + durable occurrence ledger + posted transaction |
+| Scheduler | Daily Vercel Cron GET at 03:00 UTC; Cairo dates; bounded catch-up |
+| Goals | Manual progress; linked-account metadata; explicit completion |
+| Pagination | Signed user/filter-bound cursors; frontend history |
+| Period | dashboard this_month enum; inclusive analytics dates |
+| Migration | Maintenance; preserve inventory; operator owner; retire V1 before writes |
+| Rollback | Before writes rehearsed restore; after writes authenticated forward-fix |
+| Writes | No automatic uncertain-write retries |
+
+No implementation-blocking architecture decisions remain. Details are normative in the sections above and database/API contracts.
 
 ---
 
@@ -1910,26 +1512,6 @@ Architecture is ready for implementation planning when:
 
 # 80. BMAD Next Step
 
-Next artifact:
+T02 technical contracts remain frozen. The approved code-first amendment makes T03 the frontend design system/app shell and T04 the P0 browser prototype, using Next.js/React/TypeScript/Tailwind CSS 4 and fixtures only. Browser implementation is the visual source of truth; UI approval precedes T05+ authentication/API integration. Simulated prototype sessions are presentation state, never production authorization. This amendment changes documentation only.
 
-**`05-database-design.md`**
-
-It should define:
-
-- all V2 tables;
-- columns and types;
-- primary/foreign keys;
-- relationships;
-- user ownership;
-- indexes;
-- unique constraints;
-- recurring occurrence constraints;
-- transfer structure;
-- budgets/goals/categories/notifications;
-- V1 migration SQL strategy;
-- privileges;
-- possible RLS preparation;
-- exact money types;
-- date/time rules.
-
-No V2 application implementation should begin yet.
+---

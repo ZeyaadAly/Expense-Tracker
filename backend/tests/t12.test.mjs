@@ -30,7 +30,8 @@ test('T12 exact money POST/PUT/GET, unrestricted totals and live Cairo date boun
     return {status: response.status, body: await response.json()};
   }
   try {
-    await admin.query('TRUNCATE expense_tracker.transactions');
+    // Keep disposable reset compatible with the T11 occurrence FK.
+    await admin.query('DELETE FROM expense_tracker.transactions');
     for (const amount of ['0.01', '0.10', '0.20', '0.30', '1.00', '1000.00', '999999999.99']) {
       const created = await request('/transactions', 'POST', {...input, amount});
       assert.equal(created.status, 201);

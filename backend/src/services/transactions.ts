@@ -7,6 +7,21 @@ import { formatDecimal } from "../utils/money.js";
 export type TransactionFilters = { type?: TransactionType; category?: Category };
 const columns = `id, type, amount::text AS amount, description, category,
   to_char(transaction_date, 'YYYY-MM-DD') AS transaction_date, created_at, updated_at`;
+// Read-only compatibility for new V2 rows. to_jsonb also works before T11 adds category_id.
+// Retained legacy evidence is never rewritten; category IDs are authoritative after T15.
+// Custom categories use V1's Other bucket; unmigrated rows retain their existing text.
+const legacyCategory = `CASE WHEN to_jsonb(transactions)->>'category_id' IS NULL THEN category
+  ELSE CASE to_jsonb(transactions)->>'category_id'
+  WHEN 'c1200000-0000-4000-8000-000000000001' THEN 'salary'
+  WHEN 'c1200000-0000-4000-8000-000000000002' THEN 'freelance'
+  WHEN 'c1200000-0000-4000-8000-000000000003' THEN 'gift'
+  WHEN 'c1200000-0000-4000-8000-000000000004' THEN 'food'
+  WHEN 'c1200000-0000-4000-8000-000000000005' THEN 'transport'
+  WHEN 'c1200000-0000-4000-8000-000000000006' THEN 'shopping'
+  WHEN 'c1200000-0000-4000-8000-000000000007' THEN 'bills'
+  WHEN 'c1200000-0000-4000-8000-000000000008' THEN 'entertainment'
+  ELSE 'other' END END`;
+const readColumns = columns.replace("description, category,", `description, ${legacyCategory} AS category,`);
 
 export function createTransactionService(database: Pick<Pool, "query">) {
   return {
@@ -41,18 +56,18 @@ export function createTransactionService(database: Pick<Pool, "query">) {
       }
       if (filters.category !== undefined) {
         values.push(filters.category);
-        clauses.push(`category = $${values.length}`);
+        clauses.push(`(${legacyCategory}) = $${values.length}`);
       }
       const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
       const result = await database.query<TransactionRow>(
-        `SELECT ${columns} FROM expense_tracker.transactions ${where}
+        `SELECT ${readColumns} FROM expense_tracker.transactions ${where}
          ORDER BY transaction_date DESC, created_at DESC, id DESC`, values,
       );
       return result.rows.map(mapTransaction);
     },
     async get(id: string) {
       const result = await database.query<TransactionRow>(
-        `SELECT ${columns} FROM expense_tracker.transactions WHERE id = $1`, [id],
+        `SELECT ${readColumns} FROM expense_tracker.transactions WHERE id = $1`, [id],
       );
       return result.rows[0] ? mapTransaction(result.rows[0]) : null;
     },

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "express",
+  "buildCommand": "npm run build",
+  "crons": [{ "path": "/internal/recurring/process", "schedule": "0 3 * * *" }],
+  "functions": {
+    "server.mjs": {
+      "includeFiles": "certs/supabase-ca.crt",
+      "maxDuration": 60
+    }
+  }
+}

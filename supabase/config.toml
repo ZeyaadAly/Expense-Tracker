@@ -154,6 +154,8 @@ max_indexes = 5
 # [storage.vector.buckets.documents-openai]
 
 [auth]
+# V2 development uses hosted Auth; this local-only configuration is not deployed.
+# Docker/local Auth remains optional. See docs/v2/t05-verification.md.
 enabled = false
 # The base URL of your website. Used as an allow-list for redirects and for constructing URLs used
 # in emails.

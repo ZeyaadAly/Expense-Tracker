@@ -1,10 +1,12 @@
 # Expense Tracker V2 — API Design
 
-**Version:** 2.0 Planning  
-**Status:** Draft for BMAD API Design  
+**Version:** 2.0 Planning — T02 decisions recorded
+**Status:** P0 planning frozen with approved code-first design amendment; revised T03/T04 not started
 **Date:** 2026-10-06  
 **Project:** Expense Tracker  
 **Depends on:** `01-product-brief.md`, `02-prd.md`, `03-ux-specification.md`, `04-architecture.md`, `05-database-design.md`
+
+**Release rule:** Core completion requires P0 only. P1 sections are optional enhancement contracts; post-V2 features do not gate core release. Decisions are frozen as of 2026-10-06; future material changes follow change control.
 
 ---
 
@@ -43,25 +45,7 @@ This is a design contract. Implementation may refine details, but V2 development
 
 # 2. Base URL
 
-V2 API prefix:
-
-```text
-/api/v2
-```
-
-Example production base:
-
-```text
-https://<backend-host>/api/v2
-```
-
-V1 may remain temporarily available at:
-
-```text
-/api/v1
-```
-
-during migration and rollback windows.
+V2 prefix `/api/v2` on the existing separate Express backend. Internal job is root GET /internal/recurring/process. V1 financial routes receive 503 MAINTENANCE during cutover, then 410 API_RETIRED with no data; public sanitized V1 health may remain. No old unauthenticated V1 financial compatibility against V2 data. P1 endpoints below remain unimplemented/absent in core unless explicitly promoted.
 
 ---
 
@@ -83,6 +67,10 @@ The backend:
 4. scopes all financial operations to that user.
 
 Public endpoint:
+
+T10 transport reads the current token through T06 `getAccessToken()` for every protected request. Missing tokens fail locally with typed `AUTH_REQUIRED` (status 0), without fetching. Backend 401 failures remain typed auth errors; session/navigation decisions belong to the T08 layer, with no low-level redirect/signout. `503 AUTH_UNAVAILABLE` is a temporary server availability error. Requests never retry automatically. Cancellation is distinct and an interrupted dispatched mutation may have an uncertain outcome. A 204 returns undefined; other successes require the JSON data envelope, retaining optional meta and exact money strings.
+
+`NEXT_PUBLIC_API_BASE_URL` retains its V1 `/api/v1` prefix in shared deployments. The isolated V2 client accepts a backend origin, `/api/v1`, or `/api/v2` and constructs `/api/v2`; other base paths fail configuration validation. V1 URL handling remains unchanged.
 
 ```text
 GET /api/v2/health
@@ -186,6 +174,10 @@ Recommended V2 codes:
 
 - `AUTH_REQUIRED`
 - `AUTH_INVALID`
+- `AUTH_UNAVAILABLE` — 503 when signing-key retrieval/configuration is unavailable; sanitized retry-later message, never successful authentication.
+- `PROFILE_REQUIRED`
+- `MAINTENANCE`
+- `API_RETIRED`
 - `VALIDATION_ERROR`
 - `NOT_FOUND`
 - `CONFLICT`
@@ -225,40 +217,26 @@ Bodies must reject:
 - wrong scalar types;
 - oversized bodies.
 
-The explicit body-size limit should be documented in implementation configuration.
+P0 JSON body limit is 16kb, preserving V1. Reject unknown mutation/query properties, repeated scalar queries, malformed/oversized input. Bootstrap accepts exactly `{}`.
 
 ---
 
-# 9. Money Serialization
+# 9. Money Serialization and Validation
 
-Money values must be strings.
+### Frozen money contract
 
-Correct:
+All persisted monetary columns use PostgreSQL **NUMERIC without a precision/scale typmod**, with explicit `scale(value) <= 2` and range CHECK constraints. This preserves V1's excess-scale rejection: `NUMERIC(11,2)` would round before a CHECK could inspect the original value. Effective per-value bounds are nine integer digits and two fractional digits; no monetary column uses float/double.
 
-```json
-{
-  "amount": "1250.50"
-}
-```
+| Value | Minimum | Maximum |
+|---|---|---|
+| Transaction, transfer, recurring amount | `0.01` | `999999999.99` |
+| Account opening balance (all types) | `-999999999.99` | `999999999.99` |
+| Budget amount, goal target | `0.01` | `999999999.99` |
+| Goal saved amount | `0.00` | `999999999.99` |
 
-Incorrect:
+Inputs are plain decimal strings with zero, one or two fractional digits; no exponent, whitespace, separators, plus sign or leading zeroes except zero itself. A minus sign is allowed only for opening balance; reject negative zero. Normalize accepted values to two fractional digits. Reject excess decimals (including trailing zeroes such as `1.230`) and out-of-range inputs with field validation; never round input.
 
-```json
-{
-  "amount": 1250.5
-}
-```
-
-The same rule applies to:
-
-- balances;
-- budget values;
-- goal values;
-- analytics totals;
-- transfer amounts;
-- recurring amounts.
-
-Frontend must never require float arithmetic to interpret API money.
+Derived balances/SUM totals are unbounded exact NUMERIC and serialize as two-decimal strings. PostgreSQL rounds derived averages and percentages to two decimals, with ties away from zero (half-up for nonnegative values). Percentages are decimal strings, may exceed 100 or be negative where meaningful, and are null for zero denominators. Never calculate financial values with JS floating-point arithmetic.
 
 ---
 
@@ -296,53 +274,19 @@ Example:
 
 # 11. Pagination
 
-Recommended transaction pagination:
+Transactions and transfers use cursor pagination ordered by **date DESC, createdAt DESC, id DESC** (transaction storage column is `transaction_date`). P1 notifications use **createdAt DESC, id DESC**. Default limit **25**, maximum **100**; integer limits only. Backend returns `meta: {limit, nextCursor, hasMore}`; no total-page count or previousCursor.
 
-cursor-based.
+Opaque cursor is a versioned base64url payload plus HMAC-SHA256 signature using server-only `CURSOR_SIGNING_SECRET`. Payload binds resource, verified user ID, ordering tuple, normalized filter/search scope and limit; it expires after **24 hours**. Validate encoding, signature, version, types, expiry and scope before querying. Malformed, tampered, expired, wrong-user or wrong-scope cursors return **400 VALIDATION_ERROR** with a generic cursor field message. Scope excludes the cursor itself; omitted/default filters canonicalize identically.
 
-Request example:
+Frontend keeps cursor history for Next/Previous, resets it on filter/search/limit changes and after financial mutations, and starts over on invalid cursor. Every page request still applies user scoping. Paging is keyset-based, not a historical snapshot: inserts do not shift already traversed pages, but edits/deletes can change membership; refresh resets the list.
 
-```text
-GET /api/v2/transactions?limit=25&cursor=<opaque-cursor>
-```
-
-Response:
-
-```json
-{
-  "data": [],
-  "meta": {
-    "limit": 25,
-    "nextCursor": "opaque-or-null",
-    "hasMore": true
-  }
-}
-```
-
-Cursor must be opaque to the client.
-
-Server ordering:
-
-```text
-date DESC
-createdAt DESC
-id DESC
-```
+Example GET /api/v2/transactions?limit=25&cursor=<opaque-cursor>; lists return `{data: [...], meta: {limit: 25, nextCursor: null, hasMore: false}}`. Transfer and P1 notification lists use the same meta envelope.
 
 ---
 
 # 12. List Limits
 
-Suggested defaults:
-
-```text
-default limit: 25
-maximum limit: 100
-```
-
-Final values may be tuned later.
-
-Invalid limits return `VALIDATION_ERROR`.
+Final default 25, maximum 100 for cursor lists; integer 1–100, invalid/repeated limits return 400 VALIDATION_ERROR. Accounts/categories/recurring/budgets/goals list small planning collections with meta.count; recurring upcoming returns date-ordered occurrences, days integer 1–366 default 30. Financial aggregate ranges are bounded by §78.
 
 ---
 
@@ -360,7 +304,7 @@ Example:
 GET /api/v2/transactions?q=netflix
 ```
 
-Search may inspect:
+Search inspects:
 
 - description;
 - category name;
@@ -447,83 +391,76 @@ Cache-Control: no-store
 
 # 16. Profile Endpoints
 
-## GET `/profile`
+### POST /profile/bootstrap
 
-Returns current authenticated profile.
+Authenticated, body `{}`; idempotently creates current verified sub profile with EGP/en/Africa/Cairo defaults. Returns 200 `{data: profile}` whether created or already present; never accepts owner ID. Frontend invokes after session resolution and retries safely on definite failure.
 
-Response:
+### GET /profile
 
-```json
-{
-  "data": {
-    "userId": "uuid",
-    "displayName": "Zeyad",
-    "preferredCurrency": "EGP",
-    "locale": "en",
-    "timezone": "Africa/Cairo",
-    "createdAt": "...",
-    "updatedAt": "..."
-  }
-}
-```
+Returns `{data: {userId, displayName, preferredCurrency: "EGP", locale: "en", timezone: "Africa/Cairo", createdAt, updatedAt}}`. Missing profile → 409 PROFILE_REQUIRED; bootstrap recovers it. Profile userId is an output only, never a trusted input.
 
----
+### PUT /profile
 
-## PUT `/profile`
+Body exactly `{displayName: "Zeyad"}`; nullable or trimmed 1–100 Unicode code points. Currency/locale/timezone are read-only P0. Return 200 profile; missing profile → 409 PROFILE_REQUIRED. No GET side-effect provisioning or auth.users read required.
 
-Request:
+T13 bootstrap always starts displayName=null; Auth metadata is not imported. A validated registration draft, stored locally for its exact signup user UUID, may be applied through PUT after verified sign-in/bootstrap if the existing name is null. All profile routes reject query parameters; bootstrap requires exactly `{}`. PUT rejects unknown fields, including userId/email/preferences/timestamps, empty names, control characters and invalid Unicode. Unchanged PUT names, repeated bootstrap and GET preserve timestamps; actual changes use the existing T11 timestamp trigger and serialize UTC. A missing Auth FK during bootstrap is a sanitized 500 INTERNAL_ERROR; no Auth-table reads or admin credentials are needed. Frontend bootstrap failure keeps protected children unmounted with explicit Retry; 401 clears the session gate and redirects to login. Settings editing remains T49.
 
-```json
-{
-  "displayName": "Zeyad",
-  "locale": "en",
-  "timezone": "Africa/Cairo"
-}
-```
+### Frozen authentication boundary
 
-The authenticated user ID is not accepted in body.
+Supabase Auth email/password with email confirmation enabled in production; reset redirects are allowlisted. Frontend uses one Supabase browser client with session persistence/automatic refresh, accesses its current token for each Express request, and sends Bearer authorization. Use a client protected layout/route guard with an initial loading gate: render no financial content or requests before session/bootstrap succeeds. P0 renders authenticated financial data client-side; no cookie-based Express auth or financial SSR cache is introduced. Root / redirects to dashboard or login after session resolution; only local allowlisted return paths are accepted.
+
+Backend uses **jose remote JWKS verification**, as described by Supabase's official JWT guidance, against the configured project `/auth/v1/.well-known/jwks.json`. T05 must verify/select an asymmetric **ES256 signing key** before T09 verification tests; do not assume the current project already has one. Pin allowed algorithm ES256, exact issuer `<SUPABASE_URL>/auth/v1`, audience `authenticated`, expiration, nbf when present, nonempty UUID sub and authenticated role. Identity is verified sub, never user metadata or body/query userId. Fail closed on verification/JWKS failure; no legacy HS256 fallback/shared JWT secret. Cache remote keys through the library and test rotation/unknown kid.
+
+Profile provisioning uses authenticated **POST /api/v2/profile/bootstrap** with empty JSON body: idempotent insert-on-conflict using verified sub, defaults EGP/en/Africa/Cairo and no auth-schema reads or admin key. Signup display name remains a draft until verified sign-in; PUT /profile writes validated displayName. Bootstrap runs after authenticated session resolution and before financial reads. GET/PUT /profile returns **409 PROFILE_REQUIRED** if missing; client re-runs bootstrap safely. This avoids an auth.users trigger failure blocking signup; profiles also backfill through the operator migration flow. Only displayName is editable in P0; currency/locale/timezone are returned read-only.
+
+On sign-out/user change/auth invalidation, clear financial data and cursor history, abort pending reads and suppress late responses from the old session. Supabase refreshes sessions; on API 401 block operations, clear protected UI and redirect to login without retrying uncertain writes. Supabase sign-out does not instantly revoke locally verified access tokens; authorization lasts until JWT expiry. Configure access-token lifetime **15 minutes** in T05. Strong session revocation and identity deletion require separate post-V2 design.
+
+References checked 2026-10-06: [Supabase JWT verification](https://supabase.com/docs/guides/auth/jwts), [user provisioning and trigger failure behavior](https://supabase.com/docs/guides/auth/managing-user-data).
 
 ---
 
 # 17. Dashboard Endpoint
 
-## GET `/dashboard`
+**GET /dashboard?period=this_month**; enum/default/ranges frozen in §77. Response `data` requires:
 
-Purpose:
+- period: {key, from, to, timezone: "Africa/Cairo"};
+- summary: {totalBalance, income, expenses, netSavings, currency: "EGP"}, exact monetary strings;
+- accounts: account resource array (§18), including archived balances in total;
+- incomeVsExpenses: monthly series (§49), clipped to resolved range;
+- recentTransactions: up to 5 transaction resources, newest by transaction cursor order;
+- upcomingRecurring: first 5 projected upcoming occurrences, ordered occurrenceDate then recurringTransactionId;
+- budgets: current Cairo month's budget resources (§51);
+- goals: first 3 active goals ordered targetDate NULLS LAST then id.
 
-Return dashboard overview in one coarse request.
+Each financial query scopes verified user; use read-only REPEATABLE READ snapshot. Empty collections are arrays; summary values are "0.00" except totalBalance may reflect opening balance. P1 insights may later extend response; core has no insight requirement. Dashboard charts reuse backend analytics, never frontend totals.
 
-Optional query:
+### T36 staged core contract (2026-10-12)
 
-```text
-period=month
-```
-
-or explicit range later.
-
-Example response:
+The authenticated `GET /api/v2/dashboard` now implements the authoritative core below. The final target above remains dependent on T38/T42/T43/T45. Unknown/repeated query keys, empty/invalid period values and explicit dates are rejected with 400 VALIDATION_ERROR. The only accepted query is optional `period`, default `this_month`. All responses use no-store and the shared safe error envelope; identity comes exclusively from T09 verified req.auth.userId.
 
 ```json
 {
   "data": {
-    "summary": {
-      "totalBalance": "25480.00",
-      "income": "15000.00",
-      "expenses": "8240.00",
-      "netSavings": "6760.00",
-      "currency": "EGP"
-    },
+    "period": {"key":"this_month","from":"2026-10-01","to":"2026-10-12","timezone":"Africa/Cairo"},
+    "summary": {"totalBalance":"50.00","assets":"80.00","cardDebt":"30.00","income":"0.30","expenses":"0.40","netSavings":"-0.10","currency":"EGP"},
     "accounts": [],
     "recentTransactions": [],
-    "upcomingRecurring": [],
-    "budgets": [],
-    "goals": [],
-    "insights": []
+    "upcomingRecurring": []
+  },
+  "meta": {
+    "stage":"core",
+    "deferred":["incomeVsExpenses","budgets","goals"],
+    "upcoming":{"from":"2026-10-12","to":"2026-11-10","limit":5},
+    "recentTransactions":{"limit":5,"scope":"all_history"}
   }
 }
 ```
 
-This endpoint should not replace detailed domain endpoints.
+The example collections abbreviate real public account/transaction/T29 occurrence resources. `totalBalance` is the existing T18 net position (no second alias/formula). `assets` sums signed non-card balances; `cardDebt` sums signed card balances, including negative overpayment. Both include archived accounts. Thus net position equals assets minus signed card debt. All account resources (active and archived) retain T18 createdAt ASC/id ASC order and all-history balances, regardless of period. Income/expenses/netSavings are NUMERIC period actuals only; transfers, definitions and reservations do not count. Generated persisted transactions count once; deleting one removes its financial effect without removing its terminal occurrence marker.
+
+Recent transactions are global owned history, independent of selected period, limited to 5 and ordered transaction date DESC, created_at DESC, id DESC using the T21 resource projection. No cursor secret is required for this bounded preview. Upcoming is expected activity, independent of period, using the same T29/T30 projection for Cairo today through today+29 inclusive; take the first 5 ordered occurrenceDate ASC/recurringTransactionId ASC. Only active schedules with active owned/visible parents qualify; terminal posted/skipped dates are omitted, including deleted generated postings. Upcoming metadata declares the horizon.
+
+`incomeVsExpenses`, `budgets`, and `goals` are omitted, explicitly named in `meta.deferred`; empty fake previews or client-calculated financial values are forbidden. Chart calculations await T38, budget previews T42/T43, goal previews T45. Savings rate/averages are not fields in this staged summary; their frozen null-denominator/SQL rounding rules still apply when introduced. Full P0 acceptance and full T37 UI acceptance remain dependent on those services. See [T36 verification](t36-verification.md).
 
 ---
 
@@ -545,13 +482,15 @@ Example:
 }
 ```
 
-`currentBalance` is calculated/derived.
+`currentBalance` is calculated/derived. Include `openingBalanceEditable` boolean derived from permanent opening_balance_locked; currency EGP. Credit-card currentBalance is debt-positive; cards show amount owed/credit explicitly. Total Balance is net worth including archived accounts (§77).
 
 ---
 
 # 19. GET `/accounts`
 
 Returns authenticated user's accounts.
+
+T17 list behavior: default `status=active`; `status=archived` selects archived accounts only. Unknown, repeated, bracketed or empty filters return 400 VALIDATION_ERROR. Order is createdAt ASC then id ASC. No userId is returned.
 
 Optional query:
 
@@ -584,6 +523,18 @@ Response:
 
 ---
 
+## T19: GET `/accounts/summary`
+
+Authenticated, owner-scoped, read-only account overview. No query parameters. Uses the existing T18 grouped NUMERIC balance repository; includes active and archived accounts, subtracting positive credit-card debt and adding negative card credit. Empty owners receive exact `0.00`. No browser financial arithmetic or dashboard endpoint is introduced.
+
+```json
+{"data":{"netPosition":"49.90","currency":"EGP"}}
+```
+
+Amounts are unbounded derived two-decimal strings. Shared auth, no-store and safe error envelopes apply. Unsupported methods return 405; unknown/repeated queries return 400. No schema or privilege changes.
+
+---
+
 # 20. POST `/accounts`
 
 Request:
@@ -603,13 +554,23 @@ Response:
 201 Created
 ```
 
-with created account.
+with created account. Name trimmed 1–100 code points; valid type, explicit openingBalance, currency EGP only, active status server-owned.
+
+T17 rejects controls, lone surrogates and names containing only whitespace/format characters. Names are unique per user through the existing PostgreSQL lower(name) index, including archived accounts; another user's name does not conflict. Duplicate names return 409 ACCOUNT_CONFLICT. Location identifies the created resource. Unknown fields are rejected on create and full PUT.
 
 ---
 
 # 21. GET `/accounts/:id`
 
 Returns one owned account.
+
+### T20: GET `/accounts/:id/summary`
+
+Authenticated, read-only, no query parameters, GET only, `Cache-Control: no-store`. The ID must be a UUID. Scope exclusively by verified `req.auth.userId`; missing and foreign accounts both return the existing `404 NOT_FOUND` envelope. No ownership fields are returned.
+
+Response `data`: `{currentBalance, openingBalance, totalIncome, totalExpenses, incomingTransfers, outgoingTransfers, currency: "EGP"}`. Every monetary field is an exact two-decimal string; derived values are unrestricted. All persisted owned transaction/transfer history is included, including archived accounts. Income/expenses are transaction amounts; incoming/outgoing totals reflect transfer direction and are not transaction income/expense. Credit-card `currentBalance` retains debt-positive/credit-negative semantics.
+
+One parameterized statement reuses T18's scoped grouped balance CTE and sole balance formula. Additional grouped totals cannot multiply transactions by transfers. Reads neither lock nor mutate rows. The frontend checks agreement of separately fetched resource/summary current and opening balances before publishing; a concurrent-write mismatch retains the previous consistent view with retry. No activity API, mutation, schema, analytics or transfer endpoint is introduced.
 
 Cross-user/unknown resource:
 
@@ -621,46 +582,17 @@ Cross-user/unknown resource:
 
 # 22. PUT `/accounts/:id`
 
-Full update of editable account fields.
-
-Example:
-
-```json
-{
-  "name": "Main Bank",
-  "type": "bank",
-  "status": "active"
-}
-```
-
-Opening balance mutability should be decided carefully.
-
-Recommendation:
-
-Allow changing opening balance only before financial activity exists, or provide a dedicated adjustment workflow.
+Full editable details: `{name, type, openingBalance}` with required values and currency omitted/read-only EGP. OpeningBalance must equal current value when openingBalanceEditable=false; changing it returns 409 ACCOUNT_CONFLICT. Changing credit_card ↔ asset semantics is also rejected after first activity; name and asset-to-asset type edits allowed. Status is not accepted here; use explicit archive/restore endpoints. Account locking prevents edit racing first posting. Return 200 account resource.
 
 ---
 
-# 23. POST `/accounts/:id/archive`
+# 23. Account Archive and Restore
 
-Preferred over hard delete where history exists.
+**POST /accounts/:id/archive** and **POST /accounts/:id/restore**, empty body. Archive is idempotent, atomically pauses active associated recurring definitions and skips their unposted reservations; returns `{data: account, meta: {pausedRecurringCount}}`. Restore returns active account, never resumes schedules. Historical balances remain; no DELETE /accounts/:id in core. New activity requires active account; edits of historical transaction/transfer with archived resulting references require restore first.
 
-Response:
+T17 actions use an empty JSON object `{}` under the existing POST Content-Type policy. Already archived/active actions and identical PUT preserve account updatedAt. Archive clears nextOccurrence for newly paused definitions, skips pending/failed unposted occurrences and clears their failureCode; posted/skipped history remains unchanged. Restoring changes account status only. Archived account metadata remains editable under the same permanent opening/type locks. Unsupported account DELETE returns 405 with Allow: GET, PUT.
 
-```json
-{
-  "data": {
-    "id": "uuid",
-    "status": "archived"
-  }
-}
-```
-
-Optional restore:
-
-```text
-POST /accounts/:id/restore
-```
+T18 centralizes currentBalance in the authoritative account-balance repository. List, detail and mutation responses use the same grouped exact PostgreSQL query over owned transactions/transfers, with the opposite activity sign for credit cards. Internal net-position queries reuse that calculation and include archived accounts. The public account response contract is unchanged; no net-position, dashboard or transfer endpoint is introduced here.
 
 ---
 
@@ -686,39 +618,31 @@ Example:
 }
 ```
 
-Do not expose `userId`.
+Do not expose `userId`. Include recurringOccurrenceDate as nullable date-only output for generated transactions; immutable linkage is server-owned even if the user edits the posted transaction date/amount.
 
 ---
 
 # 25. GET `/transactions`
 
-Supported query parameters:
+T24 implemented stage: authenticated `/api/v2/transactions` accepts exactly `q`, `type`, `accountId`, `categoryId`, `from`, `to`, `recurring`, `limit`, and `cursor`. Return `{data, meta: {limit, nextCursor, hasMore}}`, ordered date DESC, createdAt DESC, id DESC. Default limit 25, maximum 100; fetch limit+1 to determine continuation. No count, total-count query, offset, page number or previousCursor. All supplied filters combine with AND; the three-field search OR group remains parenthesized within that conjunction.
 
-- `type`
-- `accountId`
-- `categoryId`
-- `from`
-- `to`
-- `q`
-- `recurring`
-- `limit`
-- `cursor`
+| Parameter | Current behavior |
+|---|---|
+| q | Optional case-insensitive literal substring across description/account name/category name; trim outer whitespace; blank means omitted; maximum 200 Unicode code points. Bound ILIKE patterns escape `%`, `_`, and `!` using `ESCAPE '!'`; backslashes and quotes are literal. No Unicode normalization or accent removal; case behavior follows PostgreSQL locale. |
+| type | Exactly lowercase `income` or `expense`; omit for both. |
+| accountId | Canonical hyphenated UUID, case-insensitive syntax normalized lowercase. Reference must belong to the verified user, including archived accounts. |
+| categoryId | Canonical hyphenated UUID, normalized lowercase. System categories or the verified user's custom categories are visible, including archived history. |
+| from | Optional inclusive lower date bound, real YYYY-MM-DD from 1900-01-01 through 9999-12-31. |
+| to | Optional inclusive upper date bound with the same format/range; when both are supplied, from must be <= to. |
+| recurring | Exactly `manual` (recurring_transaction_id IS NULL) or `generated` (IS NOT NULL). Omit for both; explicit `all` is invalid. Lists posted transactions, never forecasts or definitions. |
+| limit | Optional canonical decimal integer 1–100, default 25 only when omitted; reject blank, whitespace, leading zeroes, signs, decimals, exponent forms and repeated values. |
+| cursor | Optional versioned URL-safe HMAC-SHA256 token, maximum 2,048 characters. Blank/malformed/tampered/expired/wrong-user/resource/scope cursors return 400 VALIDATION_ERROR with a generic cursor field message. |
 
-Example:
+Validate the original URL so repeated scalar keys and bracket/object/array notation are rejected. Unknown keys, blank non-q values, invalid enum/UUID/calendar values, reversed ranges, overlong q and null characters return 400 VALIDATION_ERROR before SQL. URL values are strings, so q=null searches the literal word. Malformed encoding in typed filters fails their format checks; q retains T22 URLSearchParams decoding semantics. Query validation does not apply write-time future-date restrictions: future read ranges are valid and can return empty results without timezone shifting dates.
 
-```text
-GET /api/v2/transactions?type=expense&accountId=<uuid>&from=2026-10-01&to=2026-10-31&limit=25
-```
+Invisible account/category filter references return 404 NOT_FOUND, exactly the same status/code/message/details as a nonexistent reference. Validation uses owner-scoped reference queries; no global lookup, owner/name exposure or 403. Visible references with no matching transactions return a normal empty 200 list; a visible expense-only category combined with type=income also returns empty, without cross-filter kind inference. Account/category visibility checks deliberately precede other result predicates, even if those predicates would otherwise yield no rows. No active-status restriction applies to historical references.
 
-`recurring` may support:
-
-```text
-generated
-manual
-all
-```
-
-if useful; omit if it complicates initial release.
+The transaction SQL itself always binds authenticated ownership and preserves ownership-safe joins; search does not inspect money, IDs, ownership, JWT claims or unrelated metadata. Resource fields and exact-money mapping are unchanged. Detail and mutation routes still reject all query parameters. T24 cursor scope is SHA-256 of fixed-order normalized q/type/accountId/categoryId/from/to/recurring/limit, excluding the cursor. Trimmed q, blank/omitted q, normalized UUID case and omitted/explicit default limit canonicalize consistently; other scope changes require a fresh first page. The signed version-1 payload binds the transactions resource, verified owner, last returned date/createdAt/id, scope hash and issuance/24-hour expiry. Signature protection is not encryption. Never embed descriptions, names, tokens or secrets. Validate cursor before reference lookup or transaction SQL. Continuation compares `(transaction_date, created_at, id) < (cursorDate, cursorCreatedAt, cursorId)` with typed bound parameters; cursor timestamps preserve all six PostgreSQL microsecond digits in UTC, while public timestamps retain existing mapping. Empty/final pages return nextCursor=null and hasMore=false. A deleted anchor still permits continuation; newer insertions do not shift traversed pages. Edits/deletes can change membership; paging is not an immutable snapshot. Secret rotation invalidates old cursors; restart from the first page. Frontend integration remains T25.
 
 ---
 
@@ -774,7 +698,9 @@ Rules:
 - category valid for user/type;
 - archived account/category rejected;
 - amount exact and positive;
-- date valid.
+- date valid from 1900-01-01 through Cairo today;
+- all fields strictly validated, monetary scale/range as §9;
+- transaction_date storage maps to date; generated linkage is server-owned.
 
 Response:
 
@@ -793,6 +719,8 @@ Returns one owned transaction.
 ---
 
 # 29. PUT `/transactions/:id`
+
+T21 requires all six editable fields, identical to POST; unknown fields including owner, currency, timestamps and recurring linkage are rejected. POST returns 201 with Location; PUT returns 200. Both require an owned active account and a visible active compatible category, even when the resulting references are unchanged. Archived references return 409 ACCOUNT_ARCHIVED/CATEGORY_ARCHIVED; invisible references return the same 404 as missing references. Financial fields on generated rows may change; ID, createdAt, owner, retained legacy category and generated occurrence identity remain unchanged. Description trims to 1–200 Unicode code points; amount is a decimal string from 0.01 through 999999999.99. No JavaScript money arithmetic is used.
 
 Full update body:
 
@@ -817,7 +745,7 @@ Response:
 204 No Content
 ```
 
-No JSON body.
+No JSON body. Hard delete, including generated transactions; keep durable posted occurrence, clear its generated_transaction_id and never regenerate it. Confirmation is required in UI; ownership applies even with archived parents.
 
 ---
 
@@ -845,15 +773,11 @@ Example:
 
 # 32. GET `/transfers`
 
-Optional filters:
+Optional accountId (either side), inclusive from/to, limit/cursor. Same signed cursor/meta as §11, with resource/filter scope bound. Sort date DESC, createdAt DESC, id DESC. Return transfer resource array; invisible account filter ID → 404 NOT_FOUND. P0 accounts page includes a transfer list/edit/delete flow without requiring account detail route.
 
-- accountId
-- from
-- to
-- limit
-- cursor
+T26 implements this authenticated list with exactly `accountId`, `from`, `to`, `limit`, `cursor`; search/type/category/recurring and all other parameters are rejected. Account UUID syntax, repeated/bracketed scalar rejection, inclusive one-sided real date bounds (1900-01-01–9999-12-31), limit 1–100/default 25 and cursor length/encoding reuse T23/T24 validation. Read ranges may be future dates. Account filtering matches either direction, combines with dates using AND and permits archived history. Foreign and missing filter references return identical 404 NOT_FOUND responses before result predicates, even for an otherwise empty range.
 
-If `accountId` supplied, return transfers where account is source or destination.
+T24's signing codec is reused with the explicit `transfers` resource. The fixed-order scope hash covers normalized accountId/from/to/limit; omitted and explicit default limit canonicalize identically. Decode/signature/user/resource/24-hour expiry/scope validation precedes reference lookup or transfer SQL. Keyset comparison preserves all six PostgreSQL timestamp fractional digits; public timestamps remain UTC ISO strings. Fetch limit+1; return only `{limit,nextCursor,hasMore}` metadata, with null continuation on empty/final pages. No count/offset/previous cursor. Missing/malformed server-only CURSOR_SIGNING_SECRET returns safe 503 CURSOR_UNAVAILABLE for transfer listing without SQL; CRUD and public health remain available. Rotation invalidates existing cursors. Paging is not a historical snapshot; deleted anchors still permit continuation.
 
 ---
 
@@ -875,8 +799,11 @@ Validation:
 
 - different accounts;
 - both owned;
-- active unless policy permits archived history-only;
-- positive amount.
+- both accounts active for create/edit;
+- positive exact amount 0.01–999999999.99;
+- date 1900-01-01 through Cairo today;
+- description optional, nullable/trimmed 0–200 Unicode code points, blank becomes null;
+- atomic locked operation; no income/expense effects.
 
 Response:
 
@@ -885,6 +812,10 @@ Response:
 ```
 
 Transfer creation must be atomic.
+
+T26 POST and full PUT accept only required sourceAccountId/destinationAccountId/amount/date and optional description. Omitted/null/blank description becomes null; supplied text trims to at most 200 Unicode code points, rejecting null bytes and invalid Unicode without truncation. Amount uses the existing exact-positive decimal-string validator and normalizes to two decimals; JSON numbers/exponents/excess scale/zero/negative/out-of-range values fail. IDs normalize lowercase. Same-account input returns 400 VALIDATION_ERROR with a destinationAccountId field error. All owner, currency, ID, timestamps and unknown fields are rejected. POST returns 201 with Location; public resources expose exactly §31 fields, including current owned account names and no userId.
+
+Account checks use owner-scoped row locks. Visibility of both endpoints is checked before status: foreign/missing references have the same generic 404 NOT_FOUND, including when the other owned account is archived. Owned archived resulting references return 409 ACCOUNT_ARCHIVED. No client identity is trusted; every read/lock/write scopes the T09 verified req.auth.userId.
 
 ---
 
@@ -896,21 +827,17 @@ Returns owned transfer.
 
 # 35. PUT `/transfers/:id`
 
-Full update allowed only if accounting consistency can be maintained.
+Supported in P0. Full create semantic fields; description optional/null. Require distinct owned active resulting accounts, exact amount/manual date. Lock old and new accounts consistently; mutation atomic, derived balances recomputed. Return 200 transfer resource.
 
-Body same semantic fields as create.
+T26 requires active resulting references even when their IDs are unchanged. Restore first or replace archived endpoints with distinct active owned accounts; historical GET/list remain visible with one or both parents archived. PUT preserves ID/owner/createdAt and updates updatedAt through the existing trigger. Omitted description clears the note, matching full update semantics.
+
+Create/PUT/DELETE use one checked-out pg client for BEGIN/COMMIT/ROLLBACK. PUT/DELETE first lock the owned transfer row to serialize edits/deletion and discover current old references; then lock the distinct union of old/new owned accounts in UUID order. Create locks both accounts in that same order. T17 account lifecycle operations do not lock transfer children, so there is no reverse parent-to-transfer edge. Hold locks through commit; archive that wins first prevents create/PUT, whereas archive after a committed mutation leaves valid history. The unchanged T15 trigger permanently locks opening balances/card conversion on first activity, including after deletion. T18 is the sole derived balance calculation; no balance reversal writes or paired income/expense transactions exist. Failures roll back row/timestamp/first-activity effects; rollback connection failure discards that client. Connection/commit outcomes may be uncertain: sanitized errors and no automatic mutation retry preserve the existing recovery contract.
 
 ---
 
 # 36. DELETE `/transfers/:id`
 
-If supported:
-
-```http
-204 No Content
-```
-
-The backend must reverse/recompute derived account effects automatically because balances are derived from source data.
+Supported in P0, hard delete with explicit UI confirmation. Atomic ownership-scoped deletion, including archived parents, causes derived balance effects to disappear. Return 204, no body. No transfer archive endpoint.
 
 ---
 
@@ -934,10 +861,13 @@ Example:
   "nextOccurrence": "2026-11-01",
   "endDate": null,
   "status": "active",
+  "exhausted": false,
   "createdAt": "...",
   "updatedAt": "..."
 }
 ```
+
+`nextOccurrence` is nullable when paused/archived/exhausted; `exhausted` is derived.
 
 ---
 
@@ -951,32 +881,29 @@ Filters:
 - categoryId
 - frequency
 
+T29 implements exactly these optional filters, combined with AND; omission includes all lifecycle statuses. Unknown, repeated, empty, bracketed and malformed values return 400 VALIDATION_ERROR. Foreign account/category filters return an empty owner-scoped list. Response is `{data: [recurring resource], meta: {count}}`. Order is active, paused, archived; within each status nextOccurrence ascending with nulls last, then UUID ascending. No search, pagination or ownership query is accepted.
+
 ---
 
 # 39. POST `/recurring`
 
-Request:
+Required accountId, categoryId, type, amount, description, frequency, startDate; optional nullable endDate. No userId, nextOccurrence or independent weekday/month-day input. Create returns 201 recurring resource; ownership/active category-kind checks mandatory.
 
-```json
-{
-  "accountId": "uuid",
-  "categoryId": "uuid",
-  "type": "income",
-  "amount": "15000.00",
-  "description": "Salary",
-  "frequency": "monthly",
-  "startDate": "2026-10-01",
-  "endDate": null
-}
-```
+T29 accepts decimal strings only, normalizes to two decimals without rounding, and rejects amounts outside 0.01–999999999.99. Description is trimmed and must contain 1–200 Unicode code points; controls/invalid Unicode are rejected. T30 validates real dates from 1900-01-01 through 9999-12-31, inclusive endDate >= startDate and exactly daily/weekly/monthly/yearly. Unknown fields, including status, currency and generated/occurrence metadata, are rejected. Omitted endDate becomes null. Location points to the created definition. Valid schedules already exhausted at Cairo today are created as active with null nextOccurrence and exhausted=true; exhaustion does not add a stored status. The derived flag is true precisely for active definitions with null nextOccurrence, false for paused/archived resources.
 
-Server calculates:
+All recurring routes use verified req.auth.userId, no-store responses and the shared error envelope. Foreign/missing definitions and referenced resources return indistinguishable 404 NOT_FOUND. Archived references return 409 ACCOUNT_ARCHIVED/CATEGORY_ARCHIVED; incompatible category kinds return 400 VALIDATION_ERROR. GET resources retain archived account/category names. The seven definition routes and read-only upcoming projection are wired into both local and Vercel backend entry points. No recurring restore, hard-delete, processing or cron endpoint is introduced by T29.
 
-```text
-nextOccurrence
-```
+### Frozen recurring execution
 
-according to recurrence rules.
+- Provider: **Vercel Cron**, one daily job on the Express backend project, `0 3 * * *` (03:00 UTC). Hobby's once-daily, hour-level precision is sufficient: P0 promises date-based daily posting, not midnight or minute precision. Infrastructure uses UTC; all financial due dates and manual-date validation use **Africa/Cairo**, fixed/read-only in P0. No auth/provider settings are changed by T02.
+- Endpoint: **GET /internal/recurring/process**, outside `/api/v2`, with server-only `Authorization: Bearer <CRON_SECRET>`; constant-time secret validation, no-store, no redirects, no browser credentials or user token authorization. Never authenticate by user-agent/header schedule alone.
+- Process active schedules oldest-due first, at most **100 occurrences per definition and 1000 attempts globally per invocation**; stop earlier with a safety buffer before the configured function deadline. Each occurrence commits independently. Return safe counts plus `hasRemaining`; unfinished/failed work continues next daily invocation or an operator's authenticated invocation of the same handler. Provider does not guarantee retries; log backlog/failures safely.
+- Creating a schedule anchors it to `startDate` but initializes `nextOccurrence` to the first anchored date **on or after Cairo today** (or startDate if future). No historic import/backfill occurs. Today's occurrence is due even if today's cron already ran; it posts on the next run using its original date.
+- Monthly recurrence uses the original start-date day, clamped to the last valid day each month (Jan 31 → Feb 28/29 → Mar 31). Weekly recurrence uses startDate's weekday (ISO Monday=1 … Sunday=7); yearly uses original month/day, with Feb 29 → Feb 28 in non-leap years and Feb 29 again in leap years. API accepts no independent weekday/month-day fields in P0.
+- Catch-up applies only to active schedules missed by the scheduler; occurrences are posted with their original dates. End date is inclusive. After the final occurrence, `nextOccurrence = null`; expose an exhausted flag without adding a new stored lifecycle status.
+- Pause clears nextOccurrence and marks any pending/failed unposted occurrence rows skipped. Resume finds the first anchored, nonterminal occurrence on or after today; paused history is not generated. Archive behaves like pause and is permanent in P0 (no recurring restore).
+- Definition edits lock the definition, retain posted/skipped occurrences and historical transactions unchanged, mark pending/failed unposted rows skipped, then recalculate the first unprocessed anchored date on or after today. Paused/archived definitions keep nextOccurrence null. Already terminal dates are never replayed, even after schedule edits or generated-transaction deletion.
+- Durable `recurring_occurrences` rows own idempotency. Claim/create pending occurrence under definition lock and commit; in a second transaction lock definition/occurrence, recheck active parents, create transaction, mark posted/link it, and advance schedule together. On failure roll back financial writes and record a sanitized failed occurrence separately under a fresh row lock, only if still nonterminal; never overwrite a concurrent posted/skipped status. Retain its due date for retry. Concurrent runners serialize on row locks; posted/skipped dates never generate again. Failures on one definition must not prevent attempting other definitions.
 
 ---
 
@@ -986,65 +913,39 @@ according to recurrence rules.
 
 # 41. PUT `/recurring/:id`
 
-Full update of future recurrence definition.
+Full create fields; current lifecycle status retained. Lock definition, keep terminal occurrence identity/history and posted transactions unchanged, skip unposted pending/failed reservations and recalculate next nonterminal anchored date on/after Cairo today if active. Return 200 recurring resource; archived definitions immutable.
 
-Must not rewrite historical generated transactions.
+T29 uses the T32 caller-owned transaction helpers for reservation skipping and durable-date inspection. Already reserved dates cannot become a new lifecycle nextOccurrence. Posted/skipped markers, including posted markers whose generated transaction was deleted, remain unchanged. As frozen above, unposted failed reservations become skipped and clear their failureCode; their identities/dates/creation timestamps remain. Edits retain paused status with null nextOccurrence; exhaustion retains active status with null nextOccurrence. Identical resulting definition updates preserve updatedAt. Parent account then category locks precede definition locks for create/edit/resume, matching T17/T32. Resume rejects stale reference discovery with 409 CONFLICT without automatic retry. Other lifecycle operations lock only the definition and its unposted ledger rows.
 
 ---
 
 # 42. POST `/recurring/:id/pause`
 
-Returns updated status.
+Empty body, idempotent for paused; active → paused, nextOccurrence=null; mark unposted pending/failed occurrences skipped atomically. Archived → 409 CONFLICT. Return 200 recurring resource.
 
 ---
 
 # 43. POST `/recurring/:id/resume`
 
-Recalculates/validates next occurrence.
+Empty body; require owned active account/category and nonarchived definition. Find first anchored nonterminal occurrence on/after Cairo today, ignoring paused history; null/exhausted if end already passed. Idempotent for already active. Return 200 recurring resource.
+
+Repeated pause/resume/archive preserves updatedAt when already in the requested status. Lifecycle POSTs use `{}` with the existing application/json request policy and reject fields/query parameters. Already active resume still validates active parents and preserves its existing nextOccurrence. Account restore and category restore never resume definitions automatically; explicit resume is required. Resume validates category kind again. Definition lifecycle never inserts transactions or changes account balances/income/expense/net position.
 
 ---
 
 # 44. POST `/recurring/:id/archive`
 
-Archives recurring definition.
+Empty body, idempotent terminal archive; nextOccurrence=null, unposted reservations skipped, historical generated transactions and terminal markers preserved. No DELETE or restore recurring endpoint in P0.
 
 ---
 
 # 45. GET `/recurring/upcoming`
 
-Suggested query:
-
-```text
-days=30
-```
-
-Example:
-
-```text
-GET /api/v2/recurring/upcoming?days=30
-```
-
-Response:
-
-```json
-{
-  "data": [
-    {
-      "recurringTransactionId": "uuid",
-      "description": "Rent",
-      "type": "expense",
-      "amount": "5000.00",
-      "currency": "EGP",
-      "occurrenceDate": "2026-11-01",
-      "accountName": "CIB Bank"
-    }
-  ]
-}
-```
+days integer 1–366, default 30. From Cairo today through today+days-1 inclusive; active definitions/parents only, respect start/end and omit terminal posted/skipped dates (upcoming is unposted future/due forecast). Return `{data: [{recurringTransactionId, description, type, amount, currency:"EGP", occurrenceDate, accountName}], meta:{from,to}}`; order occurrenceDate ASC then recurringTransactionId ASC. No financial posting is caused by this GET.
 
 ---
 
-# 46. Recurring Suggestions
+# 46. Recurring Suggestions — P1
 
 ## GET `/recurring/suggestions`
 
@@ -1092,51 +993,22 @@ All analytics are user-scoped.
 
 # 48. GET `/analytics/overview`
 
-Response may include:
+Required inclusive from/to, optional owned accountId; §78 range validation. Required `data` fields:
 
-```json
-{
-  "data": {
-    "period": {
-      "from": "2026-10-01",
-      "to": "2026-10-31"
-    },
-    "summary": {
-      "income": "15000.00",
-      "expenses": "8240.00",
-      "netSavings": "6760.00",
-      "savingsRatePercent": "45.07",
-      "averageDailyExpense": "265.81"
-    },
-    "incomeVsExpenses": [],
-    "expenseByCategory": [],
-    "incomeByCategory": [],
-    "accountActivity": [],
-    "recurring": {
-      "income": "15000.00",
-      "expenses": "6800.00"
-    },
-    "insights": []
-  }
-}
-```
+- period {from,to,timezone:"Africa/Cairo",calendarDays};
+- summary {income,expenses,netSavings,savingsRatePercent,averageDailyExpense};
+- incomeVsExpenses: monthly rows (§49);
+- expenseByCategory/incomeByCategory: category rows (§50);
+- accountActivity: [{accountId,accountName,type,income,expenses,netSavings,incomingTransfers,outgoingTransfers}];
+- recurring {income,expenses,netCashFlow,basis:"projected_occurrences",from,to}.
 
-Percentage values should also use strings if exact decimal behavior is desired.
+Monetary values are two-decimal strings; savingsRatePercent string or null. No P0 insight cards; projections never merge into actual totals. Savings trend reuses netSavings series. All account/category/series ordering deterministic (month ASC; breakdown amount DESC then ID; account name then ID). Zero-fill months intersecting the selected range; empty breakdowns are []; exact amounts are computed in PostgreSQL. Category percentages null on zero denominator.
 
 ---
 
 # 49. Analytics Time Series Shape
 
-Example:
-
-```json
-{
-  "period": "2026-10",
-  "income": "15000.00",
-  "expenses": "8240.00",
-  "netSavings": "6760.00"
-}
-```
+Monthly item `{period:"2026-10", from:"2026-10-01", to:"2026-10-06", income:"15000.00", expenses:"8240.00", netSavings:"6760.00"}`. from/to clip the calendar month to requested inclusive range. Same rows drive income/expense and savings charts, including zero-filled months. Backend defines values; frontend only formats.
 
 ---
 
@@ -1177,11 +1049,13 @@ Example:
 }
 ```
 
-`spent`, `remaining`, and status are derived.
+`spent`, `remaining`, and status are derived. remaining may be negative; percentUsed is rounded to two decimals only for display. Status compares exact spent/allocated/threshold before rounding (§77).
 
 ---
 
 # 52. GET `/budgets`
+
+Omitting both year/month selects the current Cairo calendar month. Supplying either requires both; validate year1900–9999/month1–12. categoryId is optional and user-visible only.
 
 Filters:
 
@@ -1226,19 +1100,13 @@ Allows changing:
 - amount;
 - threshold.
 
-Changing category/period may be allowed only if uniqueness remains valid.
+P0 full PUT body is exactly `{amount, alertThresholdPercent}`. Category/year/month are immutable after creation; delete/recreate deliberately to change period/category. Threshold integer 1–100, omitted on POST defaults to90; year1900–9999 and month1–12. POST returns201, PUT200 with budget resource. Expense/both active owned/system category only for creation; invisible IDs404. Existing budget amount/threshold can be edited if its category later archives; historical spending still computes.
 
 ---
 
 # 55. DELETE `/budgets/:id`
 
-Could be:
-
-```http
-204 No Content
-```
-
-Because budget history may be useful, archive behavior can be evaluated later.
+P0 hard delete plan with explicit confirmation, return 204. Does not delete transactions. Prior budgets remain reviewable until deliberately deleted; no budget archive/rollover.
 
 ---
 
@@ -1266,6 +1134,8 @@ Example:
 
 # 57. GET `/goals`
 
+Omitted status returns all owned goals, including archived. Invalid status returns field validation error.
+
 Optional filter:
 
 ```text
@@ -1275,6 +1145,8 @@ status=active
 ---
 
 # 58. POST `/goals`
+
+Required name (trimmed, 1–120 code points), targetAmount and savedAmount; targetDate and linkedAccountId default null. targetDate, when supplied, is a valid date1900-01-01–9999-12-31. Server sets status active, including when initially funded above target; completion stays explicit. Return201 with goal resource.
 
 Request:
 
@@ -1292,19 +1164,19 @@ Request:
 
 # 59. PUT `/goals/:id`
 
-Full update of editable fields.
+Full editable fields name/targetAmount/savedAmount/targetDate/linkedAccountId/status (active or completed); ownership and active link assignment checks apply. Manual savedAmount only, linked account metadata. Allow saved>target; remaining max(target-saved,0), unbounded percent display. Completed requires saved>=target; lowering below target requires explicit active status. Archived goal →409 GOAL_INVALID_STATE; use archive endpoint for archive.
 
 ---
 
 # 60. POST `/goals/:id/complete`
 
-Optional explicit lifecycle endpoint.
+P0 required endpoint, empty body. Explicit active→completed only if savedAmount>=targetAmount; otherwise 409 GOAL_INVALID_STATE. Already completed is idempotent; no automatic status change. Return 200 goal.
 
 ---
 
 # 61. POST `/goals/:id/archive`
 
-Optional explicit archive endpoint.
+P0 required endpoint, empty body. Active/completed → archived, idempotent. Archived goal read-only; no public DELETE/restore in core. Goal projection/history/detail are P1; no progress-history core endpoint.
 
 ---
 
@@ -1333,10 +1205,7 @@ Filters:
 - kind
 - status
 
-By default, return:
-
-- applicable system categories;
-- current user's categories.
+Authenticated through T09 requireAuth. Return system + current verified user's owned categories; no profile is required for this read. Default status=active; status=archived explicitly selects archived rows only. kind=income/expense includes both-kind categories; kind=both means both-kind only; omitted kind includes all kinds. Sort isSystem DESC then name ASC (PostgreSQL C collation for environment-stable ordering) then id ASC; return `{data: CategoryResource[], meta: {count}}` without userId or timestamps. Unknown parameters, invalid/empty values, bracket notation and repeated parameters return 400 VALIDATION_ERROR. Identity comes only from req.auth.userId. GET only; authenticated unsupported methods return 405. No custom writes are enabled until T48.
 
 ---
 
@@ -1357,9 +1226,9 @@ Request:
 
 # 65. PUT `/categories/:id`
 
-System categories should not be editable by user.
+System categories cannot be edited by users. P0 full PUT body matches category creation fields; optional nullable icon/color, status via lifecycle only.
 
-Custom categories can be edited.
+Custom categories can be edited. Owner/isSystem are immutable; kind cannot change once referenced by any transaction, recurring definition or budget. Names trimmed 1–80 Unicode code points; same-user case-insensitive name uniqueness.
 
 ---
 
@@ -1367,17 +1236,17 @@ Custom categories can be edited.
 
 Only custom owned categories.
 
-Historical transaction references remain valid.
+Historical transaction references remain valid. Atomically pause active associated recurring definitions and skip unposted reservations. Restore never auto-resumes them.
 
 ---
 
 # 67. POST `/categories/:id/restore`
 
-Restores archived custom category.
+Restores archived custom category; idempotent, returns200 category, does not resume schedules. Archive returns200 category plus meta.pausedRecurringCount, like account archive. All lifecycle bodies are empty JSON objects.
 
 ---
 
-# 68. Notification Resource Shape
+# 68. Notification Resource Shape — P1
 
 Example:
 
@@ -1395,30 +1264,25 @@ Example:
 
 ---
 
-# 69. GET `/notifications`
+# 69. GET `/notifications` — P1
 
-Filters:
-
-- status
-- type
-- limit
-- cursor
+Required when P1 promoted: status unread/read, type, limit/cursor; §11 signed cursor ordered createdAt DESC,id DESC. Same list meta. Include meta.unreadCount exact nonnegative integer for bell. Missing P1 implementation means route absent in P0, not an empty fabricated bell.
 
 ---
 
-# 70. POST `/notifications/:id/read`
+# 70. POST `/notifications/:id/read` — P1
 
 Marks notification read.
 
 ---
 
-# 71. POST `/notifications/read-all`
+# 71. POST `/notifications/read-all` — P1
 
 Marks all current user's notifications read.
 
 ---
 
-# 72. Reports
+# 72. Reports — P1
 
 ## GET `/reports/summary`
 
@@ -1432,7 +1296,7 @@ Returns report-ready data.
 
 ---
 
-# 73. CSV Export
+# 73. CSV Export — P1
 
 ## GET `/exports/transactions.csv`
 
@@ -1449,7 +1313,7 @@ Only current user's data.
 
 ---
 
-# 74. JSON Export
+# 74. JSON Export — P1
 
 ## GET `/exports/transactions.json`
 
@@ -1462,7 +1326,7 @@ Content-Disposition: attachment; filename="transactions.json"
 
 ---
 
-# 75. Full Data Export
+# 75. Full Data Export — Post-V2
 
 A later endpoint may support:
 
@@ -1474,83 +1338,49 @@ This should be considered carefully if data becomes large.
 
 ---
 
-# 76. Account Deletion API
+# 76. User Identity Deletion — Post-V2
 
-Potential endpoint:
-
-```text
-DELETE /profile/account
-```
-
-or:
-
-```text
-POST /profile/delete-account
-```
-
-Because this is highly destructive, it should require:
-
-- recent authentication;
-- explicit confirmation;
-- final UX/security design.
-
-Do not implement until policy is finalized.
+No DELETE /profile/account or alternative account-deletion API in P0/P1. No core deletion control or required browser UI state. Later policy must address recent authentication, JWT/session revocation, retention/export, explicit cleanup and auth identity last. Normal financial account lifecycle is archive/restore (§23), not user identity deletion.
 
 ---
 
-# 77. Dashboard Period Query
+# 77. Dashboard Period and Financial Definitions
 
-Possible values:
+### Frozen periods and aggregates
 
-```text
-period=this_month
-period=last_month
-period=3_months
-period=6_months
-period=1_year
-```
+P0 currency EGP, locale en, financial timezone **Africa/Cairo** (profile fields read-only). Dashboard default is `GET /api/v2/dashboard?period=this_month`; allowed enums: **this_month, last_month, 3_months, 6_months, 1_year**. this_month is first day of current Cairo month through today; last_month is the full previous month; other enums span the current month plus previous 2/5/11 calendar months through today. Return explicit resolved from/to.
 
-Or use explicit:
+Analytics uses required explicit inclusive `from` and `to`; both valid dates from 1900-01-01 through 9999-12-31, from <= to, maximum **366 calendar days** per request. Actuals include only stored posted transactions; future range portions are allowed for forecast comparison and contain no future manual postings. Presets resolve 7/30 days inclusively ending today; 3/6/12 months start at first of month 2/5/11 months before current month. Transfer/manual transaction dates range 1900-01-01 through Cairo today.
 
-```text
-from
-to
-```
+AverageDailyExpense = actual expenses / **number of calendar days represented in the inclusive requested range**, including zero-spend/future days. Dashboard current month is already month-to-date; label it accordingly. savingsRatePercent = netSavings / income * 100; return **null when income is zero**, display “Not applicable”, never fabricated zero/infinity. Category percent uses total corresponding income/expenses as denominator, null if zero. Budget default threshold is **90%**, near_limit when spent*100 >= threshold*allocated and spent <= allocated, exceeded when spent > allocated; compare exact values before display rounding, and zero spend is normal.
 
-Recommendation:
+Recurring commitments are the exact sum of **projected anchored occurrences within the selected range**, without weekly/yearly monthly normalization. Include only currently active schedules with active parents, respecting start/end dates; omit durable skipped dates. Posted occurrence dates use current definition amount as a forecast assumption, not an actual transaction total; deleted generated transactions are never reposted. Label forecast separately from actuals and explain that projections use the current schedule. Account balance is current all-history net worth (including archived accounts), not historical period income minus expenses.
 
-Use explicit dates for analytics and a simpler period enum for dashboard convenience.
+### Frozen balance and credit-card rules
+
+Asset-like accounts (cash/bank/savings/mobile_wallet/other):
+
+`currentBalance = openingBalance + income - expenses + incomingTransfers - outgoingTransfers`.
+
+Credit cards use **debt-positive** balances:
+
+`currentBalance = openingBalance + expenses - income + outgoingTransfers - incomingTransfers`.
+
+Purchases are expense transactions and increase debt. Refunds/credits recorded as income reduce debt (and count as income under this simple tracker model). A payment is a transfer from an asset account to the card: asset money falls and card debt falls; payment never counts as expense again. Transfers from cards model cash advances and increase debt. Overpayment is allowed and produces negative debt (credit owed to the user).
+
+**Total Balance = net worth = SUM(asset balances) - SUM(card debt balances)**, including archived accounts; archiving cannot remove money/debt from net worth. Period income/expenses/netSavings are actual income/expense transactions only. Account balances are current all-history values, independent of selected dashboard/analytics period. No credit limit, statement cycle, interest or billing automation is included.
 
 ---
 
 # 78. Date Range Validation
 
-Rules:
-
-- `from <= to`;
-- valid calendar dates;
-- maximum range may be imposed for expensive analytics;
-- use user's calendar semantics;
-- do not timezone-shift date-only values.
+Analytics: required from/to, inclusive valid calendar dates 1900-01-01 through 9999-12-31, from<=to, max 366 days. Same bound applies to P1 report aggregate periods. Transaction/transfer list ranges may be longer (paginated), with valid inclusive dates/from<=to. Dashboard only accepts its fixed enum/default, not explicit dates. Financial writes ≤Cairo today; recurring end/start may be future. Never timezone-convert DATE through JS timestamps. AccountId filters are ownership-validated with 404 on invisibility.
 
 ---
 
 # 79. Archived Resource Rules
 
-Archived resources:
-
-- remain visible in historical output where referenced;
-- cannot be used for new activity unless restored.
-
-Example:
-
-Creating a transaction with archived account:
-
-```text
-409 ACCOUNT_ARCHIVED
-```
-
-or validation error depending final taxonomy.
+Archived rows stay visible through history and totals; list status filtering is explicit. Account/category create/posting rejects archived references with 409 ACCOUNT_ARCHIVED/CATEGORY_ARCHIVED. Edits to resulting archived references require restore; historical hard delete remains permitted. Archive auto-pauses active schedules, restore requires explicit schedule resume. Definition/goal archives immutable; no hard delete for those roots.
 
 ---
 
@@ -1559,7 +1389,7 @@ or validation error depending final taxonomy.
 Use `409 Conflict` for cases such as:
 
 - duplicate monthly budget;
-- duplicate custom category name if uniqueness enforced;
+- duplicate case-insensitive custom category name (uniqueness enforced);
 - recurrence duplicate/conflict;
 - resource state conflict.
 
@@ -1737,7 +1567,7 @@ Recommended:
 Cache-Control: no-store
 ```
 
-for highly sensitive or mutation-sensitive endpoints.
+for every P0 financial/profile/internal job endpoint.
 
 Some analytics/dashboard responses may later use private short-lived caching if:
 
@@ -1758,46 +1588,25 @@ For manual transfers or other critical writes, API may later support:
 Idempotency-Key: <opaque-value>
 ```
 
-Not mandatory for every V2 CRUD endpoint initially.
+P0 manual CRUD/transfers have no Idempotency-Key support; no automatic uncertain-write retries. Deliberate repeated transfer requests create distinct rows, so UI must refresh/check before retry.
 
 ---
 
 # 92. Internal Recurring Job Endpoint
 
-Possible internal route:
+**GET /internal/recurring/process**, root path, not /api/v2; CRON_SECRET Bearer only, fail closed/constant-time comparison/no-store. POST is unsupported (405 Allow: GET). Vercel Cron on backend calls daily 0 3 * * * UTC; bounded processing and occurrence ownership are defined in architecture §20. Authenticated user tokens do not authorize execution. Job data remains safe counts only.
 
-```text
-POST /internal/recurring/process
-```
+T33 implements this route in both backend entry points. Authentication precedes request validation; missing/invalid Bearer returns 401 UNAUTHORIZED, lazy missing/invalid server configuration returns 503 CRON_UNAVAILABLE without processor work. GET only (including explicit HEAD rejection); other authenticated methods return 405 Allow: GET. No query string, body, owner/date/limit controls or trailing slash. The root route has no CORS headers/redirects; every handled response sets Cache-Control: no-store and generated X-Request-ID.
 
-This should not live under public authenticated user routes.
+One invocation uses cairoToday(now), 100/1000 T31 limits and a 45-second cooperative deadline below the configured 60-second server.mjs duration. Success: `{data:{processed:true,requestId,referenceDate,definitionsVisited,attempts,posted,skipped,alreadyTerminal,failed,conflicts,recordedFailures,failureRecordingErrors,limitReached,deadlineReached,hasRemaining}}`. Values are counts/flags only; no definition/user/transaction payloads. Backlog/deadline alone remains 200, without another processor pass. Failed attempts/failure-recording errors return 500 `{error:{code:"PROCESSING_FAILED",message,details:[]},meta:{...summary,processed:false}}`; thrown availability failures return the usual safe 503 DATABASE_UNAVAILABLE, other exceptions safe 500 INTERNAL_ERROR. Existing failed markers require explicit internal T32 recovery, never an HTTP retry action. No user-facing run-now route.
 
-Protected by:
-
-- cron secret;
-- provider auth;
-- internal-only controls.
-
-Response may include safe job counts.
-
-Do not expose sensitive financial records.
+Production scheduling is still disabled: active backend/vercel.json has crons=[], and backend/vercel.cron-ready.json prepares the daily entry for the later release gate. Local setup/reproduction and current provider verification: [T33 report](t33-verification.md).
 
 ---
 
-# 93. Internal Job Response Example
+# 93. Internal Job Response
 
-```json
-{
-  "data": {
-    "processed": 12,
-    "created": 4,
-    "skipped": 8,
-    "failed": 0
-  }
-}
-```
-
-Useful for observability.
+200 `{data:{processed:12,created:4,skipped:8,failed:0,hasRemaining:false}}`; processed counts attempts, created counts newly posted transactions, skipped counts terminal/no-longer-eligible dates, failed counts unsuccessful attempts. Partial bounded progress returns hasRemaining=true, persists state and logs safely. Missing/invalid internal credential 401; unavailable DB503. No automatic provider retries assumed; operator invocation is duplicate-safe.
 
 ---
 
@@ -1926,34 +1735,13 @@ The V2 API design is ready for implementation planning when:
 - transfer and recurring rules are represented;
 - analytics contract is sufficient for UX;
 - errors are standardized;
-- export behavior is defined;
+- P1 export scope is explicit and excluded from core gates;
 - internal job route strategy is understood.
 
 ---
 
 # 102. BMAD Next Step
 
-Next artifact:
+API contracts remain frozen for P0 after T02. Next: code-first T03 design system/app shell and T04 P0 browser prototype with fixtures. Neither connects to V2 APIs or Supabase Auth; later tasks replace fixtures with verified user-scoped integration. P1 endpoints remain optional enhancement contracts. This task edits documentation only.
 
-**`07-implementation-plan.md`**
-
-It should convert the V2 design into phased milestones and small implementation tasks, including:
-
-- migration safety;
-- authentication foundation;
-- user isolation;
-- accounts;
-- transactions V2;
-- transfers;
-- recurring;
-- analytics;
-- budgets;
-- goals;
-- categories/settings;
-- reports/export;
-- testing;
-- security validation;
-- Figma implementation dependencies;
-- deployment and final verification.
-
-No V2 code should be started before the implementation plan is reviewed.
+---

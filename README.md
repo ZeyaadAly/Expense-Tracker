@@ -78,6 +78,8 @@ Copy-Item frontend/.env.example frontend/.env.local
 
 Edit the copies privately. Existing files are not a prerequisite and secrets are never supplied by the repository.
 
+V2 Auth uses hosted Supabase, with no mandatory Docker/local Auth. Configure public `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` for the isolated T06 helpers, and use backend `SUPABASE_URL` as nonsecret T09 issuer/JWKS configuration for future protected V2 routers. Copy only an active publishable key into frontend configuration; no service-role/admin key or signing secret is needed. Restart development or rebuild after changing public values. T05 and T06 are completed; V1 remains independent of V2 Auth. See [T05 provider evidence](docs/v2/t05-verification.md) and [T06 helper verification](docs/v2/t06-verification.md), including the optional live-account check. Keep the V1 API URL unchanged until its later integration task. T07 connects the four Auth pages to these helpers in development; financial pages remain fixtures. See [T07 verification](docs/v2/t07-verification.md) for automated results and optional private live-account checks. T08 adds a V2-only session provider, shared financial-route guard and real shell signout. Production V2 frontend remains disabled; profile bootstrap and resource authorization are later tasks. See [T08 verification](docs/v2/t08-verification.md). T09 now supplies reusable backend ES256/JWKS identity middleware and public `/api/v2/health`; V1 remains unauthenticated. No service-role key is needed, and missing V2 Auth configuration does not affect V1 or public health. See [T09 verification](docs/v2/t09-verification.md). T10 adds an isolated authenticated frontend transport; see [T10 verification](docs/v2/t10-verification.md). Keep `NEXT_PUBLIC_API_BASE_URL` ending in `/api/v1` for V1; V2 normalizes it to `/api/v2` without changing V1. Financial V2 pages still use fixtures. T11 additive schema preparation is complete and verified only on disposable PostgreSQL; see [T11 verification](docs/v2/t11-verification.md). T12 has not started.
+
 | Variable | Location | Required/default | Visibility |
 | --- | --- | --- | --- |
 | `PORT` | Backend | Optional; 4000 | Server configuration |
@@ -144,6 +146,10 @@ Authoritative migrations, in order:
 1. `supabase/migrations/20261001144302_initial_expense_tracker_schema.sql`: private schema/table, checks, timestamp/date trigger and ordering index.
 2. `supabase/migrations/20261003163341_backend_application_role.sql`: limited `expense_tracker_app` login and grants.
 
+V2 T11 adds four **local/disposable-only preparations**, in order: `20261006132717_v2_core_tables.sql`, `20261006132719_v2_transaction_references.sql`, `20261006132721_v2_indexes_and_triggers.sql`, and `20261006132723_v2_runtime_privileges.sql`. They preserve the V1 contract and introduce no seeds/backfill. Do not push these to the retained project during onboarding; production application remains gated by T66 maintenance/reconciliation.
+
+For T11 verification, start a **fresh isolated PostgreSQL 17 cluster** on IPv4 loopback port 55451, database `postgres`, with no existing application/Auth schema or application/browser roles. Set only `T11_DISPOSABLE_DATABASE_URL` to its administrative connection and run `node --test backend/tests/v2-schema.test.mjs` after building the backend. The runner guards host/port/database, bootstraps a minimal test-only Auth/role fixture, applies V1/seed plus T11, tests transactional reversal, and leaves the migrated disposable schema available. Then unset that variable, point `T06_DISPOSABLE_DATABASE_URL` at the same disposable cluster, and run the full backend suite serially. Never set these variables to retained data. See [T11 verification](docs/v2/t11-verification.md); T12 has not started.
+
 The role migration expects database `postgres` and creates a cluster-wide role. Start with a fresh cluster/project where neither application schema nor role already exists. Creating another database in an old cluster does not remove an existing role.
 
 ### Existing linked project
@@ -188,6 +194,10 @@ psql "$MIGRATION_DATABASE_URL" -v ON_ERROR_STOP=1 -f supabase/seed.sql
 ```
 
 The seed uses three fixed IDs and `ON CONFLICT (id) DO NOTHING`: Freelance payment 1000.00, Grocery shopping 250.50 and Taxi fare 45.75. Running it twice retains three rows. Exact totals are **1000.00 income, 296.25 expenses, 703.75 balance**. Do not use the seed to reset retained data.
+
+V2 T12 reference categories are separate from the unchanged V1 sample seed. After applying T11 to a local/disposable database, run `psql "$MIGRATION_DATABASE_URL" -v ON_ERROR_STOP=1 -f supabase/seeds/v2-system-categories.sql`. Reruns preserve all existing category rows. Do not run this remotely at T12; production reference seeding belongs to the maintenance migration workflow. The backend now exposes authenticated `GET /api/v2/categories` (default active; optional kind/status); frontend fixtures remain unchanged. See [V2 T12 verification](docs/v2/t12-verification.md) for reproduction and isolation results.
+
+V2 T13 adds authenticated `POST /api/v2/profile/bootstrap` with `{}`, GET `/api/v2/profile`, and displayName-only PUT. Development V2 routes now wait for successful profile bootstrap before mounting their fictional financial UI. Local V2 verification needs an API with T11 applied and valid T09 Auth configuration; a verified Auth identity is the only owner input. Registration-name drafts are tab-local and applied after sign-in; Settings remains fixture-only until T49. No remote schema deployment or legacy ownership migration belongs to T13. See [V2 T13 verification](docs/v2/t13-verification.md).
 
 A plain local non-TLS database works with the isolated verification wrapper, not the normal TLS-enforced backend. For ordinary local app development, use the configured Supabase connection or a PostgreSQL server with correctly verified TLS.
 
@@ -290,3 +300,21 @@ V1 has no authentication or ownership isolation. Use sample data only: anyone wh
 Approved [Figma design](https://www.figma.com/design/GWgioRUOXX3XcaDLYWi8HA), [T03 specification](docs/06-t03-ui-specification.md) and [T07 implementation evidence](docs/t07-verification.md).
 
 Implementation uses Arial, Helvetica, sans-serif; Inter is a Figma fallback. Transactions switch from cards to a table at 768px. T12 checked 320/360/768/1024/1440px; the approved reference frames are 360/768/1440px.
+
+T24 local V2 transaction listing additionally requires backend-only `CURSOR_SIGNING_SECRET`: generate 32 cryptographically random bytes privately and encode them as 64 hexadecimal characters (for example, Node `crypto.randomBytes(32).toString("hex")`). Set the value only in backend/.env or private deployment configuration; never copy it to frontend/public configuration or reuse another credential. No real value is supplied in backend/.env.example. Use the same key across instances; rotation invalidates existing 24-hour cursors. Missing or malformed keys return 503 CURSOR_UNAVAILABLE for authenticated transaction lists without breaking V1 startup, health or transaction CRUD. T25 frontend integration remains unstarted. See [T24 verification](docs/v2/t24-verification.md).
+
+## Local recurring scheduler (T33)
+
+The protected backend endpoint is `GET http://localhost:4000/internal/recurring/process`. Privately generate a distinct CRON_SECRET from at least 32 cryptographically random bytes (hex or base64url are examples). Keep it in backend/.env or a private process environment; never reuse a database password, cursor key or user token. The endpoint requires `Authorization: Bearer <CRON_SECRET>`. Missing/invalid server configuration gives safe 503 only for this endpoint; incorrect credentials give 401. No body/query parameters are accepted.
+
+On a local backend connected to disposable development data, invoke it from PowerShell with an environment-held secret:
+
+```powershell
+# CRON_SECRET must already be privately present in this shell and the backend.
+if (-not $env:CRON_SECRET) { throw 'Set the private local CRON_SECRET first.' }
+Invoke-RestMethod -Method Get -Uri 'http://localhost:4000/internal/recurring/process' -Headers @{ Authorization = 'Bearer ' + $env:CRON_SECRET }
+```
+
+This call writes due V2 transactions. It derives Cairo today, runs T31 once with the unchanged 100-per-definition/1000-global limits, and stops accepting new work at a cooperative 45-second deadline. Inspect hasRemaining, limitReached and deadlineReached; a later invocation continues durable backlog. Failed markers require explicit internal T32 recovery. Responses/logs contain safe counts only, with no-store and a generated request ID.
+
+Daily `0 3 * * *` UTC scheduling is prepared in [backend/vercel.cron-ready.json](backend/vercel.cron-ready.json); the recognized [backend/vercel.json](backend/vercel.json) has crons=[] and a 60-second server.mjs duration. Production activation waits for T66-T71 validation/write-enable and T72. At that gate, verify the separate Express project uses backend as its deployment root, merge only the prepared cron entry into the current reviewed config, configure the private secret, and verify deployment protection/duration before deploying. The ready template is not automatically consumed. T33 made no hosted environment, migration or deployment changes. See [T33 verification](docs/v2/t33-verification.md) for tests/reproduction and platform references.
