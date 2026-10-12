@@ -16,6 +16,9 @@ import type {V2TransactionService} from "./services/v2-transactions.js";
 import {createV2TransactionRouter} from "./routes/v2-transactions.js";
 import type {TransferService} from "./services/transfers.js";
 import {createTransferRouter} from "./routes/transfers.js";
+import type { RecurringService } from "./services/recurring.js";
+import { createRecurringRouter } from "./routes/recurring.js";
+import { createRecurringCronRouter, type RecurringCronOptions } from "./routes/recurring-cron.js";
 
 export function createApp(options: {
   clientOrigin: string;
@@ -24,6 +27,8 @@ export function createApp(options: {
   transactions?: TransactionService;
   v2Transactions?: V2TransactionService;
   transfers?: TransferService;
+  recurring?: RecurringService;
+  recurringCron?: RecurringCronOptions;
   categories?: CategoryService;
   profiles?: ProfileService;
   accounts?: AccountService;
@@ -31,6 +36,7 @@ export function createApp(options: {
 }) {
   const app = express();
   app.disable("x-powered-by");
+  if (options.recurringCron) app.use(createRecurringCronRouter(options.recurringCron));
   const api = Router();
   api.use((_request, response, next) => { response.set("Cache-Control", "no-store"); next(); });
   api.use(cors({ origin: options.clientOrigin }));
@@ -54,6 +60,7 @@ export function createApp(options: {
   if (options.accounts) v2.use(createAccountRouter(options.accounts, createRequireAuth(options.supabaseUrl)));
   if (options.v2Transactions) v2.use(createV2TransactionRouter(options.v2Transactions, createRequireAuth(options.supabaseUrl)));
   if (options.transfers) v2.use(createTransferRouter(options.transfers, createRequireAuth(options.supabaseUrl)));
+  if (options.recurring) v2.use(createRecurringRouter(options.recurring, createRequireAuth(options.supabaseUrl)));
   v2.use(routeNotFound);
   v2.use(errorHandler);
   app.use("/api/v2", v2);

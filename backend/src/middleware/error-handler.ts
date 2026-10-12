@@ -2,6 +2,10 @@ import type { ErrorRequestHandler } from "express";
 import { ApiError, databaseUnavailable, validationError } from "../utils/api-error.js";
 
 const unavailableCodes = new Set(["ECONNREFUSED", "ECONNRESET", "ETIMEDOUT", "ENOTFOUND", "EHOSTUNREACH", "08000", "08001", "08003", "08004", "08006", "08007", "08P01", "57P01", "57P02", "57P03", "53300"]);
+export function isDatabaseUnavailable(error: unknown): boolean {
+  return typeof error === "object" && error !== null && "code" in error &&
+    typeof error.code === "string" && unavailableCodes.has(error.code);
+}
 const constraintFields: Record<string, string> = {
   transactions_type_check: "type",
   transactions_amount_range_check: "amount",
@@ -23,7 +27,7 @@ export const errorHandler: ErrorRequestHandler = (error: unknown, _request, resp
     const field = constraintFields[known.constraint];
     publicError = validationError([{ field, message: "This value does not meet the transaction rules." }]);
   }
-  else if (typeof known.code === "string" && unavailableCodes.has(known.code)) publicError = databaseUnavailable();
+  else if (isDatabaseUnavailable(error)) publicError = databaseUnavailable();
   else {
     // Never log arbitrary error objects: driver errors can contain credentials or SQL.
     console.error("Unexpected API error");

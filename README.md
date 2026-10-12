@@ -302,3 +302,19 @@ Approved [Figma design](https://www.figma.com/design/GWgioRUOXX3XcaDLYWi8HA), [T
 Implementation uses Arial, Helvetica, sans-serif; Inter is a Figma fallback. Transactions switch from cards to a table at 768px. T12 checked 320/360/768/1024/1440px; the approved reference frames are 360/768/1440px.
 
 T24 local V2 transaction listing additionally requires backend-only `CURSOR_SIGNING_SECRET`: generate 32 cryptographically random bytes privately and encode them as 64 hexadecimal characters (for example, Node `crypto.randomBytes(32).toString("hex")`). Set the value only in backend/.env or private deployment configuration; never copy it to frontend/public configuration or reuse another credential. No real value is supplied in backend/.env.example. Use the same key across instances; rotation invalidates existing 24-hour cursors. Missing or malformed keys return 503 CURSOR_UNAVAILABLE for authenticated transaction lists without breaking V1 startup, health or transaction CRUD. T25 frontend integration remains unstarted. See [T24 verification](docs/v2/t24-verification.md).
+
+## Local recurring scheduler (T33)
+
+The protected backend endpoint is `GET http://localhost:4000/internal/recurring/process`. Privately generate a distinct CRON_SECRET from at least 32 cryptographically random bytes (hex or base64url are examples). Keep it in backend/.env or a private process environment; never reuse a database password, cursor key or user token. The endpoint requires `Authorization: Bearer <CRON_SECRET>`. Missing/invalid server configuration gives safe 503 only for this endpoint; incorrect credentials give 401. No body/query parameters are accepted.
+
+On a local backend connected to disposable development data, invoke it from PowerShell with an environment-held secret:
+
+```powershell
+# CRON_SECRET must already be privately present in this shell and the backend.
+if (-not $env:CRON_SECRET) { throw 'Set the private local CRON_SECRET first.' }
+Invoke-RestMethod -Method Get -Uri 'http://localhost:4000/internal/recurring/process' -Headers @{ Authorization = 'Bearer ' + $env:CRON_SECRET }
+```
+
+This call writes due V2 transactions. It derives Cairo today, runs T31 once with the unchanged 100-per-definition/1000-global limits, and stops accepting new work at a cooperative 45-second deadline. Inspect hasRemaining, limitReached and deadlineReached; a later invocation continues durable backlog. Failed markers require explicit internal T32 recovery. Responses/logs contain safe counts only, with no-store and a generated request ID.
+
+Daily `0 3 * * *` UTC scheduling is prepared in [backend/vercel.cron-ready.json](backend/vercel.cron-ready.json); the recognized [backend/vercel.json](backend/vercel.json) has crons=[] and a 60-second server.mjs duration. Production activation waits for T66-T71 validation/write-enable and T72. At that gate, verify the separate Express project uses backend as its deployment root, merge only the prepared cron entry into the current reviewed config, configure the private secret, and verify deployment protection/duration before deploying. The ready template is not automatically consumed. T33 made no hosted environment, migration or deployment changes. See [T33 verification](docs/v2/t33-verification.md) for tests/reproduction and platform references.

@@ -56,6 +56,11 @@ export function validateV2TransactionQuery(originalUrl: string): V2TransactionLi
 }
 
 export function validateV2Transaction(input: unknown, now = new Date()): V2TransactionInput {
+  return validateV2TransactionForBusinessDate(input, cairoToday(now));
+}
+
+/** Internal callers supply the already validated Cairo business date, without consulting a clock. */
+export function validateV2TransactionForBusinessDate(input: unknown, businessDate: string): V2TransactionInput {
   if(typeof input!=="object"||input===null||Array.isArray(input))throw validationError([{field:"body",message:"Provide a JSON object with all six editable fields."}]);
   const body=input as Record<string,unknown>,errors:FieldError[]=[];
   const fields=["accountId","categoryId","type","amount","description","date"];
@@ -71,7 +76,7 @@ export function validateV2Transaction(input: unknown, now = new Date()): V2Trans
   if(typeof body.amount==="string"&&!isPositiveTransactionAmount(body.amount))errors.push({field:"amount",message:"Enter a positive amount from 0.01 to 999999999.99 with at most two decimal places."});
   const description=typeof body.description==="string"?body.description.trim():"";
   if(typeof body.description==="string"&&(Array.from(description).length<1||Array.from(description).length>200))errors.push({field:"description",message:"Enter a description of 1 to 200 characters after trimming."});
-  if(typeof body.date==="string"&&(!isCalendarDate(body.date)||body.date>cairoToday(now)))errors.push({field:"date",message:"Enter a real date from 1900-01-01 through today in Africa/Cairo."});
+  if(typeof body.date==="string"&&(!isCalendarDate(body.date)||body.date>businessDate))errors.push({field:"date",message:"Enter a real date from 1900-01-01 through today in Africa/Cairo."});
   if(errors.length)throw validationError(errors);
   return {accountId:validateUuid(body.accountId as string),categoryId:validateUuid(body.categoryId as string),type:body.type as V2TransactionInput['type'],amount:formatDecimal(body.amount as string),description,date:body.date as string};
 }

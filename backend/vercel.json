@@ -2,9 +2,11 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "express",
   "buildCommand": "npm run build",
+  "crons": [],
   "functions": {
     "server.mjs": {
-      "includeFiles": "certs/supabase-ca.crt"
+      "includeFiles": "certs/supabase-ca.crt",
+      "maxDuration": 60
     }
   }
 }

@@ -853,11 +853,17 @@ Filters:
 - categoryId
 - frequency
 
+T29 implements exactly these optional filters, combined with AND; omission includes all lifecycle statuses. Unknown, repeated, empty, bracketed and malformed values return 400 VALIDATION_ERROR. Foreign account/category filters return an empty owner-scoped list. Response is `{data: [recurring resource], meta: {count}}`. Order is active, paused, archived; within each status nextOccurrence ascending with nulls last, then UUID ascending. No search, pagination or ownership query is accepted.
+
 ---
 
 # 39. POST `/recurring`
 
 Required accountId, categoryId, type, amount, description, frequency, startDate; optional nullable endDate. No userId, nextOccurrence or independent weekday/month-day input. Create returns 201 recurring resource; ownership/active category-kind checks mandatory.
+
+T29 accepts decimal strings only, normalizes to two decimals without rounding, and rejects amounts outside 0.01–999999999.99. Description is trimmed and must contain 1–200 Unicode code points; controls/invalid Unicode are rejected. T30 validates real dates from 1900-01-01 through 9999-12-31, inclusive endDate >= startDate and exactly daily/weekly/monthly/yearly. Unknown fields, including status, currency and generated/occurrence metadata, are rejected. Omitted endDate becomes null. Location points to the created definition. Valid schedules already exhausted at Cairo today are created as active with null nextOccurrence and exhausted=true; exhaustion does not add a stored status. The derived flag is true precisely for active definitions with null nextOccurrence, false for paused/archived resources.
+
+All recurring routes use verified req.auth.userId, no-store responses and the shared error envelope. Foreign/missing definitions and referenced resources return indistinguishable 404 NOT_FOUND. Archived references return 409 ACCOUNT_ARCHIVED/CATEGORY_ARCHIVED; incompatible category kinds return 400 VALIDATION_ERROR. GET resources retain archived account/category names. The seven definition routes and read-only upcoming projection are wired into both local and Vercel backend entry points. No recurring restore, hard-delete, processing or cron endpoint is introduced by T29.
 
 ### Frozen recurring execution
 
@@ -881,6 +887,8 @@ Required accountId, categoryId, type, amount, description, frequency, startDate;
 
 Full create fields; current lifecycle status retained. Lock definition, keep terminal occurrence identity/history and posted transactions unchanged, skip unposted pending/failed reservations and recalculate next nonterminal anchored date on/after Cairo today if active. Return 200 recurring resource; archived definitions immutable.
 
+T29 uses the T32 caller-owned transaction helpers for reservation skipping and durable-date inspection. Already reserved dates cannot become a new lifecycle nextOccurrence. Posted/skipped markers, including posted markers whose generated transaction was deleted, remain unchanged. As frozen above, unposted failed reservations become skipped and clear their failureCode; their identities/dates/creation timestamps remain. Edits retain paused status with null nextOccurrence; exhaustion retains active status with null nextOccurrence. Identical resulting definition updates preserve updatedAt. Parent account then category locks precede definition locks for create/edit/resume, matching T17/T32. Resume rejects stale reference discovery with 409 CONFLICT without automatic retry. Other lifecycle operations lock only the definition and its unposted ledger rows.
+
 ---
 
 # 42. POST `/recurring/:id/pause`
@@ -892,6 +900,8 @@ Empty body, idempotent for paused; active → paused, nextOccurrence=null; mark 
 # 43. POST `/recurring/:id/resume`
 
 Empty body; require owned active account/category and nonarchived definition. Find first anchored nonterminal occurrence on/after Cairo today, ignoring paused history; null/exhausted if end already passed. Idempotent for already active. Return 200 recurring resource.
+
+Repeated pause/resume/archive preserves updatedAt when already in the requested status. Lifecycle POSTs use `{}` with the existing application/json request policy and reject fields/query parameters. Already active resume still validates active parents and preserves its existing nextOccurrence. Account restore and category restore never resume definitions automatically; explicit resume is required. Resume validates category kind again. Definition lifecycle never inserts transactions or changes account balances/income/expense/net position.
 
 ---
 
@@ -1557,6 +1567,12 @@ P0 manual CRUD/transfers have no Idempotency-Key support; no automatic uncertain
 # 92. Internal Recurring Job Endpoint
 
 **GET /internal/recurring/process**, root path, not /api/v2; CRON_SECRET Bearer only, fail closed/constant-time comparison/no-store. POST is unsupported (405 Allow: GET). Vercel Cron on backend calls daily 0 3 * * * UTC; bounded processing and occurrence ownership are defined in architecture §20. Authenticated user tokens do not authorize execution. Job data remains safe counts only.
+
+T33 implements this route in both backend entry points. Authentication precedes request validation; missing/invalid Bearer returns 401 UNAUTHORIZED, lazy missing/invalid server configuration returns 503 CRON_UNAVAILABLE without processor work. GET only (including explicit HEAD rejection); other authenticated methods return 405 Allow: GET. No query string, body, owner/date/limit controls or trailing slash. The root route has no CORS headers/redirects; every handled response sets Cache-Control: no-store and generated X-Request-ID.
+
+One invocation uses cairoToday(now), 100/1000 T31 limits and a 45-second cooperative deadline below the configured 60-second server.mjs duration. Success: `{data:{processed:true,requestId,referenceDate,definitionsVisited,attempts,posted,skipped,alreadyTerminal,failed,conflicts,recordedFailures,failureRecordingErrors,limitReached,deadlineReached,hasRemaining}}`. Values are counts/flags only; no definition/user/transaction payloads. Backlog/deadline alone remains 200, without another processor pass. Failed attempts/failure-recording errors return 500 `{error:{code:"PROCESSING_FAILED",message,details:[]},meta:{...summary,processed:false}}`; thrown availability failures return the usual safe 503 DATABASE_UNAVAILABLE, other exceptions safe 500 INTERNAL_ERROR. Existing failed markers require explicit internal T32 recovery, never an HTTP retry action. No user-facing run-now route.
+
+Production scheduling is still disabled: active backend/vercel.json has crons=[], and backend/vercel.cron-ready.json prepares the daily entry for the later release gate. Local setup/reproduction and current provider verification: [T33 report](t33-verification.md).
 
 ---
 
