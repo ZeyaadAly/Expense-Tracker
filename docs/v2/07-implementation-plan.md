@@ -1,7 +1,7 @@
 # Expense Tracker V2 — Implementation Plan
 
 **Version:** 2.0 Planning — T02 decisions recorded
-**Status:** P0 planning frozen; T01–T32 ✅ Completed locally where applicable; T20 focused P1 promoted; T33 ⬜ Next — Scheduled Execution, not started
+**Status:** T01–T34, T36 and T37 completed locally in their documented scope; optional T35 deferred; T38 unstarted. T37 source merged into main. Production-preview cutover blocked at Phase 7 backup/recovery verification; no production ownership backfill or T15/T32 application performed by this attempt. See [release attempt](production-preview-t37-verification.md).
 **Date:** 2026-10-06  
 **Project:** Expense Tracker  
 **Depends on:**  

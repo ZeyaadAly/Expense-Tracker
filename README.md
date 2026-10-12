@@ -1,5 +1,7 @@
 # Expense Tracker
 
+Current V2 checkpoint (2026-10-12): T01–T34, T36 and T37 are complete locally; optional T35 is deferred and T38 is unstarted. The T37 source is merged into main. The [production-preview release attempt](docs/v2/production-preview-t37-verification.md) is **blocked at backup/recovery verification**: the observed production database has additive T11 schema but no historical ownership backfill, T15/T32 enforcement or Auth users. V2 production routes remain gated, cron remains disabled, and old V1 financial handlers have not been retired. Historical deployment claims below do not establish hosted V2 acceptance.
+
 ## Overview
 
 Expense Tracker V1 records income and expenses in EGP and shows the overall balance. T01–T14 are complete: local V1, documentation/handoff, and hosted production CRUD verification.

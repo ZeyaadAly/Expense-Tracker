@@ -1,5 +1,7 @@
 # Vercel deployment repair — 2026-10-03
 
+For the 2026-10-12 V2 production-preview attempt, see [T37 release verification](../v2/production-preview-t37-verification.md). It is blocked at the recovery gate; historical V1 deployment acceptance below does not imply production V2 acceptance. V2 routes remain gated and cron disabled.
+
 > **Historical checkpoint:** This report preserves the results and task/deployment state at its recorded date. Later-task and fixture-only statements are historical. Current local V1 evidence is in [T12 verification](t12-verification.md); current setup/status is in [handoff](07-handoff.md). T14 is now complete; see the current hosted verification.
 
 
