@@ -1745,3 +1745,7 @@ The V2 API design is ready for implementation planning when:
 API contracts remain frozen for P0 after T02. Next: code-first T03 design system/app shell and T04 P0 browser prototype with fixtures. Neither connects to V2 APIs or Supabase Auth; later tasks replace fixtures with verified user-scoped integration. P1 endpoints remain optional enhancement contracts. This task edits documentation only.
 
 ---
+
+### T38 implementation checkpoint
+
+The frozen Analytics overview queries are implemented internally in `backend/src/services/analytics.ts`. Inclusive normalized ranges and optional owned account selection feed a consistent read-only snapshot. Monthly buckets include zeros; recurring commitments use current active definitions and projected occurrences, excluding skipped dates, separately from historical actuals. No public Analytics endpoint exists yet: T39 owns HTTP parsing, route wiring and authenticated API acceptance. See [T38 verification](t38-verification.md).

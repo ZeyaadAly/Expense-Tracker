@@ -1515,3 +1515,7 @@ Architecture is ready for implementation planning when:
 T02 technical contracts remain frozen. The approved code-first amendment makes T03 the frontend design system/app shell and T04 the P0 browser prototype, using Next.js/React/TypeScript/Tailwind CSS 4 and fixtures only. Browser implementation is the visual source of truth; UI approval precedes T05+ authentication/API integration. Simulated prototype sessions are presentation state, never production authorization. This amendment changes documentation only.
 
 ---
+
+### T38 internal Analytics boundary
+
+The Analytics repository composes owner-scoped SQL reads; its overview service uses one REPEATABLE READ, READ ONLY transaction. Summary totals share the T36 transaction aggregate CTE. Monthly series, category distributions and account movement aggregates keep money in PostgreSQL NUMERIC. Recurring forecasts reuse T30 calendar occurrence enumeration and pass only integer counts to SQL for monetary aggregation. Optional account visibility is checked within the same snapshot. No HTTP route or frontend integration is registered; T39 owns the API. See [T38 verification](t38-verification.md).

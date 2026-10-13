@@ -1,0 +1,51 @@
+{
+  "environment": "Disposable loopback PostgreSQL 17.11; synthetic data only; warm local timings, not hosted SLA",
+  "checks": 73,
+  "transactions": 30023,
+  "transfers": 2001,
+  "generatedTransactions": 2,
+  "latencyMs": {
+    "min": 45.208199999999124,
+    "median": 46.23569999999927,
+    "max": 49.92070000000058
+  },
+  "queries": [
+    {
+      "label": "summary",
+      "executionMs": 7.152,
+      "planningMs": 0.299
+    },
+    {
+      "label": "monthly series",
+      "executionMs": 10.549,
+      "planningMs": 0.407
+    },
+    {
+      "label": "category breakdown",
+      "executionMs": 13.401,
+      "planningMs": 0.542
+    },
+    {
+      "label": "account activity",
+      "executionMs": 11.287,
+      "planningMs": 0.654
+    },
+    {
+      "label": "recurring definitions",
+      "executionMs": 0.093,
+      "planningMs": 0.537
+    },
+    {
+      "label": "skipped occurrences",
+      "executionMs": 0.022,
+      "planningMs": 0.097
+    },
+    {
+      "label": "recurring totals",
+      "executionMs": 0.06,
+      "planningMs": 0.188
+    }
+  ],
+  "schemaChanges": 0,
+  "remoteTouched": false
+}

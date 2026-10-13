@@ -1,6 +1,6 @@
 # T37 production-preview release attempt
 
-Updated: 2026-10-13 (Africa/Cairo). **Status: Partial — production migration complete, awaiting the user's manual hosted sign-in.** Recovery and owner gates passed. Financial frontend routes remain gated until authenticated API acceptance. T38 is unstarted. The original 2026-10-12 attempt below is historical; the latest resumption evidence supersedes its recovery, migration, deployment and route status.
+Updated: 2026-10-13 (Africa/Cairo). **Status: Partial / intentionally deferred.** The user reported successful hosted sign-in, refresh persistence and sign-out, then explicitly deferred remaining production-preview acceptance and authorized T38 on main. Hosted financial API/UI acceptance, multi-user isolation, responsive/accessibility, network/log and recurring acceptance remain deferred. Financial routes stay gated and cron stays disabled. T38 internal queries are complete; T39 remains unstarted. No production-preview acceptance was resumed during T38. Earlier checkpoints below are historical and do not override this deferral.
 
 ## 2026-10-13 production cutover and manual Auth checkpoint
 
@@ -24,7 +24,7 @@ Current frontend lint/typecheck/build and all 140 tests passed. Backend lint/typ
 
 Final production read-only reconciliation: **1 transaction, income 9500.00 EGP, expenses 0.00, balance 9500.00**, original fingerprint `434c087400fa7760625c24b75bfc4021`, zero ownership/mapping errors, one zero-opening cash Main Account, one profile, nine system categories, zero transfers/recurring definitions/occurrences. No temporary production-preview financial records were created. Authenticated endpoint/domain tests, A/B isolation, financial responsive/a11y, email/recovery completion, protected processor execution and runtime-log review remain pending the user's manual authentication. Cron remains disabled (crons=[]), with 0 3 * * * prepared only. The isolated local restore server, local production smoke server and signed-out audit browser were stopped; ignored recovery artifacts remain available.
 
-Resume by accepting the user's manual sign-in/session/logout results and obtaining a supported controlled authenticated verification path without requesting their password. Complete authenticated API acceptance before opening implemented financial routes, then perform the original hosted CRUD/lifecycle/isolation/cleanup/cron/log gates. Never restore public V1 financial access. Full V2 is not complete; T35 remains deferred and analytics/budgets/goals/categories/settings/reports and later release work remain. T38 must not start automatically.
+When explicitly resuming the deferred release, obtain a supported controlled authenticated verification path without requesting their password. Complete authenticated API acceptance before opening implemented financial routes, then perform the original hosted CRUD/lifecycle/isolation/cleanup/cron/log gates. Never restore public V1 financial access. Full V2 is not complete; T35 remains deferred and analytics/budgets/goals/categories/settings/reports and later release work remain. T38 was subsequently explicitly authorized and completed as internal queries only.
 
 ## Resumption — verified logical application recovery
 

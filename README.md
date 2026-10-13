@@ -1,6 +1,6 @@
 # Expense Tracker
 
-Current V2 checkpoint (2026-10-13): T01–T34, T36 and T37 are complete locally; optional T35 is deferred and T38 is unstarted. The [production-preview release](docs/v2/production-preview-t37-verification.md) is **partial, awaiting manual hosted sign-in**. Logical application recovery was verified, the retained V1 row was backfilled to the explicitly designated confirmed account, and T15/T32 are enforced with exact reconciliation. V1 financial access is retired (410); production Auth pages are available while financial routes remain gated and cron remains disabled. [Sign in for the manual check](https://expensetracker-inky-mu.vercel.app/v2/login?next=%2Fv2%2Frelease-check). Historical deployment claims below do not establish hosted V2 acceptance.
+Current V2 checkpoint (2026-10-13): T01–T34 and T36–T38 are complete in their documented scope; optional T35 is deferred and T39 is next, unstarted. See [T38 verification](docs/v2/t38-verification.md). The [production-preview release](docs/v2/production-preview-t37-verification.md) remains **partial / intentionally deferred**. Manual hosted sign-in, refresh persistence and sign-out passed by user report. Remaining hosted financial acceptance is deferred while development continues. Financial routes remain gated, V1 financial access remains retired (410), and cron stays disabled. T38 adds internal queries only, with no public Analytics API or remote database change. Historical deployment claims below do not establish hosted V2 financial acceptance.
 
 ## Overview
 
