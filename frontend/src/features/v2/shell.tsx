@@ -10,6 +10,7 @@ import { Icon, type IconName } from "../../components/v2/icon";
 
 import { useOptionalPrototype } from "./prototype-context";
 import { useAuth } from "../../lib/auth/auth-provider";
+import { useOptionalProfile } from "../../lib/auth/profile-context";
 import { useRouter } from "next/navigation";
 import { FeedbackBanner } from "../../components/v2/primitives";
 const navigation: { title: string; items: [string, IconName][] }[] = [
@@ -32,12 +33,13 @@ const navigation: { title: string; items: [string, IconName][] }[] = [
   { title: "Insights", items: [["Analytics", "analytics"]] },
   { title: "Account", items: [["Settings", "settings"]] },
 ];
-export function PrototypeShell({ children, liveAccounts = false, liveTransactions = false, liveRecurring = false, liveDashboard = false, liveAnalytics = false, liveBudgets = false, liveGoals = false }: { children: ReactNode; liveAccounts?:boolean; liveTransactions?:boolean; liveRecurring?:boolean; liveDashboard?:boolean; liveAnalytics?:boolean; liveBudgets?:boolean; liveGoals?:boolean }) {
+export function PrototypeShell({ children, liveAccounts = false, liveTransactions = false, liveRecurring = false, liveDashboard = false, liveAnalytics = false, liveBudgets = false, liveGoals = false, liveSettings = false }: { children: ReactNode; liveAccounts?:boolean; liveTransactions?:boolean; liveRecurring?:boolean; liveDashboard?:boolean; liveAnalytics?:boolean; liveBudgets?:boolean; liveGoals?:boolean; liveSettings?:boolean }) {
   const path = usePathname();
   const session = useOptionalPrototype()?.session;
   const { user, signOut } = useAuth();
+  const profile = useOptionalProfile()?.profile;
   const router = useRouter();
-  const name = user?.email ?? "Signed-in user";
+  const name = profile?.displayName || user?.email || "Signed-in user";
   const [signingOut, setSigningOut] = useState(false);
   const [logoutError, setLogoutError] = useState("");
   const logoutPending = useRef(false);
@@ -113,9 +115,9 @@ export function PrototypeShell({ children, liveAccounts = false, liveTransaction
         </Button>
       </header>
       <main id="v2-main" className="v2-main" tabIndex={-1}>
-        <p className="p4-prototype-label">{liveGoals ? "Development · connected goals" : liveBudgets ? "Development · connected budgets" : liveAnalytics ? "Development · connected analytics" : liveDashboard ? "Development · connected dashboard" : liveRecurring ? "Development · connected recurring items" : liveTransactions ? "Development · connected transactions" : liveAccounts ? "Development · connected accounts" : "Prototype · fictional data"}</p>
+        <p className="p4-prototype-label">{liveSettings ? "Development · connected settings" : liveGoals ? "Development · connected goals" : liveBudgets ? "Development · connected budgets" : liveAnalytics ? "Development · connected analytics" : liveDashboard ? "Development · connected dashboard" : liveRecurring ? "Development · connected recurring items" : liveTransactions ? "Development · connected transactions" : liveAccounts ? "Development · connected accounts" : "Prototype · fictional data"}</p>
         {logoutError && <FeedbackBanner tone="error" title={logoutError} />}
-        {liveAccounts || liveTransactions || liveRecurring || liveDashboard || liveAnalytics || liveBudgets || liveGoals || session ? (
+        {liveAccounts || liveTransactions || liveRecurring || liveDashboard || liveAnalytics || liveBudgets || liveGoals || liveSettings || session ? (
           children
         ) : (
           <section className="p4-panel">

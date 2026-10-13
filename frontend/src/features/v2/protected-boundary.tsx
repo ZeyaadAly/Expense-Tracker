@@ -9,11 +9,14 @@ import { Skeleton, Button, FeedbackBanner } from "../../components/v2/primitives
 import { createProfileClient } from "../../lib/api/profile";
 import { createProfileStore } from "../../lib/auth/profile-store";
 import { profileDrafts } from "../../lib/auth/profile-draft";
+import { ProfileContext } from "../../lib/auth/profile-context";
+import type { Profile } from "../../lib/api/profile";
 
 function ProfileGate({userId, children}: {userId:string; children:ReactNode}) {
   const router=useRouter();
   const {invalidateSession,signOut}=useAuth();
   const [store]=useState(()=>createProfileStore(userId,createProfileClient(userId),profileDrafts));
+  const [latest,setLatest]=useState<Profile|null>(null);
   const state=useSyncExternalStore(store.subscribe,store.getSnapshot,store.getServerSnapshot);
   useEffect(()=>store.start(),[store]);
   useEffect(()=>{
@@ -22,7 +25,7 @@ function ProfileGate({userId, children}: {userId:string; children:ReactNode}) {
   useEffect(()=>{if(state.profile)document.getElementById('v2-main')?.focus();},[state.profile]);
   if(state.loading) return <main className="v2-main"><h1>Preparing your workspace</h1><p role="status">Preparing your profile…</p><Skeleton variant="chart" /></main>;
   if(state.error) return <main className="v2-main"><h1>Prepare your workspace</h1><FeedbackBanner tone="error" title={state.error.message} /><Button onClick={store.retry}>Retry</Button></main>;
-  return children;
+  return <ProfileContext profile={latest ?? state.profile!} setProfile={setLatest}>{children}</ProfileContext>;
 }
 export function ProtectedBoundary({ children }: { children: ReactNode }) {
   const path = usePathname();
@@ -44,5 +47,5 @@ export function ProtectedBoundary({ children }: { children: ReactNode }) {
   if (!protectedRoute) return children;
   if (!ready) return <main className="v2-main"><h1>Preparing your workspace</h1><p role="status">{loading ? "Checking your session…" : expired ? "Your session expired. Sign in again." : "Returning to sign in…"}</p><Skeleton variant="chart" /></main>;
   // Unmount fixture state on sign-out/user changes; token refresh keeps it intact.
-  return <ProfileGate key={`${session!.user.id}:${epoch}`} userId={session!.user.id}>{path === '/v2/release-check' || path === '/v2/analytics' || path === '/v2/budgets' || path === '/v2/goals' || ['/v2/transactions', '/v2/recurring', '/v2/dashboard'].includes(path) ? children : <PrototypeProvider>{children}</PrototypeProvider>}</ProfileGate>;
+  return <ProfileGate key={`${session!.user.id}:${epoch}`} userId={session!.user.id}>{path === '/v2/release-check' || path === '/v2/analytics' || path === '/v2/budgets' || path === '/v2/goals' || path === '/v2/settings' || ['/v2/transactions', '/v2/recurring', '/v2/dashboard'].includes(path) ? children : <PrototypeProvider>{children}</PrototypeProvider>}</ProfileGate>;
 }
