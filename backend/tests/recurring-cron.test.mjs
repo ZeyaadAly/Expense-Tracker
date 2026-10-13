@@ -81,7 +81,7 @@ test('T33 Vercel release gate, schedule, entry-point and runtime contract',()=>{
   assert.match(read('server.mjs'),/export default createApp/);assert.match(read('server.mjs'),/recurringCron: \{processor: createRecurringProcessor\(pool\)\}/);assert.match(read('src/index.ts'),/recurringCron:\{processor:createRecurringProcessor\(pool\)\}/);assert.match(read('.env.example'),/^CRON_SECRET=$/m);
 });
 
-test('T33 actual Vercel entry initializes in a fresh process with lazy secret protection',()=>{
+test('production Vercel entry blocks recurring execution throughout maintenance',()=>{
   const run=spawnSync(process.execPath,['--input-type=module','-e',`
     import assert from 'node:assert/strict';
     import {once} from 'node:events';
@@ -93,10 +93,10 @@ test('T33 actual Vercel entry initializes in a fresh process with lazy secret pr
       const run=authorization=>fetch(origin+'/internal/recurring/process',{headers:authorization?{Authorization:authorization}:{}});
       assert.equal((await run()).status,503);
       process.env.CRON_SECRET='isolated-test-only-secret-for-fresh-process';
-      assert.equal((await run()).status,401);
+      assert.equal((await run()).status,503);
       const unavailable=await run('Bearer '+process.env.CRON_SECRET);
       assert.equal(unavailable.status,503);
-      assert.equal((await unavailable.json()).error.code,'DATABASE_UNAVAILABLE');
+      assert.equal((await unavailable.json()).error.code,'MAINTENANCE');
       assert.equal(unavailable.headers.get('cache-control'),'no-store');
     } finally {server.closeAllConnections();await new Promise(resolve=>server.close(resolve));await pool.end();}
   `],{
