@@ -1,0 +1,22 @@
+{
+  "task": "T44",
+  "checks": 655,
+  "axeAudits": 24,
+  "axeViolations": 0,
+  "widths": [
+    360,
+    768,
+    1440
+  ],
+  "realJwt": true,
+  "realDatabase": true,
+  "uncertainCreateUpdateDelete": true,
+  "allMutationRefreshesGetOnly": true,
+  "userSwitch": true,
+  "remoteTouched": false,
+  "writeCounts": {
+    "POST": 8,
+    "PUT": 4,
+    "DELETE": 2
+  }
+}

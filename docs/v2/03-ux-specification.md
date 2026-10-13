@@ -822,6 +822,10 @@ Route:
 
 `/budgets`
 
+**T44 connected behavior (2026-10-13):** `/v2/budgets` uses authenticated T42/T43 data and the approved planning rows. The month selector defaults to Cairo current month and supports1900–9999, including future periods; no previous/next buttons, category filter or URL synchronization are added. Create chooses active expense/both categories and exact string amount; threshold defaults90 and accepts integer1–100. Edit keeps category/period read-only and allows historical archived-category budgets. Backend spent/remaining/percentUsed/status render unchanged; exactly100% remains near_limit. Only visual bar fill/ARIA value caps at100, while text/aria-valuetext preserve actual usage.
+
+Confirmed mutations refresh only the selected Budget list. Failed refresh retains labelled old scope; uncertain writes preserve dialog/draft, block resubmission and offer GET-only inspection followed by explicit acknowledgement before another attempt. Delete confirmation identifies category/month/amount and preserves expenses. Session replacement clears rows/options/dialogs/drafts. New Budget creation reloads active category choices; archived history remains visible. Dashboard/Analytics Budget previews and production activation remain separate. See [T44 verification](t44-verification.md).
+
 ## 14.1 Header
 
 Use readable progress with explicit near-limit/over-budget labels and values, not color alone.

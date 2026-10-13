@@ -309,3 +309,10 @@
 .t40-account dd { margin:0; }
 @media(max-width:1050px) { .t40-content,.t40-trend-grid { grid-template-columns:minmax(0,1fr); } .t40-account dl { grid-template-columns:repeat(3,minmax(0,1fr)); } }
 @media(max-width:560px) { .t40-controls { display:grid; grid-template-columns:minmax(0,1fr); } .t40-account dl { grid-template-columns:repeat(2,minmax(0,1fr)); } .t40-content .v2-metric-strip { grid-template-columns:minmax(0,1fr); } }
+.t44-month { max-width:240px; }
+.t44-list { margin-top:1.5rem; max-width:1050px; }
+.t44-budget { padding-bottom:1rem; border-bottom:1px solid var(--v2-border); }
+.t44-budget h3,.t44-budget .v2-money-value { overflow-wrap:anywhere; }
+.t44-budget .v2-planning-row header { flex-wrap:wrap; gap:.75rem; }
+.t44-budget .v2-data-row { flex-wrap:wrap; gap:1rem; }
+.t44-budget .v2-tabular { overflow-wrap:anywhere; max-width:100%; }
