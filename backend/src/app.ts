@@ -42,6 +42,7 @@ export function createApp(options: {
   budgetOptions?: {now?:()=>Date};
   recurringCron?: RecurringCronOptions;
   categories?: CategoryService;
+  categoryManagement?: boolean;
   profiles?: ProfileService;
   accounts?: AccountService;
   supabaseUrl?: string;
@@ -85,7 +86,7 @@ export function createApp(options: {
   v2.use(requestPolicy);
   v2.use(express.json({ limit: "16kb", strict: false }));
   v2.use(createHealthRouter(options.databaseHealth));
-  if (options.categories) v2.use(createCategoryRouter(options.categories, createRequireAuth(options.supabaseUrl)));
+  if (options.categories) v2.use(createCategoryRouter(options.categories, createRequireAuth(options.supabaseUrl), options.categoryManagement === true));
   if (options.profiles) v2.use(createProfileRouter(options.profiles, createRequireAuth(options.supabaseUrl)));
   if (options.accounts) v2.use(createAccountRouter(options.accounts, createRequireAuth(options.supabaseUrl)));
   if (options.v2Transactions) v2.use(createV2TransactionRouter(options.v2Transactions, createRequireAuth(options.supabaseUrl)));

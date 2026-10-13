@@ -1227,7 +1227,7 @@ Filters:
 - kind
 - status
 
-Authenticated through T09 requireAuth. Return system + current verified user's owned categories; no profile is required for this read. Default status=active; status=archived explicitly selects archived rows only. kind=income/expense includes both-kind categories; kind=both means both-kind only; omitted kind includes all kinds. Sort isSystem DESC then name ASC (PostgreSQL C collation for environment-stable ordering) then id ASC; return `{data: CategoryResource[], meta: {count}}` without userId or timestamps. Unknown parameters, invalid/empty values, bracket notation and repeated parameters return 400 VALIDATION_ERROR. Identity comes only from req.auth.userId. GET only; authenticated unsupported methods return 405. No custom writes are enabled until T48.
+Authenticated through T09 requireAuth. Return system + current verified user's owned categories; no profile is required for this read. Default status=active; status=archived explicitly selects archived rows only. kind=income/expense includes both-kind categories; kind=both means both-kind only; omitted kind includes all kinds. Sort isSystem DESC then name ASC (PostgreSQL C collation for environment-stable ordering) then id ASC; return `{data: CategoryResource[], meta: {count}}` without userId or timestamps. Unknown parameters, invalid/empty values, bracket notation and repeated parameters return 400 VALIDATION_ERROR. Identity comes only from req.auth.userId. T48 enables POST on this collection only in the development registration; the Vercel entry point retains the original GET-only category route while production financial acceptance is deferred.
 
 ---
 
@@ -1265,6 +1265,8 @@ Historical transaction references remain valid. Atomically pause active associat
 # 67. POST `/categories/:id/restore`
 
 Restores archived custom category; idempotent, returns200 category, does not resume schedules. Archive returns200 category plus meta.pausedRecurringCount, like account archive. All lifecycle bodies are empty JSON objects.
+
+**T48 implementation clarification (2026-10-13):** The public CategoryResource remains exactly id/name/kind/icon/color/status/isSystem; neither owner nor timestamps are exposed. POST and full PUT require name/kind and accept optional nullable icon/color (default null); name trims outer whitespace, preserves internal spacing and accepts 1–80 Unicode code points, with no truncation. Optional icon/color trim and must fit their existing varchar(64)/varchar(16) columns when present. Unknown/owner/system/status/timestamp fields and all management query parameters fail400. Custom names are unique by `(user_id, lower(name))`, including archived rows; a custom name may match a system name, and a different user may reuse it. Database uniqueness races return sanitized409 CONFLICT. No GET single or DELETE route is added. PUT/archive/restore on a visible system category return409 CATEGORY_IMMUTABLE; foreign/missing custom IDs return identical404 NOT_FOUND. Referenced kind changes return409 CATEGORY_KIND_LOCKED; category row locks and T15 reference triggers serialize kind changes against new financial references. Archive pauses active definitions and skips unposted reservations in one transaction; restore never resumes a schedule. Repeated archive/restore and unchanged PUT preserve updated_at. New category management routes remain absent from Vercel production registration; the existing GET retains its T12 behavior.
 
 ---
 

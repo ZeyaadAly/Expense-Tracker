@@ -10,3 +10,9 @@ export interface CategoryResource {
   isSystem: boolean;
 }
 export interface CategoryFilters { kind?: CategoryKind; status: CategoryStatus }
+export interface CategoryInput {
+  name: string;
+  kind: CategoryKind;
+  icon: string | null;
+  color: string | null;
+}

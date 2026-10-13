@@ -148,7 +148,26 @@ export async function verifyIsolation(connectionString,options={}) {
     const analytics=await verifyAnalyticsIsolation({pool,auth});
     const budgets=await verifyBudgetIsolation({admin,pool,auth});
     const goals=await verifyGoalIsolation({admin,pool,auth});
-    return {counts,totalChecks:Object.values(counts).reduce((sum,n)=>sum+n,0),accounts,balances,transactions,search,filters,pagination,transfers,recurring,analytics,budgets,goals,...(transferConcurrency?{transferConcurrency}:{}),failures:0,migrations,users:(await admin.query('SELECT count(*)::int n FROM auth.users')).rows[0].n,financialTotals:{count:4,income:'30.00',expenses:'10.00',balance:'20.00'},financialStateUnchangedBeforeAccountLifecycle:true,realJwtMiddleware:true,remoteTouched:false};
+    const categoryAuth=await createTestAuthHarness(pool,{categoryManagement:true});
+    try {
+      const tokenA=await categoryAuth.createTestAuthToken(a),tokenB=await categoryAuth.createTestAuthToken(b,{metadataOwner:a.userId});
+      const categoryInput=name=>({name,kind:'expense',icon:null,color:null});
+      const first=await categoryAuth.request(tokenA,'/categories','POST',categoryInput('T48 A isolated'));
+      const second=await categoryAuth.request(tokenB,'/categories','POST',categoryInput('T48 A isolated'));
+      check('api','custom A create',first.status,201);check('api','custom B same name',second.status,201);
+      const id=first.body.data.id;
+      check('api','custom B list excludes A',(await categoryAuth.request(tokenB,'/categories')).body.data.some(row=>row.id===id),false);
+      for(const [suffix,method,body] of [['','PUT',categoryInput('Stolen')],['/archive','POST',{}],['/restore','POST',{}]]){
+        const foreign=await categoryAuth.request(tokenB,`/categories/${id}${suffix}`,method,body);
+        const absent=await categoryAuth.request(tokenB,`/categories/00000000-0000-4000-8000-000000000000${suffix}`,method,body);
+        apiError(foreign,404,'NOT_FOUND');check('api','custom foreign/missing identical',foreign.body,absent.body);
+      }
+      check('api','custom A update',(await categoryAuth.request(tokenA,`/categories/${id}`,'PUT',categoryInput('T48 A renamed'))).body.data.name,'T48 A renamed');
+      check('api','custom A archive',(await categoryAuth.request(tokenA,`/categories/${id}/archive`,'POST',{})).body.data.status,'archived');
+      check('api','custom A archived list',(await categoryAuth.request(tokenA,'/categories?status=archived')).body.data.some(row=>row.id===id),true);
+      check('api','custom A restore',(await categoryAuth.request(tokenA,`/categories/${id}/restore`,'POST',{})).body.data.status,'active');
+    } finally {await categoryAuth.close();}
+    return {counts,totalChecks:Object.values(counts).reduce((sum,n)=>sum+n,0),accounts,balances,transactions,search,filters,pagination,transfers,recurring,analytics,budgets,goals,categoryManagementIsolation:true,...(transferConcurrency?{transferConcurrency}:{}),failures:0,migrations,users:(await admin.query('SELECT count(*)::int n FROM auth.users')).rows[0].n,financialTotals:{count:4,income:'30.00',expenses:'10.00',balance:'20.00'},financialStateUnchangedBeforeAccountLifecycle:true,realJwtMiddleware:true,remoteTouched:false};
   } finally {
     console.error=originalError;if(runtime){await runtime.query('ROLLBACK').catch(()=>{});await runtime.end();}await admin.query('ROLLBACK').catch(()=>{});if(auth)await auth.close();if(pool)await pool.end();await admin.end();
   }

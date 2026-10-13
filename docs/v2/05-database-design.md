@@ -258,6 +258,8 @@ Recommended indexes:
 (kind, status)
 ```
 
+T48 implementation (2026-10-13): existing `categories_user_name_unique`, `categories_timestamps`, T15 `v2_category_protect` and `v2_category_integrity` already support custom create/update/archive/restore. The service locks a custom category before editing or archiving, rejects referenced kind changes with a safe domain conflict, and serializes against reference insertion's category SHARE lock. Archive locks related definitions, lets the T15 trigger pause active definitions, and terminalizes their unposted pending/failed occurrences in the same transaction. No new migration, index, grant, RLS policy or hard delete is needed. See [T48 verification](t48-verification.md).
+
 ---
 
 # 10. Default Categories
