@@ -1,5 +1,5 @@
-﻿import type { Metadata } from "next";
-import { AuthPage } from "../../../features/v2/auth";
+import type { Metadata } from "next";
+import { AuthPage } from "../../../../features/v2/auth";
 export const metadata: Metadata = {
   title: "reset-password · Expense Tracker V2",
 };
