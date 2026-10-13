@@ -1196,6 +1196,12 @@ P0 required endpoint, empty body. Active/completed → archived, idempotent. Arc
 
 ---
 
+T45 implementation clarification (2026-10-13): the six frozen Goal routes are available through authenticated development registration only; Vercel/production entry points omit Goals while hosted financial acceptance is deferred. Lists sort createdAt DESC then id DESC and include all statuses by default; only a single status query is accepted. Full PUT requires nullable targetDate/linkedAccountId explicitly. Reopening is explicit PUT status active, with no separate reopen/restore/DELETE route. Completed goals may be edited while savedAmount remains at least targetAmount, or explicitly reopened in the same PUT. Repeated complete/archive and unchanged PUT preserve updatedAt. Lifecycle actions accept an empty JSON object (or an omitted body with JSON content type), rejecting all fields. Existing archived links can be retained or cleared; new/changed links require an owned active account. Foreign goal/account IDs return safe404.
+
+The frozen resource adds no linkedAccountName, completionSuggested or lifecycle timestamp. At exact savedAmount >= targetAmount an active goal is eligible for a UI completion suggestion; use exact target/saved strings rather than rounded percentComplete (9999.99 / 10000.00 displays100.00% but cannot complete). SQL NUMERIC computes unbounded percentComplete rounded to two decimals, ties away from zero; remainingAmount is clamped at zero per §§59 and database§24. Manual savedAmount and all financial balances/totals are independent. See [T45 verification](t45-verification.md).
+
+---
+
 # 62. Category Resource Shape
 
 Example:

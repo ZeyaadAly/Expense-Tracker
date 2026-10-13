@@ -1,0 +1,32 @@
+{
+  "checks": 245,
+  "races": 10,
+  "faults": 6,
+  "isolation": {
+    "checks": 25,
+    "realGoalApi": true,
+    "foreignAndMissingIdentical": true,
+    "reopenViaPut": true
+  },
+  "performance": {
+    "all": {
+      "rows": 2000,
+      "elapsedMs": 36.276
+    },
+    "active": {
+      "rows": 667,
+      "elapsedMs": 9.192
+    },
+    "completed": {
+      "rows": 666,
+      "elapsedMs": 10.009
+    },
+    "archived": {
+      "rows": 667,
+      "elapsedMs": 7.799
+    }
+  },
+  "totalPerformanceGoals": 10000,
+  "limitedRole": true,
+  "remoteTouched": false
+}

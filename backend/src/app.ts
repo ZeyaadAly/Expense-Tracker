@@ -24,6 +24,8 @@ import { createDashboardRouter } from "./routes/dashboard.js";
 import { createAnalyticsRouter, type AnalyticsService } from "./routes/analytics.js";
 import { createBudgetRouter } from "./routes/budgets.js";
 import type { BudgetService } from "./services/budgets.js";
+import type { GoalService } from "./services/goals.js";
+import { createGoalRouter } from "./routes/goals.js";
 
 export function createApp(options: {
   clientOrigin: string;
@@ -36,6 +38,7 @@ export function createApp(options: {
   dashboard?: DashboardService;
   analytics?: AnalyticsService;
   budgets?: BudgetService;
+  goals?: GoalService;
   budgetOptions?: {now?:()=>Date};
   recurringCron?: RecurringCronOptions;
   categories?: CategoryService;
@@ -91,6 +94,7 @@ export function createApp(options: {
   if (options.dashboard) v2.use(createDashboardRouter(options.dashboard, createRequireAuth(options.supabaseUrl)));
   if (options.analytics) v2.use(createAnalyticsRouter(options.analytics, createRequireAuth(options.supabaseUrl)));
   if (options.budgets) v2.use(createBudgetRouter(options.budgets, createRequireAuth(options.supabaseUrl),options.budgetOptions));
+  if (options.goals) v2.use(createGoalRouter(options.goals, createRequireAuth(options.supabaseUrl)));
   v2.use(routeNotFound);
   v2.use(errorHandler);
   app.use("/api/v2", v2);

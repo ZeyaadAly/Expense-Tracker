@@ -52,9 +52,9 @@ API = real current endpoint; DB = native integrity; Pattern = test-only future o
 | Recurring definitions | Pattern; API future | DB account/category ownership | DB links + Pattern | Pattern; API future | Future |
 | Recurring occurrences | Pattern; API future | DB definition/generated ownership and uniqueness | DB links + Pattern | Runtime deletion denied in T15 | Processor/API future |
 | Budgets | Pattern; API future | DB own/system expense/both | DB category + Pattern | Pattern; API future | Future |
-| Goals | Pattern; API future | DB nullable/own account | DB link + Pattern | Pattern; API future | Future |
+| Goals | T45 real owned GET; foreign/missing identical404 | T45 POST, nullable/owned active account link; metadata only | T45 full PUT, explicit reopen, owner injection rejected | T45 complete/archive; DELETE405, no restore/reopen route | T45 all/status lists scoped to JWT subject; identical list/single progress |
 
-Dashboard/analytics/current financial-domain endpoints do not exist yet. P1 report/export/notification endpoint tests remain deferred unless promoted. No cursor or aggregate endpoint coverage is claimed.
+The original foundation matrix records T16 coverage; later domain extensions below and their verification reports supersede future cells. The Goal row now records T45 real API coverage. P1 report/export/notification endpoint tests remain deferred unless promoted.
 
 ## Runtime and browser boundary
 
@@ -110,3 +110,5 @@ Central helper: `backend/tests/helpers/v2-isolation.mjs`. Added runner `backend/
 No genuine T16 blocker remains in implemented scope. The original T16 checkpoint preceded T17. **T17 extension (2026-10-07):** the real auth harness now mounts Accounts; the verifier runs 263 grouped account checks after the original 599-check reconciliation, including owned/foreign GET/PUT/archive/restore, strict owner injection, lists, exact money, lifecycle rollback and four database races. See [T17 verification](t17-verification.md). Other future-domain cells remain deferred. Next: **T18 — Build Account Balance Queries**.
 
 **T18 extension (2026-10-07):** 191 additional grouped balance checks use the production repository under expense_tracker_app and actual account HTTP endpoints. A/B lists and details agree with independently selected owned IDs; scoped net positions stay distinct and foreign balance IDs return 404. Complete snapshots verify read-only behavior. All 599 original checks and 263 T17 checks still pass. No dashboard/analytics/transfer API coverage is claimed. See [T18 verification](t18-verification.md). Next: **T19 — Build Accounts Page**, not started.
+
+**T45 extension (2026-10-13):** the shared real ES256/JWKS/limited-role harness registers Goals and invokes `verifyGoalIsolation`. Its25 grouped checks exercise A create/get/update/complete/reopen-via-PUT/archive, B empty all/status lists, foreign/missing identical404 for read/update/lifecycle and foreign account create/update rejection. JWT user_metadata never supplies ownership. Fresh T18/shared verification preserves599 foundation,263 account and285 balance checks plus existing transaction/search/filter/pagination/transfer/recurring/Analytics/Budget extensions. See [T45 verification](t45-verification.md) for245 focused checks,10 actual locking races and six rollback probes. No production Goal registration or hosted acceptance is claimed.
