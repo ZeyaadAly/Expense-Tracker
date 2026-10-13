@@ -143,7 +143,7 @@ export async function verifyIsolation(connectionString,options={}) {
     const transfers=await verifyV2Transfers({admin,runtime,pool,auth});
     const transferConcurrency=options.transferConcurrency?await verifyTransferConcurrency({admin,runtime,pool,auth}):undefined;
     const recurring=await verifyRecurringIsolation({admin,pool,auth});
-    const analytics=await verifyAnalyticsIsolation({pool});
+    const analytics=await verifyAnalyticsIsolation({pool,auth});
     return {counts,totalChecks:Object.values(counts).reduce((sum,n)=>sum+n,0),accounts,balances,transactions,search,filters,pagination,transfers,recurring,analytics,...(transferConcurrency?{transferConcurrency}:{}),failures:0,migrations,users:(await admin.query('SELECT count(*)::int n FROM auth.users')).rows[0].n,financialTotals:{count:4,income:'30.00',expenses:'10.00',balance:'20.00'},financialStateUnchangedBeforeAccountLifecycle:true,realJwtMiddleware:true,remoteTouched:false};
   } finally {
     console.error=originalError;if(runtime){await runtime.query('ROLLBACK').catch(()=>{});await runtime.end();}await admin.query('ROLLBACK').catch(()=>{});if(auth)await auth.close();if(pool)await pool.end();await admin.end();

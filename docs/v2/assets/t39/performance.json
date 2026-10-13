@@ -1,0 +1,56 @@
+{
+  "environment": "Synthetic disposable loopback PostgreSQL 17.11; local ES256/JWKS HTTP",
+  "checks": 77,
+  "transactions": 30023,
+  "transfers": 2001,
+  "generatedTransactions": 2,
+  "latencyMs": {
+    "min": 54.46990000000005,
+    "median": 72.96479999999974,
+    "max": 90.90200000000004
+  },
+  "httpComparison": {
+    "directMedianMs": 50.3828999999987,
+    "httpMedianMs": 72.96479999999974,
+    "includes": "loopback HTTP, local ES256 signing/verification, JSON serialization"
+  },
+  "queries": [
+    {
+      "query": 0,
+      "executionMs": 10.733,
+      "planningMs": 0.438
+    },
+    {
+      "query": 1,
+      "executionMs": 15.391,
+      "planningMs": 1.172
+    },
+    {
+      "query": 2,
+      "executionMs": 18.697,
+      "planningMs": 1.11
+    },
+    {
+      "query": 3,
+      "executionMs": 15.815,
+      "planningMs": 0.685
+    },
+    {
+      "query": 4,
+      "executionMs": 0.202,
+      "planningMs": 0.961
+    },
+    {
+      "query": 5,
+      "executionMs": 0.044,
+      "planningMs": 0.133
+    },
+    {
+      "query": 6,
+      "executionMs": 0.659,
+      "planningMs": 0.251
+    }
+  ],
+  "indexAdded": false,
+  "remoteTouched": false
+}

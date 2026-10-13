@@ -993,6 +993,12 @@ All analytics are user-scoped.
 
 # 48. GET `/analytics/overview`
 
+**T39 implemented locally:** the sole route is `GET /api/v2/analytics/overview`, returning `{data: overview}` exactly as below. T09 JWT authentication runs before route validation; identity comes exclusively from `req.auth.userId`. Only scalar required `from`/`to` and optional `accountId` are accepted. Repeated/unknown keys (including owner injection and preset keys), impossible/out-of-bounds dates, reversed or >366-day ranges and malformed UUIDs return structured 400 `VALIDATION_ERROR`; valid uppercase UUIDs normalize to lowercase. There is no public preset parameter.
+
+Responses use `Cache-Control: no-store` and existing exact-origin CORS. Missing/invalid credentials return 401, invisible accounts return identical 404, database unavailability returns sanitized 503 and unexpected failures return sanitized 500. Unsupported methods follow existing request policy and return 405 with `Allow: GET` after transport validation; OPTIONS retains existing CORS preflight behavior. GET bodies are rejected by existing policy. The route passes T38 output unchanged, without financial/date calculations.
+
+**Deferred production gate:** `backend/server.mjs` does not provide the Analytics service, so Vercel returns no-store 404 even with a token. The local entry enables it only outside `NODE_ENV=production`. The frontend financial gate and disabled cron remain unchanged. See [T39 verification](t39-verification.md).
+
 Required inclusive from/to, optional owned accountId; §78 range validation. Required `data` fields:
 
 - period {from,to,timezone:"Africa/Cairo",calendarDays};
@@ -1748,4 +1754,4 @@ API contracts remain frozen for P0 after T02. Next: code-first T03 design system
 
 ### T38 implementation checkpoint
 
-The frozen Analytics overview queries are implemented internally in `backend/src/services/analytics.ts`. Inclusive normalized ranges and optional owned account selection feed a consistent read-only snapshot. Monthly buckets include zeros; recurring commitments use current active definitions and projected occurrences, excluding skipped dates, separately from historical actuals. No public Analytics endpoint exists yet: T39 owns HTTP parsing, route wiring and authenticated API acceptance. See [T38 verification](t38-verification.md).
+The frozen Analytics overview queries are implemented internally in `backend/src/services/analytics.ts`. Inclusive normalized ranges and optional owned account selection feed a consistent read-only snapshot. Monthly buckets include zeros; recurring commitments use current active definitions and projected occurrences, excluding skipped dates, separately from historical actuals. T39 now supplies HTTP parsing, route wiring and authenticated API acceptance in development; hosted production Analytics registration remains deferred. See [T38 verification](t38-verification.md).

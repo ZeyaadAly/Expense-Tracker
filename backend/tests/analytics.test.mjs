@@ -4,7 +4,7 @@ import process from 'node:process';
 import {randomUUID} from 'node:crypto';
 import {performance} from 'node:perf_hooks';
 import {writeFileSync} from 'node:fs';
-import {URL} from 'node:url';
+import {URL,URLSearchParams} from 'node:url';
 import {Client,Pool} from 'pg';
 import {normalizeAnalyticsRange} from '../dist/domain/analytics-range.js';
 import {createAnalyticsService,createAnalyticsRepository} from '../dist/services/analytics.js';
@@ -13,7 +13,7 @@ import {createAccountService} from '../dist/services/accounts.js';
 import {createV2TransactionService} from '../dist/services/v2-transactions.js';
 import {createRecurringProcessor} from '../dist/services/recurring-processor.js';
 import {getTransactionTotals} from '../dist/services/transaction-totals.js';
-import {disposableIsolationUrl,prepareIsolationDatabase,createTestUser,financialSnapshot} from './helpers/v2-isolation.mjs';
+import {disposableIsolationUrl,prepareIsolationDatabase,createTestUser,financialSnapshot,createTestAuthHarness} from './helpers/v2-isolation.mjs';
 import {createGeneratedFixture} from './helpers/generated-fixture.mjs';
 
 test('T38 normalized internal ranges are bounded calendar dates; invalid inputs never connect',async()=>{
@@ -37,11 +37,21 @@ test('T38 fresh runtime analytics matrix, forecast, snapshot consistency and 30k
   skip:!process.env.T38_DISPOSABLE_DATABASE_URL&&'Requires a fresh guarded disposable PostgreSQL cluster',
 },async context=>{
   const url=disposableIsolationUrl(process.env.T38_DISPOSABLE_DATABASE_URL),admin=new Client({connectionString:url.href});await admin.connect();
-  let pool,checks=0;const equal=(actual,expected)=>{assert.deepEqual(actual,expected);checks++;};
+  let pool,auth,checks=0;const equal=(actual,expected)=>{assert.deepEqual(actual,expected);checks++;};
   try{
     await prepareIsolationDatabase(admin);url.username='expense_tracker_app';pool=new Pool({connectionString:url.href,max:5});
     const a={userId:randomUUID()},b={userId:randomUUID()},empty={userId:randomUUID()};for(const user of [a,b,empty])await createTestUser(admin,user);
-    const service=createAnalyticsService(pool),accounts=createAccountService(pool),tx=createV2TransactionService(pool);
+    const direct=createAnalyticsService(pool);
+    let httpNow=new Date('2026-10-12T09:00:00Z');
+    if(process.env.T39_ANALYTICS_HTTP)auth=await createTestAuthHarness(pool,{dashboardOptions:{now:()=>httpNow}});
+    const service=auth?{getOverview:async(userId,range)=>{
+      const token=await auth.createTestAuthToken({userId});
+      const result=await auth.rawRequest(token,'/analytics/overview?'+new URLSearchParams(range));
+      assert.equal(result.cache,'no-store');
+      if(result.status!==200)throw Object.assign(new Error(result.body.error.message),{status:result.status,...result.body.error});
+      assert.deepEqual(Object.keys(result.body),['data']);return result.body.data;
+    }}:direct;
+    const accounts=createAccountService(pool),tx=createV2TransactionService(pool);
     const range={from:'2026-01-15',to:'2026-03-10'},zero={income:'0.00',expenses:'0.00',netSavings:'0.00',savingsRatePercent:null,averageDailyExpense:'0.00'};
     const noData=await service.getOverview(empty.userId,range);equal(noData.summary,zero);equal(noData.period.calendarDays,55);equal(noData.incomeByCategory,[]);equal(noData.expenseByCategory,[]);equal(noData.accountActivity,[]);
     equal(noData.incomeVsExpenses.map(r=>[r.period,r.from,r.to]),[['2026-01','2026-01-15','2026-01-31'],['2026-02','2026-02-01','2026-02-28'],['2026-03','2026-03-01','2026-03-10']]);
@@ -93,6 +103,8 @@ test('T38 fresh runtime analytics matrix, forecast, snapshot consistency and 30k
     await pool.query("INSERT INTO expense_tracker.recurring_occurrences(user_id,recurring_transaction_id,occurrence_date,status,processed_at) VALUES($1,$2,'2024-01-02','skipped',statement_timestamp())",[a.userId,daily]);
     const client=await pool.connect();let generated;try{generated=await createGeneratedFixture(client,{userId:a.userId,definitionId:daily,occurrenceDate:'2024-01-03',accountId:bank.id,categoryId:income,type:'income',amount:'0.10',description:'Generated actual',date:'2024-01-03'});}finally{client.release();}
     const jan={from:'2024-01-01',to:'2024-01-31'};equal((await service.getOverview(a.userId,jan)).recurring,{income:'3.00',expenses:'2.00',netCashFlow:'1.00',basis:'projected_occurrences',...jan});equal((await service.getOverview(a.userId,jan)).summary.income,'0.10');
+    equal((await service.getOverview(b.userId,jan)).recurring,{income:'0.00',expenses:'0.00',netCashFlow:'0.00',basis:'projected_occurrences',...jan});
+    equal((await service.getOverview(a.userId,{...jan,accountId:card.id})).recurring.income,'0.00');
     await tx.deleteTransaction(a.userId,generated.id);equal((await service.getOverview(a.userId,jan)).summary.income,'0.00');equal((await service.getOverview(a.userId,jan)).recurring.income,'3.00');
     equal((await pool.query('SELECT status,generated_transaction_id FROM expense_tracker.recurring_occurrences WHERE id=$1',[generated.occurrenceId])).rows[0],{status:'posted',generated_transaction_id:null});
     equal((await service.getOverview(a.userId,{from:'2024-02-01',to:'2024-02-29'})).recurring.expenses,'1.00');equal((await service.getOverview(a.userId,{from:'2024-02-01',to:'2024-02-29'})).recurring.income,'2.00');equal((await service.getOverview(a.userId,{from:'2024-03-01',to:'2024-03-31'})).recurring.expenses,'1.00');
@@ -103,10 +115,11 @@ test('T38 fresh runtime analytics matrix, forecast, snapshot consistency and 30k
     equal((await createRecurringProcessor(pool).processDueRecurring({referenceDate:'2026-10-01',definitionId:due,userId:a.userId})).posted,1);
     const dashboard=createDashboardService(pool,{now:()=>new Date('2026-10-12T09:00:00Z')});
     for(const period of ['this_month','last_month','3_months','6_months','1_year']){
-      const d=(await dashboard.getDashboard(a.userId,period)).data,r=await service.getOverview(a.userId,{from:d.period.from,to:d.period.to});for(const k of ['income','expenses','netSavings'])equal(r.summary[k],d.summary[k]);
+      const d=auth?(await auth.rawRequest(await auth.createTestAuthToken(a),'/dashboard?period='+period)).body.data:(await dashboard.getDashboard(a.userId,period)).data,r=await service.getOverview(a.userId,{from:d.period.from,to:d.period.to});for(const k of ['income','expenses','netSavings'])equal(r.summary[k],d.summary[k]);
     }
     for(const instant of ['2026-09-30T20:59:59Z','2026-09-30T21:00:00Z']){
-      const d=(await createDashboardService(pool,{now:()=>new Date(instant)}).getDashboard(a.userId,'this_month')).data;
+      httpNow=new Date(instant);
+      const d=auth?(await auth.rawRequest(await auth.createTestAuthToken(a),'/dashboard?period=this_month')).body.data:(await createDashboardService(pool,{now:()=>new Date(instant)}).getDashboard(a.userId,'this_month')).data;
       const r=await service.getOverview(a.userId,{from:d.period.from,to:d.period.to});equal(r.summary.income,d.summary.income);equal(r.summary.expenses,d.summary.expenses);
     }
     const before=await financialSnapshot(admin);await service.getOverview(a.userId,range);equal(await financialSnapshot(admin),before);
@@ -118,6 +131,9 @@ test('T38 fresh runtime analytics matrix, forecast, snapshot consistency and 30k
     const old=await service.getOverview(a.userId,range);equal(await snapshotService.getOverview(a.userId,range),old);equal((await service.getOverview(a.userId,range)).summary.income,'1.40');
     // Sum series through PostgreSQL, never financial JS arithmetic.
     const current=await service.getOverview(a.userId,range);const sum=(await pool.query(`SELECT sum((v->>'income')::numeric)::text income,sum((v->>'expenses')::numeric)::text expenses FROM jsonb_array_elements($1::jsonb) v`,[JSON.stringify(current.incomeVsExpenses)])).rows[0];equal(sum,{income:current.summary.income,expenses:current.summary.expenses});
+    for(const [rows,total] of [[current.incomeByCategory,current.summary.income],[current.expenseByCategory,current.summary.expenses]]){
+      equal((await pool.query("SELECT COALESCE(sum((v->>'amount')::numeric),0)::text amount FROM jsonb_array_elements($1::jsonb) v",[JSON.stringify(rows)])).rows[0].amount,total);
+    }
     // Independent multi-account/category scale with both tenants and generated rows already present.
     await admin.query(`INSERT INTO expense_tracker.transactions(id,user_id,account_id,category_id,type,amount,description,transaction_date)
       SELECT gen_random_uuid(),CASE WHEN n%2=0 THEN $1::uuid ELSE $2::uuid END,
@@ -136,10 +152,12 @@ test('T38 fresh runtime analytics matrix, forecast, snapshot consistency and 30k
       const plan=(await pool.query('EXPLAIN (ANALYZE,BUFFERS,FORMAT JSON) '+sql,args)).rows[0]['QUERY PLAN'][0];plans.push({query:index,executionMs:plan['Execution Time'],planningMs:plan['Planning Time'],plan:plan.Plan});
     }
     const times=[];for(let i=0;i<8;i++){const start=performance.now();await service.getOverview(a.userId,scaleRange);times.push(performance.now()-start);}times.sort((a,b)=>a-b);
+    const directTimes=[];if(auth)for(let i=0;i<8;i++){const start=performance.now();await direct.getOverview(a.userId,scaleRange);directTimes.push(performance.now()-start);}directTimes.sort((a,b)=>a-b);
     equal((await service.getOverview(a.userId,scaleRange)).summary.income,(await getTransactionTotals(pool,a.userId,scaleRange.from,scaleRange.to)).income);
     assert.equal((await pool.query('SELECT current_user role')).rows[0].role,'expense_tracker_app');checks++;
     const evidence={checks,transactions:(await admin.query('SELECT count(*)::int n FROM expense_tracker.transactions')).rows[0].n,transfers:(await admin.query('SELECT count(*)::int n FROM expense_tracker.transfers')).rows[0].n,generatedTransactions:(await admin.query('SELECT count(*)::int n FROM expense_tracker.transactions WHERE recurring_transaction_id IS NOT NULL')).rows[0].n,latencyMs:{min:times[0],median:times[4],max:times.at(-1)},plans,indexAdded:false,remoteTouched:false};
-    writeFileSync(new URL('../../.tmp-v2-t38/performance.json',import.meta.url),JSON.stringify(evidence,null,2));
+    if(auth)evidence.httpComparison={directMedianMs:directTimes[4],httpMedianMs:times[4],includes:'loopback HTTP, local ES256 signing/verification, JSON serialization'};
+    writeFileSync(new URL(process.env.T39_ANALYTICS_HTTP?'../../.tmp-v2-t39/performance.json':'../../.tmp-v2-t38/performance.json',import.meta.url),JSON.stringify(evidence,null,2));
     context.diagnostic(JSON.stringify({...evidence,plans:plans.map(({query,executionMs,planningMs})=>({query,executionMs,planningMs}))}));
-  }finally{await pool?.end();await admin.end();}
+  }finally{await auth?.close();await pool?.end();await admin.end();}
 });
