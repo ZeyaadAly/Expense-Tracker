@@ -1065,6 +1065,8 @@ Example:
 
 `spent`, `remaining`, and status are derived. remaining may be negative; percentUsed is rounded to two decimals only for display. Status compares exact spent/allocated/threshold before rounding (§77).
 
+**T43 verified boundaries (no T42 implementation change):** default threshold90, configurable integer1–100. `normal` when spent=0 or spent×100<threshold×amount; `near_limit` when 0<spent<=amount and spent×100>=threshold×amount; `exceeded` only when spent>amount. Exactly100% maps to near_limit, including threshold100; no at_limit enum exists. PostgreSQL NUMERIC performs these comparisons independently of round(spent×100/amount,2), which uses ties away from zero. For amount1000: spent899.99 and900.01 both display90.00 but have normal/near_limit respectively; spent999.99/1000.00/1000.01 all display100.00, with near_limit/near_limit/exceeded at threshold90. At threshold100,999.99 remains normal despite display100.00. Repeated GETs never update budget timestamps; transactions alone change dynamic spending/status. See [T43 verification](t43-verification.md).
+
 ---
 
 # 52. GET `/budgets`

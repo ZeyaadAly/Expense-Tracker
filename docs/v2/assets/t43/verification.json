@@ -1,0 +1,28 @@
+{
+  "task": "T43",
+  "checks": 671,
+  "boundaryCases": 23,
+  "concurrentVisibilityCases": 6,
+  "realJwt": true,
+  "readDeterminism": true,
+  "implementationChanged": false,
+  "remoteTouched": false,
+  "generalSuite": {
+    "tests": 126,
+    "passed": 100,
+    "gatedSkips": 26,
+    "failures": 0
+  },
+  "t42ScaleRerun": {
+    "transactions": 30012,
+    "budgets": 777,
+    "latencyMs": {
+      "min": 7.750299999999697,
+      "median": 13.454999999999927,
+      "max": 18.42660000000069
+    },
+    "executionMs": 1.586,
+    "planningMs": 2.663
+  },
+  "productionGateChanged": false
+}
