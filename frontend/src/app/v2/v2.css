@@ -1420,3 +1420,8 @@
 .account-detail-metadata dd { margin: 4px 0 0; overflow-wrap: anywhere; }
 @media (max-width: 900px) { .account-detail-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 500px) { .account-detail-summary, .account-detail-metadata { grid-template-columns: minmax(0, 1fr); } }
+.t46-goals > section { min-width: 0; overflow-wrap: anywhere; }
+.t46-goals .v2-goal header { align-items: flex-start; flex-wrap: wrap; }
+.t46-goals .v2-data-row { flex-wrap: wrap; gap: 8px; }
+.t46-goals .v2-money { overflow-wrap: anywhere; }
+.t46-goals .v2-actions { flex-wrap: wrap; }

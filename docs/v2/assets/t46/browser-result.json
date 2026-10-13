@@ -1,0 +1,20 @@
+{
+  "checks": 1046,
+  "audits": 26,
+  "violations": 0,
+  "widths": [
+    360,
+    768,
+    1440
+  ],
+  "mutations": 19,
+  "methods": {
+    "POST": 11,
+    "PUT": 8
+  },
+  "manualProgress": true,
+  "metadataOnly": true,
+  "financialNonEffect": true,
+  "sessionIsolation": true,
+  "remoteTouched": false
+}

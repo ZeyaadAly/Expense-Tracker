@@ -889,6 +889,10 @@ At 100%+ show a completion suggestion/action without changing status. Progress-b
 
 ---
 
+T46 connected-stage clarification (2026-10-13): development `/v2/goals` renders real T45 resources in the approved card grid, including archived read-only goals. The approved page has no status-filter control; its default list includes all owned statuses. Create/edit keeps exact amount strings and manual saved progress, optional target date and owned active account choices. Existing archived references remain displayable/retainable. Completed goals expose explicit reopening through full PUT status active, also available in the completed edit dialog. Target-reached availability compares exact returned saved/target amounts, never rounded percentComplete; only explicit confirmation completes/archives. Backend remaining/progress are rendered directly, with unbounded text and capped visual progress. Loading/empty/error/retained-stale states, definite validation focus, uncertain-write GET inspection, confirmed-write/read-failure feedback and session-owned teardown are verified. Dashboard Goal preview and Analytics remain unchanged; no projection/history/automatic account savings are added. See [T46 verification](t46-verification.md).
+
+---
+
 # 16. Reports Page UX — P1
 
 Route:

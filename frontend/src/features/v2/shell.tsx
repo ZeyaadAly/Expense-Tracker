@@ -32,7 +32,7 @@ const navigation: { title: string; items: [string, IconName][] }[] = [
   { title: "Insights", items: [["Analytics", "analytics"]] },
   { title: "Account", items: [["Settings", "settings"]] },
 ];
-export function PrototypeShell({ children, liveAccounts = false, liveTransactions = false, liveRecurring = false, liveDashboard = false, liveAnalytics = false, liveBudgets = false }: { children: ReactNode; liveAccounts?:boolean; liveTransactions?:boolean; liveRecurring?:boolean; liveDashboard?:boolean; liveAnalytics?:boolean; liveBudgets?:boolean }) {
+export function PrototypeShell({ children, liveAccounts = false, liveTransactions = false, liveRecurring = false, liveDashboard = false, liveAnalytics = false, liveBudgets = false, liveGoals = false }: { children: ReactNode; liveAccounts?:boolean; liveTransactions?:boolean; liveRecurring?:boolean; liveDashboard?:boolean; liveAnalytics?:boolean; liveBudgets?:boolean; liveGoals?:boolean }) {
   const path = usePathname();
   const session = useOptionalPrototype()?.session;
   const { user, signOut } = useAuth();
@@ -63,7 +63,7 @@ export function PrototypeShell({ children, liveAccounts = false, liveTransaction
       <nav aria-label="Main navigation">
         {navigation.filter(group => !(liveDashboard || liveAnalytics) || group.title !== "Planning").map((group) => (
           <SidebarSection key={group.title} label={group.title}>
-            {group.items.filter(([label])=>!liveBudgets || label!=="Goals").map(([label, icon]) => (
+            {group.items.map(([label, icon]) => (
               <Link
                 onClick={() => setOpen(false)}
                 key={label}
@@ -113,9 +113,9 @@ export function PrototypeShell({ children, liveAccounts = false, liveTransaction
         </Button>
       </header>
       <main id="v2-main" className="v2-main" tabIndex={-1}>
-        <p className="p4-prototype-label">{liveBudgets ? "Development · connected budgets" : liveAnalytics ? "Development · connected analytics" : liveDashboard ? "Development · connected dashboard" : liveRecurring ? "Development · connected recurring items" : liveTransactions ? "Development · connected transactions" : liveAccounts ? "Development · connected accounts" : "Prototype · fictional data"}</p>
+        <p className="p4-prototype-label">{liveGoals ? "Development · connected goals" : liveBudgets ? "Development · connected budgets" : liveAnalytics ? "Development · connected analytics" : liveDashboard ? "Development · connected dashboard" : liveRecurring ? "Development · connected recurring items" : liveTransactions ? "Development · connected transactions" : liveAccounts ? "Development · connected accounts" : "Prototype · fictional data"}</p>
         {logoutError && <FeedbackBanner tone="error" title={logoutError} />}
-        {liveAccounts || liveTransactions || liveRecurring || liveDashboard || liveAnalytics || liveBudgets || session ? (
+        {liveAccounts || liveTransactions || liveRecurring || liveDashboard || liveAnalytics || liveBudgets || liveGoals || session ? (
           children
         ) : (
           <section className="p4-panel">

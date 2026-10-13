@@ -1,0 +1,634 @@
+{
+  "goals": {
+    "checks": 245,
+    "races": 10,
+    "faults": 6,
+    "isolation": {
+      "checks": 25,
+      "realGoalApi": true,
+      "foreignAndMissingIdentical": true,
+      "reopenViaPut": true
+    },
+    "performance": {
+      "all": {
+        "rows": 2000,
+        "elapsedMs": 35.397
+      },
+      "active": {
+        "rows": 667,
+        "elapsedMs": 8.627
+      },
+      "completed": {
+        "rows": 666,
+        "elapsedMs": 7.614
+      },
+      "archived": {
+        "rows": 667,
+        "elapsedMs": 7.73
+      }
+    },
+    "totalPerformanceGoals": 10000,
+    "limitedRole": true,
+    "remoteTouched": false
+  },
+  "shared": {
+    "counts": {
+      "api": 257,
+      "dbRejections": 58,
+      "positiveDb": 68,
+      "boundary": 92,
+      "concurrent": 124
+    },
+    "totalChecks": 599,
+    "accounts": {
+      "checks": 263,
+      "realAccountApi": true,
+      "concurrencyRaces": 4,
+      "rollbackFaults": 2,
+      "remoteTouched": false
+    },
+    "balances": {
+      "checks": 285,
+      "transferMatrix": 4,
+      "snapshotVisibility": true,
+      "netPosition": "49.90",
+      "readOnly": true,
+      "queryCallsPerList": 1,
+      "plan": {
+        "fixtureTransactions": 5000,
+        "fixtureTransfers": 2000,
+        "executionMs": 6.591,
+        "planningMs": 4.047,
+        "rows": 27,
+        "nodes": [
+          "Sort",
+          "Seq Scan",
+          "Hash Join",
+          "Hash Join",
+          "Aggregate",
+          "Append",
+          "Hash Join",
+          "Seq Scan",
+          "Hash",
+          "CTE Scan",
+          "Hash Join",
+          "Seq Scan",
+          "Hash",
+          "CTE Scan",
+          "Hash",
+          "CTE Scan",
+          "Hash",
+          "Subquery Scan",
+          "Aggregate",
+          "Hash Join",
+          "Seq Scan",
+          "Hash",
+          "CTE Scan"
+        ]
+      },
+      "remoteTouched": false
+    },
+    "transactions": {
+      "checks": 244,
+      "realTransactionApi": true,
+      "generatedMarkerPreserved": true,
+      "rollbackFaults": 3,
+      "concurrencyRaces": 4,
+      "legacyReads": true,
+      "legacyOwnerlessCreateDenied": true,
+      "remoteTouched": false
+    },
+    "search": {
+      "checks": 263,
+      "rowsPerOwner": 10000,
+      "performance": [
+        {
+          "term": "%AScaleNeedle%",
+          "planningMs": 2.762,
+          "executionMs": 15.611,
+          "rows": 100
+        },
+        {
+          "term": "%AScaleNeedle%",
+          "planningMs": 1.351,
+          "executionMs": 12.959,
+          "rows": 0
+        },
+        {
+          "term": "%BScaleNeedle%",
+          "planningMs": 0.904,
+          "executionMs": 15.178,
+          "rows": 100
+        },
+        {
+          "term": "%Salary%",
+          "planningMs": 0.828,
+          "executionMs": 21.556,
+          "rows": 101
+        },
+        {
+          "term": "%Transport%",
+          "planningMs": 0.941,
+          "executionMs": 22.561,
+          "rows": 101
+        }
+      ],
+      "realJwtMiddleware": true,
+      "archivedHistory": true,
+      "literalWildcards": true,
+      "unicode": true,
+      "remoteTouched": false
+    },
+    "filters": {
+      "checks": 3263,
+      "subsetCombinations": 128,
+      "foreignAndMissingIdentical": true,
+      "archivedHistory": true,
+      "durableMarkerPreserved": true,
+      "reusedScaleRows": 20000,
+      "performance": [
+        {
+          "label": "date range",
+          "rows": 784,
+          "planningMs": 2.682,
+          "executionMs": 2.365,
+          "nodes": [
+            {
+              "type": "Limit",
+              "rows": 101
+            },
+            {
+              "type": "Sort",
+              "rows": 101
+            },
+            {
+              "type": "Hash Join",
+              "rows": 784
+            },
+            {
+              "type": "Nested Loop",
+              "rows": 784
+            },
+            {
+              "type": "Seq Scan",
+              "rows": 3,
+              "filter": "(user_id = 'a2200000-0000-4000-8000-000000000001'::uuid)"
+            },
+            {
+              "type": "Index Scan",
+              "index": "transactions_user_account_date_idx",
+              "rows": 261
+            },
+            {
+              "type": "Hash",
+              "rows": 34
+            },
+            {
+              "type": "Seq Scan",
+              "rows": 34
+            }
+          ]
+        },
+        {
+          "label": "account",
+          "rows": 5001,
+          "planningMs": 0.485,
+          "executionMs": 0.82,
+          "nodes": [
+            {
+              "type": "Limit",
+              "rows": 101
+            },
+            {
+              "type": "Incremental Sort",
+              "rows": 101
+            },
+            {
+              "type": "Nested Loop",
+              "rows": 109
+            },
+            {
+              "type": "Nested Loop",
+              "rows": 109
+            },
+            {
+              "type": "Index Scan",
+              "index": "transactions_user_account_date_idx",
+              "rows": 109
+            },
+            {
+              "type": "Index Scan",
+              "index": "categories_pkey",
+              "rows": 1,
+              "filter": "(is_system OR (user_id = t.user_id))"
+            },
+            {
+              "type": "Materialize",
+              "rows": 1
+            },
+            {
+              "type": "Seq Scan",
+              "rows": 1,
+              "filter": "((id = '2e950755-bee1-40df-950d-fcaf5582555c'::uuid) AND (user_id = 'a2200000-0000-4000-8000-000000000001'::uuid))"
+            }
+          ]
+        },
+        {
+          "label": "category",
+          "rows": 5001,
+          "planningMs": 0.494,
+          "executionMs": 0.513,
+          "nodes": [
+            {
+              "type": "Limit",
+              "rows": 101
+            },
+            {
+              "type": "Incremental Sort",
+              "rows": 101
+            },
+            {
+              "type": "Nested Loop",
+              "rows": 109
+            },
+            {
+              "type": "Nested Loop",
+              "rows": 109
+            },
+            {
+              "type": "Index Scan",
+              "index": "transactions_user_category_date_idx",
+              "rows": 109
+            },
+            {
+              "type": "Materialize",
+              "rows": 1
+            },
+            {
+              "type": "Seq Scan",
+              "rows": 1,
+              "filter": "(id = 'e81f1a57-23ae-4eb2-92b1-4b8b6d4a9a2c'::uuid)"
+            },
+            {
+              "type": "Memoize",
+              "rows": 1
+            },
+            {
+              "type": "Index Scan",
+              "index": "accounts_id_user_unique",
+              "rows": 1
+            }
+          ]
+        },
+        {
+          "label": "type and date",
+          "rows": 784,
+          "planningMs": 1.537,
+          "executionMs": 2.715,
+          "nodes": [
+            {
+              "type": "Limit",
+              "rows": 101
+            },
+            {
+              "type": "Sort",
+              "rows": 101
+            },
+            {
+              "type": "Hash Join",
+              "rows": 784
+            },
+            {
+              "type": "Nested Loop",
+              "rows": 784
+            },
+            {
+              "type": "Seq Scan",
+              "rows": 3,
+              "filter": "(user_id = 'a2200000-0000-4000-8000-000000000001'::uuid)"
+            },
+            {
+              "type": "Index Scan",
+              "index": "transactions_user_account_date_idx",
+              "rows": 261,
+              "filter": "(type = 'expense'::text)"
+            },
+            {
+              "type": "Hash",
+              "rows": 34
+            },
+            {
+              "type": "Seq Scan",
+              "rows": 34
+            }
+          ]
+        },
+        {
+          "label": "search, date and account",
+          "rows": 100,
+          "planningMs": 0.867,
+          "executionMs": 7.387,
+          "nodes": [
+            {
+              "type": "Limit",
+              "rows": 100
+            },
+            {
+              "type": "Sort",
+              "rows": 100
+            },
+            {
+              "type": "Nested Loop",
+              "rows": 100
+            },
+            {
+              "type": "Seq Scan",
+              "rows": 1,
+              "filter": "((id = '2e950755-bee1-40df-950d-fcaf5582555c'::uuid) AND (user_id = 'a2200000-0000-4000-8000-000000000001'::uuid))"
+            },
+            {
+              "type": "Hash Join",
+              "rows": 5000
+            },
+            {
+              "type": "Bitmap Heap Scan",
+              "rows": 5000
+            },
+            {
+              "type": "Bitmap Index Scan",
+              "index": "transactions_user_account_date_idx",
+              "rows": 5000
+            },
+            {
+              "type": "Hash",
+              "rows": 34
+            },
+            {
+              "type": "Seq Scan",
+              "rows": 34
+            }
+          ]
+        }
+      ],
+      "remoteTouched": false
+    },
+    "pagination": {
+      "checks": 6065,
+      "deepRows": 10023,
+      "deepPages": 101,
+      "tiedTraversal": true,
+      "microsecondTuple": true,
+      "crossUserRejected": true,
+      "anchorDeletion": true,
+      "newerInsert": true,
+      "performance": [
+        {
+          "label": "first page",
+          "planningMs": 0.682,
+          "executionMs": 0.533,
+          "databaseRows": 101,
+          "nodes": [
+            {
+              "type": "Limit"
+            },
+            {
+              "type": "Nested Loop"
+            },
+            {
+              "type": "Nested Loop"
+            },
+            {
+              "type": "Index Scan",
+              "index": "transactions_user_order_idx"
+            },
+            {
+              "type": "Index Scan",
+              "index": "categories_pkey"
+            },
+            {
+              "type": "Memoize"
+            },
+            {
+              "type": "Index Scan",
+              "index": "accounts_id_user_unique"
+            }
+          ]
+        },
+        {
+          "label": "deep after 50 pages",
+          "planningMs": 0.661,
+          "executionMs": 0.518,
+          "databaseRows": 101,
+          "nodes": [
+            {
+              "type": "Limit"
+            },
+            {
+              "type": "Nested Loop"
+            },
+            {
+              "type": "Nested Loop"
+            },
+            {
+              "type": "Index Scan",
+              "index": "transactions_user_order_idx"
+            },
+            {
+              "type": "Index Scan",
+              "index": "categories_pkey"
+            },
+            {
+              "type": "Memoize"
+            },
+            {
+              "type": "Index Scan",
+              "index": "accounts_id_user_unique"
+            }
+          ]
+        },
+        {
+          "label": "search page",
+          "planningMs": 1.151,
+          "executionMs": 15.238,
+          "databaseRows": 26,
+          "nodes": [
+            {
+              "type": "Limit"
+            },
+            {
+              "type": "Sort"
+            },
+            {
+              "type": "Hash Join"
+            },
+            {
+              "type": "Nested Loop"
+            },
+            {
+              "type": "Seq Scan"
+            },
+            {
+              "type": "Index Scan",
+              "index": "transactions_account_idx"
+            },
+            {
+              "type": "Hash"
+            },
+            {
+              "type": "Seq Scan"
+            }
+          ]
+        },
+        {
+          "label": "search continuation",
+          "planningMs": 0.939,
+          "executionMs": 12.897,
+          "databaseRows": 26,
+          "nodes": [
+            {
+              "type": "Limit"
+            },
+            {
+              "type": "Sort"
+            },
+            {
+              "type": "Hash Join"
+            },
+            {
+              "type": "Nested Loop"
+            },
+            {
+              "type": "Seq Scan"
+            },
+            {
+              "type": "Index Scan",
+              "index": "transactions_account_idx"
+            },
+            {
+              "type": "Hash"
+            },
+            {
+              "type": "Seq Scan"
+            }
+          ]
+        },
+        {
+          "label": "account/date page",
+          "planningMs": 0.54,
+          "executionMs": 0.224,
+          "databaseRows": 26,
+          "nodes": [
+            {
+              "type": "Limit"
+            },
+            {
+              "type": "Incremental Sort"
+            },
+            {
+              "type": "Nested Loop"
+            },
+            {
+              "type": "Nested Loop"
+            },
+            {
+              "type": "Index Scan",
+              "index": "transactions_user_account_date_idx"
+            },
+            {
+              "type": "Index Scan",
+              "index": "categories_pkey"
+            },
+            {
+              "type": "Materialize"
+            },
+            {
+              "type": "Seq Scan"
+            }
+          ]
+        },
+        {
+          "label": "account/date continuation",
+          "planningMs": 0.716,
+          "executionMs": 0.3,
+          "databaseRows": 26,
+          "nodes": [
+            {
+              "type": "Limit"
+            },
+            {
+              "type": "Incremental Sort"
+            },
+            {
+              "type": "Nested Loop"
+            },
+            {
+              "type": "Nested Loop"
+            },
+            {
+              "type": "Index Scan",
+              "index": "transactions_user_account_date_idx"
+            },
+            {
+              "type": "Index Scan",
+              "index": "categories_pkey"
+            },
+            {
+              "type": "Materialize"
+            },
+            {
+              "type": "Seq Scan"
+            }
+          ]
+        }
+      ],
+      "remoteTouched": false
+    },
+    "transfers": {
+      "checks": 917,
+      "races": 11,
+      "rollbackFaults": 11,
+      "fourAccountTypeCombinations": true,
+      "incomeExpenseUnchanged": true,
+      "realTransferApiIsolation": true,
+      "cursorPagination": true
+    },
+    "recurring": {
+      "checks": 31,
+      "realRecurringApi": true,
+      "financialEffect": false
+    },
+    "analytics": {
+      "checks": 14,
+      "internalQueryIsolation": true,
+      "publicApi": true
+    },
+    "budgets": {
+      "checks": 15,
+      "realBudgetApi": true,
+      "foreignAndMissingIdentical": true
+    },
+    "goals": {
+      "checks": 25,
+      "realGoalApi": true,
+      "foreignAndMissingIdentical": true,
+      "reopenViaPut": true
+    },
+    "failures": 0,
+    "migrations": {
+      "v1": 2,
+      "t11": 4,
+      "t15": 1,
+      "t32": 1
+    },
+    "users": 22,
+    "financialTotals": {
+      "count": 4,
+      "income": "30.00",
+      "expenses": "10.00",
+      "balance": "20.00"
+    },
+    "financialStateUnchangedBeforeAccountLifecycle": true,
+    "realJwtMiddleware": true,
+    "remoteTouched": false
+  }
+}
