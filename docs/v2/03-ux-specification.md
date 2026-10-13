@@ -746,6 +746,8 @@ Route:
 
 Lead with a factual financial narrative/summary based on existing P0 values (for example savings rate, net savings and period), then supporting trends, category spending, account activity and recurring obligations. Avoid a wall of charts. This summary does not promote P1 deterministic insight cards into core.
 
+**T40 connected behavior (2026-10-13):** `/v2/analytics` uses authenticated T39 data. Default 30 days; the approved presets below resolve to explicit inclusive Cairo dates, and Custom validates both dates/order/max 366 without clamping or URL synchronization. The real account selector includes active and archived accounts; All accounts omits accountId. Actual summary/zero-filled monthly bars and savings line, both category breakdowns and account movements use backend values. Expected recurring commitments are separately labelled current-definition projections. Null savings rate is Not applicable. Empty/loading/error/retained-stale states never substitute fixture money; retained values identify their last loaded range/account. Session replacement clears data/options and cancels old reads. Chart data has exact readable equivalents, with keyboard-safe internal scrolling on narrow screens. Production financial gating remains unchanged. See [T40 verification](t40-verification.md).
+
 ## 13.1 Header Controls
 
 Time range:

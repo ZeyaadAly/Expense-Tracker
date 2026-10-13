@@ -282,3 +282,30 @@
 @media (max-width: 479px) {
   .t34-recurring .v2-data-row, .t34-timeline .v2-upcoming { display: flex; flex-wrap: wrap; gap: 12px; }
 }
+.t40-controls { display:flex; flex-wrap:wrap; gap:1rem; align-items:end; margin-bottom:1.5rem; }
+.t40-controls .v2-field { min-width:0; flex:1 1 160px; }
+.t40-range-error { flex-basis:100%; }
+.t40-content { display:grid; grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); gap:1.5rem; }
+.t40-content > *, .t40-content .v2-chart { min-width:0; }
+.t40-content h2 { margin-bottom:1rem; }
+.t40-derived { display:flex; flex-wrap:wrap; gap:1.5rem; margin-top:1.5rem; }
+.t40-derived dd { margin:0; font-size:1.35rem; font-weight:600; }
+.t40-trends, .t40-accounts { grid-column:1/-1; }
+.t40-trend-grid { display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:1rem; }
+.t40-chart-scroll, .t40-table-scroll { overflow-x:auto; max-width:100%; }
+.t40-bars { min-width:460px; }
+.t40-bars .p4-bar-group span { font-size:.65rem; }
+.t40-savings { width:100%; height:180px; color:var(--v2-income); }
+.t40-zero { stroke:currentColor; stroke-dasharray:4 4; opacity:.4; }
+.t40-table { width:100%; border-collapse:collapse; font-size:.85rem; }
+.t40-table th,.t40-table td { text-align:left; padding:.75rem; border-bottom:1px solid var(--v2-border); }
+.t40-table caption { text-align:left; padding:1rem 0; }
+.t40-table .v2-money { white-space:nowrap; }
+.t40-category strong,.t40-account h3,.t40-content .v2-money { overflow-wrap:anywhere; }
+.t40-category > div:first-child { align-items:start; gap:.75rem; flex-wrap:wrap; }
+.t40-category span { max-width:100%; }
+.t40-account { padding:1rem 0; border-top:1px solid var(--v2-border); }
+.t40-account dl { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:1rem; }
+.t40-account dd { margin:0; }
+@media(max-width:1050px) { .t40-content,.t40-trend-grid { grid-template-columns:minmax(0,1fr); } .t40-account dl { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(max-width:560px) { .t40-controls { display:grid; grid-template-columns:minmax(0,1fr); } .t40-account dl { grid-template-columns:repeat(2,minmax(0,1fr)); } .t40-content .v2-metric-strip { grid-template-columns:minmax(0,1fr); } }

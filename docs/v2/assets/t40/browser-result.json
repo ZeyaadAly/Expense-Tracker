@@ -1,0 +1,17 @@
+{
+  "task": "T40",
+  "checks": 894,
+  "axeAudits": 20,
+  "axeViolations": 0,
+  "widths": [
+    360,
+    768,
+    1440
+  ],
+  "realJwt": true,
+  "realDatabase": true,
+  "allFivePresets": true,
+  "allFiveDashboardPeriods": true,
+  "userSwitch": true,
+  "remoteTouched": false
+}

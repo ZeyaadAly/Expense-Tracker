@@ -32,7 +32,7 @@ const navigation: { title: string; items: [string, IconName][] }[] = [
   { title: "Insights", items: [["Analytics", "analytics"]] },
   { title: "Account", items: [["Settings", "settings"]] },
 ];
-export function PrototypeShell({ children, liveAccounts = false, liveTransactions = false, liveRecurring = false, liveDashboard = false }: { children: ReactNode; liveAccounts?:boolean; liveTransactions?:boolean; liveRecurring?:boolean; liveDashboard?:boolean }) {
+export function PrototypeShell({ children, liveAccounts = false, liveTransactions = false, liveRecurring = false, liveDashboard = false, liveAnalytics = false }: { children: ReactNode; liveAccounts?:boolean; liveTransactions?:boolean; liveRecurring?:boolean; liveDashboard?:boolean; liveAnalytics?:boolean }) {
   const path = usePathname();
   const session = useOptionalPrototype()?.session;
   const { user, signOut } = useAuth();
@@ -61,7 +61,7 @@ export function PrototypeShell({ children, liveAccounts = false, liveTransaction
         </span>
       </Link>
       <nav aria-label="Main navigation">
-        {navigation.filter(group => !liveDashboard || !["Planning", "Insights"].includes(group.title)).map((group) => (
+        {navigation.filter(group => !(liveDashboard || liveAnalytics) || group.title !== "Planning").map((group) => (
           <SidebarSection key={group.title} label={group.title}>
             {group.items.map(([label, icon]) => (
               <Link
@@ -113,9 +113,9 @@ export function PrototypeShell({ children, liveAccounts = false, liveTransaction
         </Button>
       </header>
       <main id="v2-main" className="v2-main" tabIndex={-1}>
-        <p className="p4-prototype-label">{liveDashboard ? "Development · connected dashboard" : liveRecurring ? "Development · connected recurring items" : liveTransactions ? "Development · connected transactions" : liveAccounts ? "Development · connected accounts" : "Prototype · fictional data"}</p>
+        <p className="p4-prototype-label">{liveAnalytics ? "Development · connected analytics" : liveDashboard ? "Development · connected dashboard" : liveRecurring ? "Development · connected recurring items" : liveTransactions ? "Development · connected transactions" : liveAccounts ? "Development · connected accounts" : "Prototype · fictional data"}</p>
         {logoutError && <FeedbackBanner tone="error" title={logoutError} />}
-        {liveAccounts || liveTransactions || liveRecurring || liveDashboard || session ? (
+        {liveAccounts || liveTransactions || liveRecurring || liveDashboard || liveAnalytics || session ? (
           children
         ) : (
           <section className="p4-panel">
