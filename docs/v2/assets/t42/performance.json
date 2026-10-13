@@ -1,0 +1,66 @@
+{
+  "checks": 194,
+  "transactions": 30012,
+  "budgets": 777,
+  "categories": 32,
+  "months": 24,
+  "latencyMs": {
+    "min": 7.950299999998606,
+    "median": 27.38420000000042,
+    "max": 41.1182000000008
+  },
+  "executionMs": 7.963,
+  "planningMs": 2.887,
+  "newIndex": false,
+  "remoteTouched": false,
+  "environment": "Synthetic disposable PostgreSQL 17.11; warm loopback authenticated HTTP; local timings only",
+  "nodes": [
+    {
+      "type": "Sort"
+    },
+    {
+      "type": "Hash Join"
+    },
+    {
+      "type": "Seq Scan"
+    },
+    {
+      "type": "Hash"
+    },
+    {
+      "type": "Bitmap Heap Scan"
+    },
+    {
+      "type": "Bitmap Index Scan",
+      "index": "budgets_user_period_idx"
+    },
+    {
+      "type": "Hash Join"
+    },
+    {
+      "type": "CTE Scan"
+    },
+    {
+      "type": "Hash"
+    },
+    {
+      "type": "Subquery Scan"
+    },
+    {
+      "type": "Aggregate"
+    },
+    {
+      "type": "Nested Loop"
+    },
+    {
+      "type": "CTE Scan"
+    },
+    {
+      "type": "Bitmap Heap Scan"
+    },
+    {
+      "type": "Bitmap Index Scan",
+      "index": "transactions_user_category_date_idx"
+    }
+  ]
+}

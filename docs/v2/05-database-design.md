@@ -532,6 +532,8 @@ Do not store `spent` as authoritative mutable state.
 
 # 22. Budget Query Logic
 
+T42 implements this as a shared owner-scoped, single-statement aggregate for list and single reads. Existing `(user_id,category_id,year,month)` uniqueness, T15 category/owner integrity, timestamp triggers and owner/category/date transaction indexes suffice; no schema/index/privilege migration is added. Amount and threshold updates lock the owned budget row; category and period are immutable in the public API. Creation holds a category SHARE lock through commit to serialize with archive/kind changes. Status remains derived, not stored; historical archived categories and generated posted expenses remain included. See [T42 verification](t42-verification.md).
+
 For a monthly category budget:
 
 ```text

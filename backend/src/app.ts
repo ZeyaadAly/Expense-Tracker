@@ -22,6 +22,8 @@ import { createRecurringCronRouter, type RecurringCronOptions } from "./routes/r
 import type { DashboardService } from "./services/dashboard.js";
 import { createDashboardRouter } from "./routes/dashboard.js";
 import { createAnalyticsRouter, type AnalyticsService } from "./routes/analytics.js";
+import { createBudgetRouter } from "./routes/budgets.js";
+import type { BudgetService } from "./services/budgets.js";
 
 export function createApp(options: {
   clientOrigin: string;
@@ -33,6 +35,8 @@ export function createApp(options: {
   recurring?: RecurringService;
   dashboard?: DashboardService;
   analytics?: AnalyticsService;
+  budgets?: BudgetService;
+  budgetOptions?: {now?:()=>Date};
   recurringCron?: RecurringCronOptions;
   categories?: CategoryService;
   profiles?: ProfileService;
@@ -86,6 +90,7 @@ export function createApp(options: {
   if (options.recurring) v2.use(createRecurringRouter(options.recurring, createRequireAuth(options.supabaseUrl)));
   if (options.dashboard) v2.use(createDashboardRouter(options.dashboard, createRequireAuth(options.supabaseUrl)));
   if (options.analytics) v2.use(createAnalyticsRouter(options.analytics, createRequireAuth(options.supabaseUrl)));
+  if (options.budgets) v2.use(createBudgetRouter(options.budgets, createRequireAuth(options.supabaseUrl),options.budgetOptions));
   v2.use(routeNotFound);
   v2.use(errorHandler);
   app.use("/api/v2", v2);

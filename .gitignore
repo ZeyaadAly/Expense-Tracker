@@ -62,3 +62,4 @@ supabase/.env.*.local
 .tmp-v2-t38/
 .tmp-v2-t39/
 .tmp-v2-t40/
+.tmp-v2-t42/

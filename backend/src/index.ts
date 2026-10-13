@@ -1,5 +1,6 @@
 import {createDashboardService} from "./services/dashboard.js";
 import {createAnalyticsService} from "./services/analytics.js";
+import {createBudgetService} from "./services/budgets.js";
 import { createApp } from "./app.js";
 import { env } from "./config/env.js";
 import { isDatabaseReachable } from "./db/health.js";
@@ -16,6 +17,7 @@ import {createRecurringProcessor} from "./services/recurring-processor.js";
 const app = createApp({ clientOrigin: env.clientOrigin, databaseHealth: isDatabaseReachable, recurringCron:{processor:createRecurringProcessor(pool)}, dashboard:createDashboardService(pool), recurring:createRecurringService(pool), transfers:createTransferService(pool,{cursorSigningSecret:process.env.CURSOR_SIGNING_SECRET}),
   // Deferred preview acceptance: never register Analytics in a production process.
   ...(process.env.NODE_ENV === "production" ? {} : {analytics:createAnalyticsService(pool)}),
+  ...(process.env.NODE_ENV === "production" ? {} : {budgets:createBudgetService(pool)}),
   financialMode: "v2", transactions: createTransactionService(pool), v2Transactions:createV2TransactionService(pool,{cursorSigningSecret:process.env.CURSOR_SIGNING_SECRET}), categories: createCategoryService(pool), profiles: createProfileService(pool), accounts: createAccountService(pool), supabaseUrl: process.env.SUPABASE_URL });
 
 app.listen(env.port, () => {

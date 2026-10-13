@@ -1035,6 +1035,14 @@ Example:
 
 # 51. Budget Resource Shape
 
+**T42 implementation checkpoint (local/development):** authenticated `GET/POST /api/v2/budgets` and `GET/PUT/DELETE /api/v2/budgets/:id`. List returns `{data:[Budget],meta:{count}}`; GET single, POST201 and PUT200 return `{data:Budget}`; POST sets Location; DELETE204 has no body. GET single uses the same progress statement as list. Ordering is category name, category ID, budget ID. No owner field or currency field is added to the frozen resource.
+
+Only year/month/categoryId list filters are accepted; year/month must appear together, otherwise current Cairo month is selected. Body year/month/threshold are JSON integers; query year is four digits 1900–9999 and month is canonical integer text1–12. Explicit future/past months are allowed within those bounds. Repeated/unknown parameters, owner injection and immutable PUT fields return structured400. POST threshold omission defaults90; PUT requires amount and threshold. Visible system/owned expense/both category creation requires active status: invisible404, archived409 CATEGORY_ARCHIVED, income-only400. Existing archived-category budgets remain readable/editable/deletable. Optional foreign/missing category filter returns the same404; visible categories without budgets return an empty list. Duplicate user/category/year/month uses the existing database uniqueness constraint and sanitized409 CONFLICT.
+
+T09 supplies identity, global no-store/CORS and existing transport/method policies remain unchanged. Collection Allow is GET, POST; resource Allow is GET, PUT, DELETE. DB failures use centralized sanitized500/503 envelopes. All progress comes from one parameterized SQL aggregate over owned expense transactions in the inclusive calendar month. Required status is normal for zero spending, exceeded only above amount, otherwise near_limit at/above the exact configured threshold (including exactly100%); round percentUsed only for display. Budgets are informational and never reject expenses.
+
+The Vercel entry deliberately omits the Budget service; development entry supplies it only outside NODE_ENV=production. No production API/UI gate, cron or database configuration is changed. See [T42 verification](t42-verification.md).
+
 Example:
 
 ```json
