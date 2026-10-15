@@ -25,7 +25,7 @@ const failure = (error: unknown, domain: "profile" | "category"): Failure => {
   const messages: Record<string,string> = {
     CONFLICT: "You already have a custom category with this name, including archived categories.",
     CATEGORY_IMMUTABLE: "System categories cannot be changed.",
-    CATEGORY_KIND_LOCKED: "This category is used by financial records. Its kind cannot change.",
+    CATEGORY_KIND_LOCKED: "This category is used by financial records. Its kind cannot change. Keep the existing kind to rename it.",
     CATEGORY_ARCHIVED: "This category is archived. Restore it before editing.",
     NOT_FOUND: "This item is unavailable. Refresh this section to inspect the current state.",
   };
@@ -36,6 +36,7 @@ export function createSettingsStore(profileClient: ReturnType<typeof createProfi
   let state = initial, generation = 0;
   const listeners = new Set<() => void>();
   const controllers = new Map<string, AbortController>();
+  const inspectedCategories = new Set<string>();
   const publish = (patch: Partial<State>) => { state = { ...state, ...patch }; listeners.forEach(fn => fn()); };
   const stop = () => { generation++; controllers.forEach(c => c.abort()); controllers.clear(); publish(initial); };
   const handleAuth = (error: unknown) => { if (!authFailure(error)) return false; stop(); publish({ ...initial, authError: true }); return true; };
@@ -48,7 +49,8 @@ export function createSettingsStore(profileClient: ReturnType<typeof createProfi
     try {
       const data = await get(controller.signal);
       if (life !== generation || controllers.get(key) !== controller) return false;
-      publish({ [key]: { data, loading: false, error: null, stale: false }, ...(key === "profile" && state.profileFailure?.uncertain ? { profileInspectionReady: true } : key !== "profile" && state.categoryFailure?.uncertain && (key === "active" ? !state.archived.error && !state.archived.loading : !state.active.error && !state.active.loading) ? { categoryInspectionReady: true } : {}) });
+      if (key !== "profile" && state.categoryFailure?.uncertain) inspectedCategories.add(key);
+      publish({ [key]: { data, loading: false, error: null, stale: false }, ...(key === "profile" && state.profileFailure?.uncertain ? { profileInspectionReady: true } : key !== "profile" && state.categoryFailure?.uncertain ? { categoryInspectionReady: inspectedCategories.size === 2 } : {}) });
       return true;
     } catch (error) {
       if (life !== generation || controllers.get(key) !== controller) return false;
@@ -67,10 +69,15 @@ export function createSettingsStore(profileClient: ReturnType<typeof createProfi
     const controller = new AbortController(), life = generation;
     controllers.set(`${domain}-write`, controller);
     publish({ [pending]: true, [failed]: null, [notified]: null, ...(domain === "profile" ? {profileInspectionReady:false} : {categoryInspectionReady:false}) });
-    try { await operation(controller.signal); }
+    try {
+      const value = await operation(controller.signal);
+      if (life !== generation) return false;
+      if (domain === "profile") publish({profile:{data:value as Profile,loading:false,error:null,stale:false}});
+    }
     catch (error) {
       if (life !== generation) return false;
       if (handleAuth(error)) return false;
+      if (domain === "category") inspectedCategories.clear();
       publish({ [pending]: false, [failed]: failure(error, domain) });
       return false;
     }
@@ -88,7 +95,7 @@ export function createSettingsStore(profileClient: ReturnType<typeof createProfi
     refreshProfile, refreshCategories,
     saveProfile: (displayName:string|null) => write("profile", signal => profileClient.updateProfile({displayName},{signal}), "Profile saved."),
     mutateCategory: (operation:(signal:AbortSignal)=>Promise<unknown>, notice:string) => write("category",operation,notice),
-    clearFailure: (domain:"profile"|"category") => { if (domain === "profile" ? state.profileFailure?.uncertain : state.categoryFailure?.uncertain) return; publish(domain === "profile" ? {profileFailure:null,profileNotice:null} : {categoryFailure:null,categoryNotice:null}); },
+    clearFailure: (domain:"profile"|"category") => { if (domain === "profile" ? state.profileFailure?.uncertain : state.categoryFailure?.uncertain) return; publish(domain === "profile" ? {profileFailure:null} : {categoryFailure:null}); },
     inspected: (domain:"profile"|"category") => { if (domain === "profile") { if (state.profileInspectionReady && !state.profile.error && !state.profile.loading) publish({profileFailure:null,profileInspectionReady:false}); } else if (state.categoryInspectionReady && !state.active.error && !state.archived.error && !state.active.loading && !state.archived.loading) publish({categoryFailure:null,categoryInspectionReady:false}); },
   };
 }

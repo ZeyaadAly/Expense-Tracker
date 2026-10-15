@@ -959,6 +959,8 @@ Fields:
 - timezone Africa/Cairo (read-only P0);
 - currency EGP (read-only P0).
 
+T49 implementation: email comes from the active Auth session and is read-only. Only displayName is submitted to the profile API; a blank value clears it to null. A confirmed update changes the shared shell name immediately. Profile and category refreshes recover independently and label retained stale data. An uncertain write requires a fresh GET inspection and deliberate acknowledgement before another attempt.
+
 ---
 
 ## 17.2 Categories
@@ -976,6 +978,10 @@ Actions:
 - Archive;
 - Restore.
 
+T49 distinguishes System/Custom and Active/Archived with text. System rows have no mutation controls. Custom categories use name and income/expense/both kind, with optional icon/color text from the public T48 contract. Custom archived rows can be edited or restored. Case-insensitive custom-name conflicts include archived rows; a custom name may match a system name. Referenced-kind rejection preserves the draft and explains that the existing kind must be retained for a rename. Archive confirmation explains preserved financial history and automatic recurring pause; restore confirmation explains that schedules stay paused.
+
+Account management uses a “Manage accounts” link to the existing connected `/v2/accounts` page, including its authoritative balances and archive/restore workflow.
+
 ---
 
 ## 17.3 Security
@@ -985,6 +991,8 @@ Actions:
 - Change password;
 - Sign out;
 - stronger all-session revocation and user-identity deletion are post-V2; no core deletion control.
+
+T49 reuses `/v2/forgot-password` for the existing Supabase reset flow and the shared Auth sign-out action. It adds no second password system, MFA, device list or session list. Export, notifications and user deletion are omitted from core Settings.
 
 ---
 

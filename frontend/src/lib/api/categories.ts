@@ -31,6 +31,7 @@ function parseCategory(value: unknown, write = false): Category {
   return row as Category;
 }
 export function createCategoryClient(userId: string, transport = createSessionClient(userId)) {
+  const editable = (input: CategoryInput): CategoryInput => ({name:input.name,kind:input.kind,icon:input.icon,color:input.color});
   const path = (id: string) => { if (!uuid.test(id)) throw new V2ApiError(0, "INVALID_REQUEST", "unexpected"); return `/categories/${id}`; };
   const resource = (value: unknown, id?: string) => { const category = parseCategory((value as {data?:unknown}|undefined)?.data, true); if (id && category.id !== id) throw invalid(true); return category; };
   return {
@@ -47,8 +48,8 @@ export function createCategoryClient(userId: string, transport = createSessionCl
         throw invalid();
       return rows;
     },
-    createCategory: async (input: CategoryInput, options?: V2RequestOptions) => resource(await transport.post("/categories", input, options)),
-    updateCategory: async (id: string, input: CategoryInput, options?: V2RequestOptions) => resource(await transport.put(path(id), input, options), id),
+    createCategory: async (input: CategoryInput, options?: V2RequestOptions) => resource(await transport.post("/categories", editable(input), options)),
+    updateCategory: async (id: string, input: CategoryInput, options?: V2RequestOptions) => resource(await transport.put(path(id), editable(input), options), id),
     async archiveCategory(id: string, options?: V2RequestOptions) {
       const response = await transport.post(path(id) + "/archive", {}, options);
       const category = resource(response, id);

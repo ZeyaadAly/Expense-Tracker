@@ -1,0 +1,38 @@
+[
+  {
+    "file": "v2-profiles.test.mjs",
+    "pass": 3,
+    "fail": 0,
+    "skipped": 0
+  },
+  {
+    "file": "v2-categories.test.mjs",
+    "pass": 2,
+    "fail": 0,
+    "skipped": 0
+  },
+  {
+    "file": "v2-custom-categories.test.mjs",
+    "pass": 2,
+    "fail": 0,
+    "skipped": 0
+  },
+  {
+    "file": "v2-transactions.test.mjs",
+    "pass": 5,
+    "fail": 0,
+    "skipped": 0
+  },
+  {
+    "file": "v2-recurring.test.mjs",
+    "pass": 3,
+    "fail": 0,
+    "skipped": 0
+  },
+  {
+    "file": "budgets.test.mjs",
+    "pass": 4,
+    "fail": 0,
+    "skipped": 0
+  }
+]

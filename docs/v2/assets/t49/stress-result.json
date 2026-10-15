@@ -1,0 +1,13 @@
+{
+  "checks": 17,
+  "audits": 8,
+  "violations": 0,
+  "widths": [
+    360,
+    768,
+    1440
+  ],
+  "longEmail": true,
+  "keyboard": true,
+  "remoteTouched": false
+}

@@ -1,0 +1,104 @@
+// Browser -> authenticated API -> disposable PostgreSQL. Synthetic Auth only.
+import assert from 'node:assert/strict';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { setTimeout as pause } from 'node:timers/promises';
+mkdirSync(new URL('../../.tmp-v2-t49/',import.meta.url),{recursive:true});
+const api='http://127.0.0.1:4000',origin='http://localhost:3000';
+const sessions={a:await(await fetch(api+'/test/session/a')).json(),b:await(await fetch(api+'/test/session/b')).json()};
+if(process.env.T49_STRESS_ONLY==='1')sessions.a.user.email='a'.repeat(64)+'@'+'b'.repeat(63)+'.'+'c'.repeat(63)+'.example.invalid';
+const targets=await(await fetch('http://127.0.0.1:9224/json/version')).json();
+const ws=new WebSocket(targets.webSocketDebuggerUrl);await new Promise(r=>ws.onopen=r);
+let sequence=0,session,checks=0,audits=0;const pending=new Map();
+ws.onmessage=({data})=>{const m=JSON.parse(data),p=pending.get(m.id);if(p){pending.delete(m.id);if(m.error)p.reject(Error(JSON.stringify(m.error)));else p.resolve(m.result);}};
+function call(method,params={},attach=true){return new Promise((resolve,reject)=>{const id=++sequence;pending.set(id,{resolve,reject});ws.send(JSON.stringify({id,method,params,...(attach&&session?{sessionId:session}:{})}));});}
+async function evaluate(expression){const result=await call('Runtime.evaluate',{expression,awaitPromise:true,returnByValue:true});if(result.exceptionDetails)throw Error(result.exceptionDetails.exception?.description??'Browser evaluation failed');return result.result.value;}
+async function until(expression){for(let i=0;i<200;i++){if(await evaluate(`document.body&&(${expression})`))return;await pause(100);}throw Error('Timed out: '+expression);}
+async function check(expression){assert.equal(await evaluate(expression),true,expression);checks++;}
+async function click(label,selector='button'){await until(`[...document.querySelectorAll(${JSON.stringify(selector)})].some(b=>b.textContent.trim()===${JSON.stringify(label)}&&!b.disabled&&b.getClientRects().length)`);await evaluate(`(()=>{const b=[...document.querySelectorAll(${JSON.stringify(selector)})].find(b=>b.textContent.trim()===${JSON.stringify(label)}&&!b.disabled&&b.getClientRects().length);b.focus();b.click()})()`);}
+async function fill(label,value,scope='dialog'){await evaluate(`(()=>{const l=[...document.querySelectorAll(${JSON.stringify(scope+' label')})].find(l=>l.textContent.startsWith(${JSON.stringify(label)}));if(!l)throw Error('Missing label '+${JSON.stringify(label)});const input=document.getElementById(l.htmlFor);Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,${JSON.stringify(value)});input.dispatchEvent(new Event('input',{bubbles:true}));})()`);}
+async function select(label,value){await evaluate(`(()=>{const l=[...document.querySelectorAll('dialog label')].find(l=>l.textContent.startsWith(${JSON.stringify(label)}));const el=document.getElementById(l.htmlFor);el.value=${JSON.stringify(value)};el.dispatchEvent(new Event('change',{bubbles:true}));})()`);}
+async function navigate(path){await call('Page.navigate',{url:origin+path});await until(`!!document.querySelector('#v2-main')`);}
+async function ready(){await until(`document.querySelector('#settings-profile-title')&&document.querySelector('#settings-categories-title')&&!document.body.innerText.includes('Loading active categories')`);}
+async function rowAction(name,action){await evaluate(`(()=>{const r=[...document.querySelectorAll('.v2-settings-category-list .v2-data-row')].find(r=>r.querySelector('strong')?.textContent===${JSON.stringify(name)}&&r.innerText.includes('Custom'));const b=[...r.querySelectorAll('button')].find(b=>b.textContent.trim().startsWith(${JSON.stringify(action)}));if(!b)throw Error('Missing row action');b.focus();b.click()})()`);await until(`!!document.querySelector('dialog[open]')`);}
+async function closed(){await until(`!document.querySelector('dialog[open]')`);}
+async function audit(label){const violations=await evaluate(`(async()=>{if(!window.axe){${readFileSync(new URL('../node_modules/axe-core/axe.min.js',import.meta.url),'utf8')}}return (await window.axe.run(document.querySelector('#v2-main'),{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}})).violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}));})()`);assert.deepEqual(violations,[],label);audits++;await check('document.documentElement.scrollWidth<=innerWidth');}
+async function widths(label){for(const width of [360,768,1440]){await call('Emulation.setDeviceMetricsOverride',{width,height:1000,deviceScaleFactor:1,mobile:width===360});await audit(label+' '+width);const shot=await call('Page.captureScreenshot',{captureBeyondViewport:!documentDialog});writeFileSync(new URL(`../../.tmp-v2-t49/${label}-${width}.png`,import.meta.url),Buffer.from(shot.data,'base64'));}}
+let documentDialog=false;
+async function request(path,method='GET',body,user='a'){const response=await fetch(api+'/api/v2'+path,{method,headers:{Authorization:'Bearer '+sessions[user].access_token,...(body===undefined?{}:{'Content-Type':'application/json'})},...(body===undefined?{}:{body:JSON.stringify(body)})});return {status:response.status,body:await response.json()};}
+async function mode(value){await fetch(api+'/test/mode',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:value})});}
+async function choices(categoryId,expected){for(const [path,button] of [['/v2/transactions','Add transaction'],['/v2/recurring','Add recurring item'],['/v2/budgets','Add budget']]){await navigate(path);await click(button);await until(`!!document.querySelector('dialog select[id$="categoryId"]')&&!document.querySelector('dialog select[id$="categoryId"]').disabled&&document.querySelector('dialog select[id$="categoryId"]').options.length>1`);await check(`[...document.querySelector('dialog select[id$="categoryId"]').options].some(o=>o.value===${JSON.stringify(categoryId)})===${expected}`);await click('Cancel');await closed();}await navigate('/v2/settings');await ready();}
+const inject=`(()=>{const sessions=${JSON.stringify(sessions)};const who=sessionStorage.getItem('t49-user')||'a';localStorage.setItem('sb-t37-fixture-auth-token',JSON.stringify(sessions[who]));window.__t49={sessions,errors:[],calls:[]};window.addEventListener('error',e=>window.__t49.errors.push(e.message));const original=window.fetch.bind(window);window.fetch=async(input,options={})=>{const url=new URL(typeof input==='string'?input:input.url||input.toString());if(url.hostname==='t37-fixture.supabase.co')return Response.json(url.pathname.endsWith('/logout')?{}:url.pathname.endsWith('/user')?sessions[sessionStorage.getItem('t49-user')||'a'].user:sessions[sessionStorage.getItem('t49-user')||'a']);if(!['localhost','127.0.0.1'].includes(url.hostname))throw Error('External network disabled');if(url.pathname.startsWith('/api/'))window.__t49.calls.push({path:url.pathname,method:options.method||'GET'});return original(input,options);};})();`;
+try{
+  for(const target of (await call('Target.getTargets',{},false)).targetInfos)if(target.type==='page'&&target.url.startsWith(origin))await call('Target.closeTarget',{targetId:target.targetId},false);
+  const target=await call('Target.createTarget',{url:'about:blank'},false);session=(await call('Target.attachToTarget',{targetId:target.targetId,flatten:true},false)).sessionId;await call('Page.enable');await call('Runtime.enable');await call('Page.addScriptToEvaluateOnNewDocument',{source:inject});
+  if(process.env.T49_STRESS_ONLY==='1'){
+    await navigate('/v2/settings');await ready();await check(`document.querySelector('input[readonly]').value.length>200`);await widths('long-email');
+    const longName='فئة طويلة '+'س'.repeat(65);await rowAction(longName,'Edit');documentDialog=true;
+    for(const width of [360,768,1440]){await call('Emulation.setDeviceMetricsOverride',{width,height:1000,deviceScaleFactor:1,mobile:width===360});await check(`(()=>{const d=document.querySelector('dialog'),r=d.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight&&d.scrollWidth<=d.clientWidth;})()`);await audit('long-category-dialog '+width);}
+    await click('Cancel');await closed();await check(`document.activeElement.textContent.startsWith('Edit')`);documentDialog=false;
+    await click('Add custom category');await click('Save category');await until(`document.querySelector('dialog')?.innerText.includes('Enter 1 to 80')`);await check(`document.activeElement.id.endsWith('-name')`);await audit('category-validation');await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});await closed();await check(`document.activeElement.textContent==='Add custom category'`);
+    await evaluate(`(()=>{const el=document.querySelector('#settings-profile-title').parentElement.querySelector('form input');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(el,'😀'.repeat(101));el.dispatchEvent(new Event('input',{bubbles:true}));})()`);await click('Save profile');await until(`document.body.innerText.includes('Enter 1 to 100')`);await check(`document.activeElement.id.endsWith('-name')`);await audit('profile-validation');
+    await click('Reset password','a');await until(`location.pathname==='/v2/forgot-password'`);await check(`document.body.innerText.includes('Send reset link')`);
+    const result={checks,audits,violations:0,widths:[360,768,1440],longEmail:true,keyboard:true,remoteTouched:false};writeFileSync(new URL('../../.tmp-v2-t49/stress-result.json',import.meta.url),JSON.stringify(result,null,2));console.log(JSON.stringify(result));
+  } else {
+  await navigate('/v2/settings');await ready();
+  await check(`document.querySelector('#settings-profile-title')&&document.querySelector('input[readonly]').value==='a@example.invalid'`);
+  await check(`document.body.innerText.includes('EGP')&&document.body.innerText.includes('Africa/Cairo')&&document.body.innerText.includes('English (en)')`);
+  await check(`!document.body.innerText.includes('nour@example.test')&&!!document.querySelector('.v2-settings-category-list')`);
+  await check(`!![...document.querySelectorAll('.v2-settings-category-list .v2-data-row')].find(r=>r.innerText.includes('System · read-only')&&!r.querySelector('button'))`);
+  await widths('initial');
+  // Profile label is inside the profile section; fill the controlled input directly.
+  await evaluate(`(()=>{const el=document.querySelector('#settings-profile-title').parentElement.querySelector('form input');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(el,'A updated 😀');el.dispatchEvent(new Event('input',{bubbles:true}));})()`);
+  await click('Save profile');await until(`document.body.innerText.includes('Profile saved.')`);
+  await check(`document.querySelector('.v2-user strong').textContent==='A updated 😀'`);
+  const create=async(name,kind)=>{await click('Add custom category');await until(`!!document.querySelector('dialog[open]')`);await fill('Category name',name);await select('Kind',kind);await click('Save category');await closed();await until(`document.body.innerText.includes('Category saved.')`);await until(`!![...document.querySelectorAll('.v2-settings-category-list .v2-data-row')].find(r=>r.querySelector('strong')?.textContent===${JSON.stringify(name)}&&r.innerText.includes('Custom'))`);};
+  await create('Transport T49','expense');await create('Bonus T49','income');await create('Flexible T49','both');
+  await create('Food','expense');
+  await check(`!![...document.querySelectorAll('.v2-settings-category-list .v2-data-row')].find(r=>r.querySelector('strong')?.textContent==='Food'&&r.innerText.includes('System'))&&!![...document.querySelectorAll('.v2-settings-category-list .v2-data-row')].find(r=>r.querySelector('strong')?.textContent==='Food'&&r.innerText.includes('Custom'))`);
+  await rowAction('Transport T49','Edit');await fill('Category name','Transport renamed T49');await click('Save category');await closed();await until(`!![...document.querySelectorAll('.v2-settings-category-list strong')].find(e=>e.textContent==='Transport renamed T49')`);
+  const categories=(await request('/categories')).body.data;const transport=categories.find(c=>c.name==='Transport renamed T49'&&!c.isSystem);
+  assert.ok(transport);checks++;
+  const account=(await request('/accounts','POST',{name:'T49 account',type:'cash',openingBalance:'100.00',currency:'EGP'})).body.data;
+  assert.ok(account?.id);checks++;
+  const transaction=await request('/transactions','POST',{accountId:account.id,categoryId:transport.id,type:'expense',amount:'2.00',description:'T49 historical',date:'2026-10-13'});assert.equal(transaction.status,201);checks++;
+  const recurring=await request('/recurring','POST',{accountId:account.id,categoryId:transport.id,type:'expense',amount:'1.00',description:'T49 recurring',frequency:'monthly',startDate:'2026-10-13',endDate:null});assert.equal(recurring.status,201);checks++;
+  await choices(transport.id,true);
+  const baseline=await(await fetch(api+'/test/financial')).json();
+  await rowAction('Transport renamed T49','Edit');await select('Kind','income');await click('Save category');await until(`document.querySelector('dialog')?.innerText.includes('kind cannot change')`);await check(`document.querySelector('dialog input').value==='Transport renamed T49'`);
+  await click('Cancel');await closed();
+  await rowAction('Transport renamed T49','Archive');documentDialog=true;await widths('archive-dialog');documentDialog=false;await click('Archive category');await closed();await until(`![...document.querySelectorAll('.v2-settings-category-list strong')].some(e=>e.textContent==='Transport renamed T49')`);
+  assert.deepEqual(await(await fetch(api+'/test/financial')).json(),baseline);checks++;
+  const history=await request('/transactions?limit=100');assert.equal(history.status,200,JSON.stringify(history.body));assert.ok(history.body.data.some(t=>t.categoryId===transport.id&&t.categoryName==='Transport renamed T49'));checks++;
+  assert.equal((await request('/recurring/'+recurring.body.data.id)).body.data.status,'paused');checks++;
+  await choices(transport.id,false);
+  await click('Archived','label');await until(`!![...document.querySelectorAll('.v2-settings-category-list strong')].find(e=>e.textContent==='Transport renamed T49')`);
+  await rowAction('Transport renamed T49','Edit');await fill('Icon','wallet');await fill('Color','blue');await click('Save category');await closed();
+  const archivedEdited=(await request('/categories?status=archived')).body.data.find(row=>row.id===transport.id);assert.equal(archivedEdited.icon,'wallet');assert.equal(archivedEdited.color,'blue');assert.equal(archivedEdited.status,'archived');checks+=3;
+  await rowAction('Transport renamed T49','Restore');await click('Restore category');await closed();await click('Active','label');await until(`!![...document.querySelectorAll('.v2-settings-category-list strong')].find(e=>e.textContent==='Transport renamed T49')`);
+  assert.deepEqual(await(await fetch(api+'/test/financial')).json(),baseline);checks++;
+  assert.equal((await request('/recurring/'+recurring.body.data.id)).body.data.status,'paused');checks++;
+  await choices(transport.id,true);
+  await click('Archived','label');await click('Active','label');await create('Archived duplicate T49','expense');await rowAction('Archived duplicate T49','Archive');await click('Archive category');await closed();await click('Archived','label');await until(`!![...document.querySelectorAll('.v2-settings-category-list strong')].find(e=>e.textContent==='Archived duplicate T49')`);
+  await click('Add custom category');await fill('Category name','archived duplicate t49');await click('Save category');await until(`document.querySelector('dialog')?.innerText.includes('including archived categories')`);await check(`document.querySelector('dialog input').value==='archived duplicate t49'`);await click('Cancel');await closed();
+  await navigate('/v2/settings');await ready();await check(`document.querySelector('.v2-user strong').textContent==='A updated 😀'`);
+  await click('Manage accounts','a');await until(`location.pathname==='/v2/accounts'&&document.body.innerText.includes('T49 account')`);await check(`document.body.innerText.includes('T49 account')`);
+  await navigate('/v2/settings');await ready();
+  await mode('category-read-error');await click('Refresh categories');await until(`document.body.innerText.includes('Categories could not refresh')`);await check(`document.body.innerText.includes('Transport renamed T49')&&!!document.querySelector('input[readonly]')`);await audit('stale-categories');await mode('normal');await click('Refresh categories');await until(`!document.body.innerText.includes('Categories could not refresh')`);
+  await mode('profile-read-error');await click('Refresh profile');await until(`document.body.innerText.includes('Profile could not refresh')`);await check(`!!document.querySelector('.v2-settings-category-list')`);await audit('stale-profile');await mode('normal');await click('Refresh profile');await until(`!document.body.innerText.includes('Profile could not refresh')`);
+  await click('Add custom category');await fill('Category name','Uncertain category T49');await mode('lost-write');await click('Save category');await until(`document.querySelector('dialog')?.innerText.includes('could not confirm the category')`);await check(`document.querySelector('dialog button[type=submit]').disabled&&document.querySelector('dialog input').value==='Uncertain category T49'`);await mode('normal');await click('Refresh and inspect categories');await until(`document.querySelector('dialog [aria-label="Latest confirmed categories"]')?.innerText.includes('Uncertain category T49')`);documentDialog=true;await widths('uncertain-dialog');documentDialog=false;await click('I inspected the current categories');await closed();
+  await mode('saved-stale');await click('Add custom category');await fill('Category name','Confirmed stale T49');await click('Save category');await closed();await until(`document.body.innerText.includes('Category saved. Refresh this section')`);await mode('normal');await click('Refresh categories');await until(`!document.body.innerText.includes('Categories could not refresh')`);
+  for(const [name,kind] of [['فئة طويلة '+ 'س'.repeat(65),'expense'],['Éducation très longue '+ 'é'.repeat(50),'both'],...Array.from({length:40},(_,i)=>['Many category '+i,'expense'])]){assert.equal((await request('/categories','POST',{name,kind,icon:null,color:null})).status,201);checks++;}
+  await click('Refresh categories');await until(`document.body.innerText.includes('Many category 39')`);
+  await evaluate(`(()=>{const el=document.querySelector('#settings-profile-title').parentElement.querySelector('form input');Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(el,'😀'.repeat(100));el.dispatchEvent(new Event('input',{bubbles:true}));})()`);await click('Save profile');await until(`document.querySelector('.v2-user strong').textContent==='😀'.repeat(100)`);await widths('stress');
+  await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});await audit('reduced-motion');
+  await click('Add custom category');await fill('Category name','A private unsaved draft');
+  assert.deepEqual(await(await fetch(api+'/test/financial')).json(),baseline);checks++;
+  await evaluate(`(()=>{sessionStorage.setItem('t49-user','b');localStorage.setItem('sb-t37-fixture-auth-token',JSON.stringify(window.__t49.sessions.b));const c=new BroadcastChannel('sb-t37-fixture-auth-token');c.postMessage({event:'SIGNED_IN',session:window.__t49.sessions.b});setTimeout(()=>c.close(),50);})()`);
+  await until(`document.querySelector('input[readonly]')?.value==='b@example.invalid'`);
+  await check(`!document.querySelector('dialog')&&!document.body.innerText.includes('A private unsaved draft')&&!document.body.innerText.includes('Transport renamed T49')`);
+  const bCategories=(await request('/categories','GET',undefined,'b')).body.data;assert.ok(!bCategories.some(c=>c.name==='Transport renamed T49'));checks++;
+  await widths('user-b');await audit('user-b');await check(`window.__t49.errors.length===0`);
+  await click('Sign out');await until(`location.pathname==='/v2/login'`);await check(`!document.querySelector('.v2-settings-category-list')&&!document.body.innerText.includes('Transport renamed T49')`);
+  const result={checks,audits,violations:0,widths:[360,768,1440],sessionIsolation:true,financialNonEffect:true,remoteTouched:false};writeFileSync(new URL('../../.tmp-v2-t49/browser-result.json',import.meta.url),JSON.stringify(result,null,2));console.log(JSON.stringify(result));
+  }
+}finally{ws.close();}

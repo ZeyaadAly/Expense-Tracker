@@ -708,6 +708,8 @@
 .v2-dialog-header h2 {
   font-size: 21px;
   padding-top: 8px;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .v2-dialog > .v2-actions {
   justify-content: end;

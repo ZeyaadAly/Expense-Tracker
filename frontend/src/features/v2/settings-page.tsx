@@ -73,7 +73,7 @@ function ConnectedSettings({ userId, email }: { userId: string; email: string })
         {list.data === null ? list.loading ? <Skeleton variant="transaction" /> : null : list.data.length === 0 ? <EmptyState title={`No ${status} categories.`} description={status === "active" ? "Add a custom category for your transactions and plans." : "Archived custom categories will appear here."} /> : <div className="v2-settings-category-list">{list.data.map(category => <div className="v2-data-row" key={category.id}>
           <div><strong>{category.name}</strong><p className="v2-helper">{category.isSystem ? "System · read-only" : "Custom"} · {category.kind} · {category.status}</p></div>
           {!category.isSystem && <div className="v2-actions">
-            {category.status === "active" && <Button variant="text" disabled={state.categoryPending || !!state.categoryFailure?.uncertain} onClick={() => { store.clearFailure("category"); setAction({ kind: "edit", category }); }}>Edit<span className="v2-sr-only"> {category.name}</span></Button>}
+            <Button variant="text" disabled={state.categoryPending || !!state.categoryFailure?.uncertain} onClick={() => { store.clearFailure("category"); setAction({ kind: "edit", category }); }}>Edit<span className="v2-sr-only"> {category.name}</span></Button>
             <Button variant="text" disabled={state.categoryPending || !!state.categoryFailure?.uncertain} onClick={() => { store.clearFailure("category"); setAction({ kind: category.status === "active" ? "archive" : "restore", category }); }}>{category.status === "active" ? "Archive" : "Restore"}<span className="v2-sr-only"> {category.name}</span></Button>
           </div>}
         </div>)}</div>}
@@ -102,16 +102,17 @@ export function ProfileForm({ profile, email, state, store }: { profile: Profile
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); if (pending.current || state.profilePending || state.profileFailure?.uncertain) return;
     const name = draft.trim();
-    const validation = name && (Array.from(name).length > 100 || /[\p{Cc}\p{Cs}]/u.test(name)) ? "Enter 1 to 100 characters, or leave blank. Control characters are not allowed." : "";
+    const validation = name && (Array.from(name).length > 100 || Array.from(name).some(character => { const code = character.codePointAt(0)!; return code < 32 || code === 127 || (code >= 0xD800 && code <= 0xDFFF); })) ? "Enter 1 to 100 characters, or leave blank. Control characters are not allowed." : "";
     setError(validation); if (validation) { document.getElementById(`${id}-name`)?.focus(); return; }
     pending.current = true; const saved = await store.saveProfile(name || null); pending.current = false;
     if (saved) { const current = store.getSnapshot().profile.data; if (current) profileContext?.setProfile(current); }
+    else if (store.getSnapshot().profileFailure?.fields.displayName) document.getElementById(`${id}-name`)?.focus();
   }
   return <form className="v2-form" onSubmit={event => void submit(event)}>
     {state.profileFailure && <FeedbackBanner tone={state.profileFailure.uncertain ? "warning" : "error"} title={state.profileFailure.message} />}
     <FormField id={`${id}-name`} label="Display name" error={error || state.profileFailure?.fields.displayName} hint="Leave blank to clear your display name."><TextInput id={`${id}-name`} value={draft} maxLength={200} disabled={state.profilePending} aria-invalid={!!(error || state.profileFailure?.fields.displayName)} aria-describedby={[`${id}-name-hint`, error || state.profileFailure?.fields.displayName ? `${id}-name-error` : ""].filter(Boolean).join(" ")} onChange={event => { setDraft(event.target.value); setError(""); }} /></FormField>
     <FormField id={`${id}-email`} label="Email" hint="Managed by your sign-in provider."><TextInput id={`${id}-email`} value={email} readOnly /></FormField>
     <div className="v2-actions"><Button type="submit" loading={state.profilePending} disabled={!!state.profileFailure?.uncertain || (draft.trim() || null) === profile.displayName}>Save profile</Button><Button variant="secondary" disabled={state.profile.loading || state.profilePending} onClick={() => void store.refreshProfile()}>Refresh profile</Button></div>
-    {state.profileFailure?.uncertain && <Button variant="text" disabled={!state.profileInspectionReady || state.profile.loading || !!state.profile.error} onClick={() => store.inspected("profile")}>I inspected the current profile</Button>}
+    {state.profileFailure?.uncertain && <><p>Latest saved display name: {profile.displayName ?? "No display name"}</p><Button variant="text" disabled={!state.profileInspectionReady || state.profile.loading || !!state.profile.error} onClick={() => store.inspected("profile")}>I inspected the current profile</Button></>}
   </form>;
 }

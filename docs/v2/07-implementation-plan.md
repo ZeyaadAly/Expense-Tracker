@@ -878,6 +878,8 @@ T12 already supplies GET/system seeds. Add owned custom create/update/archive/re
 
 T49a profile displayName/read-only preferences; T49b account/archive/restore and categories; T49c password-reset/sign-out security UI and protected-data clearing. P0 omits export/notifications/user deletion. P1 export integration follows T55/T56 plus approved P1 browser UI. Acceptance: safe confirmations, accessible responsive states, bootstrap recovery and no provider/admin keys.
 
+**Status: Completed locally (2026-10-15).** Settings uses authenticated T13 profile reads/displayName-only updates, fixed preferences, shared shell presentation, the existing Accounts page, and T48 custom category create/edit/archive/restore. System categories are read-only. Scoped errors, retained stale data, confirmed-save refresh failures, GET-only uncertain inspection, session teardown, real dependent selectors and financial non-effect were verified on disposable PostgreSQL. Password reset reuses the existing Auth route; sign-out clears protected state. Production gates and disabled cron remain unchanged. See [T49 verification](t49-verification.md). T50 remains optional and unstarted; the next unstarted P0 task is T57 — Full Backend Regression.
+
 ---
 
 ## T50 — Build Notification Backend — P1 Optional

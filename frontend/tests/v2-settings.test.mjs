@@ -31,12 +31,13 @@ test('T49 category client exact routes, write shapes, archived filter and respon
   assert.deepEqual(await client.listCategories(),[row]);
   assert.equal((await client.listCategories('archived'))[0].status,'archived');
   const input = {name:'  Food  ',kind:'expense',icon:null,color:null};
-  await client.createCategory(input); await client.updateCategory(row.id,input);
+  await client.createCategory({...input,userId:b,status:'archived',isSystem:true}); await client.updateCategory(row.id,{...input,userId:b});
   assert.equal((await client.archiveCategory(row.id)).pausedRecurringCount,2);
   assert.equal((await client.restoreCategory(row.id)).status,'active');
   assert.deepEqual(calls.map(c => [new URL(c.url).pathname,c.options.method]),[['/api/v2/categories','GET'],['/api/v2/categories','GET'],['/api/v2/categories','POST'],['/api/v2/categories/'+row.id,'PUT'],['/api/v2/categories/'+row.id+'/archive','POST'],['/api/v2/categories/'+row.id+'/restore','POST']]);
   assert.equal(new URL(calls[1].url).search,'?status=archived');
   assert.deepEqual(JSON.parse(calls[2].options.body),input);
+  assert.deepEqual(JSON.parse(calls[3].options.body),input);
   assert.ok(calls.every(c => c.options.headers.Authorization === 'Bearer synthetic' && c.options.cache === 'no-store'));
 });
 
@@ -93,4 +94,41 @@ test('T49 Settings teardown aborts in-flight reads and suppresses late prior-use
   const stop=aStore.start();stop();assert.equal(signal.aborted,true);
   late.resolve(profile);await tick();assert.equal(aStore.getSnapshot().profile.data,null);
   const bStore=createSettingsStore({getProfile:async()=>({...profile,userId:b})},{listCategories:async()=>[]});bStore.start();await tick();assert.equal(bStore.getSnapshot().profile.data.userId,b);
+});
+
+test('T49 profile confirmed response survives failed refresh and independent errors preserve drafts', async () => {
+  let fail=false;
+  const store=createSettingsStore({getProfile:async()=>{if(fail)throw Error('offline');return profile;},updateProfile:async input=>({...profile,...input,updatedAt:'2026-10-15T00:00:00.000Z'})},{listCategories:async()=>[]});
+  await store.refreshProfile();fail=true;assert.equal(await store.saveProfile('Confirmed'),true);
+  assert.equal(store.getSnapshot().profile.data.displayName,'Confirmed');assert.equal(store.getSnapshot().profile.stale,true);assert.match(store.getSnapshot().profileNotice,/Refresh/);
+  for(const [code,copy] of [['CONFLICT',/including archived/],['CATEGORY_KIND_LOCKED',/rename/],['CATEGORY_IMMUTABLE',/System/],['NOT_FOUND',/unavailable/]]) {
+    await store.mutateCategory(async()=>{throw new V2ApiError(409,code,'unexpected');},'Saved');assert.match(store.getSnapshot().categoryFailure.message,copy);
+  }
+});
+
+test('T49 category inspection requires both fresh status lists, failure cannot unlock and close preserves uncertainty',async()=>{
+  let fail=false;const store=createSettingsStore({getProfile:async()=>profile},{listCategories:async status=>{if(fail&&status==='archived')throw Error('offline');return [];}});
+  await Promise.all([store.refreshCategories('active'),store.refreshCategories('archived')]);
+  await store.mutateCategory(async()=>{throw {uncertain:true};},'Saved');store.clearFailure('category');assert.ok(store.getSnapshot().categoryFailure);
+  await store.refreshCategories('active');assert.equal(store.getSnapshot().categoryInspectionReady,false);
+  fail=true;await store.refreshCategories('archived');store.inspected('category');assert.ok(store.getSnapshot().categoryFailure);
+  fail=false;await store.refreshCategories('archived');store.inspected('category');assert.equal(store.getSnapshot().categoryFailure,null);
+});
+
+test('T49 pending duplicate guard, stopped write and stale ignored-abort reads cannot publish',async()=>{
+  const late=defer();let first=true,signal,writes=0;
+  const store=createSettingsStore({getProfile:async options=>{if(first){first=false;signal=options.signal;return late.promise;}return {...profile,displayName:'Fresh'};},updateProfile:async()=>profile},{listCategories:async()=>[]});
+  const stop=store.start();await store.refreshProfile();late.resolve(profile);await tick();assert.equal(signal.aborted,true);assert.equal(store.getSnapshot().profile.data.displayName,'Fresh');
+  const pending=defer();const saving=store.mutateCategory(()=>{writes++;return pending.promise;},'Saved');await store.mutateCategory(async()=>{writes++;},'Saved');assert.equal(writes,1);
+  stop();pending.resolve();assert.equal(await saving,false);assert.equal(store.getSnapshot().active.data,null);
+});
+
+test('T49 all category writes preserve T10 auth, cancellation and uncertain outcomes without retries',async()=>{
+  for(const method of ['createCategory','updateCategory','archiveCategory','restoreCategory']){
+    let calls=0;
+    const client=createCategoryClient(a,createV2ApiClient({baseUrl:'http://localhost:4000',tokenSupplier:async()=>({data:'synthetic',error:null}),fetcher:async()=>{calls++;throw Error('lost');}}));
+    const invoke=options=>method==='createCategory'?client[method](row,options):method==='updateCategory'?client[method](row.id,row,options):client[method](row.id,options);
+    await assert.rejects(invoke(),e=>e.uncertain);assert.equal(calls,1);
+    const controller=new AbortController();controller.abort();await assert.rejects(invoke({signal:controller.signal}),e=>e.kind==='aborted');assert.equal(calls,1);
+  }
 });

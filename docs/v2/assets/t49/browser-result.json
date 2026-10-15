@@ -1,0 +1,13 @@
+{
+  "checks": 100,
+  "audits": 19,
+  "violations": 0,
+  "widths": [
+    360,
+    768,
+    1440
+  ],
+  "sessionIsolation": true,
+  "financialNonEffect": true,
+  "remoteTouched": false
+}
