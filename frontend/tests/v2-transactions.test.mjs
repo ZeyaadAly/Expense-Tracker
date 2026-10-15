@@ -87,7 +87,7 @@ test('T25 deletion of sole continuation row moves safely back through cursor his
 test('T25 runtime route excludes transaction fixtures and production guard remains',()=>{
   const route=readFileSync(new URL('../src/app/v2/transactions/page.tsx',import.meta.url),'utf8'),pageSource=readFileSync(new URL('../src/features/v2/transactions-page.tsx',import.meta.url),'utf8');
   assert.match(route,/TransactionsPage/);assert.doesNotMatch(route,/PrototypePage/);assert.doesNotMatch(pageSource,/usePrototype|from .*fixtures|parseFloat|toFixed/);
-  assert.match(readFileSync(new URL('../src/features/v2/protected-boundary.tsx',import.meta.url),'utf8'),/\['\/v2\/transactions', '\/v2\/recurring', '\/v2\/dashboard'\]\.includes\(path\) \? children/);
+  assert.doesNotMatch(readFileSync(new URL('../src/features/v2/protected-boundary.tsx',import.meta.url),'utf8'),/PrototypeProvider|prototype-context/);
   assert.match(readFileSync(new URL('../src/app/v2/layout.tsx',import.meta.url),'utf8'),/NODE_ENV !== "development"/);
 });
 test('T25 session-bound transport reads current T06 session and refuses a changed owner',async()=>{

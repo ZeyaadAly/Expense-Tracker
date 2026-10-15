@@ -1,0 +1,231 @@
+{
+  "measurement": "Local development page navigation to network-idle, including 500ms idle and possible compilation; not a hosted SLA",
+  "measurements": [
+    {
+      "path": "/v2/dashboard",
+      "samples": 8,
+      "minMs": 906,
+      "medianMs": 1010,
+      "maxMs": 1719
+    },
+    {
+      "path": "/v2/transactions",
+      "samples": 9,
+      "minMs": 962,
+      "medianMs": 1035,
+      "maxMs": 1676
+    },
+    {
+      "path": "/v2/analytics",
+      "samples": 6,
+      "minMs": 968,
+      "medianMs": 1051,
+      "maxMs": 1867
+    },
+    {
+      "path": "/v2/settings",
+      "samples": 5,
+      "minMs": 925,
+      "medianMs": 948,
+      "maxMs": 1278
+    }
+  ],
+  "allSamples": [
+    {
+      "path": "/v2/dashboard",
+      "ms": 1719
+    },
+    {
+      "path": "/v2/dashboard",
+      "ms": 963
+    },
+    {
+      "path": "/v2/accounts",
+      "ms": 1201
+    },
+    {
+      "path": "/v2/accounts/bfd2cc38-5b9f-4bef-90cc-a7ffb29f5d7e",
+      "ms": 1691
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 1094
+    },
+    {
+      "path": "/v2/recurring",
+      "ms": 1048
+    },
+    {
+      "path": "/v2/analytics",
+      "ms": 1051
+    },
+    {
+      "path": "/v2/budgets",
+      "ms": 940
+    },
+    {
+      "path": "/v2/goals",
+      "ms": 944
+    },
+    {
+      "path": "/v2/settings",
+      "ms": 926
+    },
+    {
+      "path": "/v2/accounts",
+      "ms": 930
+    },
+    {
+      "path": "/v2/settings",
+      "ms": 925
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 962
+    },
+    {
+      "path": "/v2/dashboard",
+      "ms": 906
+    },
+    {
+      "path": "/v2/analytics",
+      "ms": 1867
+    },
+    {
+      "path": "/v2/budgets",
+      "ms": 1111
+    },
+    {
+      "path": "/v2/accounts",
+      "ms": 1005
+    },
+    {
+      "path": "/v2/dashboard",
+      "ms": 1076
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 1013
+    },
+    {
+      "path": "/v2/dashboard",
+      "ms": 996
+    },
+    {
+      "path": "/v2/analytics",
+      "ms": 1015
+    },
+    {
+      "path": "/v2/budgets",
+      "ms": 1490
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 1011
+    },
+    {
+      "path": "/v2/budgets",
+      "ms": 1879
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 1621
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 1676
+    },
+    {
+      "path": "/v2/dashboard",
+      "ms": 964
+    },
+    {
+      "path": "/v2/accounts",
+      "ms": 984
+    },
+    {
+      "path": "/v2/accounts/bfd2cc38-5b9f-4bef-90cc-a7ffb29f5d7e",
+      "ms": 1118
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 1035
+    },
+    {
+      "path": "/v2/recurring",
+      "ms": 5041
+    },
+    {
+      "path": "/v2/analytics",
+      "ms": 985
+    },
+    {
+      "path": "/v2/budgets",
+      "ms": 1465
+    },
+    {
+      "path": "/v2/goals",
+      "ms": 1127
+    },
+    {
+      "path": "/v2/settings",
+      "ms": 1278
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 1186
+    },
+    {
+      "path": "/v2/dashboard",
+      "ms": 1010
+    },
+    {
+      "path": "/v2/dashboard",
+      "ms": 1139
+    },
+    {
+      "path": "/v2/accounts",
+      "ms": 989
+    },
+    {
+      "path": "/v2/accounts/bfd2cc38-5b9f-4bef-90cc-a7ffb29f5d7e",
+      "ms": 1329
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 1012
+    },
+    {
+      "path": "/v2/recurring",
+      "ms": 1038
+    },
+    {
+      "path": "/v2/analytics",
+      "ms": 968
+    },
+    {
+      "path": "/v2/budgets",
+      "ms": 1518
+    },
+    {
+      "path": "/v2/goals",
+      "ms": 1275
+    },
+    {
+      "path": "/v2/settings",
+      "ms": 1048
+    },
+    {
+      "path": "/v2/accounts",
+      "ms": 3491
+    },
+    {
+      "path": "/v2/analytics",
+      "ms": 1327
+    },
+    {
+      "path": "/v2/settings",
+      "ms": 948
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "filesScanned": 238,
+  "recognizedSecretFindings": [],
+  "classifiedPlaceholders": [
+    {
+      "file": "backend\\.env.example",
+      "rule": "database-password"
+    }
+  ],
+  "productionRoutes": [
+    {
+      "route": "dashboard",
+      "status": 404
+    },
+    {
+      "route": "accounts",
+      "status": 404
+    },
+    {
+      "route": "accounts/00000000-0000-4000-8000-000000000000",
+      "status": 404
+    },
+    {
+      "route": "transactions",
+      "status": 404
+    },
+    {
+      "route": "recurring",
+      "status": 404
+    },
+    {
+      "route": "analytics",
+      "status": 404
+    },
+    {
+      "route": "budgets",
+      "status": 404
+    },
+    {
+      "route": "goals",
+      "status": 404
+    },
+    {
+      "route": "settings",
+      "status": 404
+    },
+    {
+      "route": "login",
+      "status": 200
+    },
+    {
+      "route": "register",
+      "status": 200
+    },
+    {
+      "route": "forgot-password",
+      "status": 200
+    },
+    {
+      "route": "reset-password",
+      "status": 200
+    }
+  ],
+  "productionRoot": 307,
+  "productionRootTarget": "public Auth /release-check",
+  "developmentV1Root": 200,
+  "v1FinancialPolicy": 410,
+  "v1AuthHeaders": false,
+  "v1StyleLeak": false,
+  "productionLocalhostApiRequests": 0,
+  "browserErrors": [],
+  "fixtureFreeFinancialPages": [
+    "dashboard-page",
+    "accounts-page",
+    "account-detail-page",
+    "transactions-page",
+    "transfers-panel",
+    "recurring-page",
+    "analytics-page",
+    "budgets-page",
+    "goals-page",
+    "settings-page"
+  ],
+  "cronEnabled": false,
+  "remoteTouched": false
+}

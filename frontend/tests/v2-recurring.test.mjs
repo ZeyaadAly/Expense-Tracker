@@ -106,6 +106,6 @@ test('T34 choices straddling archive retain one historical disabled option',asyn
 test('T34 route bypasses recurring fixture runtime and offers no scheduler controls',()=>{
   const read=file=>readFileSync(new URL('../src/'+file,import.meta.url),'utf8');
   assert.match(read('app/v2/recurring/page.tsx'),/RecurringPage/);assert.ok(!read('app/v2/recurring/page.tsx').includes('PrototypePage'));
-  assert.match(read('features/v2/protected-boundary.tsx'),/\['\/v2\/transactions', '\/v2\/recurring', '\/v2\/dashboard'\]/);
+  assert.doesNotMatch(read('features/v2/protected-boundary.tsx'),/PrototypeProvider|prototype-context/);
   const page=read('features/v2/recurring-page.tsx');for(const forbidden of ['CRON_SECRET','processDueRecurring','Generate now','getNextOccurrence','setRecurring','usePrototype'])assert.ok(!page.includes(forbidden));
 });

@@ -56,7 +56,7 @@ try {
   const state=await(await fetch(api+'/test/state')).json(),dashboard=await compare();
   assert.equal(state.summary.netPosition,dashboard.data.summary.totalBalance);assert.deepEqual(new Map([...state.accounts,...state.archived].map(a=>[a.id,a.currentBalance])),new Map(dashboard.data.accounts.map(a=>[a.id,a.currentBalance])));assert.deepEqual(state.transactions.data,dashboard.data.recentTransactions);assert.deepEqual(state.upcoming.data.slice(0,5),dashboard.data.upcomingRecurring);checks+=4;
   for(const key of ['this_month','last_month','3_months','6_months','1_year']){await period(key);await compare(key);}
-  await check(`!document.querySelector('.v2-chart-canvas')&&![...document.querySelectorAll('a')].some(a=>['/v2/budgets','/v2/goals','/v2/analytics'].includes(a.getAttribute('href')))`);
+  await check(`!document.querySelector('#v2-main .v2-chart-canvas')&&![...document.querySelectorAll('#v2-main a')].some(a=>['/v2/budgets','/v2/goals','/v2/analytics'].includes(a.getAttribute('href')))`);
   await period('this_month');
   const processed=await post('/test/process');assert.equal(processed.posted,1);checks++;await click('Refresh dashboard');await ready();await check(`document.querySelector('.t37-activity').innerText.includes('Generated')`);await compare();
   const deleted=await post('/test/delete-generated');assert.deepEqual(deleted.markers,[{status:'posted',generated_transaction_id:null}]);checks++;await click('Refresh dashboard');await ready();await compare();await check(`!document.querySelector('.t37-activity').innerText.includes('Generated')`);

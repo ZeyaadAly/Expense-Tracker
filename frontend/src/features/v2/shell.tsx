@@ -8,7 +8,6 @@ import { Icon, type IconName } from "../../components/v2/icon";
 
 
 
-import { useOptionalPrototype } from "./prototype-context";
 import { useAuth } from "../../lib/auth/auth-provider";
 import { useOptionalProfile } from "../../lib/auth/profile-context";
 import { useRouter } from "next/navigation";
@@ -35,7 +34,6 @@ const navigation: { title: string; items: [string, IconName][] }[] = [
 ];
 export function PrototypeShell({ children, liveAccounts = false, liveTransactions = false, liveRecurring = false, liveDashboard = false, liveAnalytics = false, liveBudgets = false, liveGoals = false, liveSettings = false }: { children: ReactNode; liveAccounts?:boolean; liveTransactions?:boolean; liveRecurring?:boolean; liveDashboard?:boolean; liveAnalytics?:boolean; liveBudgets?:boolean; liveGoals?:boolean; liveSettings?:boolean }) {
   const path = usePathname();
-  const session = useOptionalPrototype()?.session;
   const { user, signOut } = useAuth();
   const profile = useOptionalProfile()?.profile;
   const router = useRouter();
@@ -63,15 +61,15 @@ export function PrototypeShell({ children, liveAccounts = false, liveTransaction
         </span>
       </Link>
       <nav aria-label="Main navigation">
-        {navigation.filter(group => !(liveDashboard || liveAnalytics) || group.title !== "Planning").map((group) => (
+        {navigation.map((group) => (
           <SidebarSection key={group.title} label={group.title}>
             {group.items.map(([label, icon]) => (
               <Link
                 onClick={() => setOpen(false)}
                 key={label}
-                className={`v2-nav-item ${path === `/v2/${label.toLowerCase()}` ? "is-active" : ""}`}
+                className={`v2-nav-item ${path === `/v2/${label.toLowerCase()}` || (label === "Accounts" && path.startsWith("/v2/accounts/")) ? "is-active" : ""}`}
                 aria-current={
-                  path === `/v2/${label.toLowerCase()}` ? "page" : undefined
+                  path === `/v2/${label.toLowerCase()}` || (label === "Accounts" && path.startsWith("/v2/accounts/")) ? "page" : undefined
                 }
                 href={`/v2/${label.toLowerCase()}`}
               >
@@ -117,7 +115,7 @@ export function PrototypeShell({ children, liveAccounts = false, liveTransaction
       <main id="v2-main" className="v2-main" tabIndex={-1}>
         <p className="p4-prototype-label">{liveSettings ? "Development · connected settings" : liveGoals ? "Development · connected goals" : liveBudgets ? "Development · connected budgets" : liveAnalytics ? "Development · connected analytics" : liveDashboard ? "Development · connected dashboard" : liveRecurring ? "Development · connected recurring items" : liveTransactions ? "Development · connected transactions" : liveAccounts ? "Development · connected accounts" : "Prototype · fictional data"}</p>
         {logoutError && <FeedbackBanner tone="error" title={logoutError} />}
-        {liveAccounts || liveTransactions || liveRecurring || liveDashboard || liveAnalytics || liveBudgets || liveGoals || liveSettings || session ? (
+        {liveAccounts || liveTransactions || liveRecurring || liveDashboard || liveAnalytics || liveBudgets || liveGoals || liveSettings || user ? (
           children
         ) : (
           <section className="p4-panel">

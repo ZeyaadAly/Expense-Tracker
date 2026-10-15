@@ -44,8 +44,14 @@ server.post('/test/seed',async(_request,response)=>{
   for(let i=0;i<26;i++)await service.createTransaction(users.a.userId,{accountId:choices.a.cash.id,categoryId:'c1200000-0000-4000-8000-000000000004',type:'expense',amount:i===0?'999999999.99':'0.01',date:'2025-10-01',description:i===0?'Page posting '+ 'L'.repeat(187):'Page posting '+String(i).padStart(2,'0')});
   const definition=randomUUID(),generated=randomUUID();
   await pool.query("INSERT INTO expense_tracker.recurring_transactions(id,user_id,account_id,category_id,type,amount,description,frequency,start_date,next_occurrence) VALUES($1,$2,$3,'c1200000-0000-4000-8000-000000000004','expense',1.00,'Synthetic recurring schedule','monthly','1900-01-01','1900-02-01')",[definition,users.a.userId,choices.a.cash.id]);
-  await pool.query("INSERT INTO expense_tracker.transactions(id,user_id,account_id,category_id,type,amount,description,transaction_date,recurring_transaction_id,recurring_occurrence_date) VALUES($1,$2,$3,'c1200000-0000-4000-8000-000000000004','expense',1.00,'Generated posting','1900-01-01',$4,'1900-01-01')",[generated,users.a.userId,choices.a.cash.id,definition]);
-  await pool.query("INSERT INTO expense_tracker.recurring_occurrences(user_id,recurring_transaction_id,occurrence_date,status,generated_transaction_id,processed_at) VALUES($1,$2,'1900-01-01','posted',$3,statement_timestamp())",[users.a.userId,definition,generated]);
+  const client=await pool.connect();
+  try {
+    await client.query('BEGIN');
+    await client.query("INSERT INTO expense_tracker.recurring_occurrences(user_id,recurring_transaction_id,occurrence_date,status) VALUES($1,$2,'1900-01-01','pending')",[users.a.userId,definition]);
+    await client.query("INSERT INTO expense_tracker.transactions(id,user_id,account_id,category_id,type,amount,description,transaction_date,recurring_transaction_id,recurring_occurrence_date) VALUES($1,$2,$3,'c1200000-0000-4000-8000-000000000004','expense',1.00,'Generated posting','1900-01-01',$4,'1900-01-01')",[generated,users.a.userId,choices.a.cash.id,definition]);
+    await client.query("UPDATE expense_tracker.recurring_occurrences SET status='posted',generated_transaction_id=$3,processed_at=statement_timestamp() WHERE user_id=$1 AND recurring_transaction_id=$2 AND occurrence_date='1900-01-01'",[users.a.userId,definition,generated]);
+    await client.query('COMMIT');
+  } catch(error) {await client.query('ROLLBACK');throw error;} finally {client.release();}
   response.json({ok:true,generated});
 });
 server.get('/test/state',async(_request,response)=>response.json({counts:(await admin.query('SELECT user_id,count(*)::int FROM expense_tracker.transactions GROUP BY user_id')).rows,occurrences:(await admin.query('SELECT status,generated_transaction_id FROM expense_tracker.recurring_occurrences')).rows}));
