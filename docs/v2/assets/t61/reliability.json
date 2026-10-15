@@ -1,0 +1,106 @@
+{
+  "initial": {
+    "groups": [
+      {
+        "name": "fresh owned fixtures and no historical create backfill",
+        "checks": 21,
+        "durationMs": 1128
+      },
+      {
+        "name": "exact due early run calendar anchors inclusive exhaustion and money",
+        "checks": 81,
+        "durationMs": 308
+      },
+      {
+        "name": "generated deletion terminal marker future continuation and forecast separation",
+        "checks": 45,
+        "durationMs": 259
+      },
+      {
+        "name": "posted history survives coherent edits and parent restore requires explicit resume",
+        "checks": 36,
+        "durationMs": 280
+      },
+      {
+        "name": "100-per-definition continuation and cooperative committed/pending deadlines",
+        "checks": 226,
+        "durationMs": 1052
+      },
+      {
+        "name": "pending edit pause archive skip and long-pause on-or-after resume",
+        "checks": 10,
+        "durationMs": 69
+      },
+      {
+        "name": "real database connection termination and explicit failed recovery",
+        "checks": 22,
+        "durationMs": 139
+      },
+      {
+        "name": "lock timeout fails safely and explicit recovery posts once",
+        "checks": 5,
+        "durationMs": 199
+      },
+      {
+        "name": "mixed-frequency backlog obeys oldest-due ordering without resurrecting exhaustion",
+        "checks": 30,
+        "durationMs": 149
+      },
+      {
+        "name": "eight overlapping processors across dozens of owners and coherent cursors",
+        "checks": 21,
+        "durationMs": 2281
+      },
+      {
+        "name": "protected cron 1000-global backlog 100-per-definition overlap and retry",
+        "checks": 1166,
+        "durationMs": 11301
+      },
+      {
+        "name": "restart fixture contains durable pending rows without financial effects",
+        "checks": 21,
+        "durationMs": 117
+      }
+    ],
+    "checks": 1689,
+    "timings": [
+      {
+        "name": "cron 1000 posts",
+        "durationMs": 10280
+      }
+    ],
+    "safeCronLogEntries": 5,
+    "failures": 0,
+    "remoteTouched": false
+  },
+  "recovery": {
+    "groups": [
+      {
+        "name": "killed processes plus PostgreSQL restart recover pending units exactly once",
+        "checks": 38,
+        "durationMs": 314
+      }
+    ],
+    "checks": 43,
+    "timings": [],
+    "safeCronLogEntries": 0,
+    "failures": 0,
+    "remoteTouched": false
+  },
+  "crashes": [
+    {
+      "phase": "crash-reserve",
+      "checkpoint": "reservation committed",
+      "killed": true
+    },
+    {
+      "phase": "crash-post",
+      "checkpoint": "generated insert and posted link uncommitted",
+      "killed": true
+    }
+  ],
+  "databaseRestart": true,
+  "newBackendProcess": true,
+  "failures": 0,
+  "remoteTouched": false
+}

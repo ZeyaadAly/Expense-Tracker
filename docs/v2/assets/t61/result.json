@@ -1,0 +1,224 @@
+{
+  "startingSha": "2e3637a0200728227f457f072afbd55bd07d0050",
+  "status": "completed-local",
+  "backendGeneral": {
+    "tests": 132,
+    "passed": 104,
+    "databaseGated": 28,
+    "failed": 0
+  },
+  "freshMatrix": [
+    {
+      "label": "legacy",
+      "tests": 12,
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "schema",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "migration-ownership",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "category-read",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "profile",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "shared-isolation-concurrency",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "recurring",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "occurrences",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "processor",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "cron-orchestration",
+      "tests": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "dashboard",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "analytics-direct",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "analytics-http",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "budgets",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "budget-status",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "goals",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "custom-categories",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "focused": {
+    "initial": 1689,
+    "recovery": 43,
+    "groups": 13,
+    "workerKills": 2,
+    "realConnectionTermination": true,
+    "lockTimeoutRecovery": true,
+    "overlappingProcessors": 8,
+    "overlapOwners": 32,
+    "overlapDefinitions": 128,
+    "deadlocksObserved": 0,
+    "cronBacklogPosts": 1111,
+    "oldStartServiceCreations": 120
+  },
+  "processorLoad": {
+    "users": 40,
+    "definitions": 2000,
+    "due": 1200,
+    "future": 800,
+    "firstPosts": 1000,
+    "firstDurationMs": 8544.7,
+    "dueScanMs": 0.901
+  },
+  "t59": {
+    "counts": {
+      "routeAuthentication": 156,
+      "ownerInjection": 561,
+      "massAssignment": 275,
+      "occurrence": 6,
+      "concurrency": 2,
+      "boundary": 19,
+      "timing": 192
+    },
+    "foundation": {
+      "api": 270,
+      "dbRejections": 58,
+      "positiveDb": 68,
+      "boundary": 92,
+      "concurrent": 124
+    },
+    "failures": 0
+  },
+  "t60": {
+    "initial": 9445,
+    "restart": 728,
+    "failures": 0
+  },
+  "browser": {
+    "checks": [
+      "real active schedule presentation",
+      "real paused schedule presentation",
+      "real archived schedule presentation",
+      "real exhausted schedule presentation",
+      "no browser processor retry cron controls or server secrets",
+      "real processor progression refreshes next occurrence without duplicate posting",
+      "UI pause and explicit resume preserve coherent cursor"
+    ],
+    "count": 7,
+    "pageErrors": [],
+    "serverControls": false,
+    "remoteTouched": false
+  },
+  "safety": {
+    "checks": 33,
+    "filesScanned": 362,
+    "recognizedSecretPatterns": 0,
+    "documentedPlaceholders": 9,
+    "configurationAndGates": true,
+    "remoteTouched": false
+  },
+  "artifacts": {
+    "filesScanned": 376,
+    "sourceMapsScanned": 50,
+    "logsScanned": 40,
+    "checks": 416,
+    "findings": [],
+    "remoteTouched": false
+  },
+  "quality": {
+    "backendLint": true,
+    "typecheck": true,
+    "build": true,
+    "newVerifierLint": true,
+    "frontendProductSourceChanged": false,
+    "gitDiffCheck": true
+  },
+  "remoteTouched": false,
+  "nextTask": "T62 — Responsive / Accessibility Validation",
+  "changedFileReview": {
+    "files": 13,
+    "recognizedSecrets": 0,
+    "applicationSchemaChanged": false
+  }
+}

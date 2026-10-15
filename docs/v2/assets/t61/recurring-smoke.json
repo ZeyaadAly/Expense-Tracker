@@ -1,0 +1,15 @@
+{
+  "checks": [
+    "real active schedule presentation",
+    "real paused schedule presentation",
+    "real archived schedule presentation",
+    "real exhausted schedule presentation",
+    "no browser processor retry cron controls or server secrets",
+    "real processor progression refreshes next occurrence without duplicate posting",
+    "UI pause and explicit resume preserve coherent cursor"
+  ],
+  "count": 7,
+  "pageErrors": [],
+  "serverControls": false,
+  "remoteTouched": false
+}

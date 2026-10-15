@@ -1,0 +1,34 @@
+[
+  {
+    "file": "20261001144302_initial_expense_tracker_schema.sql",
+    "sha256": "d30023fb71624c98d9992637631d98626f9fd36df18973639c3439f8b04d8ed3"
+  },
+  {
+    "file": "20261003163341_backend_application_role.sql",
+    "sha256": "e7deb638302d66b3a93a374705e5a04fa647c7f53ce28b94e37c6a42ff5b4146"
+  },
+  {
+    "file": "20261006132717_v2_core_tables.sql",
+    "sha256": "b2235470373c96b43815f4b9209ca0ace8d42345ff429cd36a99e1d0908c3209"
+  },
+  {
+    "file": "20261006132719_v2_transaction_references.sql",
+    "sha256": "b08489208c3e52ea4ccdc5622612dfb9ee8dd9e95cda987c5d0cc5cd1205dfee"
+  },
+  {
+    "file": "20261006132721_v2_indexes_and_triggers.sql",
+    "sha256": "804b7c3c646fd3303c1a5ecad040d7358163e6c8e91829183aa60e78cabf0102"
+  },
+  {
+    "file": "20261006132723_v2_runtime_privileges.sql",
+    "sha256": "b8b5248452125adc72270302ea2794544131ae5e7ab6064bbb2bae403b11d121"
+  },
+  {
+    "file": "20261006171715_v2_ownership_constraints.sql",
+    "sha256": "ee591c2eaf1ec51bf93679c179f3af1a9dc418a05aa65c0678b000d8512a16ff"
+  },
+  {
+    "file": "20261008135130_v2_occurrence_invariants.sql",
+    "sha256": "26f6858317d6a7eb115c6c7c251dffcc81b6448af23eae328a1e149ac5004b3c"
+  }
+]
