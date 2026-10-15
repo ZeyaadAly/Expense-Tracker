@@ -1427,3 +1427,16 @@
 .t46-goals .v2-data-row { flex-wrap: wrap; gap: 8px; }
 .t46-goals .v2-money { overflow-wrap: anywhere; }
 .t46-goals .v2-actions { flex-wrap: wrap; }
+
+/* Standalone navigation actions need the same touch area as buttons. */
+@media (width < 1024px) {
+  .v2-mobile-header > a,
+  .t37-panel-heading > a,
+  .v2-main .v2-actions > a,
+  .p4-settings a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

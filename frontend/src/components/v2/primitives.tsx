@@ -60,7 +60,7 @@ export function FormField({
     <div className="v2-field">
       <label htmlFor={id}>
         {label}
-        {required ? <span aria-hidden="true"> *</span> : null}
+        {required ? <><span aria-hidden="true"> *</span><span className="v2-sr-only"> (required)</span></> : null}
       </label>
       {children}
       {hint ? (
