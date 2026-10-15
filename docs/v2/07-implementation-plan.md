@@ -996,6 +996,8 @@ Implement `/reports`.
 
 ## T57 — Full Backend Regression
 
+**Status: Completed locally (2026-10-15).** A clean isolated source snapshot installed locked dependencies and passed backend lint/typecheck/build and the complete general suite (132 tests: 104 passed, 28 explicitly database-gated). Seventeen fresh-database runs passed 57 test groups without skips and cover every gated domain, consolidating the shared isolation wrappers through T27. An additional 829-check integrated A/B gate verified cross-domain lifecycle, exact reconciliation, live database reconnect, three Node processes, pending recovery, cursor continuity and deleted-generated marker durability; 33 configuration/security checks also passed. The only fix makes Analytics test evidence-directory creation independent of previous runs. No application, schema, production gate, cron or hosted acceptance change occurred. See [T57 verification](t57-verification.md). T58 — Full Frontend Regression is next and unstarted.
+
 Run:
 
 - lint;

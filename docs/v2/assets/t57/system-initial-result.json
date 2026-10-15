@@ -1,0 +1,69 @@
+{
+  "phase": "initial",
+  "checks": 670,
+  "failures": 0,
+  "idleConnectionErrorsHandled": 1,
+  "latency": {
+    "profile": {
+      "requests": 41,
+      "minMs": 2.11,
+      "medianMs": 16.96,
+      "maxMs": 176.76
+    },
+    "categories": {
+      "requests": 38,
+      "minMs": 1.9,
+      "medianMs": 15.66,
+      "maxMs": 72.08
+    },
+    "accounts": {
+      "requests": 52,
+      "minMs": 3.86,
+      "medianMs": 15.86,
+      "maxMs": 193.28
+    },
+    "transactions": {
+      "requests": 37,
+      "minMs": 4.13,
+      "medianMs": 15.05,
+      "maxMs": 97.81
+    },
+    "transfers": {
+      "requests": 24,
+      "minMs": 2.51,
+      "medianMs": 16.28,
+      "maxMs": 64.89
+    },
+    "recurring": {
+      "requests": 30,
+      "minMs": 4.21,
+      "medianMs": 16.14,
+      "maxMs": 70.02
+    },
+    "budgets": {
+      "requests": 26,
+      "minMs": 2.87,
+      "medianMs": 15.91,
+      "maxMs": 50.6
+    },
+    "goals": {
+      "requests": 27,
+      "minMs": 2.53,
+      "medianMs": 14.2,
+      "maxMs": 123.23
+    },
+    "dashboard": {
+      "requests": 5,
+      "minMs": 18.4,
+      "medianMs": 28.16,
+      "maxMs": 71.64
+    },
+    "analytics": {
+      "requests": 5,
+      "minMs": 12.59,
+      "medianMs": 34.5,
+      "maxMs": 40.56
+    }
+  },
+  "remoteTouched": false
+}

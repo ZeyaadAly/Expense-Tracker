@@ -1,0 +1,263 @@
+{
+  "accountsBalance": {
+    "fixtureTransactions": 5000,
+    "fixtureTransfers": 2000,
+    "executionMs": 6.668,
+    "planningMs": 4.559,
+    "rows": 27,
+    "nodes": [
+      "Sort",
+      "Seq Scan",
+      "Hash Join",
+      "Hash Join",
+      "Aggregate",
+      "Append",
+      "Hash Join",
+      "Seq Scan",
+      "Hash",
+      "CTE Scan",
+      "Hash Join",
+      "Seq Scan",
+      "Hash",
+      "CTE Scan",
+      "Hash",
+      "CTE Scan",
+      "Hash",
+      "Subquery Scan",
+      "Aggregate",
+      "Hash Join",
+      "Seq Scan",
+      "Hash",
+      "CTE Scan"
+    ]
+  },
+  "search": [
+    {
+      "term": "%AScaleNeedle%",
+      "planningMs": 3.581,
+      "executionMs": 50.552,
+      "rows": 100
+    },
+    {
+      "term": "%AScaleNeedle%",
+      "planningMs": 1.899,
+      "executionMs": 44.067,
+      "rows": 0
+    },
+    {
+      "term": "%BScaleNeedle%",
+      "planningMs": 1.536,
+      "executionMs": 47.976,
+      "rows": 100
+    },
+    {
+      "term": "%Salary%",
+      "planningMs": 1.444,
+      "executionMs": 42.92,
+      "rows": 101
+    },
+    {
+      "term": "%Transport%",
+      "planningMs": 1.337,
+      "executionMs": 55.71,
+      "rows": 101
+    }
+  ],
+  "pagination": [
+    {
+      "label": "first page",
+      "planningMs": 1.321,
+      "executionMs": 1.714,
+      "databaseRows": 101
+    },
+    {
+      "label": "deep after 50 pages",
+      "planningMs": 2.336,
+      "executionMs": 3.032,
+      "databaseRows": 101
+    },
+    {
+      "label": "search page",
+      "planningMs": 2.263,
+      "executionMs": 142.258,
+      "databaseRows": 26
+    },
+    {
+      "label": "search continuation",
+      "planningMs": 3.07,
+      "executionMs": 129.389,
+      "databaseRows": 26
+    },
+    {
+      "label": "account/date page",
+      "planningMs": 0.673,
+      "executionMs": 0.276,
+      "databaseRows": 26
+    },
+    {
+      "label": "account/date continuation",
+      "planningMs": 1.549,
+      "executionMs": 0.845,
+      "databaseRows": 26
+    }
+  ],
+  "integratedMixedRequests": {
+    "profile": {
+      "requests": 41,
+      "minMs": 2.11,
+      "medianMs": 16.96,
+      "maxMs": 176.76
+    },
+    "categories": {
+      "requests": 38,
+      "minMs": 1.9,
+      "medianMs": 15.66,
+      "maxMs": 72.08
+    },
+    "accounts": {
+      "requests": 52,
+      "minMs": 3.86,
+      "medianMs": 15.86,
+      "maxMs": 193.28
+    },
+    "transactions": {
+      "requests": 37,
+      "minMs": 4.13,
+      "medianMs": 15.05,
+      "maxMs": 97.81
+    },
+    "transfers": {
+      "requests": 24,
+      "minMs": 2.51,
+      "medianMs": 16.28,
+      "maxMs": 64.89
+    },
+    "recurring": {
+      "requests": 30,
+      "minMs": 4.21,
+      "medianMs": 16.14,
+      "maxMs": 70.02
+    },
+    "budgets": {
+      "requests": 26,
+      "minMs": 2.87,
+      "medianMs": 15.91,
+      "maxMs": 50.6
+    },
+    "goals": {
+      "requests": 27,
+      "minMs": 2.53,
+      "medianMs": 14.2,
+      "maxMs": 123.23
+    },
+    "dashboard": {
+      "requests": 5,
+      "minMs": 18.4,
+      "medianMs": 28.16,
+      "maxMs": 71.64
+    },
+    "analytics": {
+      "requests": 5,
+      "minMs": 12.59,
+      "medianMs": 34.5,
+      "maxMs": 40.56
+    }
+  },
+  "processor": {
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "processor1000AttemptsMs": 8120,
+    "dueScanMs": 0.942,
+    "withoutConcurrentInstallOrTests": true
+  },
+  "dashboard": {
+    "scale": {
+      "owners": 20,
+      "transactions": 30000,
+      "transfers": 2000,
+      "definitions": 1000
+    },
+    "latencyMs": {
+      "min": 10.382299999999304,
+      "median": 15.352999999999156,
+      "max": 25.564699999998993
+    }
+  },
+  "analytics-direct": {
+    "transactions": 30023,
+    "transfers": 2001,
+    "generatedTransactions": 2,
+    "latencyMs": {
+      "min": 55.51849999999831,
+      "median": 59.22269999999844,
+      "max": 61.05419999999867
+    },
+    "indexAdded": false,
+    "remoteTouched": false
+  },
+  "analytics-http": {
+    "transactions": 30023,
+    "transfers": 2001,
+    "generatedTransactions": 2,
+    "latencyMs": {
+      "min": 85.56759999999849,
+      "median": 88.75310000000172,
+      "max": 106.8814999999995
+    },
+    "indexAdded": false,
+    "remoteTouched": false,
+    "httpComparison": {
+      "directMedianMs": 85.48140000000058,
+      "httpMedianMs": 88.75310000000172,
+      "includes": "loopback HTTP, local ES256 signing/verification, JSON serialization"
+    }
+  },
+  "budgets": {
+    "transactions": 30012,
+    "budgets": 777,
+    "categories": 32,
+    "months": 24,
+    "latencyMs": {
+      "min": 5.791000000001077,
+      "median": 13.548800000000483,
+      "max": 16.34820000000036
+    },
+    "executionMs": 1.644,
+    "planningMs": 3.348,
+    "newIndex": false,
+    "remoteTouched": false
+  },
+  "goals": {
+    "races": 10,
+    "faults": 6,
+    "performance": {
+      "all": {
+        "rows": 2000,
+        "elapsedMs": 35.487
+      },
+      "active": {
+        "rows": 667,
+        "elapsedMs": 8.889
+      },
+      "completed": {
+        "rows": 666,
+        "elapsedMs": 7.883
+      },
+      "archived": {
+        "rows": 667,
+        "elapsedMs": 8.765
+      }
+    },
+    "totalPerformanceGoals": 10000,
+    "limitedRole": true,
+    "remoteTouched": false
+  },
+  "custom-categories": {
+    "races": 7,
+    "rollback": 4,
+    "listMs": 17.05,
+    "migration": false,
+    "remoteTouched": false
+  }
+}

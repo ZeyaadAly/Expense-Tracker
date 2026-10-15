@@ -1,0 +1,8 @@
+{
+  "checks": 33,
+  "filesScanned": 336,
+  "recognizedSecretPatterns": 0,
+  "documentedPlaceholders": 9,
+  "configurationAndGates": true,
+  "remoteTouched": false
+}

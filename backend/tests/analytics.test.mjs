@@ -3,7 +3,7 @@ import {test} from 'node:test';
 import process from 'node:process';
 import {randomUUID} from 'node:crypto';
 import {performance} from 'node:perf_hooks';
-import {writeFileSync} from 'node:fs';
+import {writeFileSync,mkdirSync} from 'node:fs';
 import {URL,URLSearchParams} from 'node:url';
 import {Client,Pool} from 'pg';
 import {normalizeAnalyticsRange} from '../dist/domain/analytics-range.js';
@@ -157,7 +157,9 @@ test('T38 fresh runtime analytics matrix, forecast, snapshot consistency and 30k
     assert.equal((await pool.query('SELECT current_user role')).rows[0].role,'expense_tracker_app');checks++;
     const evidence={checks,transactions:(await admin.query('SELECT count(*)::int n FROM expense_tracker.transactions')).rows[0].n,transfers:(await admin.query('SELECT count(*)::int n FROM expense_tracker.transfers')).rows[0].n,generatedTransactions:(await admin.query('SELECT count(*)::int n FROM expense_tracker.transactions WHERE recurring_transaction_id IS NOT NULL')).rows[0].n,latencyMs:{min:times[0],median:times[4],max:times.at(-1)},plans,indexAdded:false,remoteTouched:false};
     if(auth)evidence.httpComparison={directMedianMs:directTimes[4],httpMedianMs:times[4],includes:'loopback HTTP, local ES256 signing/verification, JSON serialization'};
-    writeFileSync(new URL(process.env.T39_ANALYTICS_HTTP?'../../.tmp-v2-t39/performance.json':'../../.tmp-v2-t38/performance.json',import.meta.url),JSON.stringify(evidence,null,2));
+    const evidenceDirectory=new URL(process.env.T39_ANALYTICS_HTTP?'../../.tmp-v2-t39/':'../../.tmp-v2-t38/',import.meta.url);
+    mkdirSync(evidenceDirectory,{recursive:true});
+    writeFileSync(new URL('performance.json',evidenceDirectory),JSON.stringify(evidence,null,2));
     context.diagnostic(JSON.stringify({...evidence,plans:plans.map(({query,executionMs,planningMs})=>({query,executionMs,planningMs}))}));
   }finally{await auth?.close();await pool?.end();await admin.end();}
 });

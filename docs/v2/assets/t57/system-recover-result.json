@@ -1,0 +1,57 @@
+{
+  "phase": "recover",
+  "checks": 103,
+  "failures": 0,
+  "idleConnectionErrorsHandled": 0,
+  "latency": {
+    "profile": {
+      "requests": 4,
+      "minMs": 7.01,
+      "medianMs": 14.19,
+      "maxMs": 49.1
+    },
+    "accounts": {
+      "requests": 12,
+      "minMs": 4.26,
+      "medianMs": 15.53,
+      "maxMs": 20.31
+    },
+    "categories": {
+      "requests": 8,
+      "minMs": 2.56,
+      "medianMs": 14.12,
+      "maxMs": 20.44
+    },
+    "transactions": {
+      "requests": 6,
+      "minMs": 11.01,
+      "medianMs": 17.81,
+      "maxMs": 26.45
+    },
+    "transfers": {
+      "requests": 4,
+      "minMs": 3.26,
+      "medianMs": 16.69,
+      "maxMs": 16.85
+    },
+    "recurring": {
+      "requests": 4,
+      "minMs": 3.39,
+      "medianMs": 14.75,
+      "maxMs": 17.62
+    },
+    "budgets": {
+      "requests": 4,
+      "minMs": 5.1,
+      "medianMs": 17.2,
+      "maxMs": 56.76
+    },
+    "goals": {
+      "requests": 4,
+      "minMs": 9.51,
+      "medianMs": 14.32,
+      "maxMs": 22.43
+    }
+  },
+  "remoteTouched": false
+}
