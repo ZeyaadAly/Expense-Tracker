@@ -1,0 +1,174 @@
+{
+  "startingSha": "ecc649e1a12bbddc6963eb3fbf7c17cd9c8326e9",
+  "status": "completed-local",
+  "generalBackend": {
+    "tests": 132,
+    "passed": 104,
+    "databaseGated": 28,
+    "failed": 0
+  },
+  "freshMatrix": [
+    {
+      "label": "legacy",
+      "tests": 12,
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "schema",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "migration-ownership",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "category-read",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "profile",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "shared-isolation-concurrency",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "recurring",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "occurrences",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "processor",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "cron-orchestration",
+      "tests": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "dashboard",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "analytics-direct",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "analytics-http",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "budgets",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "budget-status",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "goals",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "custom-categories",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "t59": {
+    "counts": {
+      "routeAuthentication": 156,
+      "ownerInjection": 561,
+      "massAssignment": 275,
+      "occurrence": 6,
+      "concurrency": 2,
+      "boundary": 19,
+      "timing": 192
+    },
+    "foundation": {
+      "api": 270,
+      "dbRejections": 58,
+      "positiveDb": 68,
+      "boundary": 92,
+      "concurrent": 124
+    },
+    "foundationChecks": 612,
+    "failures": 0
+  },
+  "quality": {
+    "backendLint": true,
+    "typecheck": true,
+    "build": true,
+    "verifierLint": true,
+    "frontendContractChanged": false,
+    "gitDiffCheck": true
+  },
+  "remoteTouched": false,
+  "nextTask": "T61 — Recurring Reliability Tests",
+  "safety": {
+    "checks": 33,
+    "filesScanned": 357,
+    "recognizedSecretPatterns": 0,
+    "documentedPlaceholders": 9,
+    "configurationAndGates": true,
+    "remoteTouched": false
+  },
+  "changedFileReview": {
+    "filesScanned": 9,
+    "recognizedSecrets": 0,
+    "applicationSchemaContractsChanged": false
+  }
+}

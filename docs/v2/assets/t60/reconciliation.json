@@ -1,0 +1,461 @@
+{
+  "initial": {
+    "phase": "initial",
+    "groups": [
+      {
+        "name": "predeclared ledger and opening positions",
+        "checks": 351,
+        "durationMs": 1148
+      },
+      {
+        "name": "manual income expenses decimals and month/year/leap boundaries",
+        "checks": 441,
+        "durationMs": 753
+      },
+      {
+        "name": "four transfer directions neutral in every financial domain",
+        "checks": 1294,
+        "durationMs": 1752
+      },
+      {
+        "name": "forecast separation generated income expense concurrent exactly once",
+        "checks": 672,
+        "durationMs": 1019
+      },
+      {
+        "name": "generated deletion reverses actuals keeps terminal marker and forecast",
+        "checks": 318,
+        "durationMs": 466
+      },
+      {
+        "name": "transaction amount account category date edits and manual deletion",
+        "checks": 1582,
+        "durationMs": 1980
+      },
+      {
+        "name": "budget exact thresholds and negative remaining",
+        "checks": 579,
+        "durationMs": 1353
+      },
+      {
+        "name": "goals create update complete reopen archive have no financial effect",
+        "checks": 119,
+        "durationMs": 407
+      },
+      {
+        "name": "category rename/archive and account archive preserve historical money",
+        "checks": 764,
+        "durationMs": 1274
+      },
+      {
+        "name": "distinct B ledger and reciprocal aggregate separation",
+        "checks": 434,
+        "durationMs": 742
+      },
+      {
+        "name": "concurrent transactions and transfers reconcile committed ledger",
+        "checks": 473,
+        "durationMs": 784
+      },
+      {
+        "name": "transaction transfer recurring post-write rollback and lost acknowledgement",
+        "checks": 983,
+        "durationMs": 1717
+      },
+      {
+        "name": "large exact aggregates exceed input maximum without overflow",
+        "checks": 320,
+        "durationMs": 456
+      },
+      {
+        "name": "Cairo midnight day-only inclusion without UTC shifts",
+        "checks": 74,
+        "durationMs": 84
+      },
+      {
+        "name": "catalog source of truth no mutable derived totals",
+        "checks": 11,
+        "durationMs": 13
+      },
+      {
+        "name": "scale 30000 transactions 2000 transfers many budgets exact reconciliation",
+        "checks": 1030,
+        "durationMs": 13274
+      }
+    ],
+    "checks": 9445,
+    "timings": [
+      {
+        "name": "account balances",
+        "medianMs": 36.49
+      },
+      {
+        "name": "net position",
+        "medianMs": 36.47
+      },
+      {
+        "name": "Dashboard",
+        "medianMs": 161.98
+      },
+      {
+        "name": "Analytics",
+        "medianMs": 154.96
+      },
+      {
+        "name": "Budget list",
+        "medianMs": 9.46
+      }
+    ],
+    "checkpoints": [
+      {
+        "label": "openings",
+        "accounts": [
+          {
+            "key": "cash",
+            "balance": "100.00"
+          },
+          {
+            "key": "savings",
+            "balance": "50.00"
+          },
+          {
+            "key": "negative",
+            "balance": "-5.00"
+          },
+          {
+            "key": "card",
+            "balance": "20.00"
+          },
+          {
+            "key": "credit",
+            "balance": "-2.00"
+          }
+        ],
+        "position": {
+          "assets": "145.00",
+          "cardDebt": "18.00",
+          "totalBalance": "127.00"
+        },
+        "allHistory": {
+          "income": "0.00",
+          "expenses": "0.00",
+          "netSavings": "0.00"
+        },
+        "october": {
+          "income": "0.00",
+          "expenses": "0.00",
+          "netSavings": "0.00"
+        }
+      },
+      {
+        "label": "manual ledger",
+        "accounts": [
+          {
+            "key": "cash",
+            "balance": "108.57"
+          },
+          {
+            "key": "savings",
+            "balance": "51.89"
+          },
+          {
+            "key": "negative",
+            "balance": "-5.20"
+          },
+          {
+            "key": "card",
+            "balance": "22.04"
+          },
+          {
+            "key": "credit",
+            "balance": "-2.00"
+          }
+        ],
+        "position": {
+          "assets": "155.26",
+          "cardDebt": "20.04",
+          "totalBalance": "135.22"
+        },
+        "allHistory": {
+          "income": "14.94",
+          "expenses": "6.72",
+          "netSavings": "8.22"
+        },
+        "october": {
+          "income": "10.51",
+          "expenses": "1.83",
+          "netSavings": "8.68"
+        }
+      },
+      {
+        "label": "four transfers",
+        "accounts": [
+          {
+            "key": "cash",
+            "balance": "79.68"
+          },
+          {
+            "key": "savings",
+            "balance": "53.12"
+          },
+          {
+            "key": "negative",
+            "balance": "-5.20"
+          },
+          {
+            "key": "card",
+            "balance": "-4.39"
+          },
+          {
+            "key": "credit",
+            "balance": "-3.23"
+          }
+        ],
+        "position": {
+          "assets": "127.60",
+          "cardDebt": "-7.62",
+          "totalBalance": "135.22"
+        },
+        "allHistory": {
+          "income": "14.94",
+          "expenses": "6.72",
+          "netSavings": "8.22"
+        },
+        "october": {
+          "income": "10.51",
+          "expenses": "1.83",
+          "netSavings": "8.68"
+        }
+      },
+      {
+        "label": "generated income and expense",
+        "accounts": [
+          {
+            "key": "cash",
+            "balance": "79.68"
+          },
+          {
+            "key": "savings",
+            "balance": "53.22"
+          },
+          {
+            "key": "negative",
+            "balance": "-5.20"
+          },
+          {
+            "key": "card",
+            "balance": "-4.19"
+          },
+          {
+            "key": "credit",
+            "balance": "-3.23"
+          }
+        ],
+        "position": {
+          "assets": "127.70",
+          "cardDebt": "-7.42",
+          "totalBalance": "135.12"
+        },
+        "allHistory": {
+          "income": "15.04",
+          "expenses": "6.92",
+          "netSavings": "8.12"
+        },
+        "october": {
+          "income": "10.61",
+          "expenses": "2.03",
+          "netSavings": "8.58"
+        }
+      },
+      {
+        "label": "generated expense deleted",
+        "accounts": [
+          {
+            "key": "cash",
+            "balance": "79.68"
+          },
+          {
+            "key": "savings",
+            "balance": "53.22"
+          },
+          {
+            "key": "negative",
+            "balance": "-5.20"
+          },
+          {
+            "key": "card",
+            "balance": "-4.39"
+          },
+          {
+            "key": "credit",
+            "balance": "-3.23"
+          }
+        ],
+        "position": {
+          "assets": "127.70",
+          "cardDebt": "-7.62",
+          "totalBalance": "135.32"
+        },
+        "allHistory": {
+          "income": "15.04",
+          "expenses": "6.72",
+          "netSavings": "8.32"
+        },
+        "october": {
+          "income": "10.61",
+          "expenses": "1.83",
+          "netSavings": "8.78"
+        }
+      },
+      {
+        "label": "edited manual expense deleted",
+        "accounts": [
+          {
+            "key": "cash",
+            "balance": "80.91"
+          },
+          {
+            "key": "savings",
+            "balance": "53.22"
+          },
+          {
+            "key": "negative",
+            "balance": "-5.20"
+          },
+          {
+            "key": "card",
+            "balance": "-4.39"
+          },
+          {
+            "key": "credit",
+            "balance": "-3.23"
+          }
+        ],
+        "position": {
+          "assets": "128.93",
+          "cardDebt": "-7.62",
+          "totalBalance": "136.55"
+        },
+        "allHistory": {
+          "income": "15.04",
+          "expenses": "5.49",
+          "netSavings": "9.55"
+        },
+        "october": {
+          "income": "10.61",
+          "expenses": "0.60",
+          "netSavings": "10.01"
+        }
+      },
+      {
+        "label": "scale",
+        "accounts": [
+          {
+            "key": "cash",
+            "balance": "1410.85"
+          },
+          {
+            "key": "savings",
+            "balance": "73.22"
+          },
+          {
+            "key": "negative",
+            "balance": "-5.20"
+          },
+          {
+            "key": "card",
+            "balance": "-4.40"
+          },
+          {
+            "key": "credit",
+            "balance": "-3.23"
+          }
+        ],
+        "position": {
+          "assets": "1478.87",
+          "cardDebt": "-7.63",
+          "totalBalance": "1486.50"
+        },
+        "allHistory": {
+          "income": "2000001515.06",
+          "expenses": "2000000155.56",
+          "netSavings": "1359.50"
+        },
+        "october": {
+          "income": "2000001510.63",
+          "expenses": "2000000150.67",
+          "netSavings": "1359.96"
+        }
+      }
+    ],
+    "fixture": {
+      "accounts": 10,
+      "transactions": 30047,
+      "transfers": 2025,
+      "budgets": 116,
+      "forecasts": 4
+    },
+    "final": {
+      "a": {
+        "assets": "1478.87",
+        "cardDebt": "-7.63",
+        "totalBalance": "1486.50"
+      },
+      "b": {
+        "assets": "2000000044.94",
+        "cardDebt": "1000000017.99",
+        "totalBalance": "1000000026.95"
+      },
+      "aOctober": {
+        "income": "2000001510.63",
+        "expenses": "2000000150.67",
+        "netSavings": "1359.96"
+      }
+    },
+    "failures": 0,
+    "remoteTouched": false
+  },
+  "restarted": {
+    "phase": "restarted",
+    "groups": [
+      {
+        "name": "PostgreSQL and backend process restart exact equality",
+        "checks": 728,
+        "durationMs": 3767
+      }
+    ],
+    "checks": 728,
+    "timings": [],
+    "checkpoints": [],
+    "fixture": {
+      "accounts": 10,
+      "transactions": 30047,
+      "transfers": 2025,
+      "budgets": 116,
+      "forecasts": 4
+    },
+    "final": {
+      "a": {
+        "assets": "1478.87",
+        "cardDebt": "-7.63",
+        "totalBalance": "1486.50"
+      },
+      "b": {
+        "assets": "2000000044.94",
+        "cardDebt": "1000000017.99",
+        "totalBalance": "1000000026.95"
+      },
+      "aOctober": {
+        "income": "2000001510.63",
+        "expenses": "2000000150.67",
+        "netSavings": "1359.96"
+      }
+    },
+    "failures": 0,
+    "remoteTouched": false
+  },
+  "databaseRestart": true,
+  "backendProcessRestart": true,
+  "failures": 0,
+  "remoteTouched": false
+}

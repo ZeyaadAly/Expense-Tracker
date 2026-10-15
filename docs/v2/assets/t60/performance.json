@@ -1,0 +1,169 @@
+{
+  "timings": [
+    {
+      "stage": "beforeAnalyze",
+      "name": "balances",
+      "medianMs": 19.91
+    },
+    {
+      "stage": "beforeAnalyze",
+      "name": "position",
+      "medianMs": 19.26
+    },
+    {
+      "stage": "beforeAnalyze",
+      "name": "dashboard",
+      "medianMs": 52.28
+    },
+    {
+      "stage": "beforeAnalyze",
+      "name": "analytics",
+      "medianMs": 71.72
+    },
+    {
+      "stage": "beforeAnalyze",
+      "name": "budgets",
+      "medianMs": 8.74
+    },
+    {
+      "stage": "afterAnalyze",
+      "name": "balances",
+      "medianMs": 18.67
+    },
+    {
+      "stage": "afterAnalyze",
+      "name": "position",
+      "medianMs": 19.52
+    },
+    {
+      "stage": "afterAnalyze",
+      "name": "dashboard",
+      "medianMs": 51.64
+    },
+    {
+      "stage": "afterAnalyze",
+      "name": "analytics",
+      "medianMs": 63.92
+    },
+    {
+      "stage": "afterAnalyze",
+      "name": "budgets",
+      "medianMs": 8.29
+    }
+  ],
+  "plans": [
+    {
+      "index": 0,
+      "executionMs": 19.91,
+      "planningMs": 1.004,
+      "rows": 5,
+      "node": "Sort"
+    },
+    {
+      "index": 1,
+      "executionMs": 19.195,
+      "planningMs": 0.907,
+      "rows": 1,
+      "node": "Aggregate"
+    },
+    {
+      "index": 2,
+      "executionMs": 0.016,
+      "planningMs": 0.037,
+      "rows": 1,
+      "node": "Result"
+    },
+    {
+      "index": 3,
+      "executionMs": 8.79,
+      "planningMs": 0.247,
+      "rows": 1,
+      "node": "Subquery Scan"
+    },
+    {
+      "index": 4,
+      "executionMs": 0.105,
+      "planningMs": 0.57,
+      "rows": 5,
+      "node": "Limit"
+    },
+    {
+      "index": 5,
+      "executionMs": 0.007,
+      "planningMs": 0.015,
+      "rows": 1,
+      "node": "Result"
+    },
+    {
+      "index": 6,
+      "executionMs": 0.063,
+      "planningMs": 0.339,
+      "rows": 1,
+      "node": "Nested Loop"
+    },
+    {
+      "index": 7,
+      "executionMs": 0.025,
+      "planningMs": 0.105,
+      "rows": 4,
+      "node": "Seq Scan"
+    },
+    {
+      "index": 8,
+      "executionMs": 8.641,
+      "planningMs": 0.183,
+      "rows": 1,
+      "node": "Subquery Scan"
+    },
+    {
+      "index": 9,
+      "executionMs": 16.907,
+      "planningMs": 0.38,
+      "rows": 2,
+      "node": "Merge Join"
+    },
+    {
+      "index": 10,
+      "executionMs": 21.122,
+      "planningMs": 0.584,
+      "rows": 3,
+      "node": "Incremental Sort"
+    },
+    {
+      "index": 11,
+      "executionMs": 15.188,
+      "planningMs": 0.602,
+      "rows": 5,
+      "node": "Sort"
+    },
+    {
+      "index": 12,
+      "executionMs": 0.09,
+      "planningMs": 0.465,
+      "rows": 1,
+      "node": "Sort"
+    },
+    {
+      "index": 13,
+      "executionMs": 0.022,
+      "planningMs": 0.095,
+      "rows": 1,
+      "node": "Seq Scan"
+    },
+    {
+      "index": 14,
+      "executionMs": 0.065,
+      "planningMs": 0.177,
+      "rows": 1,
+      "node": "Subquery Scan"
+    },
+    {
+      "index": 15,
+      "executionMs": 6.927,
+      "planningMs": 0.606,
+      "rows": 2,
+      "node": "Sort"
+    }
+  ],
+  "remoteTouched": false
+}
