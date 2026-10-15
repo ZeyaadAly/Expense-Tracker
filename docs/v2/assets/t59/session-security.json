@@ -1,0 +1,28 @@
+{
+  "checks": [
+    "populated A to populated B clears dashboard",
+    "populated A to populated B clears accounts",
+    "populated A to populated B clears accounts/ac887fe2-2d66-4107-9652-a636b1568de1",
+    "populated A to populated B clears transactions",
+    "populated A to populated B clears recurring",
+    "populated A to populated B clears analytics",
+    "populated A to populated B clears budgets",
+    "populated A to populated B clears goals",
+    "populated A to populated B clears settings",
+    "open transactions Add transaction clears draft and choices on switch",
+    "open accounts New transfer clears draft and choices on switch",
+    "open recurring Add recurring item clears draft and choices on switch",
+    "open budgets Edit A-T59 Category clears draft and choices on switch",
+    "open goals Create goal clears draft and choices on switch",
+    "open settings Add custom category clears draft and choices on switch",
+    "held A response released after B switch dashboard",
+    "held A response released after B switch transactions",
+    "held A response released after B switch analytics",
+    "held A response released after B switch settings",
+    "foreign account deep link never renders foreign name",
+    "API 401 clears private content during redirect"
+  ],
+  "count": 21,
+  "uncaught": [],
+  "remoteTouched": false
+}

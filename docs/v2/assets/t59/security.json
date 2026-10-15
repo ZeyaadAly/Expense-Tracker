@@ -1,0 +1,282 @@
+{
+  "counts": {
+    "routeAuthentication": 156,
+    "ownerInjection": 561,
+    "massAssignment": 275,
+    "occurrence": 6,
+    "concurrency": 2,
+    "boundary": 19,
+    "timing": 192
+  },
+  "routeCases": [
+    {
+      "path": "/profile/bootstrap",
+      "method": "POST"
+    },
+    {
+      "path": "/profile",
+      "method": "PUT"
+    },
+    {
+      "path": "/categories",
+      "method": "POST"
+    },
+    {
+      "path": "/categories/a1600000-0000-4000-8000-000000000005",
+      "method": "PUT"
+    },
+    {
+      "path": "/categories/a1600000-0000-4000-8000-000000000005/archive",
+      "method": "POST"
+    },
+    {
+      "path": "/categories/a1600000-0000-4000-8000-000000000005/restore",
+      "method": "POST"
+    },
+    {
+      "path": "/accounts",
+      "method": "POST"
+    },
+    {
+      "path": "/accounts/:account",
+      "method": "PUT"
+    },
+    {
+      "path": "/accounts/:account/archive",
+      "method": "POST"
+    },
+    {
+      "path": "/accounts/:account/restore",
+      "method": "POST"
+    },
+    {
+      "path": "/transactions",
+      "method": "POST"
+    },
+    {
+      "path": "/transactions/:transaction",
+      "method": "PUT"
+    },
+    {
+      "path": "/transfers",
+      "method": "POST"
+    },
+    {
+      "path": "/transfers/a1600000-0000-4000-8000-000000000014",
+      "method": "PUT"
+    },
+    {
+      "path": "/recurring",
+      "method": "POST"
+    },
+    {
+      "path": "/recurring/a1600000-0000-4000-8000-000000000010",
+      "method": "PUT"
+    },
+    {
+      "path": "/recurring/a1600000-0000-4000-8000-000000000010/pause",
+      "method": "POST"
+    },
+    {
+      "path": "/recurring/a1600000-0000-4000-8000-000000000010/resume",
+      "method": "POST"
+    },
+    {
+      "path": "/recurring/a1600000-0000-4000-8000-000000000010/archive",
+      "method": "POST"
+    },
+    {
+      "path": "/budgets",
+      "method": "POST"
+    },
+    {
+      "path": "/budgets/a1600000-0000-4000-8000-000000000012",
+      "method": "PUT"
+    },
+    {
+      "path": "/goals",
+      "method": "POST"
+    },
+    {
+      "path": "/goals/a1600000-0000-4000-8000-000000000013",
+      "method": "PUT"
+    },
+    {
+      "path": "/goals/a1600000-0000-4000-8000-000000000013/complete",
+      "method": "POST"
+    },
+    {
+      "path": "/goals/a1600000-0000-4000-8000-000000000013/archive",
+      "method": "POST"
+    },
+    {
+      "path": "/profile",
+      "method": "GET"
+    },
+    {
+      "path": "/categories",
+      "method": "GET"
+    },
+    {
+      "path": "/categories?status=archived",
+      "method": "GET"
+    },
+    {
+      "path": "/accounts",
+      "method": "GET"
+    },
+    {
+      "path": "/accounts/summary",
+      "method": "GET"
+    },
+    {
+      "path": "/accounts/:account",
+      "method": "GET"
+    },
+    {
+      "path": "/accounts/:account/summary",
+      "method": "GET"
+    },
+    {
+      "path": "/transactions",
+      "method": "GET"
+    },
+    {
+      "path": "/transactions/:transaction",
+      "method": "GET"
+    },
+    {
+      "path": "/transfers",
+      "method": "GET"
+    },
+    {
+      "path": "/transfers/a1600000-0000-4000-8000-000000000014",
+      "method": "GET"
+    },
+    {
+      "path": "/recurring",
+      "method": "GET"
+    },
+    {
+      "path": "/recurring/upcoming",
+      "method": "GET"
+    },
+    {
+      "path": "/recurring/a1600000-0000-4000-8000-000000000010",
+      "method": "GET"
+    },
+    {
+      "path": "/dashboard",
+      "method": "GET"
+    },
+    {
+      "path": "/analytics/overview?from=1900-01-01&to=1900-01-31",
+      "method": "GET"
+    },
+    {
+      "path": "/budgets",
+      "method": "GET"
+    },
+    {
+      "path": "/budgets/a1600000-0000-4000-8000-000000000012",
+      "method": "GET"
+    },
+    {
+      "path": "/goals",
+      "method": "GET"
+    },
+    {
+      "path": "/goals/a1600000-0000-4000-8000-000000000013",
+      "method": "GET"
+    },
+    {
+      "path": "/transactions/:transaction",
+      "method": "DELETE"
+    },
+    {
+      "path": "/transfers/a1600000-0000-4000-8000-000000000014",
+      "method": "DELETE"
+    },
+    {
+      "path": "/budgets/a1600000-0000-4000-8000-000000000012",
+      "method": "DELETE"
+    }
+  ],
+  "timings": [
+    {
+      "owner": "A",
+      "domain": "accounts",
+      "foreignMedianMs": 15.115200000000186,
+      "missingMedianMs": 15.658299999995506
+    },
+    {
+      "owner": "A",
+      "domain": "transactions",
+      "foreignMedianMs": 15.581999999994878,
+      "missingMedianMs": 15.414600000003702
+    },
+    {
+      "owner": "A",
+      "domain": "transfers",
+      "foreignMedianMs": 15.56130000000121,
+      "missingMedianMs": 15.747000000003027
+    },
+    {
+      "owner": "A",
+      "domain": "recurring",
+      "foreignMedianMs": 15.32159999999567,
+      "missingMedianMs": 15.102499999993597
+    },
+    {
+      "owner": "A",
+      "domain": "budgets",
+      "foreignMedianMs": 15.523499999995693,
+      "missingMedianMs": 15.405299999998533
+    },
+    {
+      "owner": "A",
+      "domain": "goals",
+      "foreignMedianMs": 15.090100000001257,
+      "missingMedianMs": 15.200400000001537
+    },
+    {
+      "owner": "B",
+      "domain": "accounts",
+      "foreignMedianMs": 15.113200000007055,
+      "missingMedianMs": 15.386900000012247
+    },
+    {
+      "owner": "B",
+      "domain": "transactions",
+      "foreignMedianMs": 15.122900000002119,
+      "missingMedianMs": 15.58520000000135
+    },
+    {
+      "owner": "B",
+      "domain": "transfers",
+      "foreignMedianMs": 15.270999999993364,
+      "missingMedianMs": 15.248999999996158
+    },
+    {
+      "owner": "B",
+      "domain": "recurring",
+      "foreignMedianMs": 15.482500000012806,
+      "missingMedianMs": 14.863899999996647
+    },
+    {
+      "owner": "B",
+      "domain": "budgets",
+      "foreignMedianMs": 16.034499999994296,
+      "missingMedianMs": 15.908200000005309
+    },
+    {
+      "owner": "B",
+      "domain": "goals",
+      "foreignMedianMs": 14.697799999994459,
+      "missingMedianMs": 15.170200000007753
+    }
+  ],
+  "logLines": 1,
+  "failures": 0,
+  "remoteTouched": false
+}

@@ -1,0 +1,243 @@
+{
+  "startingSha": "03f025fc0790667c060e309387c152c58861c26f",
+  "status": "completed-local",
+  "sqlAuditEntries": 32,
+  "backendGeneral": {
+    "tests": 132,
+    "passed": 104,
+    "databaseGated": 28,
+    "failed": 0
+  },
+  "freshMatrix": [
+    {
+      "label": "legacy",
+      "tests": 12,
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "schema",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "migration-ownership",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "category-read",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "profile",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "shared-isolation-concurrency",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "recurring",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "occurrences",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "processor",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "cron-orchestration",
+      "tests": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "dashboard",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "analytics-direct",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "analytics-http",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "budgets",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "budget-status",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "goals",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "label": "custom-categories",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "backendSystem": {
+    "initial": 670,
+    "recover": 103,
+    "terminal": 56,
+    "failures": 0
+  },
+  "isolation": {
+    "counts": {
+      "api": 270,
+      "dbRejections": 58,
+      "positiveDb": 68,
+      "boundary": 92,
+      "concurrent": 124
+    },
+    "totalChecks": 612,
+    "domains": {
+      "accounts": {
+        "checks": 263
+      },
+      "balances": {
+        "checks": 285
+      },
+      "transactions": {
+        "checks": 244
+      },
+      "search": {
+        "checks": 263
+      },
+      "filters": {
+        "checks": 3263
+      },
+      "pagination": {
+        "checks": 6065
+      },
+      "transfers": {
+        "checks": 917
+      },
+      "recurring": {
+        "checks": 31
+      },
+      "analytics": {
+        "checks": 14
+      },
+      "budgets": {
+        "checks": 15
+      },
+      "goals": {
+        "checks": 25
+      },
+      "transferConcurrency": {
+        "checks": 4833
+      }
+    },
+    "failures": 0
+  },
+  "frontendGeneral": {
+    "tests": 183,
+    "passed": 183,
+    "failed": 0,
+    "skipped": 0
+  },
+  "browser": {
+    "checks": [
+      "all eight completed routes are reachable from Dashboard navigation",
+      "active navigation dashboard",
+      "active navigation accounts",
+      "active navigation accounts/98007143-ea47-4cb0-b7ab-d087f397322c",
+      "active navigation transactions",
+      "active navigation recurring",
+      "active navigation analytics",
+      "active navigation budgets",
+      "active navigation goals",
+      "active navigation settings",
+      "keyboard drawer trap Escape and focus return",
+      "Accounts repeated submit pending guard and lost-ack GET-only inspection",
+      "profile and category repeated submit pending guards",
+      "transaction UI duplicate guard and cross-page reconciliation",
+      "transfer changes balances without income expenses or net-position effect",
+      "generated expense reaches transactions Dashboard Analytics Budget exactly once",
+      "manual Goal non-effect and category rename history",
+      "account archive excludes choices pauses recurring restore requires explicit resume",
+      "A to B immediate private-data clearing dashboard",
+      "A to B immediate private-data clearing accounts",
+      "A to B immediate private-data clearing accounts/98007143-ea47-4cb0-b7ab-d087f397322c",
+      "A to B immediate private-data clearing transactions",
+      "A to B immediate private-data clearing recurring",
+      "A to B immediate private-data clearing analytics",
+      "A to B immediate private-data clearing budgets",
+      "A to B immediate private-data clearing goals",
+      "A to B immediate private-data clearing settings",
+      "late A write cannot restore A dialog or draft in B",
+      "session expiry unmounts protected data and redirects safely",
+      "deep reload and back-forward preserve authoritative session without dialogs",
+      "semantics textual chart status labels and reduced motion",
+      "Settings many-category performance and Unicode stress",
+      "financial network uses Express and Supabase Auth only"
+    ],
+    "audits": 56,
+    "violations": 0,
+    "failures": 0
+  },
+  "safety": {
+    "checks": 33,
+    "filesScanned": 347,
+    "recognizedSecretPatterns": 0,
+    "documentedPlaceholders": 9,
+    "configurationAndGates": true,
+    "remoteTouched": false
+  },
+  "productionTouched": false,
+  "nextTask": "T60 — Financial Reconciliation Tests"
+}

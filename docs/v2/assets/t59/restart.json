@@ -1,0 +1,10 @@
+{
+  "processesRestarted": [
+    "frontend",
+    "backend",
+    "jwks"
+  ],
+  "routes": 9,
+  "accountsTransactionsAndSummaryExact": true,
+  "remoteTouched": false
+}
