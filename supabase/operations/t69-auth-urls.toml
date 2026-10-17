@@ -1,0 +1,10 @@
+# Sparse provider configuration for the existing verified production project.
+# CLI config push preserves every property this file does not declare.
+project_id = "expense-tracker"
+
+[auth]
+site_url = "https://expensetracker-inky-mu.vercel.app"
+additional_redirect_urls = [
+  "https://expensetracker-inky-mu.vercel.app/v2/login",
+  "https://expensetracker-inky-mu.vercel.app/v2/reset-password",
+]
