@@ -26,6 +26,8 @@ import { createBudgetRouter } from "./routes/budgets.js";
 import type { BudgetService } from "./services/budgets.js";
 import type { GoalService } from "./services/goals.js";
 import { createGoalRouter } from "./routes/goals.js";
+import type { ReleaseConfig } from "./config/release.js";
+import { createReleaseGate } from "./middleware/release.js";
 
 export function createApp(options: {
   clientOrigin: string;
@@ -48,6 +50,8 @@ export function createApp(options: {
   supabaseUrl?: string;
   financialMode?: "maintenance" | "v2";
   legacyRetired?: boolean;
+  releaseAccess?: ReleaseConfig;
+  recurringEnabled?: boolean;
 }) {
   const app = express();
   app.disable("x-powered-by");
@@ -65,7 +69,7 @@ export function createApp(options: {
       code: "MAINTENANCE", message: "Financial services are temporarily unavailable.", details: [],
     } });
   };
-  if (options.financialMode === "maintenance") app.all("/internal/recurring/process", maintenanceResponse);
+  if (options.financialMode === "maintenance" || options.recurringEnabled === false) app.all("/internal/recurring/process", maintenanceResponse);
   if (options.recurringCron) app.use(createRecurringCronRouter(options.recurringCron));
   const api = Router();
   api.use((_request, response, next) => { response.set("Cache-Control", "no-store"); next(); });
@@ -96,16 +100,22 @@ export function createApp(options: {
   v2.use(requestPolicy);
   v2.use(express.json({ limit: "16kb", strict: false }));
   v2.use(createHealthRouter(options.databaseHealth));
-  if (options.categories) v2.use(createCategoryRouter(options.categories, createRequireAuth(options.supabaseUrl), options.categoryManagement === true));
-  if (options.profiles) v2.use(createProfileRouter(options.profiles, createRequireAuth(options.supabaseUrl)));
-  if (options.accounts) v2.use(createAccountRouter(options.accounts, createRequireAuth(options.supabaseUrl)));
-  if (options.v2Transactions) v2.use(createV2TransactionRouter(options.v2Transactions, createRequireAuth(options.supabaseUrl)));
-  if (options.transfers) v2.use(createTransferRouter(options.transfers, createRequireAuth(options.supabaseUrl)));
-  if (options.recurring) v2.use(createRecurringRouter(options.recurring, createRequireAuth(options.supabaseUrl)));
-  if (options.dashboard) v2.use(createDashboardRouter(options.dashboard, createRequireAuth(options.supabaseUrl)));
-  if (options.analytics) v2.use(createAnalyticsRouter(options.analytics, createRequireAuth(options.supabaseUrl)));
-  if (options.budgets) v2.use(createBudgetRouter(options.budgets, createRequireAuth(options.supabaseUrl),options.budgetOptions));
-  if (options.goals) v2.use(createGoalRouter(options.goals, createRequireAuth(options.supabaseUrl)));
+  const authenticate = createRequireAuth(options.supabaseUrl);
+  const releaseGate = createReleaseGate(options.releaseAccess);
+  const requireAuth: express.RequestHandler = (request, response, next) => authenticate(request, response, error => {
+    if (error) return next(error);
+    return releaseGate(request, response, next);
+  });
+  if (options.categories) v2.use(createCategoryRouter(options.categories, requireAuth, options.categoryManagement === true));
+  if (options.profiles) v2.use(createProfileRouter(options.profiles, requireAuth));
+  if (options.accounts) v2.use(createAccountRouter(options.accounts, requireAuth));
+  if (options.v2Transactions) v2.use(createV2TransactionRouter(options.v2Transactions, requireAuth));
+  if (options.transfers) v2.use(createTransferRouter(options.transfers, requireAuth));
+  if (options.recurring) v2.use(createRecurringRouter(options.recurring, requireAuth));
+  if (options.dashboard) v2.use(createDashboardRouter(options.dashboard, requireAuth));
+  if (options.analytics) v2.use(createAnalyticsRouter(options.analytics, requireAuth));
+  if (options.budgets) v2.use(createBudgetRouter(options.budgets, requireAuth,options.budgetOptions));
+  if (options.goals) v2.use(createGoalRouter(options.goals, requireAuth));
   v2.use(routeNotFound);
   v2.use(errorHandler);
   app.use("/api/v2", v2);

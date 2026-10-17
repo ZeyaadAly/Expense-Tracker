@@ -40,9 +40,9 @@ test('T39 actual ES256 auth, validation before database, method guards and sanit
   try {const r=await failing.rawRequest(await failing.createTestAuthToken({userId:randomUUID()}),'/analytics/overview?'+valid);expectApiError(r,500,'INTERNAL_ERROR');assert.doesNotMatch(JSON.stringify(r),/secret|SQL|stack/);}finally{await failing.close();}
 });
 
-test('T39 deferred production entry omits Analytics; unregistered endpoint remains private 404',async()=>{
-  const entry=readFileSync(new URL('../server.mjs',import.meta.url),'utf8');assert.doesNotMatch(entry,/createAnalyticsService|analytics\s*:/);
-  const local=readFileSync(new URL('../src/index.ts',import.meta.url),'utf8');assert.match(local,/NODE_ENV === "production" \? \{\} : \{analytics:/);
+test('T67 production Analytics registration uses the release guard; omitted factory endpoint stays 404',async()=>{
+  const entry=readFileSync(new URL('../server.mjs',import.meta.url),'utf8');assert.match(entry,/analytics:\s*createAnalyticsService/);assert.match(entry,/releaseAccess:\s*release/);assert.match(entry,/readReleaseConfig\(process.env, true\)/);
+  const local=readFileSync(new URL('../src/index.ts',import.meta.url),'utf8');assert.match(local,/analytics:createAnalyticsService/);assert.match(local,/releaseAccess: release/);
   assert.deepEqual(JSON.parse(readFileSync(new URL('../vercel.json',import.meta.url),'utf8')).crons,[]);
   const gate=readFileSync(new URL('../../frontend/src/app/v2/layout.tsx',import.meta.url),'utf8');assert.match(gate,/NODE_ENV !== "development"\) notFound\(\)/);
   const server=createApp({clientOrigin:'http://localhost:3000',databaseHealth:async()=>true,financialMode:'v2'}).listen(0,'127.0.0.1');await once(server,'listening');

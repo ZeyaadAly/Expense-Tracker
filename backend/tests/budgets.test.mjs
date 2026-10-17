@@ -41,11 +41,12 @@ test('T42 real JWT guards, pre-SQL validation, no-store, methods and safe DB err
   }finally{await auth.close();}
 });
 
-test('T42 broken rollback discards connection, no retry; production entry stays unregistered',async()=>{
+test('T42 broken rollback discards connection, no retry; T67 production Budgets use the release guard',async()=>{
   let released,calls=0;const service=createBudgetService({connect:async()=>({query:async sql=>{calls++;if(sql==='BEGIN')return {rows:[]};throw Error('private');},release:d=>{released=d;}})});
   await assert.rejects(service.createBudget(randomUUID(),validateBudgetBody(body,true)));assert.equal(released,true);assert.equal(calls,3);
-  assert.doesNotMatch(readFileSync(new URL('../server.mjs',import.meta.url),'utf8'),/createBudgetService|budgets\s*:/);
-  assert.match(readFileSync(new URL('../src/index.ts',import.meta.url),'utf8'),/NODE_ENV === "production" \? \{\} : \{budgets:/);
+  assert.match(readFileSync(new URL('../server.mjs',import.meta.url),'utf8'),/budgets:\s*createBudgetService/);
+  assert.match(readFileSync(new URL('../server.mjs',import.meta.url),'utf8'),/releaseAccess:\s*release/);
+  assert.match(readFileSync(new URL('../src/index.ts',import.meta.url),'utf8'),/budgets:createBudgetService/);
   const server=createApp({clientOrigin:'http://localhost:3000',databaseHealth:async()=>true,financialMode:'v2'}).listen(0,'127.0.0.1');await once(server,'listening');
   try{const r=await globalThis.fetch(`http://127.0.0.1:${server.address().port}/api/v2/budgets`);assert.equal(r.status,404);assert.equal(r.headers.get('Cache-Control'),'no-store');}finally{server.closeAllConnections();await new Promise(r=>server.close(r));}
 });

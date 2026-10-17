@@ -107,7 +107,7 @@ test('T66 actual Vercel maintenance entry blocks financial and cron execution be
     } finally {server.closeAllConnections();await new Promise(resolve=>server.close(resolve));await pool.end();}
   `],{
     cwd:new URL('../',import.meta.url),encoding:'utf8',timeout:15_000,
-    env:{...process.env,DATABASE_URL:'postgresql://postgres@127.0.0.1:55452/postgres',DATABASE_SSL_CA_FILE:'',CRON_SECRET:'',CURSOR_SIGNING_SECRET:'',SUPABASE_URL:''},
+    env:{...process.env,DATABASE_URL:'postgresql://postgres@127.0.0.1:55452/postgres',DATABASE_SSL_CA_FILE:'',CRON_SECRET:'',CURSOR_SIGNING_SECRET:'',SUPABASE_URL:'',V2_RELEASE_STAGE:'',V2_ACCEPTANCE_USER_IDS:'',V2_CRON_ENABLED:'false'},
   });
   assert.equal(run.error,undefined);
   assert.equal(run.status,0,'Fresh Vercel entry smoke test failed');

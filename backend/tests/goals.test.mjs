@@ -52,11 +52,12 @@ test('T45 real JWT guards, validation before SQL, no-store, 405 and sanitized er
   }finally{await auth.close();}
 });
 
-test('T45 broken rollback discards client without retries; production registration stays gated',async()=>{
+test('T45 broken rollback discards client without retries; T67 production Goals use the release guard',async()=>{
   let released,calls=0;const service=createGoalService({connect:async()=>({query:async sql=>{calls++;if(sql==='BEGIN')return {rows:[]};throw Error('private');},release:value=>{released=value;}})});
   await assert.rejects(service.createGoal(randomUUID(),input));assert.equal(released,true);assert.equal(calls,3);
-  assert.doesNotMatch(readFileSync(new URL('../server.mjs',import.meta.url),'utf8'),/createGoalService|goals\s*:/);
-  assert.match(readFileSync(new URL('../src/index.ts',import.meta.url),'utf8'),/NODE_ENV === "production" \? \{\} : \{goals:/);
+  assert.match(readFileSync(new URL('../server.mjs',import.meta.url),'utf8'),/goals:\s*createGoalService/);
+  assert.match(readFileSync(new URL('../server.mjs',import.meta.url),'utf8'),/releaseAccess:\s*release/);
+  assert.match(readFileSync(new URL('../src/index.ts',import.meta.url),'utf8'),/goals:createGoalService/);
   assert.match(readFileSync(new URL('../../frontend/src/app/v2/layout.tsx',import.meta.url),'utf8'),/NODE_ENV !== "development"/);
   assert.deepEqual(JSON.parse(readFileSync(new URL('../vercel.json',import.meta.url),'utf8')).crons,[]);
   const server=createApp({clientOrigin:'http://localhost:3000',databaseHealth:async()=>true,financialMode:'v2'}).listen(0,'127.0.0.1');await once(server,'listening');
