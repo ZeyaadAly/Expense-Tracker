@@ -6,7 +6,7 @@ import { AuthProvider } from "../../../lib/auth/auth-provider";
 import { ProtectedBoundary } from "../../../features/v2/protected-boundary";
 
 export const metadata: Metadata = {
-  title: "Expense Tracker · Production Preview",
+  title: "Expense Tracker V2",
   robots: { index: false, follow: false },
 };
 

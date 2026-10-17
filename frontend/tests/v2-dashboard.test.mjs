@@ -82,5 +82,5 @@ test('T37 runtime fixture/deferred/production and session-key boundaries',()=>{
   assert.match(page,/key=\{user.id\}/);assert.match(page,/summary.totalBalance/);assert.match(page,/data.period.from/);
   for(const forbidden of ['usePrototype','FlowChart','BudgetRow','GoalCard','parseFloat','Number(','processDueRecurring','getNextOccurrence','reduce('])assert.ok(!page.includes(forbidden));
   assert.doesNotMatch(read('features/v2/protected-boundary.tsx'),/PrototypeProvider|prototype-context/);
-  assert.match(read('app/v2/layout.tsx'),/NODE_ENV !== "development"\) notFound/);
+  assert.match(read('app/v2/layout.tsx'),/NODE_ENV !== "development" && process.env.V2_APP_ENABLED !== "true"/);
 });

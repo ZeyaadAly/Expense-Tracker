@@ -60,7 +60,7 @@ test('T40 401 clears metrics/options and safe 404 preserves scope without switch
 test('T40 runtime fixture, authority, session and production boundaries',()=>{
   const route=read('app/v2/analytics/page.tsx'),page=read('features/v2/analytics-page.tsx');assert.doesNotMatch(route,/PrototypePage|state=/);assert.match(page,/key=\{user.id\}/);
   for(const p of [page,read('features/v2/analytics-charts.tsx')])assert.doesNotMatch(p,/from ["'].*fixtures|parseFloat|Number\(|getNextOccurrence|processDueRecurring/);
-  assert.doesNotMatch(read('features/v2/protected-boundary.tsx'),/PrototypeProvider|prototype-context/);assert.match(read('app/v2/layout.tsx'),/NODE_ENV !== "development"\) notFound/);assert.match(page,/Transferred in/);assert.match(page,/Projected income/);assert.match(page,/Not applicable/);
+  assert.doesNotMatch(read('features/v2/protected-boundary.tsx'),/PrototypeProvider|prototype-context/);assert.match(read('app/v2/layout.tsx'),/NODE_ENV !== "development" && process.env.V2_APP_ENABLED !== "true"/);assert.match(page,/Transferred in/);assert.match(page,/Projected income/);assert.match(page,/Not applicable/);
 });
 test('T40 session teardown rejects late A results/failures and backend validation retains inputs',async()=>{
   for(const reject of [false,true]){

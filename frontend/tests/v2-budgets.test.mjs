@@ -78,5 +78,5 @@ test('T44 current 401 clears financial data and forbids new reads/writes',async(
 });
 test('T44 runtime fixture, status authority, mutation safety and production boundaries',()=>{
   const page=read('features/v2/budgets-page.tsx');assert.match(read('app/v2/budgets/page.tsx'),/BudgetsPage/);assert.doesNotMatch(read('app/v2/budgets/page.tsx'),/PrototypePage/);assert.match(page,/key=\{user.id\}/);
-  assert.match(page,/status=\{b.status\}/);assert.match(page,/percent=\{b.percentUsed\}/);assert.match(page,/remaining=\{b.remaining\}/);assert.doesNotMatch(page,/parseFloat|toFixed|budgetProps|usePrototype|from .*fixtures/);assert.match(page,/Number\(draft.threshold\)/);assert.match(read('app/v2/layout.tsx'),/NODE_ENV !== "development"\) notFound/);
+  assert.match(page,/status=\{b.status\}/);assert.match(page,/percent=\{b.percentUsed\}/);assert.match(page,/remaining=\{b.remaining\}/);assert.doesNotMatch(page,/parseFloat|toFixed|budgetProps|usePrototype|from .*fixtures/);assert.match(page,/Number\(draft.threshold\)/);assert.match(read('app/v2/layout.tsx'),/NODE_ENV !== "development" && process.env.V2_APP_ENABLED !== "true"/);
 });

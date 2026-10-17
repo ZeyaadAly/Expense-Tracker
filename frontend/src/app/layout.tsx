@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Expense Tracker",
-  description: "A local expense tracking project",
+  description: "Manage accounts, income, expenses and financial goals.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

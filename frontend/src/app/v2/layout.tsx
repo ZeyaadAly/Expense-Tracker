@@ -7,13 +7,13 @@ import { AuthProvider } from "../../lib/auth/auth-provider";
 import { ProtectedBoundary } from "../../features/v2/protected-boundary";
 
 export const metadata: Metadata = {
-  title: "V2 Design System · Expense Tracker",
+  title: "Expense Tracker V2",
   robots: { index: false, follow: false },
 };
 
 export default function V2Layout({ children }: { children: ReactNode }) {
-  // Fixture review must never become an unauthenticated production application.
-  if (process.env.NODE_ENV !== "development") notFound();
+  // Deployment flag opens the real session boundary, never fixture identity.
+  if (process.env.NODE_ENV !== "development" && process.env.V2_APP_ENABLED !== "true") notFound();
   return (
     <div className="v2-theme">
       <AuthProvider><ProtectedBoundary>{children}</ProtectedBoundary></AuthProvider>
