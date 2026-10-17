@@ -2,6 +2,12 @@
 
 Prepared by T65. **Preparation only: this document does not authorize T66, a deployment, remote SQL, credential rotation, public financial access or cron.** T66 requires its own explicit authorization and verified operator inputs. T65 evidence is [the local dress rehearsal](t65-verification.md).
 
+## T66 operational checkpoint — 2026-10-17
+
+**Blocked at the required-input gate; no production operation performed.** The user authorized T66 subject to its STOP conditions. Starting clean synchronized main was `beaf4a0839cdf5b7a3a03b3bbabb53ebd3298f64`. Only a limited runtime connection is configured locally; explicit production administrative recovery access, owner/Main Account mapping, accessible approved backup/recovery target, maintenance window/artifact and stale-deployment strategy are missing. The historical T37 archive is absent at its documented workspace location. Live target/history/catalog, deployed SHAs, maintenance/write/cron gates and rollback window remain unverified. No stage was skipped as already verified; none was replayed. See [T66 checkpoint](t66-verification.md) for evidence and exact resume inputs.
+
+Resume **T66 target verification** after the missing inputs are supplied. Do not infer Window A, restore a historical backup, select an Auth owner, or start T67. This dated checkpoint does not replace the procedure below or turn historical preview claims into current proof.
+
 ## Establish the actual starting state
 
 The [historical T37 production-preview record](production-preview-t37-verification.md) says that the eight migrations, owner backfill and permanent V1 retirement were already executed, while hosted financial acceptance was subsequently deferred. **Do not assume production is a fresh V1 database. Do not replay applied migrations/backfill, infer the owner, recreate Main Account, or reuse historical counts/fingerprints as current inventory.**

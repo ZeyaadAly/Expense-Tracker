@@ -1,12 +1,12 @@
 # Expense Tracker
 
-Current V2 checkpoint (2026-10-17): T01–T34, T36–T40, T42–T46, T48–T49 and T57–T65 are complete in their documented local scope. Optional T35/T41/T47/T50–T56 remain deferred. T65 local migration dress rehearsal passed two clean 510-row source/backup/restore/cutovers, 64 named groups, exact reconciliation, Window A recovery and Window B refusal. See [T65 verification](docs/v2/t65-verification.md) and the prepared [production migration runbook](docs/v2/production-migration-runbook.md). T66 — Execute Production Migration and V1 Retirement is next and unstarted; fresh operator inventory must classify the already-recorded T37 preview state before any production action. [T64 security review](docs/v2/t64-verification.md) remains preserved. Hosted financial acceptance stays deferred, financial/Settings gates remain intact and cron remains disabled. T65 performed no production access, remote configuration change or deployment.
+Current V2 checkpoint (2026-10-17): T01–T34, T36–T40, T42–T46, T48–T49 and T57–T65 are complete in their documented local scope. Optional T35/T41/T47/T50–T56 remain deferred. **T66 — Execute Production Migration and V1 Retirement is blocked at its required-input gate.** No production operation was performed: administrative recovery access, explicit owner/Main Account mapping, approved available backup/isolated restore target, maintenance window/artifact and stale-deployment strategy are missing. See [T66 checkpoint](docs/v2/t66-verification.md) and the [runbook checkpoint](docs/v2/production-migration-runbook.md#t66-operational-checkpoint--2026-10-17). T37 historically records V1 financial retirement; current live V1 access, V2 financial write/maintenance gates and cron state remain unverified. Source still retires V1, gates financial/Settings pages and has cron disabled; this is not proof of a backend financial write gate. Resume T66 target verification after supplying the required inputs. **T67+ remain unstarted.** [T65 local rehearsal](docs/v2/t65-verification.md) and [T64 security review](docs/v2/t64-verification.md) remain preserved; hosted financial acceptance stays deferred.
 
 ## Overview
 
 Expense Tracker V1 records income and expenses in EGP and shows the overall balance. T01–T14 are complete: local V1, documentation/handoff, and hosted production CRUD verification.
 
-V1 has one shared transaction collection and no authentication. Use sample data for any hosted demonstration. Start with this README; [developer handoff](docs/07-handoff.md) records maintenance notes and remaining work.
+V1 has one shared transaction collection and no authentication. Use sample data for any hosted demonstration. Start with this README; [developer handoff](docs/v1/07-handoff.md) records maintenance notes and remaining work.
 
 ## Features
 
@@ -36,7 +36,7 @@ Browser → Next.js frontend → Express REST API → PostgreSQL / Supabase
 
 The browser calls Express using native fetch and never connects directly to Supabase. Express owns validation and parameterized SQL and connects as `expense_tracker_app`, not an administrator. PostgreSQL calculates all financial totals. Amounts and totals remain exact decimal strings throughout the API and frontend; the browser never sums persisted financial data.
 
-Transaction dates remain `YYYY-MM-DD` calendar strings and display as `DD/MM/YYYY`. Today's default and future-date validation use Africa/Cairo. [API contract](docs/04-api-design.md) and [database design](docs/03-database-design.md) contain the detailed rules.
+Transaction dates remain `YYYY-MM-DD` calendar strings and display as `DD/MM/YYYY`. Today's default and future-date validation use Africa/Cairo. [API contract](docs/v1/04-api-design.md) and [database design](docs/v1/03-database-design.md) contain the detailed rules.
 
 ## Repository Structure
 
@@ -94,7 +94,7 @@ A missing/unsafe frontend API URL shows a configuration error; it has no automat
 
 Get **Connect → Session pooler** from the Supabase Dashboard. Copy the supplied host/database and port 5432; use username `expense_tracker_app.YOUR_PROJECT_REF` and that role's password. Percent-encode reserved password characters. Do not use an administrative connection as the backend URL.
 
-The included [public CA certificate](backend/certs/supabase-ca.crt) supports the verified configuration; its source is recorded in [T04](docs/t04-verification.md). The pool always verifies TLS certificates and hostname. It rejects `sslmode`, `sslrootcert`, `sslcert`, `sslkey`, and `uselibpqcompat` URL parameters because they can override its TLS settings. Do not disable TLS for ordinary app setup.
+The included [public CA certificate](backend/certs/supabase-ca.crt) supports the verified configuration; its source is recorded in [T04](docs/v1/t04-verification.md). The pool always verifies TLS certificates and hostname. It rejects `sslmode`, `sslrootcert`, `sslcert`, `sslkey`, and `uselibpqcompat` URL parameters because they can override its TLS settings. Do not disable TLS for ordinary app setup.
 
 ## Local Development
 
@@ -166,7 +166,7 @@ npx supabase link --project-ref kpbyvbgcfwavcsgtcdws
 npx supabase migration list --linked
 ```
 
-Before the list command, confirm `supabase/.temp/project-ref` matches the intended project. CLI link state remains ignored. Resolve any history discrepancy only after catalog inspection; the historical [T04 report](docs/t04-verification.md) describes the original reconciliation.
+Before the list command, confirm `supabase/.temp/project-ref` matches the intended project. CLI link state remains ignored. Resolve any history discrepancy only after catalog inspection; the historical [T04 report](docs/v1/t04-verification.md) describes the original reconciliation.
 
 ### Fresh database or project
 
@@ -219,7 +219,7 @@ All paths below are relative to `/api/v1`.
 
 Success JSON uses `{data}`; lists add `meta`; errors use `{error:{code,message,details}}`. DELETE 204 has no JSON. Unsupported methods return 405 with Allow. Amount is a positive decimal string from 0.01 through 999999999.99; descriptions are trimmed, 1–200 Unicode code points; dates are valid calendar days from 1900-01-01 through today in Cairo. Unknown fields, unsupported/repeated queries and invalid type/category pairs are rejected.
 
-Read [the full API specification](docs/04-api-design.md) for payloads, filters, status codes and recovery contracts.
+Read [the full API specification](docs/v1/04-api-design.md) for payloads, filters, status codes and recovery contracts.
 
 ## Testing
 
@@ -252,11 +252,11 @@ Optional verification scripts:
 
 For example, from `frontend/`: `node scripts/verify-t07-domain.mjs`. From `backend/`: `node scripts/verify-t12-security.mjs` after a frontend build.
 
-[Complete T12 reproduction](docs/t12-verification.md#reproduction-and-changed-files) documents T07–T12 browser runners, test environment variables and restart phases. Use the disposable test API on 4108 only for verification. Run suites sharing fixture data sequentially; rebuild the frontend after changing its API URL. Historical browser/database suites are optional for normal development and are not rerun merely for documentation changes.
+[Complete T12 reproduction](docs/v1/t12-verification.md#reproduction-and-changed-files) documents T07–T12 browser runners, test environment variables and restart phases. Use the disposable test API on 4108 only for verification. Run suites sharing fixture data sequentially; rebuild the frontend after changing its API URL. Historical browser/database suites are optional for normal development and are not rerun merely for documentation changes.
 
 ## Verified V1 Status
 
-[T12 verification](docs/t12-verification.md) is the accepted local baseline:
+[T12 verification](docs/v1/t12-verification.md) is the accepted local baseline:
 
 - Backend: 24 named test groups passed, zero failures/skips.
 - Frontend: 22 named automated groups passed, zero failures/skips; domain runner passed.
@@ -266,7 +266,7 @@ For example, from `frontend/`: `node scripts/verify-t07-domain.mjs`. From `backe
 - Exact money/dates and persistence through browser refresh, frontend/backend restarts and repeated database reconnect passed.
 - Isolated current-source snapshot: locked dependency installations, builds, checks and tests passed without copied application build artifacts.
 
-These are T12 results, not new T13 executions. Check counts are not combined with test-group or audit counts. See [T13 documentation verification](docs/t13-verification.md) for the lightweight handoff audit.
+These are T12 results, not new T13 executions. Check counts are not combined with test-group or audit counts. See [T13 documentation verification](docs/v1/t13-verification.md) for the lightweight handoff audit.
 
 ## Security Model
 
@@ -287,7 +287,7 @@ CORS configures one browser origin but is not authentication and does not preven
 
 ## Deployment
 
-**T14 completed on 2026-10-06 (Africa/Cairo).** [Hosted verification](docs/t14-verification.md) records production CRUD, exact totals, cleanup, persistence, responsive/accessibility and security smoke checks.
+**T14 completed on 2026-10-06 (Africa/Cairo).** [Hosted verification](docs/v1/t14-verification.md) records production CRUD, exact totals, cleanup, persistence, responsive/accessibility and security smoke checks.
 
 Frontend: https://expensetracker-inky-mu.vercel.app/
 
@@ -299,7 +299,7 @@ V1 has no authentication or ownership isolation. Use sample data only: anyone wh
 
 ## Design
 
-Approved [Figma design](https://www.figma.com/design/GWgioRUOXX3XcaDLYWi8HA), [T03 specification](docs/06-t03-ui-specification.md) and [T07 implementation evidence](docs/t07-verification.md).
+Approved [Figma design](https://www.figma.com/design/GWgioRUOXX3XcaDLYWi8HA), [T03 specification](docs/v1/06-t03-ui-specification.md) and [T07 implementation evidence](docs/v1/t07-verification.md).
 
 Implementation uses Arial, Helvetica, sans-serif; Inter is a Figma fallback. Transactions switch from cards to a table at 768px. T12 checked 320/360/768/1024/1440px; the approved reference frames are 360/768/1440px.
 
