@@ -16,7 +16,8 @@ import {createRecurringService} from "./dist/services/recurring.js";
 import {createRecurringProcessor} from "./dist/services/recurring-processor.js";
 
 export default createApp({
-  financialMode: "v2",
+  financialMode: "maintenance",
+  legacyRetired: true,
   clientOrigin: env.clientOrigin,
   databaseHealth: isDatabaseReachable,
   transactions: createTransactionService(pool),

@@ -47,6 +47,7 @@ export function createApp(options: {
   accounts?: AccountService;
   supabaseUrl?: string;
   financialMode?: "maintenance" | "v2";
+  legacyRetired?: boolean;
 }) {
   const app = express();
   app.disable("x-powered-by");
@@ -71,7 +72,7 @@ export function createApp(options: {
   api.use(cors({ origin: options.clientOrigin }));
   if (options.financialMode) api.use((request, response, next) => {
     if (request.path === "/health") return next();
-    if (options.financialMode === "maintenance") return maintenanceResponse(request, response);
+    if (options.financialMode === "maintenance" && !options.legacyRetired) return maintenanceResponse(request, response);
     response.status(410).json({ error: {
       code: "API_RETIRED", message: "This financial API has been retired. Use the authenticated V2 application.", details: [],
     } });

@@ -20,7 +20,7 @@ const app = createApp({ clientOrigin: env.clientOrigin, databaseHealth: isDataba
   ...(process.env.NODE_ENV === "production" ? {} : {analytics:createAnalyticsService(pool)}),
   ...(process.env.NODE_ENV === "production" ? {} : {budgets:createBudgetService(pool)}),
   ...(process.env.NODE_ENV === "production" ? {} : {goals:createGoalService(pool)}),
-  financialMode: "v2", transactions: createTransactionService(pool), v2Transactions:createV2TransactionService(pool,{cursorSigningSecret:process.env.CURSOR_SIGNING_SECRET}), categories: createCategoryService(pool), categoryManagement: process.env.NODE_ENV !== "production", profiles: createProfileService(pool), accounts: createAccountService(pool), supabaseUrl: process.env.SUPABASE_URL });
+  financialMode: process.env.NODE_ENV === "production" ? "maintenance" : "v2", legacyRetired: true, transactions: createTransactionService(pool), v2Transactions:createV2TransactionService(pool,{cursorSigningSecret:process.env.CURSOR_SIGNING_SECRET}), categories: createCategoryService(pool), categoryManagement: process.env.NODE_ENV !== "production", profiles: createProfileService(pool), accounts: createAccountService(pool), supabaseUrl: process.env.SUPABASE_URL });
 
 app.listen(env.port, () => {
   console.log(`Expense Tracker API listening on http://localhost:${env.port}`);

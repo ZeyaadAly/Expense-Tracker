@@ -79,3 +79,7 @@ supabase/.env.*.local
 .tmp-v2-t64/
 .tmp-v2-t65/
 *.private-cutover.json
+.tmp-v2-release/
+.private-backups/
+*.dump
+*.backup
