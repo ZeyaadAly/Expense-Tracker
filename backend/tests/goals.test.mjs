@@ -59,7 +59,7 @@ test('T45 broken rollback discards client without retries; T67 production Goals 
   assert.match(readFileSync(new URL('../server.mjs',import.meta.url),'utf8'),/releaseAccess:\s*release/);
   assert.match(readFileSync(new URL('../src/index.ts',import.meta.url),'utf8'),/goals:createGoalService/);
   assert.match(readFileSync(new URL('../../frontend/src/app/v2/layout.tsx',import.meta.url),'utf8'),/NODE_ENV !== "development"/);
-  assert.deepEqual(JSON.parse(readFileSync(new URL('../vercel.json',import.meta.url),'utf8')).crons,[]);
+  assert.deepEqual(JSON.parse(readFileSync(new URL('../vercel.json',import.meta.url),'utf8')).crons,[{path:'/internal/recurring/process',schedule:'0 3 * * *'}]);
   const server=createApp({clientOrigin:'http://localhost:3000',databaseHealth:async()=>true,financialMode:'v2'}).listen(0,'127.0.0.1');await once(server,'listening');
   try{for(const path of ['/goals','/goals/'+randomUUID(),'/goals/'+randomUUID()+'/complete']){const response=await globalThis.fetch(`http://127.0.0.1:${server.address().port}/api/v2${path}`);assert.equal(response.status,404);assert.equal(response.headers.get('Cache-Control'),'no-store');}}finally{server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}
 });

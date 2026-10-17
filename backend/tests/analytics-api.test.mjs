@@ -43,7 +43,7 @@ test('T39 actual ES256 auth, validation before database, method guards and sanit
 test('T67 production Analytics registration uses the release guard; omitted factory endpoint stays 404',async()=>{
   const entry=readFileSync(new URL('../server.mjs',import.meta.url),'utf8');assert.match(entry,/analytics:\s*createAnalyticsService/);assert.match(entry,/releaseAccess:\s*release/);assert.match(entry,/readReleaseConfig\(process.env, true\)/);
   const local=readFileSync(new URL('../src/index.ts',import.meta.url),'utf8');assert.match(local,/analytics:createAnalyticsService/);assert.match(local,/releaseAccess: release/);
-  assert.deepEqual(JSON.parse(readFileSync(new URL('../vercel.json',import.meta.url),'utf8')).crons,[]);
+  assert.deepEqual(JSON.parse(readFileSync(new URL('../vercel.json',import.meta.url),'utf8')).crons,[{path:'/internal/recurring/process',schedule:'0 3 * * *'}]);
   const gate=readFileSync(new URL('../../frontend/src/app/v2/layout.tsx',import.meta.url),'utf8');assert.match(gate,/NODE_ENV !== "development" && process.env.V2_APP_ENABLED !== "true"/);
   const server=createApp({clientOrigin:'http://localhost:3000',databaseHealth:async()=>true,financialMode:'v2'}).listen(0,'127.0.0.1');await once(server,'listening');
   try {for(const token of [null,'arbitrary']){const r=await globalThis.fetch(`http://127.0.0.1:${server.address().port}/api/v2/analytics/overview?${valid}`,{headers:token?{Authorization:'Bearer '+token}:{}});assert.equal(r.status,404);assert.equal(r.headers.get('Cache-Control'),'no-store');assert.equal((await r.json()).error.code,'ROUTE_NOT_FOUND');}}finally{server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}

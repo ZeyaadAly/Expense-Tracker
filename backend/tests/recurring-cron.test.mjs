@@ -76,7 +76,7 @@ test('T33 Cairo boundary, fixed limits, deadline, projected counters and sanitiz
 test('T33 Vercel release gate, schedule, entry-point and runtime contract',()=>{
   const read=file=>readFileSync(new URL('../'+file,import.meta.url),'utf8');
   const active=JSON.parse(read('vercel.json')),ready=JSON.parse(read('vercel.cron-ready.json'));
-  assert.deepEqual(active.crons,[]);assert.deepEqual(ready.crons,[{path:RECURRING_CRON_PATH,schedule:'0 3 * * *'}]);
+  assert.deepEqual(active.crons,[{path:RECURRING_CRON_PATH,schedule:'0 3 * * *'}]);assert.deepEqual(ready.crons,active.crons);
   for(const config of [active,ready]){assert.equal(config.framework,'express');assert.equal(config.buildCommand,'npm run build');assert.equal(config.functions['server.mjs'].maxDuration,60);assert.ok(RECURRING_CRON_BUDGET_MS<config.functions['server.mjs'].maxDuration*1000);assert.equal(config.functions['server.mjs'].includeFiles,'certs/supabase-ca.crt');}
   assert.match(read('server.mjs'),/export default createApp/);assert.match(read('server.mjs'),/recurringCron: \{processor: createRecurringProcessor\(pool\)\}/);assert.match(read('src/index.ts'),/recurringCron:\{processor:createRecurringProcessor\(pool\)\}/);assert.match(read('.env.example'),/^CRON_SECRET=$/m);
 });
