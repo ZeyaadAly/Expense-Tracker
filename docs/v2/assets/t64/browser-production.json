@@ -1,0 +1,142 @@
+{
+  "phase": "production",
+  "browser": "155.0.4283.45",
+  "checks": [
+    "production Auth login",
+    "production Auth register",
+    "production Auth forgot-password",
+    "production Auth reset-password",
+    "production gate dashboard",
+    "production gate accounts",
+    "production gate accounts/a6400000-0000-4000-8000-000000000001",
+    "production gate transactions",
+    "production gate recurring",
+    "production gate analytics",
+    "production gate budgets",
+    "production gate goals",
+    "production gate settings",
+    "production gate design-system",
+    "production release-check requires session",
+    "production browser source maps are not published",
+    "browser frame embedding blocked"
+  ],
+  "headers": [
+    {
+      "label": "login",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "register",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "forgot-password",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "reset-password",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "dashboard",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "accounts",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "accounts/a6400000-0000-4000-8000-000000000001",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "transactions",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "recurring",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "analytics",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "budgets",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "goals",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "settings",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "design-system",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    }
+  ],
+  "audits": [],
+  "pageErrors": [],
+  "remoteRequestsSent": 0,
+  "remoteTouched": false,
+  "clientScriptMapProbes": 10
+}

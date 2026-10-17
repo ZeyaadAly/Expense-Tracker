@@ -1,0 +1,600 @@
+{
+  "phase": "app",
+  "browser": "155.0.4283.45",
+  "checks": [
+    "stored text escaped 0 dashboard",
+    "stored text escaped 0 accounts",
+    "stored text escaped 0 transactions",
+    "stored text escaped 0 recurring",
+    "stored text escaped 0 analytics",
+    "stored text escaped 0 budgets",
+    "stored text escaped 0 goals",
+    "stored text escaped 0 settings",
+    "profile and category input values remain inert 0",
+    "stored text escaped 1 dashboard",
+    "stored text escaped 1 accounts",
+    "stored text escaped 1 transactions",
+    "stored text escaped 1 recurring",
+    "stored text escaped 1 analytics",
+    "stored text escaped 1 budgets",
+    "stored text escaped 1 goals",
+    "stored text escaped 1 settings",
+    "profile and category input values remain inert 1",
+    "SDK storage boundary",
+    "redirect remains internal 19",
+    "redirect remains internal 20",
+    "redirect remains internal 21",
+    "redirect remains internal 22",
+    "logout plus back navigation clears private text",
+    "401 clears private data",
+    "expiry clears private data"
+  ],
+  "headers": [
+    {
+      "label": "dashboard",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "accounts",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "transactions",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "recurring",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "analytics",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "budgets",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "goals",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    },
+    {
+      "label": "settings",
+      "csp": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+      "nosniff": true,
+      "frameDeny": true,
+      "noReferrer": true,
+      "hsts": null
+    }
+  ],
+  "audits": [
+    {
+      "route": "dashboard",
+      "violations": 0
+    },
+    {
+      "route": "transactions",
+      "violations": 0
+    },
+    {
+      "route": "analytics",
+      "violations": 0
+    },
+    {
+      "route": "settings",
+      "violations": 0
+    }
+  ],
+  "pageErrors": [],
+  "remoteRequestsSent": 0,
+  "remoteTouched": false,
+  "storageKeys": [
+    "sb-t37-fixture-auth-token"
+  ],
+  "privateApiCacheResponses": [
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/dashboard",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/transfers",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts/summary",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/transactions",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/recurring",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/recurring/upcoming",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/analytics/overview",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/budgets",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/goals",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/dashboard",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/transfers",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts/summary",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/transactions",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/recurring",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/recurring/upcoming",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/analytics/overview",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/budgets",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/goals",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/dashboard",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/transactions",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/analytics/overview",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/dashboard",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/dashboard",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/dashboard",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/dashboard",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/dashboard",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/dashboard",
+      "noStore": true
+    }
+  ]
+}

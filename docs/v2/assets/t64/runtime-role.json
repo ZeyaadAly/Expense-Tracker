@@ -1,0 +1,12 @@
+{
+  "role": {
+    "rolname": "expense_tracker_app",
+    "rolsuper": false,
+    "rolcreatedb": false,
+    "rolcreaterole": false,
+    "rolreplication": false,
+    "rolbypassrls": false
+  },
+  "scope": "fresh local runtime role; not a hosted role read",
+  "remoteTouched": false
+}

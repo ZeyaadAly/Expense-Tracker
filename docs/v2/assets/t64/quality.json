@@ -1,0 +1,307 @@
+{
+  "date": "2026-10-17",
+  "startingSha": "a9862a081fcc1e509ac90d9cc1023a462be804e6",
+  "backend": {
+    "lint": true,
+    "typecheck": true,
+    "build": true,
+    "newScriptLint": true,
+    "ordinaryTests": {
+      "passed": 106,
+      "failed": 0,
+      "skipped": 28,
+      "note": "Guarded database wrappers run in fresh matrix below"
+    }
+  },
+  "frontend": {
+    "lint": true,
+    "typecheck": true,
+    "cleanOptimizedBuild": true,
+    "tests": {
+      "passed": 185,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "t57": {
+    "matrix": [
+      {
+        "label": "legacy",
+        "tests": 12,
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "schema",
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "migration-ownership",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "category-read",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "profile",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "shared-isolation-concurrency",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "recurring",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "occurrences",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "processor",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "cron-orchestration",
+        "tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "dashboard",
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "analytics-direct",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "analytics-http",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "budgets",
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "budget-status",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "goals",
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "custom-categories",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      }
+    ],
+    "system": {
+      "initial": {
+        "checks": 670,
+        "failures": 0,
+        "remoteTouched": false
+      },
+      "recover": {
+        "checks": 103,
+        "failures": 0,
+        "remoteTouched": false
+      },
+      "terminal": {
+        "checks": 56,
+        "failures": 0,
+        "remoteTouched": false
+      }
+    }
+  },
+  "t58": {
+    "integratedChecks": 33,
+    "axeAudits": 56,
+    "recoveryChecks": 15
+  },
+  "t59": {
+    "isolationChecks": 612,
+    "roleAndDomainEvidence": "Fresh complete isolation suite",
+    "attackCounts": {
+      "routeAuthentication": 156,
+      "ownerInjection": 561,
+      "massAssignment": 275,
+      "occurrence": 6,
+      "concurrency": 2,
+      "boundary": 19,
+      "timing": 192
+    },
+    "failures": 0,
+    "timing": [
+      {
+        "owner": "A",
+        "domain": "accounts",
+        "foreignMedianMs": 15.00820000001113,
+        "missingMedianMs": 14.344700000001467
+      },
+      {
+        "owner": "A",
+        "domain": "transactions",
+        "foreignMedianMs": 15.85450000000128,
+        "missingMedianMs": 16.120300000009593
+      },
+      {
+        "owner": "A",
+        "domain": "transfers",
+        "foreignMedianMs": 15.302500000005239,
+        "missingMedianMs": 15.564799999992829
+      },
+      {
+        "owner": "A",
+        "domain": "recurring",
+        "foreignMedianMs": 15.930999999996857,
+        "missingMedianMs": 15.757299999997485
+      },
+      {
+        "owner": "A",
+        "domain": "budgets",
+        "foreignMedianMs": 15.848299999997835,
+        "missingMedianMs": 15.832699999999022
+      },
+      {
+        "owner": "A",
+        "domain": "goals",
+        "foreignMedianMs": 16.113100000002305,
+        "missingMedianMs": 15.117800000007264
+      },
+      {
+        "owner": "B",
+        "domain": "accounts",
+        "foreignMedianMs": 15.773300000000745,
+        "missingMedianMs": 15.371699999988778
+      },
+      {
+        "owner": "B",
+        "domain": "transactions",
+        "foreignMedianMs": 15.289600000003702,
+        "missingMedianMs": 15.26950000000943
+      },
+      {
+        "owner": "B",
+        "domain": "transfers",
+        "foreignMedianMs": 15.884600000004866,
+        "missingMedianMs": 15.590400000000955
+      },
+      {
+        "owner": "B",
+        "domain": "recurring",
+        "foreignMedianMs": 16.261200000008103,
+        "missingMedianMs": 15.227599999998347
+      },
+      {
+        "owner": "B",
+        "domain": "budgets",
+        "foreignMedianMs": 15.983699999997043,
+        "missingMedianMs": 15.331300000005285
+      },
+      {
+        "owner": "B",
+        "domain": "goals",
+        "foreignMedianMs": 14.926600000006147,
+        "missingMedianMs": 15.634299999990617
+      }
+    ]
+  },
+  "t60": {
+    "initial": {
+      "checks": 9445,
+      "failures": 0,
+      "remoteTouched": false
+    },
+    "restart": {
+      "checks": 728,
+      "failures": 0,
+      "remoteTouched": false
+    },
+    "databaseRestart": true,
+    "backendRestart": true
+  },
+  "t61": {
+    "initial": {
+      "checks": 1689,
+      "failures": 0,
+      "remoteTouched": false
+    },
+    "recovery": {
+      "checks": 43,
+      "failures": 0,
+      "remoteTouched": false
+    },
+    "crashes": [
+      {
+        "phase": "crash-reserve",
+        "checkpoint": "reservation committed",
+        "killed": true
+      },
+      {
+        "phase": "crash-post",
+        "checkpoint": "generated insert and posted link uncommitted",
+        "killed": true
+      }
+    ],
+    "databaseRestart": true
+  },
+  "t64": {
+    "productionChecks": 17,
+    "appChecks": 26,
+    "axeAudits": 4,
+    "axeViolations": 0,
+    "privateNoStoreResponses": 119,
+    "pageErrors": []
+  },
+  "remoteTouched": false
+}

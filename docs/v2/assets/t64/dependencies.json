@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-17",
+  "outdated": {
+    "backend": {
+      "@types/node": {
+        "current": "26.6.3",
+        "wanted": "26.6.5",
+        "latest": "26.6.5"
+      },
+      "dotenv": {
+        "current": "18.0.5",
+        "wanted": "18.0.8",
+        "latest": "18.0.8"
+      },
+      "eslint": {
+        "current": "10.11.0",
+        "wanted": "10.13.0",
+        "latest": "10.13.0"
+      },
+      "express": {
+        "current": "5.2.1",
+        "wanted": "5.3.0",
+        "latest": "5.3.0"
+      },
+      "typescript": {
+        "current": "6.0.3",
+        "wanted": "6.0.3",
+        "latest": "7.0.2"
+      },
+      "typescript-eslint": {
+        "current": "8.71.0",
+        "wanted": "8.71.2",
+        "latest": "8.71.2"
+      }
+    },
+    "frontend": {
+      "@supabase/supabase-js": {
+        "current": "2.117.2",
+        "wanted": "2.117.2",
+        "latest": "2.118.0"
+      },
+      "@types/node": {
+        "current": "20.19.43",
+        "wanted": "20.19.43",
+        "latest": "26.6.5"
+      },
+      "eslint": {
+        "current": "9.39.5",
+        "wanted": "9.39.5",
+        "latest": "10.13.0"
+      },
+      "eslint-config-next": {
+        "current": "16.3.8",
+        "wanted": "16.3.8",
+        "latest": "16.4.2"
+      },
+      "next": {
+        "current": "16.3.8",
+        "wanted": "16.3.8",
+        "latest": "16.4.2"
+      },
+      "react": {
+        "current": "19.2.8",
+        "wanted": "19.2.8",
+        "latest": "19.3.1"
+      },
+      "react-dom": {
+        "current": "19.2.8",
+        "wanted": "19.2.8",
+        "latest": "19.3.1"
+      },
+      "typescript": {
+        "current": "5.9.3",
+        "wanted": "5.9.3",
+        "latest": "7.0.2"
+      }
+    }
+  },
+  "runtimeAdvisories": 0,
+  "frontendDevelopmentHighPackages": 5,
+  "underlyingAdvisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+  "noPatchedBracesAtReview": true,
+  "dependencyOrLockChanges": false
+}

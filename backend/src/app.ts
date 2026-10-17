@@ -50,6 +50,15 @@ export function createApp(options: {
 }) {
   const app = express();
   app.disable("x-powered-by");
+  app.use((_request, response, next) => {
+    response.set({
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "DENY",
+      "Referrer-Policy": "no-referrer",
+      "Content-Security-Policy": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'",
+    });
+    next();
+  });
   const maintenanceResponse = (_request: express.Request, response: express.Response) => {
     response.set("Cache-Control", "no-store").status(503).json({ error: {
       code: "MAINTENANCE", message: "Financial services are temporarily unavailable.", details: [],

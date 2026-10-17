@@ -1,0 +1,3159 @@
+{
+  "scope": "Existing T63 runner after T64 fixes; fresh local normal/stress, max-five pool, no competing frontend server",
+  "environment": {
+    "node": "v26.5.0",
+    "platform": "win32",
+    "release": "10.0.26200",
+    "cpu": "AMD Ryzen 7 5800H with Radeon Graphics         ",
+    "logicalCpus": 16,
+    "memoryBytes": 14877257728,
+    "postgres": "PostgreSQL 17.11 on x86_64-windows, compiled by msvc-19.44.35228, 64-bit",
+    "poolMax": 5,
+    "tls": false
+  },
+  "datasets": [
+    {
+      "who": "normal",
+      "accounts": 6,
+      "categories": 12,
+      "transactions": 1200,
+      "transfers": 80,
+      "recurring": 24,
+      "budgets": 12,
+      "goals": 8
+    },
+    {
+      "who": "stress",
+      "accounts": 32,
+      "categories": 1000,
+      "transactions": 32000,
+      "transfers": 2200,
+      "recurring": 1200,
+      "budgets": 720,
+      "goals": 2200
+    }
+  ],
+  "measurements": [
+    {
+      "name": "normal/HTTP profile",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.3,
+      "p95Ms": 16.551,
+      "maxMs": 16.551,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 221
+    },
+    {
+      "name": "normal/HTTP bootstrap",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.336,
+      "p95Ms": 17.922,
+      "maxMs": 17.922,
+      "queryCount": [
+        2,
+        2
+      ],
+      "jsonBytes": 221
+    },
+    {
+      "name": "normal/HTTP categories",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.293,
+      "p95Ms": 17.152,
+      "maxMs": 17.152,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 2958
+    },
+    {
+      "name": "normal/HTTP categories/expense",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.98,
+      "p95Ms": 16.884,
+      "maxMs": 16.884,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 2546
+    },
+    {
+      "name": "normal/HTTP accounts",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.555,
+      "p95Ms": 16.46,
+      "maxMs": 16.46,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 1690
+    },
+    {
+      "name": "normal/HTTP account-detail",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.843,
+      "p95Ms": 16.855,
+      "maxMs": 16.855,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 283
+    },
+    {
+      "name": "normal/HTTP account-summary",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.921,
+      "p95Ms": 17.314,
+      "maxMs": 17.314,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 52
+    },
+    {
+      "name": "normal/HTTP transactions/25",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.315,
+      "p95Ms": 17.27,
+      "maxMs": 17.27,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 11961
+    },
+    {
+      "name": "normal/HTTP transactions/100",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.653,
+      "p95Ms": 18.329,
+      "maxMs": 18.329,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 46275
+    },
+    {
+      "name": "normal/HTTP transfers",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.807,
+      "p95Ms": 16.931,
+      "maxMs": 16.931,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 10428
+    },
+    {
+      "name": "normal/HTTP transfers/account",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 16.074,
+      "p95Ms": 17.972,
+      "maxMs": 17.972,
+      "queryCount": [
+        2,
+        2
+      ],
+      "jsonBytes": 10428
+    },
+    {
+      "name": "normal/HTTP transfers/date",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.026,
+      "p95Ms": 16.305,
+      "maxMs": 16.305,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 6400
+    },
+    {
+      "name": "normal/HTTP recurring",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 16.202,
+      "p95Ms": 20.442,
+      "maxMs": 20.442,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 12003
+    },
+    {
+      "name": "normal/HTTP recurring/filtered",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.154,
+      "p95Ms": 17.033,
+      "maxMs": 17.033,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 2024
+    },
+    {
+      "name": "normal/HTTP recurring/upcoming",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.932,
+      "p95Ms": 16.487,
+      "maxMs": 16.487,
+      "queryCount": [
+        6,
+        6
+      ],
+      "jsonBytes": 5136
+    },
+    {
+      "name": "normal/HTTP budgets",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.337,
+      "p95Ms": 17.141,
+      "maxMs": 17.141,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 4201
+    },
+    {
+      "name": "normal/HTTP goals",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.835,
+      "p95Ms": 16.657,
+      "maxMs": 16.657,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 2685
+    },
+    {
+      "name": "normal/HTTP profile PUT",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.734,
+      "p95Ms": 16.96,
+      "maxMs": 16.96,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 236
+    },
+    {
+      "name": "normal/dashboard service this_month",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 7.293,
+      "p95Ms": 8.004,
+      "maxMs": 8.004,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 5512
+    },
+    {
+      "name": "normal/HTTP dashboard this_month",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.104,
+      "p95Ms": 16.84,
+      "maxMs": 16.84,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 5512
+    },
+    {
+      "name": "normal/dashboard service last_month",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 7.074,
+      "p95Ms": 7.694,
+      "maxMs": 7.694,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 5514
+    },
+    {
+      "name": "normal/HTTP dashboard last_month",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.338,
+      "p95Ms": 16.362,
+      "maxMs": 16.362,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 5514
+    },
+    {
+      "name": "normal/dashboard service 3_months",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 6.564,
+      "p95Ms": 7.018,
+      "maxMs": 7.018,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 5513
+    },
+    {
+      "name": "normal/HTTP dashboard 3_months",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.457,
+      "p95Ms": 25.73,
+      "maxMs": 25.73,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 5513
+    },
+    {
+      "name": "normal/dashboard service 6_months",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 7.147,
+      "p95Ms": 8.622,
+      "maxMs": 8.622,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 5514
+    },
+    {
+      "name": "normal/HTTP dashboard 6_months",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 16.311,
+      "p95Ms": 17.326,
+      "maxMs": 17.326,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 5514
+    },
+    {
+      "name": "normal/dashboard service 1_year",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 7.009,
+      "p95Ms": 9.061,
+      "maxMs": 9.061,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 5513
+    },
+    {
+      "name": "normal/HTTP dashboard 1_year",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 14.642,
+      "p95Ms": 25.845,
+      "maxMs": 25.845,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 5513
+    },
+    {
+      "name": "normal/analytics service 2026-10-01",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 4.362,
+      "p95Ms": 4.698,
+      "maxMs": 4.698,
+      "queryCount": [
+        9,
+        9
+      ],
+      "jsonBytes": 3227
+    },
+    {
+      "name": "normal/HTTP analytics 2026-10-01",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.404,
+      "p95Ms": 17.449,
+      "maxMs": 17.449,
+      "queryCount": [
+        9,
+        9
+      ],
+      "jsonBytes": 3236
+    },
+    {
+      "name": "normal/analytics service 2026-08-01",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 4.544,
+      "p95Ms": 5.795,
+      "maxMs": 5.795,
+      "queryCount": [
+        9,
+        9
+      ],
+      "jsonBytes": 3501
+    },
+    {
+      "name": "normal/HTTP analytics 2026-08-01",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.801,
+      "p95Ms": 17.32,
+      "maxMs": 17.32,
+      "queryCount": [
+        9,
+        9
+      ],
+      "jsonBytes": 3510
+    },
+    {
+      "name": "normal/analytics service 2026-05-01",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 5.138,
+      "p95Ms": 6.481,
+      "maxMs": 6.481,
+      "queryCount": [
+        9,
+        9
+      ],
+      "jsonBytes": 3877
+    },
+    {
+      "name": "normal/HTTP analytics 2026-05-01",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 14.694,
+      "p95Ms": 17.634,
+      "maxMs": 17.634,
+      "queryCount": [
+        9,
+        9
+      ],
+      "jsonBytes": 3886
+    },
+    {
+      "name": "normal/analytics service 2025-10-17",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 6.046,
+      "p95Ms": 16.104,
+      "maxMs": 16.104,
+      "queryCount": [
+        9,
+        9
+      ],
+      "jsonBytes": 4718
+    },
+    {
+      "name": "normal/HTTP analytics 2025-10-17",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.741,
+      "p95Ms": 18.768,
+      "maxMs": 18.768,
+      "queryCount": [
+        9,
+        9
+      ],
+      "jsonBytes": 4727
+    },
+    {
+      "name": "normal/HTTP analytics account",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.374,
+      "p95Ms": 17.553,
+      "maxMs": 17.553,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 2413
+    },
+    {
+      "name": "normal/search groceries",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.107,
+      "p95Ms": 1.273,
+      "maxMs": 1.273,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 11961
+    },
+    {
+      "name": "normal/search RareNeedle",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.971,
+      "p95Ms": 2.124,
+      "maxMs": 2.124,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 525
+    },
+    {
+      "name": "normal/search no-match-zzzz",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.95,
+      "p95Ms": 2.473,
+      "maxMs": 2.473,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 65
+    },
+    {
+      "name": "normal/search العربية",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.961,
+      "p95Ms": 2.577,
+      "maxMs": 2.577,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 525
+    },
+    {
+      "name": "normal/search Account 1",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.354,
+      "p95Ms": 1.484,
+      "maxMs": 1.484,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 11956
+    },
+    {
+      "name": "normal/search Category 1",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.206,
+      "p95Ms": 1.222,
+      "maxMs": 1.222,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 11979
+    },
+    {
+      "name": "normal/filter account",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.46,
+      "p95Ms": 1.662,
+      "maxMs": 1.662,
+      "queryCount": [
+        2,
+        2
+      ],
+      "jsonBytes": 11956
+    },
+    {
+      "name": "normal/filter category",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.279,
+      "p95Ms": 1.89,
+      "maxMs": 1.89,
+      "queryCount": [
+        2,
+        2
+      ],
+      "jsonBytes": 11949
+    },
+    {
+      "name": "normal/filter date",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.122,
+      "p95Ms": 1.211,
+      "maxMs": 1.211,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 11961
+    },
+    {
+      "name": "normal/filter type",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 0.989,
+      "p95Ms": 1.82,
+      "maxMs": 1.82,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 11974
+    },
+    {
+      "name": "normal/filter recurring",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 0.525,
+      "p95Ms": 0.746,
+      "maxMs": 0.746,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 65
+    },
+    {
+      "name": "normal/filter combined",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.293,
+      "p95Ms": 1.451,
+      "maxMs": 1.451,
+      "queryCount": [
+        2,
+        2
+      ],
+      "jsonBytes": 11973
+    },
+    {
+      "name": "normal/cursor page 0",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.742,
+      "p95Ms": 2.064,
+      "maxMs": 2.064,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 46275
+    },
+    {
+      "name": "normal/HTTP cursor page 0",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.24,
+      "p95Ms": 16.139,
+      "maxMs": 16.139,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 46275
+    },
+    {
+      "name": "normal/cursor page 6",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.851,
+      "p95Ms": 3.64,
+      "maxMs": 3.64,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 46435
+    },
+    {
+      "name": "normal/HTTP cursor page 6",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.314,
+      "p95Ms": 16.626,
+      "maxMs": 16.626,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 46435
+    },
+    {
+      "name": "normal/cursor page 11",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.771,
+      "p95Ms": 2.178,
+      "maxMs": 2.178,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 45864
+    },
+    {
+      "name": "normal/HTTP cursor page 11",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.129,
+      "p95Ms": 16.295,
+      "maxMs": 16.295,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 45864
+    },
+    {
+      "name": "normal/accounts repository",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.703,
+      "p95Ms": 1.938,
+      "maxMs": 1.938,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 1662
+    },
+    {
+      "name": "normal/budgets service",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 0.952,
+      "p95Ms": 1.242,
+      "maxMs": 1.242,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 4172
+    },
+    {
+      "name": "normal/goals service",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 0.333,
+      "p95Ms": 0.345,
+      "maxMs": 0.345,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 2657
+    },
+    {
+      "name": "normal/category service",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 0.308,
+      "p95Ms": 0.403,
+      "maxMs": 0.403,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 2929
+    },
+    {
+      "name": "normal/recurring service",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 0.842,
+      "p95Ms": 1.096,
+      "maxMs": 1.096,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 11974
+    },
+    {
+      "name": "normal/analytics breakdown getSummary",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 0.504,
+      "p95Ms": 0.526,
+      "maxMs": 0.526,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 124
+    },
+    {
+      "name": "normal/analytics breakdown getCashFlowSeries",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 0.796,
+      "p95Ms": 0.887,
+      "maxMs": 0.887,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 1548
+    },
+    {
+      "name": "normal/analytics breakdown getCategoryBreakdown",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.16,
+      "p95Ms": 1.181,
+      "maxMs": 1.181,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 1499
+    },
+    {
+      "name": "normal/analytics breakdown getAccountActivity",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 0.943,
+      "p95Ms": 1.174,
+      "maxMs": 1.174,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 1257
+    },
+    {
+      "name": "normal/analytics breakdown getRecurringCommitments",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 2.019,
+      "p95Ms": 2.672,
+      "maxMs": 2.672,
+      "queryCount": [
+        3,
+        3
+      ],
+      "jsonBytes": 133
+    },
+    {
+      "name": "normal/HTTP transaction POST PUT DELETE cycle",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 46.858,
+      "p95Ms": 48.103,
+      "maxMs": 48.103,
+      "queryCount": [
+        16,
+        16
+      ],
+      "jsonBytes": 18
+    },
+    {
+      "name": "normal/HTTP transfer POST PUT DELETE cycle",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 46.169,
+      "p95Ms": 48.4,
+      "maxMs": 48.4,
+      "queryCount": [
+        16,
+        16
+      ],
+      "jsonBytes": 18
+    },
+    {
+      "name": "stress/HTTP profile",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.273,
+      "p95Ms": 18.797,
+      "maxMs": 18.797,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 221
+    },
+    {
+      "name": "stress/HTTP bootstrap",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.436,
+      "p95Ms": 16.824,
+      "maxMs": 16.824,
+      "queryCount": [
+        2,
+        2
+      ],
+      "jsonBytes": 221
+    },
+    {
+      "name": "stress/HTTP categories",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.675,
+      "p95Ms": 21.409,
+      "maxMs": 21.409,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 143170
+    },
+    {
+      "name": "stress/HTTP categories/expense",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 14.585,
+      "p95Ms": 16.317,
+      "maxMs": 16.317,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 142758
+    },
+    {
+      "name": "stress/HTTP accounts",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 31.442,
+      "p95Ms": 32.049,
+      "maxMs": 32.049,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 8975
+    },
+    {
+      "name": "stress/HTTP account-detail",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.554,
+      "p95Ms": 16.91,
+      "maxMs": 16.91,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 285
+    },
+    {
+      "name": "stress/HTTP account-summary",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 31.274,
+      "p95Ms": 33.637,
+      "maxMs": 33.637,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 54
+    },
+    {
+      "name": "stress/HTTP transactions/25",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 14.426,
+      "p95Ms": 17.686,
+      "maxMs": 17.686,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 12096
+    },
+    {
+      "name": "stress/HTTP transactions/100",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.418,
+      "p95Ms": 16.57,
+      "maxMs": 16.57,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 46810
+    },
+    {
+      "name": "stress/HTTP transfers",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.916,
+      "p95Ms": 16.594,
+      "maxMs": 16.594,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 10467
+    },
+    {
+      "name": "stress/HTTP transfers/account",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.412,
+      "p95Ms": 15.987,
+      "maxMs": 15.987,
+      "queryCount": [
+        2,
+        2
+      ],
+      "jsonBytes": 10440
+    },
+    {
+      "name": "stress/HTTP transfers/date",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 16.008,
+      "p95Ms": 17.378,
+      "maxMs": 17.378,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 10467
+    },
+    {
+      "name": "stress/HTTP recurring",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 27.661,
+      "p95Ms": 52.681,
+      "maxMs": 52.681,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 603265
+    },
+    {
+      "name": "stress/HTTP recurring/filtered",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.958,
+      "p95Ms": 16.615,
+      "maxMs": 16.615,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 18604
+    },
+    {
+      "name": "stress/HTTP recurring/upcoming",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 29.796,
+      "p95Ms": 34.155,
+      "maxMs": 34.155,
+      "queryCount": [
+        6,
+        6
+      ],
+      "jsonBytes": 256616
+    },
+    {
+      "name": "stress/HTTP budgets",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 31.867,
+      "p95Ms": 46.146,
+      "maxMs": 46.146,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 251859
+    },
+    {
+      "name": "stress/HTTP goals",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 31.488,
+      "p95Ms": 35.252,
+      "maxMs": 35.252,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 735925
+    },
+    {
+      "name": "stress/HTTP profile PUT",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.98,
+      "p95Ms": 16.209,
+      "maxMs": 16.209,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 236
+    },
+    {
+      "name": "stress/dashboard service this_month",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 44.066,
+      "p95Ms": 50.839,
+      "maxMs": 50.839,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 12845
+    },
+    {
+      "name": "stress/HTTP dashboard this_month",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 58.772,
+      "p95Ms": 63.214,
+      "maxMs": 63.214,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 12845
+    },
+    {
+      "name": "stress/dashboard service last_month",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 47.17,
+      "p95Ms": 62.743,
+      "maxMs": 62.743,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 12846
+    },
+    {
+      "name": "stress/HTTP dashboard last_month",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 58.844,
+      "p95Ms": 63.963,
+      "maxMs": 63.963,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 12846
+    },
+    {
+      "name": "stress/dashboard service 3_months",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 44.106,
+      "p95Ms": 46.865,
+      "maxMs": 46.865,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 12845
+    },
+    {
+      "name": "stress/HTTP dashboard 3_months",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 58.837,
+      "p95Ms": 66.183,
+      "maxMs": 66.183,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 12845
+    },
+    {
+      "name": "stress/dashboard service 6_months",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 45.425,
+      "p95Ms": 49.477,
+      "maxMs": 49.477,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 12846
+    },
+    {
+      "name": "stress/HTTP dashboard 6_months",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 63.35,
+      "p95Ms": 68.699,
+      "maxMs": 68.699,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 12846
+    },
+    {
+      "name": "stress/dashboard service 1_year",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 48.126,
+      "p95Ms": 51.398,
+      "maxMs": 51.398,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 12845
+    },
+    {
+      "name": "stress/HTTP dashboard 1_year",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 63.177,
+      "p95Ms": 67.638,
+      "maxMs": 67.638,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 12845
+    },
+    {
+      "name": "stress/analytics service 2026-10-01",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 16.034,
+      "p95Ms": 18.604,
+      "maxMs": 18.604,
+      "queryCount": [
+        9,
+        9
+      ],
+      "jsonBytes": 91603
+    },
+    {
+      "name": "stress/HTTP analytics 2026-10-01",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 32.306,
+      "p95Ms": 33.777,
+      "maxMs": 33.777,
+      "queryCount": [
+        9,
+        9
+      ],
+      "jsonBytes": 91612
+    },
+    {
+      "name": "stress/analytics service 2026-08-01",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 26.279,
+      "p95Ms": 29.541,
+      "maxMs": 29.541,
+      "queryCount": [
+        9,
+        9
+      ],
+      "jsonBytes": 129389
+    },
+    {
+      "name": "stress/HTTP analytics 2026-08-01",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 34.054,
+      "p95Ms": 47.975,
+      "maxMs": 47.975,
+      "queryCount": [
+        9,
+        9
+      ],
+      "jsonBytes": 129398
+    },
+    {
+      "name": "stress/analytics service 2026-05-01",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 38.311,
+      "p95Ms": 42.277,
+      "maxMs": 42.277,
+      "queryCount": [
+        9,
+        9
+      ],
+      "jsonBytes": 129953
+    },
+    {
+      "name": "stress/HTTP analytics 2026-05-01",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 47.273,
+      "p95Ms": 48.83,
+      "maxMs": 48.83,
+      "queryCount": [
+        9,
+        9
+      ],
+      "jsonBytes": 129962
+    },
+    {
+      "name": "stress/analytics service 2025-10-17",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 70.912,
+      "p95Ms": 71.743,
+      "maxMs": 71.743,
+      "queryCount": [
+        9,
+        9
+      ],
+      "jsonBytes": 130835
+    },
+    {
+      "name": "stress/HTTP analytics 2025-10-17",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 77.864,
+      "p95Ms": 90.814,
+      "maxMs": 90.814,
+      "queryCount": [
+        9,
+        9
+      ],
+      "jsonBytes": 130844
+    },
+    {
+      "name": "stress/HTTP analytics account",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.156,
+      "p95Ms": 16.714,
+      "maxMs": 16.714,
+      "queryCount": [
+        10,
+        10
+      ],
+      "jsonBytes": 17456
+    },
+    {
+      "name": "stress/search groceries",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.091,
+      "p95Ms": 1.393,
+      "maxMs": 1.393,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 12096
+    },
+    {
+      "name": "stress/search RareNeedle",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 28.575,
+      "p95Ms": 29.418,
+      "maxMs": 29.418,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 12114
+    },
+    {
+      "name": "stress/search no-match-zzzz",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 27.909,
+      "p95Ms": 28.91,
+      "maxMs": 28.91,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 65
+    },
+    {
+      "name": "stress/search العربية",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 28.161,
+      "p95Ms": 29.92,
+      "maxMs": 29.92,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 12114
+    },
+    {
+      "name": "stress/search Account 1",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.181,
+      "p95Ms": 1.281,
+      "maxMs": 1.281,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 12106
+    },
+    {
+      "name": "stress/search Category 1",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.48,
+      "p95Ms": 1.627,
+      "maxMs": 1.627,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 12085
+    },
+    {
+      "name": "stress/filter account",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.163,
+      "p95Ms": 1.559,
+      "maxMs": 1.559,
+      "queryCount": [
+        2,
+        2
+      ],
+      "jsonBytes": 12068
+    },
+    {
+      "name": "stress/filter category",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.083,
+      "p95Ms": 1.383,
+      "maxMs": 1.383,
+      "queryCount": [
+        2,
+        2
+      ],
+      "jsonBytes": 12043
+    },
+    {
+      "name": "stress/filter date",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 0.939,
+      "p95Ms": 0.971,
+      "maxMs": 0.971,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 12096
+    },
+    {
+      "name": "stress/filter type",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 0.941,
+      "p95Ms": 1.328,
+      "maxMs": 1.328,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 12106
+    },
+    {
+      "name": "stress/filter recurring",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 0.526,
+      "p95Ms": 0.564,
+      "maxMs": 0.564,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 65
+    },
+    {
+      "name": "stress/filter combined",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 0.967,
+      "p95Ms": 1.011,
+      "maxMs": 1.011,
+      "queryCount": [
+        2,
+        2
+      ],
+      "jsonBytes": 65
+    },
+    {
+      "name": "stress/cursor page 0",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.743,
+      "p95Ms": 2.156,
+      "maxMs": 2.156,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 46810
+    },
+    {
+      "name": "stress/HTTP cursor page 0",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 14.977,
+      "p95Ms": 17.191,
+      "maxMs": 17.191,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 46810
+    },
+    {
+      "name": "stress/cursor page 160",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.792,
+      "p95Ms": 1.988,
+      "maxMs": 1.988,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 46824
+    },
+    {
+      "name": "stress/HTTP cursor page 160",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.819,
+      "p95Ms": 16.85,
+      "maxMs": 16.85,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 46824
+    },
+    {
+      "name": "stress/cursor page 319",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.732,
+      "p95Ms": 1.985,
+      "maxMs": 1.985,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 46364
+    },
+    {
+      "name": "stress/HTTP cursor page 319",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 15.821,
+      "p95Ms": 17.316,
+      "maxMs": 17.316,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 46364
+    },
+    {
+      "name": "stress/accounts repository",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 13.209,
+      "p95Ms": 13.76,
+      "maxMs": 13.76,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 8946
+    },
+    {
+      "name": "stress/budgets service",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 14.464,
+      "p95Ms": 14.848,
+      "maxMs": 14.848,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 251829
+    },
+    {
+      "name": "stress/goals service",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 17.042,
+      "p95Ms": 18.52,
+      "maxMs": 18.52,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 735894
+    },
+    {
+      "name": "stress/category service",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.96,
+      "p95Ms": 2.378,
+      "maxMs": 2.378,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 143139
+    },
+    {
+      "name": "stress/recurring service",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 12.593,
+      "p95Ms": 13.114,
+      "maxMs": 13.114,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 603234
+    },
+    {
+      "name": "stress/analytics breakdown getSummary",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 4.569,
+      "p95Ms": 5.027,
+      "maxMs": 5.027,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 134
+    },
+    {
+      "name": "stress/analytics breakdown getCashFlowSeries",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 7.552,
+      "p95Ms": 8.948,
+      "maxMs": 8.948,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 1637
+    },
+    {
+      "name": "stress/analytics breakdown getCategoryBreakdown",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 12.419,
+      "p95Ms": 13.534,
+      "maxMs": 13.534,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 121937
+    },
+    {
+      "name": "stress/analytics breakdown getAccountActivity",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 7.583,
+      "p95Ms": 7.817,
+      "maxMs": 7.817,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 6835
+    },
+    {
+      "name": "stress/analytics breakdown getRecurringCommitments",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 35.442,
+      "p95Ms": 37.752,
+      "maxMs": 37.752,
+      "queryCount": [
+        3,
+        3
+      ],
+      "jsonBytes": 135
+    },
+    {
+      "name": "stress/HTTP transaction POST PUT DELETE cycle",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 46.588,
+      "p95Ms": 47.623,
+      "maxMs": 47.623,
+      "queryCount": [
+        16,
+        16
+      ],
+      "jsonBytes": 18
+    },
+    {
+      "name": "stress/HTTP transfer POST PUT DELETE cycle",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 44.298,
+      "p95Ms": 47.439,
+      "maxMs": 47.439,
+      "queryCount": [
+        16,
+        16
+      ],
+      "jsonBytes": 18
+    },
+    {
+      "name": "processor due discovery",
+      "iterations": 9,
+      "warmups": 2,
+      "medianMs": 1.24,
+      "p95Ms": 1.402,
+      "maxMs": 1.402,
+      "queryCount": [
+        1,
+        1
+      ],
+      "jsonBytes": 96335
+    }
+  ],
+  "concurrency": [
+    {
+      "workers": 5,
+      "operations": 50,
+      "errors": 0,
+      "elapsedMs": 524.877,
+      "medianMs": 27.907,
+      "p95Ms": 87.649,
+      "maxMs": 266.17,
+      "peakWaiting": 0,
+      "peakConnections": 5,
+      "observedLockWaiters": 0
+    },
+    {
+      "workers": 12,
+      "operations": 120,
+      "errors": 0,
+      "elapsedMs": 611.884,
+      "medianMs": 42.656,
+      "p95Ms": 115.234,
+      "maxMs": 149.844,
+      "peakWaiting": 7,
+      "peakConnections": 5,
+      "observedLockWaiters": 2
+    }
+  ],
+  "processor": [
+    {
+      "repeat": 0,
+      "invocation": 0,
+      "elapsedMs": 6409.29,
+      "postsPerSecond": 156.024,
+      "attemptsPerSecond": 156.024,
+      "queries": 22002,
+      "definitionsVisited": 1000,
+      "attempts": 1000,
+      "posted": 1000,
+      "skipped": 0,
+      "alreadyTerminal": 0,
+      "failed": 0,
+      "conflicts": 0,
+      "recordedFailures": 0,
+      "failureRecordingErrors": 0,
+      "limitReached": true,
+      "deadlineReached": false,
+      "hasRemaining": true
+    },
+    {
+      "repeat": 0,
+      "invocation": 1,
+      "elapsedMs": 1726.48,
+      "postsPerSecond": 115.843,
+      "attemptsPerSecond": 115.843,
+      "queries": 4402,
+      "definitionsVisited": 200,
+      "attempts": 200,
+      "posted": 200,
+      "skipped": 0,
+      "alreadyTerminal": 0,
+      "failed": 0,
+      "conflicts": 0,
+      "recordedFailures": 0,
+      "failureRecordingErrors": 0,
+      "limitReached": false,
+      "deadlineReached": false,
+      "hasRemaining": false
+    },
+    {
+      "repeat": 1,
+      "invocation": 0,
+      "elapsedMs": 8001.704,
+      "postsPerSecond": 124.973,
+      "attemptsPerSecond": 124.973,
+      "queries": 22002,
+      "definitionsVisited": 1000,
+      "attempts": 1000,
+      "posted": 1000,
+      "skipped": 0,
+      "alreadyTerminal": 0,
+      "failed": 0,
+      "conflicts": 0,
+      "recordedFailures": 0,
+      "failureRecordingErrors": 0,
+      "limitReached": true,
+      "deadlineReached": false,
+      "hasRemaining": true
+    },
+    {
+      "repeat": 1,
+      "invocation": 1,
+      "elapsedMs": 1639.682,
+      "postsPerSecond": 121.975,
+      "attemptsPerSecond": 121.975,
+      "queries": 4402,
+      "definitionsVisited": 200,
+      "attempts": 200,
+      "posted": 200,
+      "skipped": 0,
+      "alreadyTerminal": 0,
+      "failed": 0,
+      "conflicts": 0,
+      "recordedFailures": 0,
+      "failureRecordingErrors": 0,
+      "limitReached": false,
+      "deadlineReached": false,
+      "hasRemaining": false
+    },
+    {
+      "repeat": 2,
+      "invocation": 0,
+      "elapsedMs": 7600.46,
+      "postsPerSecond": 131.571,
+      "attemptsPerSecond": 131.571,
+      "queries": 22002,
+      "definitionsVisited": 1000,
+      "attempts": 1000,
+      "posted": 1000,
+      "skipped": 0,
+      "alreadyTerminal": 0,
+      "failed": 0,
+      "conflicts": 0,
+      "recordedFailures": 0,
+      "failureRecordingErrors": 0,
+      "limitReached": true,
+      "deadlineReached": false,
+      "hasRemaining": true
+    },
+    {
+      "repeat": 2,
+      "invocation": 1,
+      "elapsedMs": 1342.24,
+      "postsPerSecond": 149.005,
+      "attemptsPerSecond": 149.005,
+      "queries": 4402,
+      "definitionsVisited": 200,
+      "attempts": 200,
+      "posted": 200,
+      "skipped": 0,
+      "alreadyTerminal": 0,
+      "failed": 0,
+      "conflicts": 0,
+      "recordedFailures": 0,
+      "failureRecordingErrors": 0,
+      "limitReached": false,
+      "deadlineReached": false,
+      "hasRemaining": false
+    }
+  ],
+  "comparison": [
+    {
+      "name": "normal/HTTP profile",
+      "t63MedianMs": 14.763,
+      "t64MedianMs": 15.3,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP bootstrap",
+      "t63MedianMs": 15.596,
+      "t64MedianMs": 15.336,
+      "queryCount": [
+        2,
+        2
+      ]
+    },
+    {
+      "name": "normal/HTTP categories",
+      "t63MedianMs": 15.012,
+      "t64MedianMs": 15.293,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP categories/expense",
+      "t63MedianMs": 13.993,
+      "t64MedianMs": 15.98,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP accounts",
+      "t63MedianMs": 13.581,
+      "t64MedianMs": 15.555,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP account-detail",
+      "t63MedianMs": 15.007,
+      "t64MedianMs": 15.843,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP account-summary",
+      "t63MedianMs": 15.651,
+      "t64MedianMs": 15.921,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP transactions/25",
+      "t63MedianMs": 15.332,
+      "t64MedianMs": 15.315,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP transactions/100",
+      "t63MedianMs": 15.128,
+      "t64MedianMs": 15.653,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP transfers",
+      "t63MedianMs": 15.334,
+      "t64MedianMs": 15.807,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP transfers/account",
+      "t63MedianMs": 15.676,
+      "t64MedianMs": 16.074,
+      "queryCount": [
+        2,
+        2
+      ]
+    },
+    {
+      "name": "normal/HTTP transfers/date",
+      "t63MedianMs": 15.167,
+      "t64MedianMs": 15.026,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP recurring",
+      "t63MedianMs": 14.394,
+      "t64MedianMs": 16.202,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP recurring/filtered",
+      "t63MedianMs": 15.922,
+      "t64MedianMs": 15.154,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP recurring/upcoming",
+      "t63MedianMs": 15.174,
+      "t64MedianMs": 15.932,
+      "queryCount": [
+        6,
+        6
+      ]
+    },
+    {
+      "name": "normal/HTTP budgets",
+      "t63MedianMs": 15.294,
+      "t64MedianMs": 15.337,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP goals",
+      "t63MedianMs": 15.261,
+      "t64MedianMs": 15.835,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP profile PUT",
+      "t63MedianMs": 15.707,
+      "t64MedianMs": 15.734,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/dashboard service this_month",
+      "t63MedianMs": 8.612,
+      "t64MedianMs": 7.293,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "normal/HTTP dashboard this_month",
+      "t63MedianMs": 16.558,
+      "t64MedianMs": 15.104,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "normal/dashboard service last_month",
+      "t63MedianMs": 12.626,
+      "t64MedianMs": 7.074,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "normal/HTTP dashboard last_month",
+      "t63MedianMs": 15.043,
+      "t64MedianMs": 15.338,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "normal/dashboard service 3_months",
+      "t63MedianMs": 11.408,
+      "t64MedianMs": 6.564,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "normal/HTTP dashboard 3_months",
+      "t63MedianMs": 15.969,
+      "t64MedianMs": 15.457,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "normal/dashboard service 6_months",
+      "t63MedianMs": 8.59,
+      "t64MedianMs": 7.147,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "normal/HTTP dashboard 6_months",
+      "t63MedianMs": 14.891,
+      "t64MedianMs": 16.311,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "normal/dashboard service 1_year",
+      "t63MedianMs": 8.953,
+      "t64MedianMs": 7.009,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "normal/HTTP dashboard 1_year",
+      "t63MedianMs": 14.68,
+      "t64MedianMs": 14.642,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "normal/analytics service 2026-10-01",
+      "t63MedianMs": 5.986,
+      "t64MedianMs": 4.362,
+      "queryCount": [
+        9,
+        9
+      ]
+    },
+    {
+      "name": "normal/HTTP analytics 2026-10-01",
+      "t63MedianMs": 14.251,
+      "t64MedianMs": 15.404,
+      "queryCount": [
+        9,
+        9
+      ]
+    },
+    {
+      "name": "normal/analytics service 2026-08-01",
+      "t63MedianMs": 5.79,
+      "t64MedianMs": 4.544,
+      "queryCount": [
+        9,
+        9
+      ]
+    },
+    {
+      "name": "normal/HTTP analytics 2026-08-01",
+      "t63MedianMs": 14.644,
+      "t64MedianMs": 15.801,
+      "queryCount": [
+        9,
+        9
+      ]
+    },
+    {
+      "name": "normal/analytics service 2026-05-01",
+      "t63MedianMs": 7.204,
+      "t64MedianMs": 5.138,
+      "queryCount": [
+        9,
+        9
+      ]
+    },
+    {
+      "name": "normal/HTTP analytics 2026-05-01",
+      "t63MedianMs": 15.764,
+      "t64MedianMs": 14.694,
+      "queryCount": [
+        9,
+        9
+      ]
+    },
+    {
+      "name": "normal/analytics service 2025-10-17",
+      "t63MedianMs": 8.898,
+      "t64MedianMs": 6.046,
+      "queryCount": [
+        9,
+        9
+      ]
+    },
+    {
+      "name": "normal/HTTP analytics 2025-10-17",
+      "t63MedianMs": 15.617,
+      "t64MedianMs": 15.741,
+      "queryCount": [
+        9,
+        9
+      ]
+    },
+    {
+      "name": "normal/HTTP analytics account",
+      "t63MedianMs": 15.43,
+      "t64MedianMs": 15.374,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "normal/search groceries",
+      "t63MedianMs": 1.511,
+      "t64MedianMs": 1.107,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/search RareNeedle",
+      "t63MedianMs": 3.425,
+      "t64MedianMs": 1.971,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/search no-match-zzzz",
+      "t63MedianMs": 3.65,
+      "t64MedianMs": 1.95,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/search العربية",
+      "t63MedianMs": 2.618,
+      "t64MedianMs": 1.961,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/search Account 1",
+      "t63MedianMs": 1.735,
+      "t64MedianMs": 1.354,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/search Category 1",
+      "t63MedianMs": 1.392,
+      "t64MedianMs": 1.206,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/filter account",
+      "t63MedianMs": 2.309,
+      "t64MedianMs": 1.46,
+      "queryCount": [
+        2,
+        2
+      ]
+    },
+    {
+      "name": "normal/filter category",
+      "t63MedianMs": 1.671,
+      "t64MedianMs": 1.279,
+      "queryCount": [
+        2,
+        2
+      ]
+    },
+    {
+      "name": "normal/filter date",
+      "t63MedianMs": 1.365,
+      "t64MedianMs": 1.122,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/filter type",
+      "t63MedianMs": 1.092,
+      "t64MedianMs": 0.989,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/filter recurring",
+      "t63MedianMs": 0.534,
+      "t64MedianMs": 0.525,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/filter combined",
+      "t63MedianMs": 1.554,
+      "t64MedianMs": 1.293,
+      "queryCount": [
+        2,
+        2
+      ]
+    },
+    {
+      "name": "normal/cursor page 0",
+      "t63MedianMs": 2.241,
+      "t64MedianMs": 1.742,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP cursor page 0",
+      "t63MedianMs": 15.748,
+      "t64MedianMs": 15.24,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/cursor page 6",
+      "t63MedianMs": 2.233,
+      "t64MedianMs": 1.851,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP cursor page 6",
+      "t63MedianMs": 15.225,
+      "t64MedianMs": 15.314,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/cursor page 11",
+      "t63MedianMs": 2.377,
+      "t64MedianMs": 1.771,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/HTTP cursor page 11",
+      "t63MedianMs": 15.158,
+      "t64MedianMs": 15.129,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/accounts repository",
+      "t63MedianMs": 1.701,
+      "t64MedianMs": 1.703,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/budgets service",
+      "t63MedianMs": 1.117,
+      "t64MedianMs": 0.952,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/goals service",
+      "t63MedianMs": 0.335,
+      "t64MedianMs": 0.333,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/category service",
+      "t63MedianMs": 0.303,
+      "t64MedianMs": 0.308,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/recurring service",
+      "t63MedianMs": 1.013,
+      "t64MedianMs": 0.842,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/analytics breakdown getSummary",
+      "t63MedianMs": 0.515,
+      "t64MedianMs": 0.504,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/analytics breakdown getCashFlowSeries",
+      "t63MedianMs": 0.803,
+      "t64MedianMs": 0.796,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/analytics breakdown getCategoryBreakdown",
+      "t63MedianMs": 1.23,
+      "t64MedianMs": 1.16,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/analytics breakdown getAccountActivity",
+      "t63MedianMs": 1.186,
+      "t64MedianMs": 0.943,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "normal/analytics breakdown getRecurringCommitments",
+      "t63MedianMs": 2.501,
+      "t64MedianMs": 2.019,
+      "queryCount": [
+        3,
+        3
+      ]
+    },
+    {
+      "name": "normal/HTTP transaction POST PUT DELETE cycle",
+      "t63MedianMs": 46.482,
+      "t64MedianMs": 46.858,
+      "queryCount": [
+        16,
+        16
+      ]
+    },
+    {
+      "name": "normal/HTTP transfer POST PUT DELETE cycle",
+      "t63MedianMs": 45.978,
+      "t64MedianMs": 46.169,
+      "queryCount": [
+        16,
+        16
+      ]
+    },
+    {
+      "name": "stress/HTTP profile",
+      "t63MedianMs": 14.593,
+      "t64MedianMs": 15.273,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP bootstrap",
+      "t63MedianMs": 15.498,
+      "t64MedianMs": 15.436,
+      "queryCount": [
+        2,
+        2
+      ]
+    },
+    {
+      "name": "stress/HTTP categories",
+      "t63MedianMs": 15.396,
+      "t64MedianMs": 15.675,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP categories/expense",
+      "t63MedianMs": 15.452,
+      "t64MedianMs": 14.585,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP accounts",
+      "t63MedianMs": 30.92,
+      "t64MedianMs": 31.442,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP account-detail",
+      "t63MedianMs": 15.535,
+      "t64MedianMs": 15.554,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP account-summary",
+      "t63MedianMs": 30.857,
+      "t64MedianMs": 31.274,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP transactions/25",
+      "t63MedianMs": 15.692,
+      "t64MedianMs": 14.426,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP transactions/100",
+      "t63MedianMs": 15.683,
+      "t64MedianMs": 15.418,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP transfers",
+      "t63MedianMs": 14.655,
+      "t64MedianMs": 15.916,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP transfers/account",
+      "t63MedianMs": 15.091,
+      "t64MedianMs": 15.412,
+      "queryCount": [
+        2,
+        2
+      ]
+    },
+    {
+      "name": "stress/HTTP transfers/date",
+      "t63MedianMs": 15.41,
+      "t64MedianMs": 16.008,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP recurring",
+      "t63MedianMs": 33.176,
+      "t64MedianMs": 27.661,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP recurring/filtered",
+      "t63MedianMs": 15.002,
+      "t64MedianMs": 15.958,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP recurring/upcoming",
+      "t63MedianMs": 30.978,
+      "t64MedianMs": 29.796,
+      "queryCount": [
+        6,
+        6
+      ]
+    },
+    {
+      "name": "stress/HTTP budgets",
+      "t63MedianMs": 31.226,
+      "t64MedianMs": 31.867,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP goals",
+      "t63MedianMs": 31.139,
+      "t64MedianMs": 31.488,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP profile PUT",
+      "t63MedianMs": 14.922,
+      "t64MedianMs": 15.98,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/dashboard service this_month",
+      "t63MedianMs": 49.445,
+      "t64MedianMs": 44.066,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "stress/HTTP dashboard this_month",
+      "t63MedianMs": 82.583,
+      "t64MedianMs": 58.772,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "stress/dashboard service last_month",
+      "t63MedianMs": 68.108,
+      "t64MedianMs": 47.17,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "stress/HTTP dashboard last_month",
+      "t63MedianMs": 62.663,
+      "t64MedianMs": 58.844,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "stress/dashboard service 3_months",
+      "t63MedianMs": 48.995,
+      "t64MedianMs": 44.106,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "stress/HTTP dashboard 3_months",
+      "t63MedianMs": 57.762,
+      "t64MedianMs": 58.837,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "stress/dashboard service 6_months",
+      "t63MedianMs": 50.385,
+      "t64MedianMs": 45.425,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "stress/HTTP dashboard 6_months",
+      "t63MedianMs": 61.192,
+      "t64MedianMs": 63.35,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "stress/dashboard service 1_year",
+      "t63MedianMs": 53.281,
+      "t64MedianMs": 48.126,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "stress/HTTP dashboard 1_year",
+      "t63MedianMs": 62.344,
+      "t64MedianMs": 63.177,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "stress/analytics service 2026-10-01",
+      "t63MedianMs": 18.26,
+      "t64MedianMs": 16.034,
+      "queryCount": [
+        9,
+        9
+      ]
+    },
+    {
+      "name": "stress/HTTP analytics 2026-10-01",
+      "t63MedianMs": 28.816,
+      "t64MedianMs": 32.306,
+      "queryCount": [
+        9,
+        9
+      ]
+    },
+    {
+      "name": "stress/analytics service 2026-08-01",
+      "t63MedianMs": 29.222,
+      "t64MedianMs": 26.279,
+      "queryCount": [
+        9,
+        9
+      ]
+    },
+    {
+      "name": "stress/HTTP analytics 2026-08-01",
+      "t63MedianMs": 45.492,
+      "t64MedianMs": 34.054,
+      "queryCount": [
+        9,
+        9
+      ]
+    },
+    {
+      "name": "stress/analytics service 2026-05-01",
+      "t63MedianMs": 43.539,
+      "t64MedianMs": 38.311,
+      "queryCount": [
+        9,
+        9
+      ]
+    },
+    {
+      "name": "stress/HTTP analytics 2026-05-01",
+      "t63MedianMs": 61.077,
+      "t64MedianMs": 47.273,
+      "queryCount": [
+        9,
+        9
+      ]
+    },
+    {
+      "name": "stress/analytics service 2025-10-17",
+      "t63MedianMs": 82.266,
+      "t64MedianMs": 70.912,
+      "queryCount": [
+        9,
+        9
+      ]
+    },
+    {
+      "name": "stress/HTTP analytics 2025-10-17",
+      "t63MedianMs": 92.116,
+      "t64MedianMs": 77.864,
+      "queryCount": [
+        9,
+        9
+      ]
+    },
+    {
+      "name": "stress/HTTP analytics account",
+      "t63MedianMs": 15.118,
+      "t64MedianMs": 15.156,
+      "queryCount": [
+        10,
+        10
+      ]
+    },
+    {
+      "name": "stress/search groceries",
+      "t63MedianMs": 1.186,
+      "t64MedianMs": 1.091,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/search RareNeedle",
+      "t63MedianMs": 29.802,
+      "t64MedianMs": 28.575,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/search no-match-zzzz",
+      "t63MedianMs": 29.435,
+      "t64MedianMs": 27.909,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/search العربية",
+      "t63MedianMs": 30.033,
+      "t64MedianMs": 28.161,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/search Account 1",
+      "t63MedianMs": 1.337,
+      "t64MedianMs": 1.181,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/search Category 1",
+      "t63MedianMs": 1.661,
+      "t64MedianMs": 1.48,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/filter account",
+      "t63MedianMs": 1.264,
+      "t64MedianMs": 1.163,
+      "queryCount": [
+        2,
+        2
+      ]
+    },
+    {
+      "name": "stress/filter category",
+      "t63MedianMs": 1.132,
+      "t64MedianMs": 1.083,
+      "queryCount": [
+        2,
+        2
+      ]
+    },
+    {
+      "name": "stress/filter date",
+      "t63MedianMs": 0.96,
+      "t64MedianMs": 0.939,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/filter type",
+      "t63MedianMs": 1.156,
+      "t64MedianMs": 0.941,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/filter recurring",
+      "t63MedianMs": 0.519,
+      "t64MedianMs": 0.526,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/filter combined",
+      "t63MedianMs": 0.996,
+      "t64MedianMs": 0.967,
+      "queryCount": [
+        2,
+        2
+      ]
+    },
+    {
+      "name": "stress/cursor page 0",
+      "t63MedianMs": 2.013,
+      "t64MedianMs": 1.743,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP cursor page 0",
+      "t63MedianMs": 15.167,
+      "t64MedianMs": 14.977,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/cursor page 160",
+      "t63MedianMs": 2.037,
+      "t64MedianMs": 1.792,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP cursor page 160",
+      "t63MedianMs": 15.655,
+      "t64MedianMs": 15.819,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/cursor page 319",
+      "t63MedianMs": 1.991,
+      "t64MedianMs": 1.732,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/HTTP cursor page 319",
+      "t63MedianMs": 14.796,
+      "t64MedianMs": 15.821,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/accounts repository",
+      "t63MedianMs": 15.09,
+      "t64MedianMs": 13.209,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/budgets service",
+      "t63MedianMs": 16.527,
+      "t64MedianMs": 14.464,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/goals service",
+      "t63MedianMs": 18.663,
+      "t64MedianMs": 17.042,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/category service",
+      "t63MedianMs": 2.306,
+      "t64MedianMs": 1.96,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/recurring service",
+      "t63MedianMs": 15.101,
+      "t64MedianMs": 12.593,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/analytics breakdown getSummary",
+      "t63MedianMs": 6.637,
+      "t64MedianMs": 4.569,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/analytics breakdown getCashFlowSeries",
+      "t63MedianMs": 9.205,
+      "t64MedianMs": 7.552,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/analytics breakdown getCategoryBreakdown",
+      "t63MedianMs": 13.833,
+      "t64MedianMs": 12.419,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/analytics breakdown getAccountActivity",
+      "t63MedianMs": 9.587,
+      "t64MedianMs": 7.583,
+      "queryCount": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "stress/analytics breakdown getRecurringCommitments",
+      "t63MedianMs": 40.035,
+      "t64MedianMs": 35.442,
+      "queryCount": [
+        3,
+        3
+      ]
+    },
+    {
+      "name": "stress/HTTP transaction POST PUT DELETE cycle",
+      "t63MedianMs": 46.215,
+      "t64MedianMs": 46.588,
+      "queryCount": [
+        16,
+        16
+      ]
+    },
+    {
+      "name": "stress/HTTP transfer POST PUT DELETE cycle",
+      "t63MedianMs": 46.186,
+      "t64MedianMs": 44.298,
+      "queryCount": [
+        16,
+        16
+      ]
+    },
+    {
+      "name": "processor due discovery",
+      "t63MedianMs": 1.896,
+      "t64MedianMs": 1.24,
+      "queryCount": [
+        1,
+        1
+      ]
+    }
+  ],
+  "remoteTouched": false
+}

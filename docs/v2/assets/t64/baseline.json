@@ -1,0 +1,30 @@
+{
+  "startingSha": "a9862a081fcc1e509ac90d9cc1023a462be804e6",
+  "backendHeaders": {
+    "content-security-policy": null,
+    "x-frame-options": null,
+    "x-content-type-options": null,
+    "referrer-policy": null
+  },
+  "driverOverride": [
+    {
+      "urlOption": "ssl=0",
+      "tlsDisabled": true,
+      "verificationDisabled": false,
+      "explicitCaDiscarded": true
+    },
+    {
+      "urlOption": "ssl=no-verify",
+      "tlsDisabled": false,
+      "verificationDisabled": true,
+      "explicitCaDiscarded": true
+    },
+    {
+      "urlOption": "ssl=true",
+      "tlsDisabled": false,
+      "verificationDisabled": false,
+      "explicitCaDiscarded": true
+    }
+  ],
+  "networkConnectionsForTlsProof": 0
+}
