@@ -1,7 +1,7 @@
 # Expense Tracker V2 — API Design
 
 **Version:** 2.0 Planning — T02 decisions recorded
-**Status:** P0 planning frozen with approved code-first design amendment; revised T03/T04 not started
+**Status:** P0 implemented and production-accepted through T73; final release/source state is recorded in [T75](t75-verification.md). P1 remains deferred.
 **Date:** 2026-10-06  
 **Project:** Expense Tracker  
 **Depends on:** `01-product-brief.md`, `02-prd.md`, `03-ux-specification.md`, `04-architecture.md`, `05-database-design.md`
@@ -12,7 +12,7 @@
 
 # 1. Purpose
 
-This document defines the proposed authenticated HTTP API for Expense Tracker V2.
+This document defines the implemented P0 authenticated HTTP API and deferred enhancement contracts for Expense Tracker V2.
 
 It specifies:
 

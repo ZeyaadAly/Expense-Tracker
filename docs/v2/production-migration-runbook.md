@@ -1,5 +1,7 @@
 # Production migration and V1 retirement runbook
 
+**Current operating checkpoint (2026-10-17):** T66-T73 passed in their documented scope. The original EGP9,500.00 record is unchanged. Backup/restore was explicitly waived; no tested recovery artifact exists. Controlled writes have occurred, so recovery is Window B / forward-only. Eight migrations/backfill/seed already match production: never replay them. V1 remains410 and older deployments are protected. Runtime V2 grants are restored only for the limited role; cron is active at03:00 UTC daily. Acceptance financial rows are cleaned and durable history retained. Use [deployment handoff](production-deployment-runbook.md) and [T75](t75-verification.md) for final public release status. Earlier blocked/resumption notes below are historical, not current input requirements.
+
 Prepared by T65. **Preparation only: this document does not authorize T66, a deployment, remote SQL, credential rotation, public financial access or cron.** T66 requires its own explicit authorization and verified operator inputs. T65 evidence is [the local dress rehearsal](t65-verification.md).
 
 ## T66 operational checkpoint — 2026-10-17
