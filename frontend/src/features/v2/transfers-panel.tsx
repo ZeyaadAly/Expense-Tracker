@@ -66,7 +66,7 @@ function TransferDialog({ action, source, state, store, client, close }: { actio
     setErrors(validation); if (Object.keys(validation).length) { setReview(false); focus(validation); return false; } return true;
   }
   async function submit() {
-    if (submitting.current || store.getSnapshot().pending || uncertain || state.optionsLoading || state.optionsError) return;
+    if (submitting.current || store.getSnapshot().pending || uncertain || (action.kind !== "delete" && (state.optionsLoading || state.optionsError))) return;
     if (action.kind !== "delete" && !validate()) return;
     submitting.current = true;
     const success = await store.mutate(options => action.kind === "create" ? client.createTransfer(draft, options) : action.kind === "edit" ? client.updateTransfer(row!.id, draft, options) : client.deleteTransfer(row!.id, options), action.kind);
