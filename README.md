@@ -1,6 +1,6 @@
 # Expense Tracker
 
-Current V2 checkpoint (2026-10-17): **T66 and T67 completed under the explicit backup/restore waiver, preserving the retained EGP9500.00 record.** Authenticated full P0 backend is READY from committed e057da2, with41 hosted checks and real A/B Auth/profile verification. Runtime grants are restored behind controlled read-only access; financial writes/cron remain disabled. V1 stays410 and49 immutable/alias paths deny stale access. See [T66](docs/v2/t66-verification.md) and [T67](docs/v2/t67-verification.md). Continue automatically at T68 frontend deployment, then remaining production gates. No normal/public financial release or tested recovery artifact is claimed; optional P1 tasks remain deferred.
+Current V2 checkpoint (2026-10-17): **T66–T68 completed under controlled release gates and the explicit backup/restore waiver.** The retained EGP9500.00 record is preserved. Full P0 backend is authenticated/read-only for acceptance users; protected frontend is READY and passes13 real hosted browser checks with45 private no-store responses. V1 stays410; financial writes and cron remain disabled. See [T66](docs/v2/t66-verification.md), [T67](docs/v2/t67-verification.md) and [T68](docs/v2/t68-verification.md). Continue automatically at T69 hosted Auth verification, then remaining acceptance/release gates. No tested recovery artifact or normal public financial release is claimed; optional P1 tasks remain deferred.
 
 ## Overview
 

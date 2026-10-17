@@ -1,5 +1,13 @@
 # T68 — Deploy V2 Frontend
 
+## Final hosted checkpoint — completed
+
+**Completed under controlled backend read-only access.** Source `437f5938f6b2181851ca29e5a58ce2be6ae2e366`, deployment `dpl_7B4nE1h2PDJ1CDg3HK7i5Yv4PMjj`, READY. Public frontend: https://expensetracker-inky-mu.vercel.app/ . Server-only V2_APP_ENABLED is true; existing public API/Auth configuration is reused. No server credential was injected into the frontend.
+
+Real production Edge/Chromium browser verification passed **13 checks**: signed-out dashboard redirects to login without financial UI; genuine controlled email/password login and profile bootstrap mount the protected app; all eight core routes render the real empty controlled workspace; reload restores the real SDK session; design-system prototype404; genuine sign-out returns to login. **45 private API responses** were successful and no-store. Zero page errors, localhost/unexpected/non-HTTPS requests or direct Supabase financial Data API requests. No financial mutation occurred; no original owner session/data was used for testing. Passwords/tokens remain in ignored local operator/browser state and were not recorded in evidence.
+
+Together with185 passing frontend tests, lint/typecheck/build and the source/build/history secret scan, this satisfies deployment acceptance. T69 extends hosted Auth/confirmation/recovery verification next, followed by A/B/financial/cron/accessibility gates. Backend read-only/allowlist and disabled cron remain in force; normal public financial use is not yet released. The preparation notes below are historical.
+
 **Status: prepared; committed production deployment and browser verification pending.** Starts after completed T67 on `3043d70c2657891b5ad395856e891f6bfee65d80`. Backend remains controlled read-only for the two verified acceptance subjects; financial writes and cron remain closed. T66 backup/restore waiver and retained-record preservation remain in force.
 
 The server-only `V2_APP_ENABLED=true` flag opens the existing V2 route layout into its unchanged real AuthProvider/ProtectedBoundary/profile boundary. Absent/false retains production404; it is not an authorization signal and cannot override backend release/owner checks. Production root redirects to the guarded dashboard when enabled, rather than the old Auth-only release-check. The design-system showcase now has its own unconditional non-development404 guard, so enabling the real application cannot expose its fixture UI. Product styling/components, session storage policy and financial calculations are unchanged. Metadata now identifies the actual V2 application.
