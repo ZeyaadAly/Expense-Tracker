@@ -1,6 +1,6 @@
 # Expense Tracker
 
-Current V2 checkpoint (2026-10-17): **T66 completed under the explicit backup/restore waiver, preserving the retained EGP9500.00 transaction.** Fresh schema/history/ownership verification passed; existing migration/backfill stages were skipped. Hosted V1 financial paths return410, V2/processor return503, and runtime financial DML is suspended; both health routes remain200. Forty older backend deployment URLs are protected. No independently tested recovery artifact exists. Frontend financial UI and cron remain gated. See [final T66 checkpoint](docs/v2/t66-verification.md#final-t66-checkpoint--completed-under-explicit-backup-waiver). Continue automatically at T67 under controlled access, then the remaining release gates; normal V2 production use is not yet accepted. Optional P1 tasks remain deferred.
+Current V2 checkpoint (2026-10-17): **T66 and T67 completed under the explicit backup/restore waiver, preserving the retained EGP9500.00 record.** Authenticated full P0 backend is READY from committed e057da2, with41 hosted checks and real A/B Auth/profile verification. Runtime grants are restored behind controlled read-only access; financial writes/cron remain disabled. V1 stays410 and49 immutable/alias paths deny stale access. See [T66](docs/v2/t66-verification.md) and [T67](docs/v2/t67-verification.md). Continue automatically at T68 frontend deployment, then remaining production gates. No normal/public financial release or tested recovery artifact is claimed; optional P1 tasks remain deferred.
 
 ## Overview
 

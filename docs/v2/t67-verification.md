@@ -1,5 +1,17 @@
 # T67 — Deploy Authenticated V2 Backend
 
+## Final hosted checkpoint — completed
+
+**Completed under controlled read-only access.** Source `e057da24c7465f038a00aca2e510e347d5ec614f`, production backend deployment `dpl_DxFXAnJdaVbmYR9L1tEsCcQbdhfJ`, READY. Public URL: https://expense-tracker-api-green.vercel.app/ . Exact production configuration is read-only, two verified controlled subjects, cron false. Both controlled Auth users were provisioned through the committed expiring operator; their genuine hosted sign-ins passed ES256/JWKS/issuer/audience/subject checks without exporting provider administration credentials.
+
+**41 hosted backend checks pass**: health200; all private P0 routes401 without JWT; forged JWT401; both signed acceptance users denied financial/profile mutations503 before SQL; six V1 paths410; cron503; no-store, exact CORS, nosniff and frame protection. After44 immutable deployments and five aliases all denied old V1 access, the [guarded operation](../../supabase/operations/t67-restore-runtime.sql) restored exactly the original two V2 DML GRANT statements. The same49 paths still deny after regrant (48 protected302, current public alias410). No password/role split was introduced; old artifacts remain protected and were never bypassed.
+
+Real hosted A/B profile bootstrap then passed with EGP defaults and correct subjects; both users read empty accounts/transactions/transfers/recurring/budgets/goals and nine categories. No financial record was created. Production has3 Auth identities/3 profiles, while financial history remains exactly1 transaction/1 Main Account; original fields/amount/date/microsecond timestamps match the private T66 baseline. Runtime occurrence DELETE/TRUNCATE remain denied, browser schema usage denied, and limited role attributes/memberships are unchanged. Client TLS1.3/authorized certificate verification, expected role/database, hosted health/CORS/no-store pass again.
+
+The temporary operator is ACTIVE only for the two fixed controlled identities with a private random bearer credential and fixed expiry; unauthorized calls401. It must be retired after acceptance. Financial write gate stays read-only and cron remains disabled. T68 frontend deployment is next automatically; T69–T75 acceptance/public release is still pending. No independently tested recovery artifact exists under the explicit waiver.
+
+The preparation notes below are historical context for this successful deployment.
+
 **Status: prepared, hosted deployment pending.** Starts from the completed T66 checkpoint `95d3a934ee7bf90f95808f8ff8cd3bf4b37be47b`. The explicit backup/restore waiver and exact retained-record preservation remain in force. Public financial access and cron remain closed.
 
 The production backend now registers all completed P0 domains, including Analytics, Budgets, Goals and category management, behind a shared release gate and the existing ES256/JWKS authentication and owner-scoped services. The runtime remains the limited PostgreSQL role. Production defaults to maintenance; invalid stages/subjects fail closed. Controlled/read-only stages require explicit verified JWT subject UUIDs. Read-only permits reads and idempotent profile bootstrap, while blocking financial/profile mutations before SQL. Non-allowlisted authenticated users receive maintenance. Public stage preserves JWT/owner checks. Cron requires a separate explicit enablement and cannot run in maintenance/read-only.
