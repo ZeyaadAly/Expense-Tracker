@@ -1,0 +1,62 @@
+[
+  {
+    "route": "/v2/dashboard",
+    "status": 404
+  },
+  {
+    "route": "/v2/accounts",
+    "status": 404
+  },
+  {
+    "route": "/v2/accounts/00000000-0000-4000-8000-000000000000",
+    "status": 404
+  },
+  {
+    "route": "/v2/transactions",
+    "status": 404
+  },
+  {
+    "route": "/v2/recurring",
+    "status": 404
+  },
+  {
+    "route": "/v2/analytics",
+    "status": 404
+  },
+  {
+    "route": "/v2/budgets",
+    "status": 404
+  },
+  {
+    "route": "/v2/goals",
+    "status": 404
+  },
+  {
+    "route": "/v2/settings",
+    "status": 404
+  },
+  {
+    "route": "/v2/design-system",
+    "status": 404
+  },
+  {
+    "route": "/v2/release-check",
+    "status": 200
+  },
+  {
+    "route": "/v2/login",
+    "status": 200
+  },
+  {
+    "route": "/v2/register",
+    "status": 200
+  },
+  {
+    "route": "/v2/forgot-password",
+    "status": 200
+  },
+  {
+    "route": "/v2/reset-password",
+    "status": 200
+  }
+]

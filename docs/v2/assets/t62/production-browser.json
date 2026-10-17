@@ -1,0 +1,37 @@
+[
+  {
+    "route": "login",
+    "title": "login · Expense Tracker V2",
+    "main": 1,
+    "overflow": false,
+    "violations": []
+  },
+  {
+    "route": "register",
+    "title": "register · Expense Tracker V2",
+    "main": 1,
+    "overflow": false,
+    "violations": []
+  },
+  {
+    "route": "forgot-password",
+    "title": "forgot-password · Expense Tracker V2",
+    "main": 1,
+    "overflow": false,
+    "violations": []
+  },
+  {
+    "route": "reset-password",
+    "title": "reset-password · Expense Tracker V2",
+    "main": 1,
+    "overflow": false,
+    "violations": []
+  },
+  {
+    "route": "release-check",
+    "title": "login · Expense Tracker V2",
+    "main": 1,
+    "overflow": false,
+    "violations": []
+  }
+]

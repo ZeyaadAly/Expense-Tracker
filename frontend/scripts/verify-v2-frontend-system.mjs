@@ -4,8 +4,8 @@ import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 const tools=resolve(process.env.T58_TOOLS_ROOT);
-const {chromium}=await import(pathToFileURL(resolve(tools,'.tmp-v2-t20/node_modules/playwright/index.mjs')));
-const axe=readFileSync(resolve(tools,'.npm-cache/t03-tools/node_modules/axe-core/axe.min.js'),'utf8');
+const {chromium}=await import(pathToFileURL(resolve(process.env.T58_PLAYWRIGHT_PATH??resolve(tools,'.tmp-v2-t20/node_modules/playwright/index.mjs'))));
+const axe=readFileSync(resolve(process.env.T58_AXE_PATH??resolve(tools,'.npm-cache/t03-tools/node_modules/axe-core/axe.min.js')),'utf8');
 const out=resolve(process.env.T58_OUTPUT_DIRECTORY);mkdirSync(out,{recursive:true});
 const origin='http://localhost:3000',api='http://127.0.0.1:4000';
 const sessions=Object.fromEntries(await Promise.all(['a','b'].map(async k=>[k,await(await fetch(api+'/test/session/'+k)).json()])));
@@ -26,7 +26,7 @@ async function request(path,method='GET',body,user='a'){
 async function goto(path){const start=Date.now();await page.goto(origin+path);await page.locator('#v2-main').waitFor();await page.waitForLoadState('networkidle');performance.push({path,ms:Date.now()-start});}
 async function mode(value){await fetch(api+'/test/mode',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:value})});}
 async function switchUser(who){await page.evaluate(w=>{sessionStorage.setItem('t58-user',w);const s=window.__t58sessions[w];localStorage.setItem('sb-t37-fixture-auth-token',JSON.stringify(s));const c=new BroadcastChannel('sb-t37-fixture-auth-token');c.postMessage({event:'SIGNED_IN',session:s});setTimeout(()=>c.close(),50);},who);}
-async function audit(label){await page.addScriptTag({content:axe});const violations=await page.evaluate(async()=>{const r=await window.axe.run(document.querySelector('.v2-theme'),{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}});return r.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}));});assert.deepEqual(violations,[],label);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,label+' overflow');audits.push({label,violations:0});}
+async function audit(label){await page.bringToFront();await page.waitForLoadState('networkidle');await page.waitForTimeout(250);await page.addScriptTag({content:axe});const violations=await page.evaluate(async()=>{const r=await window.axe.run(document.querySelector('.v2-theme'),{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}});return r.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}));});assert.deepEqual(violations,[],label);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,label+' overflow');audits.push({label,violations:0});}
 async function dashboard(){await goto('/v2/dashboard');const expected=await request('/dashboard?period=this_month');const values=await page.evaluate(()=>Object.fromEntries(['Net position','Income','Expenses','Net savings'].map(label=>[label,[...document.querySelectorAll('section')].find(s=>s.getAttribute('aria-label')===label)?.querySelector('.v2-money-value')?.textContent])));for(const [label,key]of [['Net position','totalBalance'],['Income','income'],['Expenses','expenses'],['Net savings','netSavings']])assert.ok(values[label]?.includes(expected.summary[key].replace('-','').replace(/\B(?=(\d{3})+(?!\d))/g,',')),label);return expected.summary;}
 try{
  if(process.env.T58_RESTART_ONLY==='1'){

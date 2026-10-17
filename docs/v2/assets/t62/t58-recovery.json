@@ -1,0 +1,78 @@
+{
+  "checks": [
+    "Transaction POST lost-ack preserves context and recovers with GET only",
+    "Transaction PUT lost-ack preserves context and recovers with GET only",
+    "Transaction DELETE lost-ack preserves context and recovers with GET only",
+    "browser Back Forward during open draft never restores stale dialog",
+    "signed-out redirect dashboard",
+    "signed-out redirect accounts",
+    "signed-out redirect accounts/ee9f6d50-1b90-48d1-adf2-a8cc14539423",
+    "signed-out redirect transactions",
+    "signed-out redirect recurring",
+    "signed-out redirect analytics",
+    "signed-out redirect budgets",
+    "signed-out redirect goals",
+    "signed-out redirect settings",
+    "safe Auth next https://external.invalid",
+    "safe Auth next /v2/analytics?period=month"
+  ],
+  "uncaught": [],
+  "networkFailures": [
+    {
+      "path": "/api/v2/transactions",
+      "status": 500,
+      "expected": true
+    },
+    {
+      "path": "/api/v2/transactions",
+      "error": "net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+      "expected": true
+    },
+    {
+      "path": "/api/v2/transactions/e691a24c-de3d-4d54-8858-99e6bec39096",
+      "status": 500,
+      "expected": true
+    },
+    {
+      "path": "/api/v2/transactions/e691a24c-de3d-4d54-8858-99e6bec39096",
+      "error": "net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+      "expected": true
+    },
+    {
+      "path": "/api/v2/transactions/e691a24c-de3d-4d54-8858-99e6bec39096",
+      "status": 500,
+      "expected": true
+    },
+    {
+      "path": "/api/v2/transactions/e691a24c-de3d-4d54-8858-99e6bec39096",
+      "error": "net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+      "expected": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "error": "net::ERR_ABORTED",
+      "expected": true
+    },
+    {
+      "path": "/api/v2/accounts/summary",
+      "error": "net::ERR_ABORTED",
+      "expected": true
+    },
+    {
+      "path": "/api/v2/transfers",
+      "error": "net::ERR_ABORTED",
+      "expected": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "error": "net::ERR_ABORTED",
+      "expected": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "error": "net::ERR_ABORTED",
+      "expected": true
+    }
+  ],
+  "remoteTouched": false
+}

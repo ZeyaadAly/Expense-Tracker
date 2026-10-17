@@ -333,6 +333,8 @@ export function DialogShell({
       document.body.style.overflow = overflow;
       if (trigger instanceof HTMLElement && trigger.isConnected)
         trigger.focus();
+      else
+        document.querySelector<HTMLElement>("main[tabindex]")?.focus();
     };
   }, []);
   return (

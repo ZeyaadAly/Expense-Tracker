@@ -1,0 +1,38 @@
+[
+  {
+    "name": "muted",
+    "ratio": 4.606885804703014
+  },
+  {
+    "name": "secondary",
+    "ratio": 4.753951295147993
+  },
+  {
+    "name": "sidebar muted",
+    "ratio": 7.929571596939606
+  },
+  {
+    "name": "primary",
+    "ratio": 5.8644052017198325
+  },
+  {
+    "name": "danger",
+    "ratio": 5.996949692051869
+  },
+  {
+    "name": "warning",
+    "ratio": 5.8648260996779475
+  },
+  {
+    "name": "income",
+    "ratio": 5.872319650763217
+  },
+  {
+    "name": "expense",
+    "ratio": 5.421873633211561
+  },
+  {
+    "name": "transfer",
+    "ratio": 4.5843334159081275
+  }
+]

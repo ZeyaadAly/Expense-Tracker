@@ -292,7 +292,8 @@
 .t40-derived dd { margin:0; font-size:1.35rem; font-weight:600; }
 .t40-trends, .t40-accounts { grid-column:1/-1; }
 .t40-trend-grid { display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:1rem; }
-.t40-chart-scroll, .t40-table-scroll { overflow-x:auto; max-width:100%; }
+/* Contain absolutely positioned accessible labels within the scroll region. */
+.t40-chart-scroll, .t40-table-scroll { position:relative; overflow-x:auto; max-width:100%; }
 .t40-bars { min-width:460px; }
 .t40-bars .p4-bar-group span { font-size:.65rem; }
 .t40-savings { width:100%; height:180px; color:var(--v2-income); }

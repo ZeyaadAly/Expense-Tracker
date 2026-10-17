@@ -43,7 +43,7 @@ export function TransfersPanel({ userId, account, refreshBalances, disabled = fa
         </div>
       </article>;
     })}</div>}
-    {state.rows && <div className="v2-actions" aria-label="Transfer pages"><Button variant="secondary" disabled={state.pending || state.loading || !state.history.length} onClick={() => store.previous()}>Previous transfers</Button><span className="v2-helper">Page {state.history.length + 1}</span><Button variant="secondary" disabled={state.pending || state.loading || !!state.error || !state.meta?.hasMore} onClick={() => store.next()}>Next transfers</Button></div>}
+    {state.rows && <div role="group" className="v2-actions" aria-label="Transfer pages"><Button variant="secondary" disabled={state.pending || state.loading || !state.history.length} onClick={() => store.previous()}>Previous transfers</Button><span className="v2-helper">Page {state.history.length + 1}</span><Button variant="secondary" disabled={state.pending || state.loading || !!state.error || !state.meta?.hasMore} onClick={() => store.next()}>Next transfers</Button></div>}
     {action && <TransferDialog key={action.kind + (action.transfer?.id ?? "")} action={action} source={account} state={state} store={store} client={client} close={close}/>}
   </section>;
 }

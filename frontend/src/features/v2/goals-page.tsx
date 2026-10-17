@@ -30,7 +30,7 @@ function ConnectedGoals({userId}:{userId:string}){
     {state.error&&<ErrorState title="Goals unavailable" description={state.error} onRetry={()=>void store.refresh()}/>}
     {state.error&&state.rows&&<StaleIndicator>Last loaded goals · refresh failed</StaleIndicator>}
     <h2 className="v2-sr-only">Your savings goals</h2>
-    {state.rows===null?state.loading?<div aria-busy="true" aria-label="Loading goals"><Skeleton variant="metric"/><Skeleton variant="transaction"/></div>:null:state.rows.length===0?<EmptyState title="No goals yet." description="Set a target and update your savings manually. Your accounts remain independent." action={<Button disabled={state.pending} onClick={()=>open({kind:'create'})}>Create goal</Button>}/>:<div className="p4-columns t46-goals" aria-busy={state.loading}>{state.rows.map(g=>{
+    {state.rows===null?state.loading?<div role="group" aria-busy="true" aria-label="Loading goals"><Skeleton variant="metric"/><Skeleton variant="transaction"/></div>:null:state.rows.length===0?<EmptyState title="No goals yet." description="Set a target and update your savings manually. Your accounts remain independent." action={<Button disabled={state.pending} onClick={()=>open({kind:'create'})}>Create goal</Button>}/>:<div className="p4-columns t46-goals" aria-busy={state.loading}>{state.rows.map(g=>{
       const account=state.accounts.find(a=>a.id===g.linkedAccountId);
       return <section data-goal-id={g.id} key={g.id} aria-label={g.name}>
         <GoalCard name={g.name} saved={g.savedAmount} target={g.targetAmount} percent={g.percentComplete} date={g.targetDate??undefined} status={statusLabel(g.status)}/>

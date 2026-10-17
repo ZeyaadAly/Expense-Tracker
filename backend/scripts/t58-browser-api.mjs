@@ -22,10 +22,11 @@ import {createDashboardService} from '../dist/services/dashboard.js';
 import {createAnalyticsService} from '../dist/services/analytics.js';
 import {disposableIsolationUrl,prepareIsolationDatabase,createTestUser} from '../tests/helpers/v2-isolation.mjs';
 
-const url=disposableIsolationUrl(process.env.T58_DISPOSABLE_DATABASE_URL);
+const t62=process.env.T62_DISPOSABLE_DATABASE_URL;
+const url=disposableIsolationUrl(t62??process.env.T58_DISPOSABLE_DATABASE_URL);
 const admin=new Client({connectionString:url.href});await admin.connect();
 const directory=realpathSync((await admin.query('SHOW data_directory')).rows[0].data_directory);
-assert.equal(basename(directory),'pgdata');assert.equal(basename(dirname(directory)),'.tmp-v2-t58');
+assert.equal(basename(directory),'pgdata');assert.equal(basename(dirname(directory)),t62?'.tmp-v2-t62':'.tmp-v2-t58');
 const users={a:{userId:'a5800000-0000-4000-8000-000000000001'},b:{userId:'b5800000-0000-4000-8000-000000000001'}};
 if(!(await admin.query("SELECT 1 FROM pg_namespace WHERE nspname='expense_tracker'")).rowCount){await prepareIsolationDatabase(admin);for(const user of Object.values(users))await createTestUser(admin,user);}
 const keyPath=resolve(directory,'../synthetic-key.json');
@@ -56,6 +57,6 @@ server.use(async(req,res,next)=>{
   }
   next();
 });
-server.use(createApp({clientOrigin:'http://localhost:3000',financialMode:'v2',databaseHealth:async()=>true,supabaseUrl:issuer,profiles:createProfileService(pool),categories:createCategoryService(pool),categoryManagement:true,accounts:createAccountService(pool),v2Transactions:createV2TransactionService(pool,{cursorSigningSecret:'58'.repeat(32)}),transfers:createTransferService(pool,{cursorSigningSecret:'58'.repeat(32)}),recurring:createRecurringService(pool),budgets:createBudgetService(pool),goals:createGoalService(pool),dashboard:createDashboardService(pool,{now:()=>new Date('2026-10-15T09:00:00Z')}),analytics:createAnalyticsService(pool)}));
+server.use(createApp({clientOrigin:'http://localhost:3000',financialMode:'v2',databaseHealth:async()=>true,supabaseUrl:issuer,profiles:createProfileService(pool),categories:createCategoryService(pool),categoryManagement:true,accounts:createAccountService(pool),v2Transactions:createV2TransactionService(pool,{cursorSigningSecret:'58'.repeat(32)}),transfers:createTransferService(pool,{cursorSigningSecret:'58'.repeat(32)}),recurring:createRecurringService(pool,t62?{}:{now:()=>new Date('2026-10-15T09:00:00Z')}),budgets:createBudgetService(pool),goals:createGoalService(pool),dashboard:createDashboardService(pool,{now:()=>new Date('2026-10-15T09:00:00Z')}),analytics:createAnalyticsService(pool)}));
 const listener=server.listen(4000,'127.0.0.1');await once(listener,'listening');console.log('T58 disposable full API ready');
 for(const signal of ['SIGINT','SIGTERM'])process.on(signal,async()=>{listener.closeAllConnections();jwks.closeAllConnections();await Promise.all([new Promise(r=>listener.close(r)),new Promise(r=>jwks.close(r))]);await pool.end();await admin.end();process.exit(0);});

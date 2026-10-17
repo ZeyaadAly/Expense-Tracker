@@ -34,7 +34,7 @@ function ConnectedDashboard({ userId }: { userId: string }) {
     <p role="status" className="v2-helper">{state.loading ? data ? `Refreshing ${periodLabels[state.period].toLowerCase()}… Showing last loaded ${periodLabels[data.period.key].toLowerCase()} values.` : "Loading your dashboard…" : state.error ? "Dashboard refresh failed." : "Dashboard is up to date."}</p>
     {state.error && <ErrorState title="Dashboard unavailable" description={state.error} onRetry={() => void store.refresh()} />}
     {state.error && data && <StaleIndicator>Last loaded {periodLabels[data.period.key].toLowerCase()} values · refresh failed</StaleIndicator>}
-    {!data && state.loading && <div className="p4-overview" aria-label="Loading dashboard" aria-busy="true"><div><Skeleton variant="metric" /><Skeleton variant="chart" /></div><Skeleton variant="transaction" /></div>}
+    {!data && state.loading && <div role="group" className="p4-overview" aria-label="Loading dashboard" aria-busy="true"><div><Skeleton variant="metric" /><Skeleton variant="chart" /></div><Skeleton variant="transaction" /></div>}
     {data && <>
       <div className="p4-overview t37-overview" aria-busy={state.loading}>
         <div>

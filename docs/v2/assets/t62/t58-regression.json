@@ -1,0 +1,668 @@
+{
+  "checks": [
+    "all eight completed routes are reachable from Dashboard navigation",
+    "active navigation dashboard",
+    "active navigation accounts",
+    "active navigation accounts/19ea147c-89a6-468a-b733-e14452d35341",
+    "active navigation transactions",
+    "active navigation recurring",
+    "active navigation analytics",
+    "active navigation budgets",
+    "active navigation goals",
+    "active navigation settings",
+    "keyboard drawer trap Escape and focus return",
+    "Accounts repeated submit pending guard and lost-ack GET-only inspection",
+    "profile and category repeated submit pending guards",
+    "transaction UI duplicate guard and cross-page reconciliation",
+    "transfer changes balances without income expenses or net-position effect",
+    "generated expense reaches transactions Dashboard Analytics Budget exactly once",
+    "manual Goal non-effect and category rename history",
+    "account archive excludes choices pauses recurring restore requires explicit resume",
+    "A to B immediate private-data clearing dashboard",
+    "A to B immediate private-data clearing accounts",
+    "A to B immediate private-data clearing accounts/19ea147c-89a6-468a-b733-e14452d35341",
+    "A to B immediate private-data clearing transactions",
+    "A to B immediate private-data clearing recurring",
+    "A to B immediate private-data clearing analytics",
+    "A to B immediate private-data clearing budgets",
+    "A to B immediate private-data clearing goals",
+    "A to B immediate private-data clearing settings",
+    "late A write cannot restore A dialog or draft in B",
+    "session expiry unmounts protected data and redirects safely",
+    "deep reload and back-forward preserve authoritative session without dialogs",
+    "semantics textual chart status labels and reduced motion",
+    "Settings many-category performance and Unicode stress",
+    "financial network uses Express and Supabase Auth only"
+  ],
+  "audits": [
+    {
+      "label": "dashboard populated 360",
+      "violations": 0
+    },
+    {
+      "label": "dashboard populated 768",
+      "violations": 0
+    },
+    {
+      "label": "dashboard populated 1440",
+      "violations": 0
+    },
+    {
+      "label": "accounts populated 360",
+      "violations": 0
+    },
+    {
+      "label": "accounts populated 768",
+      "violations": 0
+    },
+    {
+      "label": "accounts populated 1440",
+      "violations": 0
+    },
+    {
+      "label": "accounts/19ea147c-89a6-468a-b733-e14452d35341 populated 360",
+      "violations": 0
+    },
+    {
+      "label": "accounts/19ea147c-89a6-468a-b733-e14452d35341 populated 768",
+      "violations": 0
+    },
+    {
+      "label": "accounts/19ea147c-89a6-468a-b733-e14452d35341 populated 1440",
+      "violations": 0
+    },
+    {
+      "label": "transactions populated 360",
+      "violations": 0
+    },
+    {
+      "label": "transactions populated 768",
+      "violations": 0
+    },
+    {
+      "label": "transactions populated 1440",
+      "violations": 0
+    },
+    {
+      "label": "recurring populated 360",
+      "violations": 0
+    },
+    {
+      "label": "recurring populated 768",
+      "violations": 0
+    },
+    {
+      "label": "recurring populated 1440",
+      "violations": 0
+    },
+    {
+      "label": "analytics populated 360",
+      "violations": 0
+    },
+    {
+      "label": "analytics populated 768",
+      "violations": 0
+    },
+    {
+      "label": "analytics populated 1440",
+      "violations": 0
+    },
+    {
+      "label": "budgets populated 360",
+      "violations": 0
+    },
+    {
+      "label": "budgets populated 768",
+      "violations": 0
+    },
+    {
+      "label": "budgets populated 1440",
+      "violations": 0
+    },
+    {
+      "label": "goals populated 360",
+      "violations": 0
+    },
+    {
+      "label": "goals populated 768",
+      "violations": 0
+    },
+    {
+      "label": "goals populated 1440",
+      "violations": 0
+    },
+    {
+      "label": "settings populated 360",
+      "violations": 0
+    },
+    {
+      "label": "settings populated 768",
+      "violations": 0
+    },
+    {
+      "label": "settings populated 1440",
+      "violations": 0
+    },
+    {
+      "label": "navigation drawer 360",
+      "violations": 0
+    },
+    {
+      "label": "dashboard B empty 360",
+      "violations": 0
+    },
+    {
+      "label": "dashboard B empty 768",
+      "violations": 0
+    },
+    {
+      "label": "dashboard B empty 1440",
+      "violations": 0
+    },
+    {
+      "label": "accounts B empty 360",
+      "violations": 0
+    },
+    {
+      "label": "accounts B empty 768",
+      "violations": 0
+    },
+    {
+      "label": "accounts B empty 1440",
+      "violations": 0
+    },
+    {
+      "label": "transactions B empty 360",
+      "violations": 0
+    },
+    {
+      "label": "transactions B empty 768",
+      "violations": 0
+    },
+    {
+      "label": "transactions B empty 1440",
+      "violations": 0
+    },
+    {
+      "label": "recurring B empty 360",
+      "violations": 0
+    },
+    {
+      "label": "recurring B empty 768",
+      "violations": 0
+    },
+    {
+      "label": "recurring B empty 1440",
+      "violations": 0
+    },
+    {
+      "label": "analytics B empty 360",
+      "violations": 0
+    },
+    {
+      "label": "analytics B empty 768",
+      "violations": 0
+    },
+    {
+      "label": "analytics B empty 1440",
+      "violations": 0
+    },
+    {
+      "label": "budgets B empty 360",
+      "violations": 0
+    },
+    {
+      "label": "budgets B empty 768",
+      "violations": 0
+    },
+    {
+      "label": "budgets B empty 1440",
+      "violations": 0
+    },
+    {
+      "label": "goals B empty 360",
+      "violations": 0
+    },
+    {
+      "label": "goals B empty 768",
+      "violations": 0
+    },
+    {
+      "label": "goals B empty 1440",
+      "violations": 0
+    },
+    {
+      "label": "settings B empty 360",
+      "violations": 0
+    },
+    {
+      "label": "settings B empty 768",
+      "violations": 0
+    },
+    {
+      "label": "settings B empty 1440",
+      "violations": 0
+    },
+    {
+      "label": "reduced motion analytics",
+      "violations": 0
+    },
+    {
+      "label": "Settings 40 categories 360",
+      "violations": 0
+    },
+    {
+      "label": "Settings 40 categories 768",
+      "violations": 0
+    },
+    {
+      "label": "Settings 40 categories 1440",
+      "violations": 0
+    }
+  ],
+  "performance": [
+    {
+      "path": "/v2/dashboard",
+      "ms": 992
+    },
+    {
+      "path": "/v2/dashboard",
+      "ms": 859
+    },
+    {
+      "path": "/v2/accounts",
+      "ms": 932
+    },
+    {
+      "path": "/v2/accounts/19ea147c-89a6-468a-b733-e14452d35341",
+      "ms": 869
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 822
+    },
+    {
+      "path": "/v2/recurring",
+      "ms": 907
+    },
+    {
+      "path": "/v2/analytics",
+      "ms": 850
+    },
+    {
+      "path": "/v2/budgets",
+      "ms": 808
+    },
+    {
+      "path": "/v2/goals",
+      "ms": 772
+    },
+    {
+      "path": "/v2/settings",
+      "ms": 795
+    },
+    {
+      "path": "/v2/accounts",
+      "ms": 841
+    },
+    {
+      "path": "/v2/settings",
+      "ms": 781
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 845
+    },
+    {
+      "path": "/v2/dashboard",
+      "ms": 787
+    },
+    {
+      "path": "/v2/analytics",
+      "ms": 759
+    },
+    {
+      "path": "/v2/budgets",
+      "ms": 790
+    },
+    {
+      "path": "/v2/accounts",
+      "ms": 811
+    },
+    {
+      "path": "/v2/dashboard",
+      "ms": 820
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 827
+    },
+    {
+      "path": "/v2/dashboard",
+      "ms": 805
+    },
+    {
+      "path": "/v2/analytics",
+      "ms": 776
+    },
+    {
+      "path": "/v2/budgets",
+      "ms": 790
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 806
+    },
+    {
+      "path": "/v2/budgets",
+      "ms": 787
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 822
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 797
+    },
+    {
+      "path": "/v2/dashboard",
+      "ms": 825
+    },
+    {
+      "path": "/v2/accounts",
+      "ms": 777
+    },
+    {
+      "path": "/v2/accounts/19ea147c-89a6-468a-b733-e14452d35341",
+      "ms": 853
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 795
+    },
+    {
+      "path": "/v2/recurring",
+      "ms": 809
+    },
+    {
+      "path": "/v2/analytics",
+      "ms": 775
+    },
+    {
+      "path": "/v2/budgets",
+      "ms": 792
+    },
+    {
+      "path": "/v2/goals",
+      "ms": 796
+    },
+    {
+      "path": "/v2/settings",
+      "ms": 792
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 823
+    },
+    {
+      "path": "/v2/dashboard",
+      "ms": 855
+    },
+    {
+      "path": "/v2/dashboard",
+      "ms": 928
+    },
+    {
+      "path": "/v2/accounts",
+      "ms": 835
+    },
+    {
+      "path": "/v2/accounts/19ea147c-89a6-468a-b733-e14452d35341",
+      "ms": 1041
+    },
+    {
+      "path": "/v2/transactions",
+      "ms": 758
+    },
+    {
+      "path": "/v2/recurring",
+      "ms": 787
+    },
+    {
+      "path": "/v2/analytics",
+      "ms": 834
+    },
+    {
+      "path": "/v2/budgets",
+      "ms": 771
+    },
+    {
+      "path": "/v2/goals",
+      "ms": 792
+    },
+    {
+      "path": "/v2/settings",
+      "ms": 824
+    },
+    {
+      "path": "/v2/accounts",
+      "ms": 852
+    },
+    {
+      "path": "/v2/analytics",
+      "ms": 777
+    },
+    {
+      "path": "/v2/settings",
+      "ms": 789
+    }
+  ],
+  "uncaught": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING"
+  ],
+  "network": {
+    "financial": 411,
+    "providerFinancial": 0,
+    "failures": [
+      {
+        "path": "/api/v2/accounts",
+        "status": 500,
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts",
+        "error": "net::ERR_INCOMPLETE_CHUNKED_ENCODING",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/dashboard",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts/summary",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/transfers",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts/19ea147c-89a6-468a-b733-e14452d35341",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts/19ea147c-89a6-468a-b733-e14452d35341/summary",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/transactions",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/recurring",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/recurring/upcoming",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/categories",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/categories",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/analytics/overview",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/budgets",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/categories",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/categories",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/goals",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/profile",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/transactions",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/transactions",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/categories",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/categories",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/profile",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/categories",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/categories",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts/summary",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      },
+      {
+        "path": "/api/v2/accounts",
+        "error": "net::ERR_ABORTED",
+        "expected": true
+      }
+    ]
+  },
+  "remoteTouched": false
+}

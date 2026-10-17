@@ -683,6 +683,7 @@
   width: 100% !important;
 }
 .v2-dialog {
+  overflow-wrap: anywhere;
   margin: auto;
   width: min(560px, calc(100% - 32px));
   max-height: calc(100dvh - 32px);
