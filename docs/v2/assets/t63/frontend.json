@@ -1,0 +1,2439 @@
+{
+  "mode": "Next development; intentional production financial 404 preserved",
+  "browser": "155.0.4283.45",
+  "navigation": [
+    {
+      "route": "dashboard",
+      "label": "first development compile and session restore",
+      "reload": true,
+      "usableApproxMs": 1439,
+      "domNodes": 635,
+      "longTasks": [
+        82
+      ]
+    },
+    {
+      "route": "accounts",
+      "label": "warmup compilation",
+      "reload": false,
+      "usableApproxMs": 410,
+      "domNodes": 1184,
+      "longTasks": [
+        52
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "warmup compilation",
+      "reload": false,
+      "usableApproxMs": 390,
+      "domNodes": 2126,
+      "longTasks": [
+        52,
+        80
+      ]
+    },
+    {
+      "route": "recurring",
+      "label": "warmup compilation",
+      "reload": false,
+      "usableApproxMs": 2616,
+      "domNodes": 37237,
+      "longTasks": [
+        317,
+        441,
+        447,
+        167,
+        239
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "warmup compilation",
+      "reload": false,
+      "usableApproxMs": 1294,
+      "domNodes": 11579,
+      "longTasks": [
+        172,
+        207,
+        269
+      ]
+    },
+    {
+      "route": "budgets",
+      "label": "warmup compilation",
+      "reload": false,
+      "usableApproxMs": 1313,
+      "domNodes": 19603,
+      "longTasks": [
+        319
+      ]
+    },
+    {
+      "route": "goals",
+      "label": "warmup compilation",
+      "reload": false,
+      "usableApproxMs": 5068,
+      "domNodes": 59562,
+      "longTasks": [
+        119,
+        927,
+        1768,
+        871,
+        174
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "warmup compilation",
+      "reload": false,
+      "usableApproxMs": 1601,
+      "domNodes": 9248,
+      "longTasks": [
+        55,
+        248,
+        52,
+        202
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "desktop warm 0",
+      "reload": false,
+      "usableApproxMs": 368,
+      "domNodes": 649,
+      "longTasks": [
+        56
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "desktop warm 0",
+      "reload": false,
+      "usableApproxMs": 309,
+      "domNodes": 2136,
+      "longTasks": [
+        60,
+        75
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "desktop warm 0",
+      "reload": false,
+      "usableApproxMs": 685,
+      "domNodes": 11585,
+      "longTasks": [
+        224
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "desktop warm 0",
+      "reload": false,
+      "usableApproxMs": 956,
+      "domNodes": 9248,
+      "longTasks": [
+        51,
+        161,
+        537
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "desktop warm 1",
+      "reload": false,
+      "usableApproxMs": 600,
+      "domNodes": 649,
+      "longTasks": [
+        84
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "desktop warm 1",
+      "reload": false,
+      "usableApproxMs": 421,
+      "domNodes": 2136,
+      "longTasks": [
+        69,
+        79
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "desktop warm 1",
+      "reload": false,
+      "usableApproxMs": 820,
+      "domNodes": 11585,
+      "longTasks": [
+        248
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "desktop warm 1",
+      "reload": false,
+      "usableApproxMs": 930,
+      "domNodes": 9248,
+      "longTasks": [
+        57,
+        263,
+        348
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "desktop warm 2",
+      "reload": false,
+      "usableApproxMs": 461,
+      "domNodes": 649,
+      "longTasks": [
+        61
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "desktop warm 2",
+      "reload": false,
+      "usableApproxMs": 370,
+      "domNodes": 2136,
+      "longTasks": [
+        58,
+        100
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "desktop warm 2",
+      "reload": false,
+      "usableApproxMs": 892,
+      "domNodes": 11585,
+      "longTasks": [
+        287
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "desktop warm 2",
+      "reload": false,
+      "usableApproxMs": 1455,
+      "domNodes": 9248,
+      "longTasks": [
+        69,
+        325,
+        302
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "desktop warm 3",
+      "reload": false,
+      "usableApproxMs": 311,
+      "domNodes": 649,
+      "longTasks": [
+        58
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "desktop warm 3",
+      "reload": false,
+      "usableApproxMs": 260,
+      "domNodes": 2136,
+      "longTasks": [
+        77
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "desktop warm 3",
+      "reload": false,
+      "usableApproxMs": 587,
+      "domNodes": 11585,
+      "longTasks": [
+        151
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "desktop warm 3",
+      "reload": false,
+      "usableApproxMs": 1090,
+      "domNodes": 9248,
+      "longTasks": [
+        79,
+        227,
+        122
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "desktop warm 4",
+      "reload": false,
+      "usableApproxMs": 350,
+      "domNodes": 649,
+      "longTasks": [
+        64
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "desktop warm 4",
+      "reload": false,
+      "usableApproxMs": 303,
+      "domNodes": 2136,
+      "longTasks": [
+        75
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "desktop warm 4",
+      "reload": false,
+      "usableApproxMs": 646,
+      "domNodes": 11585,
+      "longTasks": [
+        209
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "desktop warm 4",
+      "reload": false,
+      "usableApproxMs": 636,
+      "domNodes": 9248,
+      "longTasks": [
+        108,
+        299
+      ]
+    },
+    {
+      "route": "accounts",
+      "label": "desktop extra",
+      "reload": false,
+      "usableApproxMs": 544,
+      "domNodes": 1196,
+      "longTasks": []
+    },
+    {
+      "route": "recurring",
+      "label": "desktop extra",
+      "reload": false,
+      "usableApproxMs": 2958,
+      "domNodes": 37245,
+      "longTasks": [
+        265,
+        624,
+        646,
+        192,
+        284
+      ]
+    },
+    {
+      "route": "budgets",
+      "label": "desktop extra",
+      "reload": false,
+      "usableApproxMs": 1801,
+      "domNodes": 19607,
+      "longTasks": [
+        172,
+        319,
+        666
+      ]
+    },
+    {
+      "route": "goals",
+      "label": "desktop extra",
+      "reload": false,
+      "usableApproxMs": 5020,
+      "domNodes": 59564,
+      "longTasks": [
+        99,
+        750,
+        777,
+        167
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "direct reload",
+      "reload": true,
+      "usableApproxMs": 1874,
+      "domNodes": 2122,
+      "longTasks": [
+        60,
+        87
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "restore 25-row runtime after DOM stress",
+      "reload": true,
+      "usableApproxMs": 707,
+      "domNodes": 2122,
+      "longTasks": [
+        65,
+        103
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "1000 custom categories",
+      "reload": true,
+      "usableApproxMs": 1194,
+      "domNodes": 9234,
+      "longTasks": [
+        252,
+        108
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "dialog preparation",
+      "reload": false,
+      "usableApproxMs": 545,
+      "domNodes": 2124,
+      "longTasks": [
+        89,
+        62,
+        60,
+        96
+      ]
+    },
+    {
+      "route": "accounts",
+      "label": "dialog preparation",
+      "reload": false,
+      "usableApproxMs": 273,
+      "domNodes": 1186,
+      "longTasks": [
+        126,
+        109,
+        86,
+        158,
+        104,
+        106,
+        101
+      ]
+    },
+    {
+      "route": "recurring",
+      "label": "dialog preparation",
+      "reload": false,
+      "usableApproxMs": 2506,
+      "domNodes": 37237,
+      "longTasks": [
+        62,
+        53,
+        324,
+        413,
+        433,
+        169,
+        265
+      ]
+    },
+    {
+      "route": "budgets",
+      "label": "dialog preparation",
+      "reload": false,
+      "usableApproxMs": 2962,
+      "domNodes": 19601,
+      "longTasks": [
+        1209,
+        743,
+        634,
+        715,
+        1001,
+        132,
+        558,
+        598,
+        102,
+        1021,
+        137,
+        582,
+        586,
+        841,
+        1169,
+        198,
+        688,
+        496,
+        776,
+        1009,
+        130,
+        515,
+        464,
+        743,
+        171,
+        53,
+        712,
+        698
+      ]
+    },
+    {
+      "route": "goals",
+      "label": "dialog preparation",
+      "reload": false,
+      "usableApproxMs": 8507,
+      "domNodes": 59560,
+      "longTasks": [
+        831,
+        286,
+        278,
+        411,
+        751,
+        169,
+        377,
+        405,
+        793,
+        181,
+        398,
+        417,
+        686,
+        78,
+        224,
+        366,
+        789,
+        166,
+        388,
+        55,
+        135,
+        3375,
+        2099,
+        853
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "dialog preparation",
+      "reload": false,
+      "usableApproxMs": 4630,
+      "domNodes": 9244,
+      "longTasks": [
+        1676,
+        725,
+        736,
+        1102,
+        1994,
+        680,
+        924,
+        1446,
+        1456,
+        206,
+        750,
+        654,
+        1205,
+        1371,
+        156,
+        693,
+        871,
+        1209,
+        1317,
+        182,
+        667,
+        633,
+        137,
+        51,
+        80,
+        379,
+        72,
+        1400,
+        300,
+        251
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "normal personal dataset",
+      "reload": false,
+      "usableApproxMs": 197,
+      "domNodes": 409,
+      "longTasks": [
+        291,
+        315,
+        215,
+        319,
+        307,
+        213,
+        269,
+        267,
+        194,
+        233,
+        252,
+        198,
+        234,
+        270,
+        194
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "normal personal dataset",
+      "reload": false,
+      "usableApproxMs": 258,
+      "domNodes": 1120,
+      "longTasks": [
+        62
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "normal personal dataset",
+      "reload": false,
+      "usableApproxMs": 182,
+      "domNodes": 691,
+      "longTasks": []
+    },
+    {
+      "route": "settings",
+      "label": "normal personal dataset",
+      "reload": false,
+      "usableApproxMs": 162,
+      "domNodes": 356,
+      "longTasks": []
+    },
+    {
+      "route": "dashboard",
+      "label": "mobile viewport warm 0",
+      "reload": true,
+      "usableApproxMs": 724,
+      "domNodes": 635,
+      "longTasks": []
+    },
+    {
+      "route": "dashboard",
+      "label": "mobile viewport warm 1",
+      "reload": true,
+      "usableApproxMs": 462,
+      "domNodes": 635,
+      "longTasks": []
+    },
+    {
+      "route": "dashboard",
+      "label": "mobile viewport warm 2",
+      "reload": true,
+      "usableApproxMs": 525,
+      "domNodes": 635,
+      "longTasks": []
+    },
+    {
+      "route": "transactions",
+      "label": "mobile viewport warm 0",
+      "reload": true,
+      "usableApproxMs": 565,
+      "domNodes": 2122,
+      "longTasks": [
+        59,
+        97
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "mobile viewport warm 1",
+      "reload": true,
+      "usableApproxMs": 581,
+      "domNodes": 2122,
+      "longTasks": [
+        77,
+        88
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "mobile viewport warm 2",
+      "reload": true,
+      "usableApproxMs": 554,
+      "domNodes": 2122,
+      "longTasks": [
+        60,
+        95
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "mobile viewport warm 0",
+      "reload": true,
+      "usableApproxMs": 859,
+      "domNodes": 11571,
+      "longTasks": [
+        230
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "mobile viewport warm 1",
+      "reload": true,
+      "usableApproxMs": 1036,
+      "domNodes": 11571,
+      "longTasks": [
+        286
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "mobile viewport warm 2",
+      "reload": true,
+      "usableApproxMs": 938,
+      "domNodes": 11571,
+      "longTasks": [
+        233
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "mobile viewport warm 0",
+      "reload": true,
+      "usableApproxMs": 1187,
+      "domNodes": 9234,
+      "longTasks": [
+        262
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "mobile viewport warm 1",
+      "reload": true,
+      "usableApproxMs": 987,
+      "domNodes": 9234,
+      "longTasks": [
+        257
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "mobile viewport warm 2",
+      "reload": true,
+      "usableApproxMs": 1431,
+      "domNodes": 9234,
+      "longTasks": [
+        331
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "360px 4x CPU, 150ms RTT, 1.6Mbps down/750kbps up",
+      "reload": true,
+      "usableApproxMs": 7228,
+      "domNodes": 635,
+      "longTasks": [
+        54,
+        152,
+        233
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "360px 4x CPU, 150ms RTT, 1.6Mbps down/750kbps up",
+      "reload": true,
+      "usableApproxMs": 8364,
+      "domNodes": 2122,
+      "longTasks": [
+        79,
+        50,
+        286,
+        477,
+        101,
+        561
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "360px 4x CPU, 150ms RTT, 1.6Mbps down/750kbps up",
+      "reload": true,
+      "usableApproxMs": 11177,
+      "domNodes": 11571,
+      "longTasks": [
+        88,
+        142,
+        1636
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "360px 4x CPU, 150ms RTT, 1.6Mbps down/750kbps up",
+      "reload": true,
+      "usableApproxMs": 11560,
+      "domNodes": 9234,
+      "longTasks": [
+        59,
+        157,
+        55,
+        1888,
+        2129
+      ]
+    }
+  ],
+  "waterfalls": [
+    {
+      "route": "dashboard",
+      "label": "first development compile and session restore",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 1124
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/dashboard?period=this_month",
+          "startMs": 1225
+        }
+      ]
+    },
+    {
+      "route": "accounts",
+      "label": "warmup compilation",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/transfers?limit=25",
+          "startMs": 166
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 169
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 173
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 173
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/summary",
+          "startMs": 174
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "warmup compilation",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/transactions?limit=25",
+          "startMs": 119
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 121
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 121
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 121
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 121
+        }
+      ]
+    },
+    {
+      "route": "recurring",
+      "label": "warmup compilation",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/recurring",
+          "startMs": 117
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/recurring/upcoming?days=30",
+          "startMs": 118
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 119
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 119
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 120
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 120
+        }
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "warmup compilation",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/analytics/overview?from=2026-09-18&to=2026-10-17",
+          "startMs": 723
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 724
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 724
+        }
+      ]
+    },
+    {
+      "route": "budgets",
+      "label": "warmup compilation",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/budgets?year=2026&month=10",
+          "startMs": 220
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 221
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 221
+        }
+      ]
+    },
+    {
+      "route": "goals",
+      "label": "warmup compilation",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/goals",
+          "startMs": 495
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 497
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 497
+        }
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "warmup compilation",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/profile",
+          "startMs": 1055
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 1056
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 1056
+        }
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "desktop warm 0",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/dashboard?period=this_month",
+          "startMs": 245
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "desktop warm 0",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/transactions?limit=25",
+          "startMs": 98
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 98
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 100
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 100
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 100
+        }
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "desktop warm 0",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/analytics/overview?from=2026-09-18&to=2026-10-17",
+          "startMs": 106
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 106
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 106
+        }
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "desktop warm 0",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/profile",
+          "startMs": 219
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 219
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 219
+        }
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "desktop warm 1",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/dashboard?period=this_month",
+          "startMs": 418
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "desktop warm 1",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/transactions?limit=25",
+          "startMs": 179
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 182
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 183
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 183
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 184
+        }
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "desktop warm 1",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/analytics/overview?from=2026-09-18&to=2026-10-17",
+          "startMs": 137
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 137
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 137
+        }
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "desktop warm 1",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/profile",
+          "startMs": 262
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 263
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 263
+        }
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "desktop warm 2",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/dashboard?period=this_month",
+          "startMs": 294
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "desktop warm 2",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/transactions?limit=25",
+          "startMs": 120
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 120
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 120
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 122
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 122
+        }
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "desktop warm 2",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/analytics/overview?from=2026-09-18&to=2026-10-17",
+          "startMs": 121
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 122
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 122
+        }
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "desktop warm 2",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/profile",
+          "startMs": 274
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 275
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 276
+        }
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "desktop warm 3",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/dashboard?period=this_month",
+          "startMs": 166
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "desktop warm 3",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/transactions?limit=25",
+          "startMs": 94
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 95
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 95
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 95
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 96
+        }
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "desktop warm 3",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/analytics/overview?from=2026-09-18&to=2026-10-17",
+          "startMs": 104
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 104
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 104
+        }
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "desktop warm 3",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/profile",
+          "startMs": 231
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 232
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 232
+        }
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "desktop warm 4",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/dashboard?period=this_month",
+          "startMs": 185
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "desktop warm 4",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/transactions?limit=25",
+          "startMs": 105
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 108
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 108
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 109
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 109
+        }
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "desktop warm 4",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/analytics/overview?from=2026-09-18&to=2026-10-17",
+          "startMs": 111
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 112
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 112
+        }
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "desktop warm 4",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/profile",
+          "startMs": 194
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 194
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 195
+        }
+      ]
+    },
+    {
+      "route": "accounts",
+      "label": "desktop extra",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/transfers?limit=25",
+          "startMs": 387
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 388
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 389
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 389
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/summary",
+          "startMs": 389
+        }
+      ]
+    },
+    {
+      "route": "recurring",
+      "label": "desktop extra",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/recurring",
+          "startMs": 100
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/recurring/upcoming?days=30",
+          "startMs": 102
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 103
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 103
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 103
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 103
+        }
+      ]
+    },
+    {
+      "route": "budgets",
+      "label": "desktop extra",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/budgets?year=2026&month=10",
+          "startMs": 752
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 752
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 752
+        }
+      ]
+    },
+    {
+      "route": "goals",
+      "label": "desktop extra",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/goals",
+          "startMs": 398
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 398
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 398
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "direct reload",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 1578
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/transactions?limit=25",
+          "startMs": 1633
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 1634
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 1634
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 1635
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 1635
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "restore 25-row runtime after DOM stress",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 292
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/transactions?limit=25",
+          "startMs": 343
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 344
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 344
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 344
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 344
+        }
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "1000 custom categories",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 305
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/profile",
+          "startMs": 356
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 357
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 357
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "dialog preparation",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/transactions?limit=25",
+          "startMs": 317
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 319
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 319
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 320
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 320
+        }
+      ]
+    },
+    {
+      "route": "accounts",
+      "label": "dialog preparation",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/transfers?limit=25",
+          "startMs": 124
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 125
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 125
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 125
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/summary",
+          "startMs": 125
+        }
+      ]
+    },
+    {
+      "route": "recurring",
+      "label": "dialog preparation",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/recurring",
+          "startMs": 117
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/recurring/upcoming?days=30",
+          "startMs": 118
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 118
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 118
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 118
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 119
+        }
+      ]
+    },
+    {
+      "route": "budgets",
+      "label": "dialog preparation",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/budgets?year=2026&month=10",
+          "startMs": 1500
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 1501
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 1501
+        }
+      ]
+    },
+    {
+      "route": "goals",
+      "label": "dialog preparation",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/goals",
+          "startMs": 1082
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 1085
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 1085
+        }
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "dialog preparation",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/profile",
+          "startMs": 2624
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 2625
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 2625
+        }
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "normal personal dataset",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/dashboard?period=this_month",
+          "startMs": 102
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "normal personal dataset",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/transactions?limit=25",
+          "startMs": 98
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 100
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 103
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 104
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 104
+        }
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "normal personal dataset",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/analytics/overview?from=2026-09-18&to=2026-10-17",
+          "startMs": 107
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 108
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 110
+        }
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "normal personal dataset",
+      "requests": [
+        {
+          "method": "GET",
+          "path": "/api/v2/profile",
+          "startMs": 97
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 98
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 98
+        }
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "mobile viewport warm 0",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 538
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/dashboard?period=this_month",
+          "startMs": 578
+        }
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "mobile viewport warm 1",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 264
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/dashboard?period=this_month",
+          "startMs": 307
+        }
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "mobile viewport warm 2",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 306
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/dashboard?period=this_month",
+          "startMs": 357
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "mobile viewport warm 0",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 259
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/transactions?limit=25",
+          "startMs": 321
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 322
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 322
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 323
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 324
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "mobile viewport warm 1",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 260
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/transactions?limit=25",
+          "startMs": 317
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 318
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 319
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 322
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 324
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "mobile viewport warm 2",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 269
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/transactions?limit=25",
+          "startMs": 323
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 324
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 324
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 328
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 329
+        }
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "mobile viewport warm 0",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 250
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/analytics/overview?from=2026-09-18&to=2026-10-17",
+          "startMs": 300
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 300
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 300
+        }
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "mobile viewport warm 1",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 351
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/analytics/overview?from=2026-09-18&to=2026-10-17",
+          "startMs": 404
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 405
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 405
+        }
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "mobile viewport warm 2",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 336
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/analytics/overview?from=2026-09-18&to=2026-10-17",
+          "startMs": 378
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 378
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 378
+        }
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "mobile viewport warm 0",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 334
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/profile",
+          "startMs": 385
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 386
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 386
+        }
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "mobile viewport warm 1",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 350
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/profile",
+          "startMs": 395
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 396
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 396
+        }
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "mobile viewport warm 2",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 346
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/profile",
+          "startMs": 395
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 395
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 395
+        }
+      ]
+    },
+    {
+      "route": "dashboard",
+      "label": "360px 4x CPU, 150ms RTT, 1.6Mbps down/750kbps up",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 6289
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/dashboard?period=this_month",
+          "startMs": 6635
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "label": "360px 4x CPU, 150ms RTT, 1.6Mbps down/750kbps up",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 6218
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/transactions?limit=25",
+          "startMs": 6687
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 6688
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 6688
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 6688
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 6688
+        }
+      ]
+    },
+    {
+      "route": "analytics",
+      "label": "360px 4x CPU, 150ms RTT, 1.6Mbps down/750kbps up",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 6065
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/analytics/overview?from=2026-09-18&to=2026-10-17",
+          "startMs": 6415
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "startMs": 6415
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "startMs": 6416
+        }
+      ]
+    },
+    {
+      "route": "settings",
+      "label": "360px 4x CPU, 150ms RTT, 1.6Mbps down/750kbps up",
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "startMs": 6089
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/profile",
+          "startMs": 6442
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "startMs": 6443
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "startMs": 6443
+        }
+      ]
+    }
+  ],
+  "dialogs": [
+    {
+      "name": "Add transaction",
+      "openMs": [
+        232,
+        208,
+        262,
+        193,
+        207
+      ],
+      "beforeNodes": 2124,
+      "afterNodes": 2124
+    },
+    {
+      "name": "New transfer",
+      "openMs": [
+        112,
+        96,
+        108,
+        128,
+        115
+      ],
+      "beforeNodes": 1186,
+      "afterNodes": 1186
+    },
+    {
+      "name": "Add recurring item",
+      "openMs": [
+        4827,
+        4221,
+        4099,
+        4417,
+        3756
+      ],
+      "beforeNodes": 37237,
+      "afterNodes": 37237
+    },
+    {
+      "name": "Add budget",
+      "openMs": [
+        1411,
+        1403,
+        1746,
+        1594,
+        2033
+      ],
+      "beforeNodes": 19601,
+      "afterNodes": 19601
+    },
+    {
+      "name": "Create goal",
+      "openMs": [
+        8767,
+        8996,
+        7924,
+        7754,
+        8076
+      ],
+      "beforeNodes": 59560,
+      "afterNodes": 59560
+    },
+    {
+      "name": "Add custom category",
+      "openMs": [
+        769,
+        789,
+        687,
+        637,
+        665
+      ],
+      "beforeNodes": 9244,
+      "afterNodes": 9244
+    }
+  ],
+  "memory": [
+    {
+      "label": "after warmup",
+      "documents": 2,
+      "nodes": 177865,
+      "jsEventListeners": 13026,
+      "metrics": []
+    },
+    {
+      "label": "after repeated routes and dialogs",
+      "documents": 2,
+      "nodes": 28544,
+      "jsEventListeners": 22941,
+      "metrics": []
+    }
+  ],
+  "errors": [],
+  "checks": [],
+  "remoteTouched": false,
+  "hundredRowDomStress": {
+    "rows": 100,
+    "twoFrameLayoutMs": 24.59999990463257,
+    "kind": "DOM cloning only; React runtime remains 25 rows"
+  },
+  "rapidSearchRequests": [
+    {
+      "method": "POST",
+      "path": "/api/v2/profile/bootstrap",
+      "startMs": 292
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/transactions?limit=25",
+      "startMs": 343
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts?status=active",
+      "startMs": 344
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/accounts?status=archived",
+      "startMs": 344
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/categories?status=active",
+      "startMs": 344
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/categories?status=archived",
+      "startMs": 344
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/transactions?q=Weekly&limit=25",
+      "startMs": 974
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/transactions?q=RareNeedle&limit=25",
+      "startMs": 1302
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/transactions?q=groceries&limit=25",
+      "startMs": 1515
+    }
+  ],
+  "sessionSwitch": {
+    "ms": 526,
+    "requests": [
+      {
+        "method": "POST",
+        "path": "/api/v2/profile/bootstrap",
+        "startMs": 47
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/profile",
+        "startMs": 140
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/categories?status=active",
+        "startMs": 141
+      },
+      {
+        "method": "GET",
+        "path": "/api/v2/categories?status=archived",
+        "startMs": 141
+      }
+    ],
+    "priorUserIdAbsent": true
+  },
+  "slowLoadingStatusMs": 458,
+  "retainedRefreshContent": true,
+  "failureRequests": [
+    {
+      "method": "POST",
+      "path": "/api/v2/profile/bootstrap",
+      "startMs": 15567
+    },
+    {
+      "method": "GET",
+      "path": "/api/v2/dashboard?period=this_month",
+      "startMs": 15609
+    }
+  ]
+}

@@ -1,0 +1,605 @@
+{
+  "mutations": [
+    {
+      "kind": "transaction",
+      "elapsedIncludingNetworkIdleMs": 455,
+      "requests": [
+        {
+          "path": "/api/v2/transactions",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/transactions?limit=25",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "transfer",
+      "elapsedIncludingNetworkIdleMs": 355,
+      "requests": [
+        {
+          "path": "/api/v2/transfers",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/accounts?status=active",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/accounts/summary",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/accounts?status=active",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/accounts?status=archived",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/transfers?limit=25",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "recurring",
+      "elapsedIncludingNetworkIdleMs": 446,
+      "requests": [
+        {
+          "path": "/api/v2/recurring",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/recurring",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/recurring/upcoming?days=30",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "budget",
+      "elapsedIncludingNetworkIdleMs": 305,
+      "requests": [
+        {
+          "path": "/api/v2/budgets",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/budgets?year=2026&month=10",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "goal",
+      "elapsedIncludingNetworkIdleMs": 303,
+      "requests": [
+        {
+          "path": "/api/v2/goals",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/goals",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "category",
+      "elapsedIncludingNetworkIdleMs": 312,
+      "requests": [
+        {
+          "path": "/api/v2/categories",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/categories?status=active",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/categories?status=archived",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "transaction",
+      "elapsedIncludingNetworkIdleMs": 415,
+      "requests": [
+        {
+          "path": "/api/v2/transactions",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/transactions?limit=25",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "transfer",
+      "elapsedIncludingNetworkIdleMs": 382,
+      "requests": [
+        {
+          "path": "/api/v2/transfers",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/accounts?status=active",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/accounts/summary",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/accounts?status=active",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/accounts?status=archived",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/transfers?limit=25",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "recurring",
+      "elapsedIncludingNetworkIdleMs": 430,
+      "requests": [
+        {
+          "path": "/api/v2/recurring",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/recurring",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/recurring/upcoming?days=30",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "budget",
+      "elapsedIncludingNetworkIdleMs": 304,
+      "requests": [
+        {
+          "path": "/api/v2/budgets",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/budgets?year=2026&month=10",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "goal",
+      "elapsedIncludingNetworkIdleMs": 319,
+      "requests": [
+        {
+          "path": "/api/v2/goals",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/goals",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "category",
+      "elapsedIncludingNetworkIdleMs": 298,
+      "requests": [
+        {
+          "path": "/api/v2/categories",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/categories?status=active",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/categories?status=archived",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "transaction",
+      "elapsedIncludingNetworkIdleMs": 399,
+      "requests": [
+        {
+          "path": "/api/v2/transactions",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/transactions?limit=25",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "transfer",
+      "elapsedIncludingNetworkIdleMs": 385,
+      "requests": [
+        {
+          "path": "/api/v2/transfers",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/accounts?status=active",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/accounts/summary",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/accounts?status=active",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/accounts?status=archived",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/transfers?limit=25",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "recurring",
+      "elapsedIncludingNetworkIdleMs": 436,
+      "requests": [
+        {
+          "path": "/api/v2/recurring",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/recurring",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/recurring/upcoming?days=30",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "budget",
+      "elapsedIncludingNetworkIdleMs": 300,
+      "requests": [
+        {
+          "path": "/api/v2/budgets",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/budgets?year=2026&month=10",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "goal",
+      "elapsedIncludingNetworkIdleMs": 299,
+      "requests": [
+        {
+          "path": "/api/v2/goals",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/goals",
+          "method": "GET"
+        }
+      ]
+    },
+    {
+      "kind": "category",
+      "elapsedIncludingNetworkIdleMs": 310,
+      "requests": [
+        {
+          "path": "/api/v2/categories",
+          "method": "POST"
+        },
+        {
+          "path": "/api/v2/categories?status=active",
+          "method": "GET"
+        },
+        {
+          "path": "/api/v2/categories?status=archived",
+          "method": "GET"
+        }
+      ]
+    }
+  ],
+  "normalRoutes": [
+    {
+      "route": "dashboard",
+      "repeat": 0,
+      "msIncludingNetworkIdle": 1001
+    },
+    {
+      "route": "accounts",
+      "repeat": 0,
+      "msIncludingNetworkIdle": 898
+    },
+    {
+      "route": "transactions",
+      "repeat": 0,
+      "msIncludingNetworkIdle": 916
+    },
+    {
+      "route": "recurring",
+      "repeat": 0,
+      "msIncludingNetworkIdle": 857
+    },
+    {
+      "route": "analytics",
+      "repeat": 0,
+      "msIncludingNetworkIdle": 826
+    },
+    {
+      "route": "budgets",
+      "repeat": 0,
+      "msIncludingNetworkIdle": 807
+    },
+    {
+      "route": "goals",
+      "repeat": 0,
+      "msIncludingNetworkIdle": 792
+    },
+    {
+      "route": "settings",
+      "repeat": 0,
+      "msIncludingNetworkIdle": 822
+    },
+    {
+      "route": "dashboard",
+      "repeat": 1,
+      "msIncludingNetworkIdle": 790
+    },
+    {
+      "route": "accounts",
+      "repeat": 1,
+      "msIncludingNetworkIdle": 847
+    },
+    {
+      "route": "transactions",
+      "repeat": 1,
+      "msIncludingNetworkIdle": 846
+    },
+    {
+      "route": "recurring",
+      "repeat": 1,
+      "msIncludingNetworkIdle": 872
+    },
+    {
+      "route": "analytics",
+      "repeat": 1,
+      "msIncludingNetworkIdle": 809
+    },
+    {
+      "route": "budgets",
+      "repeat": 1,
+      "msIncludingNetworkIdle": 819
+    },
+    {
+      "route": "goals",
+      "repeat": 1,
+      "msIncludingNetworkIdle": 813
+    },
+    {
+      "route": "settings",
+      "repeat": 1,
+      "msIncludingNetworkIdle": 803
+    },
+    {
+      "route": "dashboard",
+      "repeat": 2,
+      "msIncludingNetworkIdle": 785
+    },
+    {
+      "route": "accounts",
+      "repeat": 2,
+      "msIncludingNetworkIdle": 841
+    },
+    {
+      "route": "transactions",
+      "repeat": 2,
+      "msIncludingNetworkIdle": 874
+    },
+    {
+      "route": "recurring",
+      "repeat": 2,
+      "msIncludingNetworkIdle": 853
+    },
+    {
+      "route": "analytics",
+      "repeat": 2,
+      "msIncludingNetworkIdle": 838
+    },
+    {
+      "route": "budgets",
+      "repeat": 2,
+      "msIncludingNetworkIdle": 793
+    },
+    {
+      "route": "goals",
+      "repeat": 2,
+      "msIncludingNetworkIdle": 787
+    },
+    {
+      "route": "settings",
+      "repeat": 2,
+      "msIncludingNetworkIdle": 840
+    }
+  ],
+  "charts": [
+    {
+      "range": "1_year",
+      "elapsedIncludingNetworkIdleMs": 219,
+      "tableRows": 12
+    },
+    {
+      "range": "6_months",
+      "elapsedIncludingNetworkIdleMs": 208,
+      "tableRows": 6
+    },
+    {
+      "range": "1_year",
+      "elapsedIncludingNetworkIdleMs": 214,
+      "tableRows": 12
+    },
+    {
+      "range": "6_months",
+      "elapsedIncludingNetworkIdleMs": 199,
+      "tableRows": 6
+    },
+    {
+      "range": "1_year",
+      "elapsedIncludingNetworkIdleMs": 170,
+      "tableRows": 12
+    }
+  ],
+  "audits": [
+    {
+      "label": "normal dashboard",
+      "violations": []
+    },
+    {
+      "label": "normal transactions",
+      "violations": []
+    },
+    {
+      "label": "normal analytics",
+      "violations": []
+    },
+    {
+      "label": "normal settings",
+      "violations": []
+    }
+  ],
+  "production": [
+    {
+      "route": "dashboard",
+      "status": 404
+    },
+    {
+      "route": "accounts",
+      "status": 404
+    },
+    {
+      "route": "transactions",
+      "status": 404
+    },
+    {
+      "route": "recurring",
+      "status": 404
+    },
+    {
+      "route": "analytics",
+      "status": 404
+    },
+    {
+      "route": "budgets",
+      "status": 404
+    },
+    {
+      "route": "goals",
+      "status": 404
+    },
+    {
+      "route": "settings",
+      "status": 404
+    }
+  ],
+  "errors": [],
+  "remoteTouched": false,
+  "memory": [
+    {
+      "cycle": 0,
+      "documents": 2,
+      "nodes": 646,
+      "jsEventListeners": 674
+    },
+    {
+      "cycle": 1,
+      "documents": 2,
+      "nodes": 646,
+      "jsEventListeners": 674
+    },
+    {
+      "cycle": 2,
+      "documents": 2,
+      "nodes": 646,
+      "jsEventListeners": 674
+    }
+  ],
+  "privateSessionSwitch": [
+    {
+      "privateClearMs": 43,
+      "settledMs": 246,
+      "stressMarkerAbsent": true
+    },
+    {
+      "privateClearMs": 226,
+      "settledMs": 452,
+      "stressMarkerAbsent": true
+    },
+    {
+      "privateClearMs": 209,
+      "settledMs": 446,
+      "stressMarkerAbsent": true
+    }
+  ],
+  "productionAuth": [
+    {
+      "iteration": 0,
+      "status": 200,
+      "usableApproxMs": 159
+    },
+    {
+      "iteration": 1,
+      "status": 200,
+      "usableApproxMs": 106
+    },
+    {
+      "iteration": 2,
+      "status": 200,
+      "usableApproxMs": 113
+    },
+    {
+      "iteration": 3,
+      "status": 200,
+      "usableApproxMs": 112
+    },
+    {
+      "iteration": 4,
+      "status": 200,
+      "usableApproxMs": 109
+    },
+    {
+      "iteration": 5,
+      "status": 200,
+      "usableApproxMs": 104
+    },
+    {
+      "iteration": 6,
+      "status": 200,
+      "usableApproxMs": 106
+    }
+  ]
+}

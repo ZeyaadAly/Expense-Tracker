@@ -1,0 +1,375 @@
+{
+  "date": "2026-10-17",
+  "startingSha": "23681b1b89aab46472f58e94d8e33c7cefef7811",
+  "backend": {
+    "lint": true,
+    "typecheck": true,
+    "build": true,
+    "newScriptLint": true,
+    "ordinaryTests": {
+      "passed": 104,
+      "failed": 0,
+      "skipped": 28,
+      "note": "Explicit disposable database suites executed separately below"
+    }
+  },
+  "frontend": {
+    "lint": true,
+    "typecheck": true,
+    "cleanOptimizedBuild": true,
+    "tests": {
+      "passed": 183,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "t57": {
+    "matrix": [
+      {
+        "label": "legacy",
+        "tests": 12,
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 3464
+      },
+      {
+        "label": "schema",
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 790
+      },
+      {
+        "label": "migration-ownership",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 2585
+      },
+      {
+        "label": "category-read",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 880
+      },
+      {
+        "label": "profile",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 1146
+      },
+      {
+        "label": "shared-isolation-concurrency",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 51801
+      },
+      {
+        "label": "recurring",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 3982
+      },
+      {
+        "label": "occurrences",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 2111
+      },
+      {
+        "label": "processor",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 11544
+      },
+      {
+        "label": "cron-orchestration",
+        "tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 10249
+      },
+      {
+        "label": "dashboard",
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 7061
+      },
+      {
+        "label": "analytics-direct",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 6296
+      },
+      {
+        "label": "analytics-http",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 6713
+      },
+      {
+        "label": "budgets",
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 7139
+      },
+      {
+        "label": "budget-status",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 4463
+      },
+      {
+        "label": "goals",
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 3730
+      },
+      {
+        "label": "custom-categories",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 1953
+      }
+    ],
+    "systems": [
+      {
+        "phase": "initial",
+        "checks": 670,
+        "failures": 0
+      },
+      {
+        "phase": "recover",
+        "checks": 103,
+        "failures": 0
+      },
+      {
+        "phase": "terminal",
+        "checks": 56,
+        "failures": 0
+      }
+    ]
+  },
+  "t59": {
+    "foundationChecks": 612,
+    "domainCounts": {
+      "api": 270,
+      "dbRejections": 58,
+      "positiveDb": 68,
+      "boundary": 92,
+      "concurrent": 124
+    },
+    "attackMatrix": {
+      "routeAuthentication": 156,
+      "ownerInjection": 561,
+      "massAssignment": 275,
+      "occurrence": 6,
+      "concurrency": 2,
+      "boundary": 19,
+      "timing": 192
+    },
+    "failures": 0
+  },
+  "t60": {
+    "initialChecks": 9445,
+    "restartedChecks": 728,
+    "databaseRestart": true,
+    "backendProcessRestart": true,
+    "failures": 0
+  },
+  "t61": {
+    "initialChecks": 1689,
+    "recoveryChecks": 43,
+    "groups": [
+      {
+        "name": "fresh owned fixtures and no historical create backfill",
+        "checks": 21
+      },
+      {
+        "name": "exact due early run calendar anchors inclusive exhaustion and money",
+        "checks": 81
+      },
+      {
+        "name": "generated deletion terminal marker future continuation and forecast separation",
+        "checks": 45
+      },
+      {
+        "name": "posted history survives coherent edits and parent restore requires explicit resume",
+        "checks": 36
+      },
+      {
+        "name": "100-per-definition continuation and cooperative committed/pending deadlines",
+        "checks": 226
+      },
+      {
+        "name": "pending edit pause archive skip and long-pause on-or-after resume",
+        "checks": 10
+      },
+      {
+        "name": "real database connection termination and explicit failed recovery",
+        "checks": 22
+      },
+      {
+        "name": "lock timeout fails safely and explicit recovery posts once",
+        "checks": 5
+      },
+      {
+        "name": "mixed-frequency backlog obeys oldest-due ordering without resurrecting exhaustion",
+        "checks": 30
+      },
+      {
+        "name": "eight overlapping processors across dozens of owners and coherent cursors",
+        "checks": 21
+      },
+      {
+        "name": "protected cron 1000-global backlog 100-per-definition overlap and retry",
+        "checks": 1166
+      },
+      {
+        "name": "restart fixture contains durable pending rows without financial effects",
+        "checks": 21
+      }
+    ],
+    "crashes": [
+      {
+        "phase": "crash-reserve",
+        "checkpoint": "reservation committed",
+        "killed": true
+      },
+      {
+        "phase": "crash-post",
+        "checkpoint": "generated insert and posted link uncommitted",
+        "killed": true
+      }
+    ],
+    "databaseRestart": true,
+    "newBackendProcess": true,
+    "failures": 0
+  },
+  "browser": {
+    "pageErrors": 0,
+    "freshAxeAudits": 4,
+    "axeViolations": 0,
+    "uiMutations": 18,
+    "privateSessionSwitches": 3,
+    "chartSamples": 5,
+    "retainedDomCounters": [
+      {
+        "cycle": 0,
+        "documents": 2,
+        "nodes": 646,
+        "jsEventListeners": 674
+      },
+      {
+        "cycle": 1,
+        "documents": 2,
+        "nodes": 646,
+        "jsEventListeners": 674
+      },
+      {
+        "cycle": 2,
+        "documents": 2,
+        "nodes": 646,
+        "jsEventListeners": 674
+      }
+    ],
+    "cleanProductionHttp": {
+      "cleanBuild": true,
+      "routes": [
+        {
+          "route": "dashboard",
+          "status": 404
+        },
+        {
+          "route": "accounts",
+          "status": 404
+        },
+        {
+          "route": "transactions",
+          "status": 404
+        },
+        {
+          "route": "recurring",
+          "status": 404
+        },
+        {
+          "route": "analytics",
+          "status": 404
+        },
+        {
+          "route": "budgets",
+          "status": 404
+        },
+        {
+          "route": "goals",
+          "status": 404
+        },
+        {
+          "route": "settings",
+          "status": 404
+        },
+        {
+          "route": "login",
+          "status": 200
+        },
+        {
+          "route": "register",
+          "status": 200
+        },
+        {
+          "route": "forgot-password",
+          "status": 200
+        },
+        {
+          "route": "reset-password",
+          "status": 200
+        }
+      ],
+      "remoteTouched": false
+    },
+    "previousFullT62AuditsNotCountedAsRerun": true
+  },
+  "sourceAndBuildSecretScan": {
+    "filesScanned": 782,
+    "sourceMapsScanned": 96,
+    "logsScanned": 3,
+    "checks": 785,
+    "findings": [],
+    "remoteTouched": false
+  },
+  "productOrSchemaChanged": false,
+  "dependenciesChanged": false,
+  "productionGatesIntact": true,
+  "cronEnabled": false,
+  "remoteTouched": false
+}

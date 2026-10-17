@@ -1,0 +1,350 @@
+{
+  "mode": "optimized production, ordinary financial gates preserved",
+  "chunks": [
+    {
+      "path": "static/chunks/2jvuiz52c-e9_.js",
+      "bytes": 249365,
+      "gzipBytes": 64983
+    },
+    {
+      "path": "static/chunks/1rj7ns8rte9vc.js",
+      "bytes": 229156,
+      "gzipBytes": 71628
+    },
+    {
+      "path": "static/chunks/36hei7oa9r0rt.js",
+      "bytes": 160166,
+      "gzipBytes": 43906
+    },
+    {
+      "path": "static/chunks/0cz1d0mv5g_q7.js",
+      "bytes": 112594,
+      "gzipBytes": 39627
+    },
+    {
+      "path": "static/chunks/3qjhd_40j879z.js",
+      "bytes": 47273,
+      "gzipBytes": 12424
+    },
+    {
+      "path": "static/chunks/0a-c4uq2klv40.js",
+      "bytes": 45243,
+      "gzipBytes": 12549
+    },
+    {
+      "path": "static/chunks/0ioo2b01t70zw.js",
+      "bytes": 42505,
+      "gzipBytes": 12749
+    },
+    {
+      "path": "static/chunks/0m0gwuaoakwge.js",
+      "bytes": 37143,
+      "gzipBytes": 11472
+    },
+    {
+      "path": "static/chunks/33uwuz4w_65t4.js",
+      "bytes": 36994,
+      "gzipBytes": 10843
+    },
+    {
+      "path": "static/chunks/2mmpezlrfmbu5.js",
+      "bytes": 34718,
+      "gzipBytes": 8716
+    },
+    {
+      "path": "static/chunks/3x6c9tf1ojmr7.js",
+      "bytes": 31708,
+      "gzipBytes": 9132
+    },
+    {
+      "path": "static/chunks/1gkp0l6w30ftn.js",
+      "bytes": 30493,
+      "gzipBytes": 9825
+    },
+    {
+      "path": "static/chunks/16k82rps94joz.js",
+      "bytes": 30253,
+      "gzipBytes": 9649
+    },
+    {
+      "path": "static/chunks/1s8_c_9uf3bki.js",
+      "bytes": 19623,
+      "gzipBytes": 6727
+    },
+    {
+      "path": "static/chunks/3l0u3nphehgkx.js",
+      "bytes": 18717,
+      "gzipBytes": 6031
+    },
+    {
+      "path": "static/chunks/2su6pqvt3wvg6.js",
+      "bytes": 18714,
+      "gzipBytes": 6364
+    },
+    {
+      "path": "static/chunks/12qbtsimymt7k.js",
+      "bytes": 18471,
+      "gzipBytes": 6803
+    },
+    {
+      "path": "static/chunks/32xulqk4ezgcx.js",
+      "bytes": 16146,
+      "gzipBytes": 6214
+    },
+    {
+      "path": "static/chunks/3fntmmi971322.js",
+      "bytes": 14377,
+      "gzipBytes": 3661
+    },
+    {
+      "path": "static/chunks/17gwntr0o588p.js",
+      "bytes": 14009,
+      "gzipBytes": 4853
+    },
+    {
+      "path": "static/chunks/turbopack-1zek5y5ox6e-e.js",
+      "bytes": 9721,
+      "gzipBytes": 3849
+    },
+    {
+      "path": "static/chunks/310vm2bl3xxpt.js",
+      "bytes": 5364,
+      "gzipBytes": 1970
+    },
+    {
+      "path": "static/chunks/2er4fafr5cceo.js",
+      "bytes": 4902,
+      "gzipBytes": 1869
+    },
+    {
+      "path": "static/chunks/1g_xodrk9vbv_.js",
+      "bytes": 919,
+      "gzipBytes": 584
+    }
+  ],
+  "routes": [
+    {
+      "route": "(public-v2)/v2/forgot-password/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js",
+        "/_next/static/chunks/12qbtsimymt7k.js",
+        "/_next/static/chunks/2jvuiz52c-e9_.js",
+        "/_next/static/chunks/32xulqk4ezgcx.js"
+      ],
+      "bytes": 298359,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "(public-v2)/v2/login/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js",
+        "/_next/static/chunks/12qbtsimymt7k.js",
+        "/_next/static/chunks/2jvuiz52c-e9_.js",
+        "/_next/static/chunks/32xulqk4ezgcx.js"
+      ],
+      "bytes": 298359,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "(public-v2)/v2/register/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js",
+        "/_next/static/chunks/12qbtsimymt7k.js",
+        "/_next/static/chunks/2jvuiz52c-e9_.js",
+        "/_next/static/chunks/32xulqk4ezgcx.js"
+      ],
+      "bytes": 298359,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "(public-v2)/v2/release-check/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js",
+        "/_next/static/chunks/12qbtsimymt7k.js",
+        "/_next/static/chunks/2jvuiz52c-e9_.js",
+        "/_next/static/chunks/1g_xodrk9vbv_.js"
+      ],
+      "bytes": 283132,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "(public-v2)/v2/reset-password/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js",
+        "/_next/static/chunks/12qbtsimymt7k.js",
+        "/_next/static/chunks/2jvuiz52c-e9_.js",
+        "/_next/static/chunks/32xulqk4ezgcx.js"
+      ],
+      "bytes": 298359,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js",
+        "/_next/static/chunks/0ioo2b01t70zw.js"
+      ],
+      "bytes": 56882,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "v2/accounts/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js",
+        "/_next/static/chunks/12qbtsimymt7k.js",
+        "/_next/static/chunks/2jvuiz52c-e9_.js",
+        "/_next/static/chunks/1gkp0l6w30ftn.js",
+        "/_next/static/chunks/0a-c4uq2klv40.js"
+      ],
+      "bytes": 357949,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "v2/accounts/[id]/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js",
+        "/_next/static/chunks/12qbtsimymt7k.js",
+        "/_next/static/chunks/2jvuiz52c-e9_.js",
+        "/_next/static/chunks/2er4fafr5cceo.js",
+        "/_next/static/chunks/0a-c4uq2klv40.js",
+        "/_next/static/chunks/1gkp0l6w30ftn.js"
+      ],
+      "bytes": 362851,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "v2/analytics/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js",
+        "/_next/static/chunks/12qbtsimymt7k.js",
+        "/_next/static/chunks/2jvuiz52c-e9_.js",
+        "/_next/static/chunks/1s8_c_9uf3bki.js",
+        "/_next/static/chunks/16k82rps94joz.js"
+      ],
+      "bytes": 332089,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "v2/budgets/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js",
+        "/_next/static/chunks/12qbtsimymt7k.js",
+        "/_next/static/chunks/2jvuiz52c-e9_.js",
+        "/_next/static/chunks/2su6pqvt3wvg6.js",
+        "/_next/static/chunks/1gkp0l6w30ftn.js"
+      ],
+      "bytes": 331420,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "v2/dashboard/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js",
+        "/_next/static/chunks/12qbtsimymt7k.js",
+        "/_next/static/chunks/2jvuiz52c-e9_.js",
+        "/_next/static/chunks/17gwntr0o588p.js",
+        "/_next/static/chunks/1gkp0l6w30ftn.js"
+      ],
+      "bytes": 326715,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "v2/design-system/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js",
+        "/_next/static/chunks/12qbtsimymt7k.js",
+        "/_next/static/chunks/2jvuiz52c-e9_.js",
+        "/_next/static/chunks/3qjhd_40j879z.js"
+      ],
+      "bytes": 329486,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "v2/goals/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js",
+        "/_next/static/chunks/12qbtsimymt7k.js",
+        "/_next/static/chunks/2jvuiz52c-e9_.js",
+        "/_next/static/chunks/3l0u3nphehgkx.js",
+        "/_next/static/chunks/16k82rps94joz.js"
+      ],
+      "bytes": 331183,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "v2/recurring/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js",
+        "/_next/static/chunks/12qbtsimymt7k.js",
+        "/_next/static/chunks/2jvuiz52c-e9_.js",
+        "/_next/static/chunks/3x6c9tf1ojmr7.js",
+        "/_next/static/chunks/1gkp0l6w30ftn.js"
+      ],
+      "bytes": 344414,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "v2/settings/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js",
+        "/_next/static/chunks/12qbtsimymt7k.js",
+        "/_next/static/chunks/2jvuiz52c-e9_.js",
+        "/_next/static/chunks/0m0gwuaoakwge.js"
+      ],
+      "bytes": 319356,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "v2/transactions/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js",
+        "/_next/static/chunks/12qbtsimymt7k.js",
+        "/_next/static/chunks/2jvuiz52c-e9_.js",
+        "/_next/static/chunks/1gkp0l6w30ftn.js",
+        "/_next/static/chunks/33uwuz4w_65t4.js"
+      ],
+      "bytes": 349700,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "_global-error/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js"
+      ],
+      "bytes": 14377,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    },
+    {
+      "route": "_not-found/page_client-reference-manifest.js",
+      "chunks": [
+        "/_next/static/chunks/3fntmmi971322.js"
+      ],
+      "bytes": 14377,
+      "note": "Union of referenced chunks; gated routes return 404 and do not serve the full financial UI"
+    }
+  ],
+  "allChunkBytes": 1228574,
+  "allChunkGzipBytes": 366428,
+  "note": "All emitted chunks are not a per-route first-load total. Next 16 build does not print per-route byte sizes.",
+  "clientManifestModules": [
+    "[project]/src/lib/auth/auth-provider.tsx",
+    "[project]/src/features/v2/protected-boundary.tsx",
+    "[project]/src/features/v2/auth.tsx",
+    "[project]/src/app/(public-v2)/v2/release-check/page.tsx",
+    "[project]/src/components/dashboard/dashboard.tsx",
+    "[project]/src/components/dashboard/fixture-dashboard.tsx",
+    "[project]/src/features/v2/accounts-page.tsx",
+    "[project]/src/features/v2/account-detail-page.tsx",
+    "[project]/src/features/v2/analytics-page.tsx",
+    "[project]/src/features/v2/budgets-page.tsx",
+    "[project]/src/features/v2/dashboard-page.tsx",
+    "[project]/src/components/v2/dev/showcase.tsx",
+    "[project]/src/features/v2/goals-page.tsx",
+    "[project]/src/features/v2/recurring-page.tsx",
+    "[project]/src/features/v2/settings-page.tsx",
+    "[project]/src/features/v2/transactions-page.tsx"
+  ],
+  "fixtureModuleReferences": [],
+  "heavyChartsInManifest": [],
+  "supabaseVersion": "2.117.2"
+}

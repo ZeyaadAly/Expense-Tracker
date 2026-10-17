@@ -1,0 +1,182 @@
+{
+  "measurements": [
+    {
+      "name": "fresh runtime pool connect and role query",
+      "iterations": 15,
+      "warmups": 2,
+      "medianMs": 33.07040000000006,
+      "p95Ms": 34.62079999999992,
+      "maxMs": 34.62079999999992
+    },
+    {
+      "name": "warm health HTTP with actual limited-role DB query",
+      "iterations": 15,
+      "warmups": 2,
+      "medianMs": 15.45089999999982,
+      "p95Ms": 16.703899999999976,
+      "maxMs": 16.703899999999976
+    },
+    {
+      "name": "cold local JWKS + JWT verification",
+      "iterations": 15,
+      "warmups": 2,
+      "medianMs": 15.345100000000002,
+      "p95Ms": 16.797399999999925,
+      "maxMs": 16.797399999999925
+    },
+    {
+      "name": "warm local JWKS JWT verification",
+      "iterations": 100,
+      "warmups": 2,
+      "medianMs": 0.19059999999990396,
+      "p95Ms": 0.2446999999997388,
+      "maxMs": 0.3404000000000451
+    },
+    {
+      "name": "1000 cursor HMAC encode/decode pairs",
+      "iterations": 15,
+      "warmups": 2,
+      "medianMs": 82.46480000000065,
+      "p95Ms": 98.11179999999968,
+      "maxMs": 98.11179999999968
+    },
+    {
+      "name": "transactions signed POST plus cleanup DELETE",
+      "iterations": 15,
+      "warmups": 2,
+      "medianMs": 30.92659999999978,
+      "p95Ms": 32.511999999999716,
+      "maxMs": 32.511999999999716
+    },
+    {
+      "name": "transactions signed PUT",
+      "iterations": 15,
+      "warmups": 2,
+      "medianMs": 15.892299999999523,
+      "p95Ms": 16.899199999999837,
+      "maxMs": 16.899199999999837
+    },
+    {
+      "name": "transactions signed DELETE",
+      "iterations": 15,
+      "warmups": 2,
+      "medianMs": 15.449799999999414,
+      "p95Ms": 17.90769999999975,
+      "maxMs": 17.90769999999975
+    },
+    {
+      "name": "transfers signed POST plus cleanup DELETE",
+      "iterations": 15,
+      "warmups": 2,
+      "medianMs": 30.679800000000796,
+      "p95Ms": 32.70759999999973,
+      "maxMs": 32.70759999999973
+    },
+    {
+      "name": "transfers signed PUT",
+      "iterations": 15,
+      "warmups": 2,
+      "medianMs": 15.306500000000597,
+      "p95Ms": 16.418900000000576,
+      "maxMs": 16.418900000000576
+    },
+    {
+      "name": "transfers signed DELETE",
+      "iterations": 15,
+      "warmups": 2,
+      "medianMs": 15.586699999999837,
+      "p95Ms": 17.039999999999964,
+      "maxMs": 17.039999999999964
+    },
+    {
+      "name": "transactions isolated signed POST",
+      "iterations": 15,
+      "warmups": 2,
+      "medianMs": 17.919699999999466,
+      "p95Ms": 19.0616,
+      "maxMs": 19.0616
+    },
+    {
+      "name": "transfers isolated signed POST",
+      "iterations": 15,
+      "warmups": 2,
+      "medianMs": 16.986399999999776,
+      "p95Ms": 18.680999999999585,
+      "maxMs": 18.680999999999585
+    }
+  ],
+  "startup": [
+    {
+      "processWallMs": 216.03859999999997,
+      "builtAppImportMs": 146.4577
+    },
+    {
+      "processWallMs": 212.0509,
+      "builtAppImportMs": 146.1999
+    },
+    {
+      "processWallMs": 213.07709999999997,
+      "builtAppImportMs": 146.78279999999998
+    },
+    {
+      "processWallMs": 221.0113,
+      "builtAppImportMs": 156.276
+    },
+    {
+      "processWallMs": 218.26020000000017,
+      "builtAppImportMs": 153.5478
+    },
+    {
+      "processWallMs": 225.9366,
+      "builtAppImportMs": 153.5854
+    },
+    {
+      "processWallMs": 226.4331000000002,
+      "builtAppImportMs": 152.2577
+    }
+  ],
+  "remoteTouched": false,
+  "transferContention": {
+    "workers": 8,
+    "cycles": 80,
+    "mutations": 240,
+    "elapsedMs": 692.1424999999999,
+    "cycleLatency": {
+      "medianMs": 56.30149999999958,
+      "p95Ms": 96.1256999999996,
+      "maxMs": 222.3121000000001
+    },
+    "deadlockDelta": 0,
+    "errors": 0
+  },
+  "datasetCounts": {
+    "transactions": 32000,
+    "transfers": 2200
+  },
+  "startupSummary": {
+    "processWall": {
+      "medianMs": 218.26020000000017,
+      "p95Ms": 226.4331000000002,
+      "maxMs": 226.4331000000002
+    },
+    "builtImport": {
+      "medianMs": 152.2577,
+      "p95Ms": 156.276,
+      "maxMs": 156.276
+    }
+  },
+  "externalRestartFreshProcessConnections": [
+    {
+      "restartMs": 372.1515,
+      "firstConnectionAndRoleQueryMs": 48.1371
+    },
+    {
+      "restartMs": 375.4999,
+      "firstConnectionAndRoleQueryMs": 50.047799999999995
+    },
+    {
+      "restartMs": 365.4498,
+      "firstConnectionAndRoleQueryMs": 51.8154
+    }
+  ]
+}
