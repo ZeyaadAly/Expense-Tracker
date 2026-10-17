@@ -1,0 +1,61 @@
+{
+  "checks": [
+    {
+      "route": "login",
+      "status": 200
+    },
+    {
+      "route": "register",
+      "status": 200
+    },
+    {
+      "route": "forgot-password",
+      "status": 200
+    },
+    {
+      "route": "reset-password",
+      "status": 200
+    },
+    {
+      "route": "dashboard",
+      "status": 404
+    },
+    {
+      "route": "accounts",
+      "status": 404
+    },
+    {
+      "route": "accounts/a6500000-0000-4000-8000-000000000002",
+      "status": 404
+    },
+    {
+      "route": "transactions",
+      "status": 404
+    },
+    {
+      "route": "recurring",
+      "status": 404
+    },
+    {
+      "route": "analytics",
+      "status": 404
+    },
+    {
+      "route": "budgets",
+      "status": 404
+    },
+    {
+      "route": "goals",
+      "status": 404
+    },
+    {
+      "route": "settings",
+      "status": 404
+    },
+    {
+      "route": "design-system",
+      "status": 404
+    }
+  ],
+  "remoteTouched": false
+}

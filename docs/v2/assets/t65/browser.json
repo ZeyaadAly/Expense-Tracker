@@ -1,0 +1,158 @@
+{
+  "checks": [
+    "dashboard migrated history rendered through real API",
+    "accounts migrated history rendered through real API",
+    "transactions migrated history rendered through real API",
+    "analytics migrated history rendered through real API",
+    "literal migrated-history search rendered",
+    "browser-smoke API cannot enable financial writes"
+  ],
+  "audits": [
+    {
+      "route": "dashboard",
+      "violations": 0
+    },
+    {
+      "route": "accounts",
+      "violations": 0
+    },
+    {
+      "route": "transactions",
+      "violations": 0
+    },
+    {
+      "route": "analytics",
+      "violations": 0
+    }
+  ],
+  "apiResponses": [
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/dashboard",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/transfers",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts/summary",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/transactions",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/analytics/overview",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/profile/bootstrap",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/transactions",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/accounts",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/categories",
+      "status": 200,
+      "noStore": true
+    },
+    {
+      "path": "/api/v2/transactions",
+      "status": 200,
+      "noStore": true
+    }
+  ],
+  "pageErrors": [],
+  "remoteRequestsSent": 0,
+  "remoteTouched": false
+}

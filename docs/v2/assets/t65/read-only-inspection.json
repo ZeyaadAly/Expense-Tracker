@@ -1,0 +1,35 @@
+{
+  "inventory": {
+    "phase": "inventory",
+    "rows": 511,
+    "totals": {
+      "count": 511,
+      "income": "51000000030.09",
+      "expenses": "5229.04",
+      "balance": "50999994801.05",
+      "minimum": "0.01",
+      "maximum": "999999999.99"
+    },
+    "digest": "f434ddb759bdf47947884289b427c44ea1654c4e2263c0b9b468d31c841f47b5",
+    "catalogDigest": "1315d54df23d780c354b2d9ecb10965ac497eccb4dc74f72ad05639d2376fea4",
+    "readOnly": true
+  },
+  "reconcile": {
+    "originalRows": 510,
+    "originalDigest": "ac53e2da67a60f06ea8078e11102210bf975977ee5fe81761b3dfc02e00a5a35",
+    "originalTotals": {
+      "income": "51000000030.09",
+      "expenses": "5229.03",
+      "balance": "50999994801.06"
+    },
+    "currentTotals": {
+      "income": "51000000030.09",
+      "expenses": "5229.04",
+      "balance": "50999994801.05"
+    },
+    "currentRows": 511,
+    "phase": "reconcile",
+    "readOnly": true
+  },
+  "remoteTouched": false
+}

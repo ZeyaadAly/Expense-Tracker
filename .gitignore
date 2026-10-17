@@ -77,3 +77,5 @@ supabase/.env.*.local
 .tmp-v2-t62/
 .tmp-v2-t63/
 .tmp-v2-t64/
+.tmp-v2-t65/
+*.private-cutover.json

@@ -1,0 +1,111 @@
+{
+  "inheritedT64": {
+    "checks": [
+      {
+        "name": "bounded recognizable-secret history scan",
+        "commits": 40,
+        "uniqueTextBlobs": 860
+      },
+      {
+        "name": "source/build/maps/docs/evidence scan",
+        "files": 1133,
+        "maps": 96
+      },
+      {
+        "name": "configured local secret value comparison",
+        "envFiles": 1,
+        "valuesCompared": 2
+      },
+      {
+        "name": "tracked env/private backup boundary"
+      },
+      {
+        "name": "production execution/HTML/TLS sinks review"
+      },
+      {
+        "name": "exact CORS, unrelated/null origins, preflight and no credentials"
+      },
+      {
+        "name": "Bearer parsing and ambient-cookie rejection"
+      },
+      {
+        "name": "Node oversized-header boundary",
+        "status": 431
+      },
+      {
+        "name": "plain and inflated gzip body limit",
+        "bytes": 16384
+      },
+      {
+        "name": "JSON ambiguity and prototype-property rejection"
+      },
+      {
+        "name": "search/page/query/analytics bounds reject before SQL"
+      },
+      {
+        "name": "driver failure sanitization"
+      },
+      {
+        "name": "representative private error cache controls"
+      },
+      {
+        "name": "no token/driver detail in captured error logs",
+        "lines": 0
+      },
+      {
+        "name": "retired legacy routes stop before parsing and SQL"
+      }
+    ],
+    "findings": [],
+    "remoteTouched": false,
+    "formalPenetrationTest": false,
+    "staticHits": {
+      "html": [],
+      "execution": [],
+      "unsafeTls": [],
+      "financialSdk": [
+        "backend\\src\\utils\\transaction-cursor.ts",
+        "backend\\src\\validators\\account.ts",
+        "backend\\src\\validators\\category.ts",
+        "backend\\src\\validators\\goal.ts",
+        "backend\\src\\validators\\profile.ts",
+        "backend\\src\\validators\\recurring.ts",
+        "backend\\src\\validators\\transaction.ts",
+        "backend\\src\\validators\\transfer.ts",
+        "backend\\src\\validators\\v2-transaction.ts",
+        "frontend\\src\\components\\transactions\\transaction-form.tsx",
+        "frontend\\src\\components\\ui\\dialog-shell.tsx",
+        "frontend\\src\\components\\ui\\feedback.tsx",
+        "frontend\\src\\components\\v2\\primitives.tsx",
+        "frontend\\src\\features\\v2\\auth-form.ts",
+        "frontend\\src\\features\\v2\\charts.tsx",
+        "frontend\\src\\features\\v2\\fixtures\\index.ts",
+        "frontend\\src\\features\\v2\\pages.tsx",
+        "frontend\\src\\features\\v2\\settings-page.tsx",
+        "frontend\\src\\lib\\api\\accounts.ts",
+        "frontend\\src\\lib\\api\\analytics.ts",
+        "frontend\\src\\lib\\api\\budgets.ts",
+        "frontend\\src\\lib\\api\\categories.ts",
+        "frontend\\src\\lib\\api\\client.ts",
+        "frontend\\src\\lib\\api\\dashboard.ts",
+        "frontend\\src\\lib\\api\\goals.ts",
+        "frontend\\src\\lib\\api\\profile.ts",
+        "frontend\\src\\lib\\api\\recurring.ts",
+        "frontend\\src\\lib\\api\\transfers.ts",
+        "frontend\\src\\lib\\api\\v2-transactions.ts",
+        "frontend\\src\\lib\\auth\\profile-draft.ts",
+        "frontend\\src\\lib\\transactions.ts"
+      ]
+    }
+  },
+  "t65": {
+    "localSyntheticCredentialValuesCompared": 1,
+    "textFilesCompared": 1114,
+    "ignoredArchiveFiles": 12,
+    "ignoredPrivateArtifacts": 6,
+    "trackedBackupsOrPrivateArtifacts": 0,
+    "productionSourceAndAppliedMigrationsUnchanged": true,
+    "unsafeSqlInterpolationReview": "Tenant values are bound. DDL comes only from tracked SQL or PostgreSQL catalog definitions; password DDL uses PostgreSQL format %L. Local tools use argument arrays, fixed loopback targets, verified data directories and no dotenv/default target."
+  },
+  "remoteTouched": false
+}

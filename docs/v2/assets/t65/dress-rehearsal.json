@@ -1,0 +1,829 @@
+{
+  "date": "2026-10-17",
+  "sourceSha": "809c9a8f79ec6b8242d444941cbf007caa57d297",
+  "tools": {
+    "pg_dump": "pg_dump (PostgreSQL) 17.11",
+    "pg_restore": "pg_restore (PostgreSQL) 17.11",
+    "psql": "psql (PostgreSQL) 17.11"
+  },
+  "migrations": [
+    {
+      "file": "20261001144302_initial_expense_tracker_schema.sql",
+      "sha256": "d2089527b233abe065a86f22434e8bec88fa530cbc1cbd0f17e9d9d8fbb4306b",
+      "gitCanonicalSha256": "bc09264b9a4ec212289964671875ea6e04ecbe09e625cb4f9e6def437e893c98",
+      "workingTreeCrLfNormalization": true,
+      "historicalEvidenceSha256": "d30023fb71624c98d9992637631d98626f9fd36df18973639c3439f8b04d8ed3"
+    },
+    {
+      "file": "20261003163341_backend_application_role.sql",
+      "sha256": "e88814928ceea25918b61745f15e94db5c7ad99decf20d0308ce0ffa9b5ec7c5",
+      "gitCanonicalSha256": "e88814928ceea25918b61745f15e94db5c7ad99decf20d0308ce0ffa9b5ec7c5",
+      "workingTreeCrLfNormalization": false,
+      "historicalEvidenceSha256": "e7deb638302d66b3a93a374705e5a04fa647c7f53ce28b94e37c6a42ff5b4146"
+    },
+    {
+      "file": "20261006132717_v2_core_tables.sql",
+      "sha256": "b2235470373c96b43815f4b9209ca0ace8d42345ff429cd36a99e1d0908c3209",
+      "gitCanonicalSha256": "533571cefe554504eca801829eeecde0326797f227380a2f40d7445d55799f5d",
+      "workingTreeCrLfNormalization": true,
+      "historicalEvidenceSha256": "b2235470373c96b43815f4b9209ca0ace8d42345ff429cd36a99e1d0908c3209"
+    },
+    {
+      "file": "20261006132719_v2_transaction_references.sql",
+      "sha256": "b08489208c3e52ea4ccdc5622612dfb9ee8dd9e95cda987c5d0cc5cd1205dfee",
+      "gitCanonicalSha256": "54aa8d1b20b22273d7cd24c338430437b0d278dcd9a5e2e17d1e238827b48ddd",
+      "workingTreeCrLfNormalization": true,
+      "historicalEvidenceSha256": "b08489208c3e52ea4ccdc5622612dfb9ee8dd9e95cda987c5d0cc5cd1205dfee"
+    },
+    {
+      "file": "20261006132721_v2_indexes_and_triggers.sql",
+      "sha256": "804b7c3c646fd3303c1a5ecad040d7358163e6c8e91829183aa60e78cabf0102",
+      "gitCanonicalSha256": "73566d1796f6be84fb2e28ffc138eabae731e02c2a7875da61ec3a4014661da6",
+      "workingTreeCrLfNormalization": true,
+      "historicalEvidenceSha256": "804b7c3c646fd3303c1a5ecad040d7358163e6c8e91829183aa60e78cabf0102"
+    },
+    {
+      "file": "20261006132723_v2_runtime_privileges.sql",
+      "sha256": "b8b5248452125adc72270302ea2794544131ae5e7ab6064bbb2bae403b11d121",
+      "gitCanonicalSha256": "7f755bce3037cd4dc9a84f1ce80df764f7f4742a00b38ebf03a7ac78d52f96ae",
+      "workingTreeCrLfNormalization": true,
+      "historicalEvidenceSha256": "b8b5248452125adc72270302ea2794544131ae5e7ab6064bbb2bae403b11d121"
+    },
+    {
+      "file": "20261006171715_v2_ownership_constraints.sql",
+      "sha256": "ee591c2eaf1ec51bf93679c179f3af1a9dc418a05aa65c0678b000d8512a16ff",
+      "gitCanonicalSha256": "30d848ab19de28a140ee35f4e024fdce914dc26f555ad2ee5613721f9216e665",
+      "workingTreeCrLfNormalization": true,
+      "historicalEvidenceSha256": "ee591c2eaf1ec51bf93679c179f3af1a9dc418a05aa65c0678b000d8512a16ff"
+    },
+    {
+      "file": "20261008135130_v2_occurrence_invariants.sql",
+      "sha256": "26f6858317d6a7eb115c6c7c251dffcc81b6448af23eae328a1e149ac5004b3c",
+      "gitCanonicalSha256": "a76d8d7c9b0e271bc667117dc5282f1d3e5b1fb3b70712ff816dea020c460668",
+      "workingTreeCrLfNormalization": true,
+      "historicalEvidenceSha256": "26f6858317d6a7eb115c6c7c251dffcc81b6448af23eae328a1e149ac5004b3c"
+    }
+  ],
+  "runs": [
+    {
+      "name": "rehearsal-1",
+      "groups": [
+        {
+          "name": "target, owner and explicit mode guards",
+          "passed": true,
+          "durationMs": 1
+        },
+        {
+          "name": "deterministic actual V1 source and immutable inventory",
+          "passed": true,
+          "durationMs": 735
+        },
+        {
+          "name": "real pg_dump archive, TOC and checksum",
+          "passed": true,
+          "durationMs": 211
+        },
+        {
+          "name": "independent empty-target restore and exact V1 equality",
+          "passed": true,
+          "durationMs": 541
+        },
+        {
+          "name": "backup missing, corrupt and checksum mismatch guards",
+          "passed": true,
+          "durationMs": 819
+        },
+        {
+          "name": "real stale V1 process understands preserved baseline",
+          "passed": true,
+          "durationMs": 353
+        },
+        {
+          "name": "S2 actual all-financial maintenance and stale DML revocation",
+          "passed": true,
+          "durationMs": 472
+        },
+        {
+          "name": "ordered additive migrations with atomic maintenance revocation",
+          "passed": true,
+          "durationMs": 106
+        },
+        {
+          "name": "repeatable fixed T12 seed and T13 owner/profile",
+          "passed": true,
+          "durationMs": 142
+        },
+        {
+          "name": "wrong inventory, account collision, seed drift and owner faults",
+          "passed": true,
+          "durationMs": 190
+        },
+        {
+          "name": "conflicting foreign owner is never reassigned",
+          "passed": true,
+          "durationMs": 48
+        },
+        {
+          "name": "unknown legacy category aborts without partial backfill",
+          "passed": true,
+          "durationMs": 45
+        },
+        {
+          "name": "mid-backfill failure restores exact rows, Main Account and trigger",
+          "passed": true,
+          "durationMs": 67
+        },
+        {
+          "name": "exactly-once T14 backfill and idempotent rerun",
+          "passed": true,
+          "durationMs": 104
+        },
+        {
+          "name": "T15 preflight failure and mid-DDL rollback leave no partial constraints",
+          "passed": true,
+          "durationMs": 95
+        },
+        {
+          "name": "tracked T15/T32 target constraints and history integrity",
+          "passed": true,
+          "durationMs": 65
+        },
+        {
+          "name": "legacy format still readable only inside isolated revoked-role probe",
+          "passed": true,
+          "durationMs": 277
+        },
+        {
+          "name": "Window A guard accepts exact constrained pre-write state",
+          "passed": true,
+          "durationMs": 6
+        },
+        {
+          "name": "Window A full verified backup restore to a separate clean target",
+          "passed": true,
+          "durationMs": 898
+        },
+        {
+          "name": "same-role stale credential retirement before V2 DML regrant",
+          "passed": true,
+          "durationMs": 1050
+        },
+        {
+          "name": "current V2 grants and browser/DDL/Auth denials",
+          "passed": true,
+          "durationMs": 271
+        },
+        {
+          "name": "S7 V2 read acceptance with financial writes and cron still blocked",
+          "passed": true,
+          "durationMs": 799
+        },
+        {
+          "name": "second synthetic user sees empty migrated financial dataset",
+          "passed": true,
+          "durationMs": 160
+        },
+        {
+          "name": "explicit S8 write-enable and first genuine V2 financial write",
+          "passed": true,
+          "durationMs": 30
+        },
+        {
+          "name": "new mutation timestamps and permanently locked Main Account",
+          "passed": true,
+          "durationMs": 63
+        },
+        {
+          "name": "post-cutover transfers, recurring, Budget and Goal remain coherent",
+          "passed": true,
+          "durationMs": 137
+        },
+        {
+          "name": "post-write T59 isolation, ownership constraints and T60 ledger reconciliation",
+          "passed": true,
+          "durationMs": 167
+        },
+        {
+          "name": "Window B refuses blind pre-V2 restore before any restore process",
+          "passed": true,
+          "durationMs": 67
+        },
+        {
+          "name": "post-write incident freezes access, snapshots and forward-recovers without loss",
+          "passed": true,
+          "durationMs": 348
+        },
+        {
+          "name": "final original-row preservation, V1 retirement and cron absence",
+          "passed": true,
+          "durationMs": 329
+        },
+        {
+          "name": "original source remains independent and unchanged after full cutover",
+          "passed": true,
+          "durationMs": 394
+        },
+        {
+          "name": "independent empty-schema application of every tracked migration matches target",
+          "passed": true,
+          "durationMs": 507
+        }
+      ],
+      "stateTransitions": [
+        "S0",
+        "S1 backup verified",
+        "S2 maintenance and old DML suspended",
+        "S3 additive schema",
+        "S4 backfill reconciled",
+        "S5 constraints complete; no financial V2 writes",
+        "S6 V1 retired; stale sessions/config neutralized",
+        "S7 controlled read acceptance; write gate closed",
+        "S8 explicit write enable; first V2 transaction committed"
+      ],
+      "baseline": {
+        "count": 510,
+        "income": "51000000030.09",
+        "expenses": "5229.03",
+        "balance": "50999994801.06",
+        "minimum": "0.01",
+        "maximum": "999999999.99",
+        "rowDigest": "ac53e2da67a60f06ea8078e11102210bf975977ee5fe81761b3dfc02e00a5a35",
+        "catalogDigest": "deb9000ae234fae7e0db62ef9bbcdaa4e33dcd0d79da05008c47c92b519f6e16",
+        "categoryTotals": [
+          {
+            "type": "expense",
+            "category": "bills",
+            "amount": "62.73",
+            "count": 51
+          },
+          {
+            "type": "expense",
+            "category": "entertainment",
+            "amount": "50.49",
+            "count": 51
+          },
+          {
+            "type": "expense",
+            "category": "food",
+            "amount": "0.51",
+            "count": 51
+          },
+          {
+            "type": "expense",
+            "category": "other",
+            "amount": "10.20",
+            "count": 51
+          },
+          {
+            "type": "expense",
+            "category": "shopping",
+            "amount": "5.10",
+            "count": 51
+          },
+          {
+            "type": "expense",
+            "category": "transport",
+            "amount": "5100.00",
+            "count": 51
+          },
+          {
+            "type": "income",
+            "category": "freelance",
+            "amount": "5.10",
+            "count": 51
+          },
+          {
+            "type": "income",
+            "category": "gift",
+            "amount": "10.20",
+            "count": 51
+          },
+          {
+            "type": "income",
+            "category": "other",
+            "amount": "15.30",
+            "count": 51
+          },
+          {
+            "type": "income",
+            "category": "salary",
+            "amount": "50999999999.49",
+            "count": 51
+          }
+        ],
+        "objects": {
+          "columns": 8,
+          "constraints": 7,
+          "indexes": 2,
+          "triggers": 1,
+          "functions": 1,
+          "privileges": 11,
+          "schemaPrivileges": 1
+        }
+      },
+      "backup": {
+        "file": "run-1/pre-v2.dump",
+        "bytes": 18246,
+        "sha256": "963c886b0b857e89affe86a2b003ea464b44271a5d9d4fc081ef8e39d6b0536e",
+        "tocEntries": 23
+      },
+      "restoreCatalogReparseProof": [
+        "transactions.transactions_description_check"
+      ],
+      "restore": {
+        "exactRows": true,
+        "exactCatalog": true,
+        "checksum": "963c886b0b857e89affe86a2b003ea464b44271a5d9d4fc081ef8e39d6b0536e",
+        "noSequencesRequired": true
+      },
+      "staleSpecimen": {
+        "separateProcess": true,
+        "sameDatabaseRole": true,
+        "afterRegrantDenied": true,
+        "oldSessionsTerminated": 1,
+        "oldCredentialRejected": true,
+        "roleSplit": false
+      },
+      "reconciliation": {
+        "originalRows": 510,
+        "originalDigest": "ac53e2da67a60f06ea8078e11102210bf975977ee5fe81761b3dfc02e00a5a35",
+        "originalTotals": {
+          "income": "51000000030.09",
+          "expenses": "5229.03",
+          "balance": "50999994801.06"
+        },
+        "currentTotals": {
+          "income": "51000000030.09",
+          "expenses": "5229.03",
+          "balance": "50999994801.06"
+        },
+        "currentRows": 510
+      },
+      "targetCatalogCounts": {
+        "columns": 92,
+        "constraints": 92,
+        "indexes": 44,
+        "triggers": 31,
+        "functions": 11,
+        "privileges": 63,
+        "schemaPrivileges": 1
+      },
+      "windowA": {
+        "backupRestore": true,
+        "originalFingerprint": "ac53e2da67a60f06ea8078e11102210bf975977ee5fe81761b3dfc02e00a5a35",
+        "noV2FinancialTables": true,
+        "v1Crud": true,
+        "syntheticAuthOwnerPreserved": true
+      },
+      "runtimeFlags": {
+        "rolsuper": false,
+        "rolcreatedb": false,
+        "rolcreaterole": false,
+        "rolreplication": false,
+        "rolbypassrls": false,
+        "rolinherit": false
+      },
+      "apiBaseline": {
+        "rowsRead": 510,
+        "detailReads": 9,
+        "analyticsWindows": 5,
+        "dashboardMonth": {
+          "income": "12000000007.58",
+          "expenses": "1331.70",
+          "balance": "11999998675.88"
+        },
+        "allHistory": {
+          "income": "51000000030.09",
+          "expenses": "5229.03",
+          "balance": "50999994801.06"
+        }
+      },
+      "writeCheckpoint": {
+        "state": "S8",
+        "enabled": "2026-10-17T17:48:31.986241Z",
+        "first_write": "2026-10-17T17:48:31.993820Z"
+      },
+      "postWrite": {
+        "originalRows": 510,
+        "originalDigest": "ac53e2da67a60f06ea8078e11102210bf975977ee5fe81761b3dfc02e00a5a35",
+        "originalTotals": {
+          "income": "51000000030.09",
+          "expenses": "5229.03",
+          "balance": "50999994801.06"
+        },
+        "currentTotals": {
+          "income": "51000000030.09",
+          "expenses": "5229.04",
+          "balance": "50999994801.05"
+        },
+        "currentRows": 511
+      },
+      "windowB": {
+        "blindRestoreRefused": true,
+        "originalRows": 510,
+        "currentTransactions": 511,
+        "newAccountWouldBeLost": true,
+        "transferWouldBeLost": true,
+        "definitionBudgetGoalWouldBeLost": true,
+        "forwardRecoveryPreserved": true
+      },
+      "postWriteBackup": {
+        "file": "run-1/post-v2-preservation.dump",
+        "bytes": 97503,
+        "sha256": "f764f1be0c62dcc4f4896f9ea7547802cdc8a70565a3a7d3fbe8e03e5a06204e",
+        "tocEntries": 160
+      },
+      "finalCatalogDigest": "1315d54df23d780c354b2d9ecb10965ac497eccb4dc74f72ad05639d2376fea4",
+      "schemaValidated": true,
+      "failures": 0,
+      "targetCatalogReparseProof": [
+        "transactions.transactions_description_check"
+      ],
+      "targetSchemaMatchesFreshChain": true,
+      "complete": true
+    },
+    {
+      "name": "rehearsal-2",
+      "groups": [
+        {
+          "name": "target, owner and explicit mode guards",
+          "passed": true,
+          "durationMs": 1
+        },
+        {
+          "name": "deterministic actual V1 source and immutable inventory",
+          "passed": true,
+          "durationMs": 637
+        },
+        {
+          "name": "real pg_dump archive, TOC and checksum",
+          "passed": true,
+          "durationMs": 235
+        },
+        {
+          "name": "independent empty-target restore and exact V1 equality",
+          "passed": true,
+          "durationMs": 543
+        },
+        {
+          "name": "backup missing, corrupt and checksum mismatch guards",
+          "passed": true,
+          "durationMs": 712
+        },
+        {
+          "name": "real stale V1 process understands preserved baseline",
+          "passed": true,
+          "durationMs": 342
+        },
+        {
+          "name": "S2 actual all-financial maintenance and stale DML revocation",
+          "passed": true,
+          "durationMs": 562
+        },
+        {
+          "name": "ordered additive migrations with atomic maintenance revocation",
+          "passed": true,
+          "durationMs": 101
+        },
+        {
+          "name": "repeatable fixed T12 seed and T13 owner/profile",
+          "passed": true,
+          "durationMs": 139
+        },
+        {
+          "name": "wrong inventory, account collision, seed drift and owner faults",
+          "passed": true,
+          "durationMs": 186
+        },
+        {
+          "name": "conflicting foreign owner is never reassigned",
+          "passed": true,
+          "durationMs": 44
+        },
+        {
+          "name": "unknown legacy category aborts without partial backfill",
+          "passed": true,
+          "durationMs": 46
+        },
+        {
+          "name": "mid-backfill failure restores exact rows, Main Account and trigger",
+          "passed": true,
+          "durationMs": 64
+        },
+        {
+          "name": "exactly-once T14 backfill and idempotent rerun",
+          "passed": true,
+          "durationMs": 104
+        },
+        {
+          "name": "T15 preflight failure and mid-DDL rollback leave no partial constraints",
+          "passed": true,
+          "durationMs": 96
+        },
+        {
+          "name": "tracked T15/T32 target constraints and history integrity",
+          "passed": true,
+          "durationMs": 62
+        },
+        {
+          "name": "legacy format still readable only inside isolated revoked-role probe",
+          "passed": true,
+          "durationMs": 280
+        },
+        {
+          "name": "Window A guard accepts exact constrained pre-write state",
+          "passed": true,
+          "durationMs": 8
+        },
+        {
+          "name": "Window A full verified backup restore to a separate clean target",
+          "passed": true,
+          "durationMs": 1019
+        },
+        {
+          "name": "same-role stale credential retirement before V2 DML regrant",
+          "passed": true,
+          "durationMs": 1120
+        },
+        {
+          "name": "current V2 grants and browser/DDL/Auth denials",
+          "passed": true,
+          "durationMs": 288
+        },
+        {
+          "name": "S7 V2 read acceptance with financial writes and cron still blocked",
+          "passed": true,
+          "durationMs": 777
+        },
+        {
+          "name": "second synthetic user sees empty migrated financial dataset",
+          "passed": true,
+          "durationMs": 104
+        },
+        {
+          "name": "explicit S8 write-enable and first genuine V2 financial write",
+          "passed": true,
+          "durationMs": 31
+        },
+        {
+          "name": "new mutation timestamps and permanently locked Main Account",
+          "passed": true,
+          "durationMs": 61
+        },
+        {
+          "name": "post-cutover transfers, recurring, Budget and Goal remain coherent",
+          "passed": true,
+          "durationMs": 127
+        },
+        {
+          "name": "post-write T59 isolation, ownership constraints and T60 ledger reconciliation",
+          "passed": true,
+          "durationMs": 275
+        },
+        {
+          "name": "Window B refuses blind pre-V2 restore before any restore process",
+          "passed": true,
+          "durationMs": 59
+        },
+        {
+          "name": "post-write incident freezes access, snapshots and forward-recovers without loss",
+          "passed": true,
+          "durationMs": 336
+        },
+        {
+          "name": "final original-row preservation, V1 retirement and cron absence",
+          "passed": true,
+          "durationMs": 317
+        },
+        {
+          "name": "original source remains independent and unchanged after full cutover",
+          "passed": true,
+          "durationMs": 499
+        },
+        {
+          "name": "independent empty-schema application of every tracked migration matches target",
+          "passed": true,
+          "durationMs": 608
+        }
+      ],
+      "stateTransitions": [
+        "S0",
+        "S1 backup verified",
+        "S2 maintenance and old DML suspended",
+        "S3 additive schema",
+        "S4 backfill reconciled",
+        "S5 constraints complete; no financial V2 writes",
+        "S6 V1 retired; stale sessions/config neutralized",
+        "S7 controlled read acceptance; write gate closed",
+        "S8 explicit write enable; first V2 transaction committed"
+      ],
+      "baseline": {
+        "count": 510,
+        "income": "51000000030.09",
+        "expenses": "5229.03",
+        "balance": "50999994801.06",
+        "minimum": "0.01",
+        "maximum": "999999999.99",
+        "rowDigest": "ac53e2da67a60f06ea8078e11102210bf975977ee5fe81761b3dfc02e00a5a35",
+        "catalogDigest": "deb9000ae234fae7e0db62ef9bbcdaa4e33dcd0d79da05008c47c92b519f6e16",
+        "categoryTotals": [
+          {
+            "type": "expense",
+            "category": "bills",
+            "amount": "62.73",
+            "count": 51
+          },
+          {
+            "type": "expense",
+            "category": "entertainment",
+            "amount": "50.49",
+            "count": 51
+          },
+          {
+            "type": "expense",
+            "category": "food",
+            "amount": "0.51",
+            "count": 51
+          },
+          {
+            "type": "expense",
+            "category": "other",
+            "amount": "10.20",
+            "count": 51
+          },
+          {
+            "type": "expense",
+            "category": "shopping",
+            "amount": "5.10",
+            "count": 51
+          },
+          {
+            "type": "expense",
+            "category": "transport",
+            "amount": "5100.00",
+            "count": 51
+          },
+          {
+            "type": "income",
+            "category": "freelance",
+            "amount": "5.10",
+            "count": 51
+          },
+          {
+            "type": "income",
+            "category": "gift",
+            "amount": "10.20",
+            "count": 51
+          },
+          {
+            "type": "income",
+            "category": "other",
+            "amount": "15.30",
+            "count": 51
+          },
+          {
+            "type": "income",
+            "category": "salary",
+            "amount": "50999999999.49",
+            "count": 51
+          }
+        ],
+        "objects": {
+          "columns": 8,
+          "constraints": 7,
+          "indexes": 2,
+          "triggers": 1,
+          "functions": 1,
+          "privileges": 11,
+          "schemaPrivileges": 1
+        }
+      },
+      "backup": {
+        "file": "run-2/pre-v2.dump",
+        "bytes": 18246,
+        "sha256": "71c322e28acad490815af39277f216d2e56f5ad33b0f4dfed2287c488dcbbe65",
+        "tocEntries": 23
+      },
+      "restoreCatalogReparseProof": [
+        "transactions.transactions_description_check"
+      ],
+      "restore": {
+        "exactRows": true,
+        "exactCatalog": true,
+        "checksum": "71c322e28acad490815af39277f216d2e56f5ad33b0f4dfed2287c488dcbbe65",
+        "noSequencesRequired": true
+      },
+      "staleSpecimen": {
+        "separateProcess": true,
+        "sameDatabaseRole": true,
+        "afterRegrantDenied": true,
+        "oldSessionsTerminated": 1,
+        "oldCredentialRejected": true,
+        "roleSplit": false
+      },
+      "reconciliation": {
+        "originalRows": 510,
+        "originalDigest": "ac53e2da67a60f06ea8078e11102210bf975977ee5fe81761b3dfc02e00a5a35",
+        "originalTotals": {
+          "income": "51000000030.09",
+          "expenses": "5229.03",
+          "balance": "50999994801.06"
+        },
+        "currentTotals": {
+          "income": "51000000030.09",
+          "expenses": "5229.03",
+          "balance": "50999994801.06"
+        },
+        "currentRows": 510
+      },
+      "targetCatalogCounts": {
+        "columns": 92,
+        "constraints": 92,
+        "indexes": 44,
+        "triggers": 31,
+        "functions": 11,
+        "privileges": 63,
+        "schemaPrivileges": 1
+      },
+      "windowA": {
+        "backupRestore": true,
+        "originalFingerprint": "ac53e2da67a60f06ea8078e11102210bf975977ee5fe81761b3dfc02e00a5a35",
+        "noV2FinancialTables": true,
+        "v1Crud": true,
+        "syntheticAuthOwnerPreserved": true
+      },
+      "runtimeFlags": {
+        "rolsuper": false,
+        "rolcreatedb": false,
+        "rolcreaterole": false,
+        "rolreplication": false,
+        "rolbypassrls": false,
+        "rolinherit": false
+      },
+      "apiBaseline": {
+        "rowsRead": 510,
+        "detailReads": 9,
+        "analyticsWindows": 5,
+        "dashboardMonth": {
+          "income": "12000000007.58",
+          "expenses": "1331.70",
+          "balance": "11999998675.88"
+        },
+        "allHistory": {
+          "income": "51000000030.09",
+          "expenses": "5229.03",
+          "balance": "50999994801.06"
+        }
+      },
+      "writeCheckpoint": {
+        "state": "S8",
+        "enabled": "2026-10-17T17:49:08.277812Z",
+        "first_write": "2026-10-17T17:49:08.287563Z"
+      },
+      "postWrite": {
+        "originalRows": 510,
+        "originalDigest": "ac53e2da67a60f06ea8078e11102210bf975977ee5fe81761b3dfc02e00a5a35",
+        "originalTotals": {
+          "income": "51000000030.09",
+          "expenses": "5229.03",
+          "balance": "50999994801.06"
+        },
+        "currentTotals": {
+          "income": "51000000030.09",
+          "expenses": "5229.04",
+          "balance": "50999994801.05"
+        },
+        "currentRows": 511
+      },
+      "windowB": {
+        "blindRestoreRefused": true,
+        "originalRows": 510,
+        "currentTransactions": 511,
+        "newAccountWouldBeLost": true,
+        "transferWouldBeLost": true,
+        "definitionBudgetGoalWouldBeLost": true,
+        "forwardRecoveryPreserved": true
+      },
+      "postWriteBackup": {
+        "file": "run-2/post-v2-preservation.dump",
+        "bytes": 97501,
+        "sha256": "f9f05e042d7c109637c54446774bc482c5b37c553f308ca76e906bcce11d2d32",
+        "tocEntries": 160
+      },
+      "finalCatalogDigest": "1315d54df23d780c354b2d9ecb10965ac497eccb4dc74f72ad05639d2376fea4",
+      "schemaValidated": true,
+      "failures": 0,
+      "targetCatalogReparseProof": [
+        "transactions.transactions_description_check"
+      ],
+      "targetSchemaMatchesFreshChain": true,
+      "complete": true
+    }
+  ],
+  "remoteTouched": false,
+  "cronEnabled": false,
+  "productionGatesChanged": false,
+  "repeatability": true,
+  "failures": 0,
+  "complete": true
+}

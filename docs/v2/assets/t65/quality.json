@@ -1,0 +1,192 @@
+{
+  "date": "2026-10-17",
+  "startingSha": "809c9a8f79ec6b8242d444941cbf007caa57d297",
+  "environment": {
+    "node": "v26.5.0",
+    "postgres": "17.11",
+    "localOnly": true
+  },
+  "backend": {
+    "lint": true,
+    "typecheck": true,
+    "build": true,
+    "scriptLintAndSyntax": true,
+    "ordinaryTests": {
+      "passed": 111,
+      "failed": 0,
+      "skipped": 28,
+      "total": 139,
+      "note": "Explicit fresh database suites run separately"
+    },
+    "focusedT65Tests": 5
+  },
+  "frontend": {
+    "scriptLint": true,
+    "migratedTargetSmokeChecks": 6,
+    "axeAudits": 4,
+    "axeViolations": 0,
+    "pageErrors": 0,
+    "privateNoStoreResponses": 25,
+    "optimizedGateCases": 14,
+    "sourceUnchanged": true,
+    "unrelatedFullSuiteNotRerun": true
+  },
+  "dressRehearsal": {
+    "rounds": 2,
+    "namedGroups": 64,
+    "rowsPerSource": 510,
+    "failures": 0
+  },
+  "t57": {
+    "matrix": [
+      {
+        "label": "legacy",
+        "tests": 12,
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "schema",
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "migration-ownership",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "t15Checks": 210,
+        "t14Checks": 64
+      },
+      {
+        "label": "category-read",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "profile",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "shared-isolation-concurrency",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "recurring",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "occurrences",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "processor",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "cron-orchestration",
+        "tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "dashboard",
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "analytics-direct",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "analytics-http",
+        "tests": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "budgets",
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "budget-status",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "goals",
+        "tests": 4,
+        "passed": 4,
+        "failed": 0,
+        "skipped": 0
+      },
+      {
+        "label": "custom-categories",
+        "tests": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      }
+    ],
+    "suites": 17,
+    "passed": 57,
+    "matrixOnly": true
+  },
+  "t59": {
+    "isolationChecks": 612,
+    "attackCounts": {
+      "routeAuthentication": 156,
+      "ownerInjection": 561,
+      "massAssignment": 275,
+      "occurrence": 6,
+      "concurrency": 2,
+      "boundary": 19,
+      "timing": 192
+    },
+    "failures": 0,
+    "migratedOwnerSubsetAlsoPassed": true
+  },
+  "t60": {
+    "initialChecks": 9445,
+    "restartChecks": 728,
+    "databaseRestart": true,
+    "backendRestart": true,
+    "failures": 0,
+    "migratedDatasetReconciledBothRounds": true
+  },
+  "productionSourceAndMigrationsUnchanged": true,
+  "remoteTouched": false
+}
