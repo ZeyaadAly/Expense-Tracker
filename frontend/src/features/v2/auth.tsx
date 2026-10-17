@@ -88,7 +88,7 @@ export function AuthPage({ route }: { route: AuthRoute }) {
         <p>EGP · built around your financial life</p>
       </section>
       <section className="p4-auth-form">
-        <p className="p4-prototype-label">{process.env.NODE_ENV === "development" ? "Real authentication · development preview" : "Production preview · secure sign in"}</p>
+        <p className="p4-prototype-label">{process.env.NODE_ENV === "development" ? "Real authentication · development preview" : "Secure sign in"}</p>
         <h1>{titles[route]}</h1>
         <p className="v2-secondary">{route === "login" ? "Pick up where you left off." : "A little clarity starts here."}</p>
         {initializing && <p role="status" className="v2-helper">Checking authentication…</p>}
