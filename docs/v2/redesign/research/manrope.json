@@ -1,0 +1,20 @@
+{
+  "domain": "google-fonts",
+  "query": "Manrope",
+  "file": "google-fonts.csv",
+  "count": 1,
+  "results": [
+    {
+      "Family": "Manrope",
+      "Category": "Sans Serif",
+      "Stroke": "Sans Serif",
+      "Classifications": "",
+      "Styles": "200 | 300 | 400 | 500 | 600 | 700 | 800",
+      "Variable Axes": "wght: 200..800",
+      "Subsets": "cyrillic | cyrillic-ext | greek | latin | latin-ext | vietnamese",
+      "Designers": "Mikhail Sharanda",
+      "Popularity Rank": "22",
+      "Google Fonts URL": "https://fonts.google.com/specimen/Manrope"
+    }
+  ]
+}

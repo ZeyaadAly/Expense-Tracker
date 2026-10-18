@@ -27,7 +27,7 @@ function ConnectedDashboard({ userId }: { userId: string }) {
   if (state.authError) return null;
   const response = state.dashboard, data = response?.data;
   return <PrototypeShell liveDashboard>
-    <PageHeader title="Your money, in perspective" description="A clear view of today. A thoughtful plan for tomorrow." actions={<div className="t37-controls">
+    <PageHeader title="Financial overview" description="Your position, recent movement and the money ahead." actions={<div className="t37-controls">
       <FormField id={`${id}-period`} label="Dashboard period"><Select id={`${id}-period`} value={state.period} onChange={e => store.setPeriod(e.target.value as DashboardPeriod)}>{dashboardPeriods.map(p => <option key={p} value={p}>{periodLabels[p]}</option>)}</Select></FormField>
       <Button variant="secondary" disabled={state.loading} onClick={() => void store.refresh()}>Refresh dashboard</Button>
     </div>} />
@@ -36,24 +36,28 @@ function ConnectedDashboard({ userId }: { userId: string }) {
     {state.error && data && <StaleIndicator>Last loaded {periodLabels[data.period.key].toLowerCase()} values · refresh failed</StaleIndicator>}
     {!data && state.loading && <div role="group" className="p4-overview" aria-label="Loading dashboard" aria-busy="true"><div><Skeleton variant="metric" /><Skeleton variant="chart" /></div><Skeleton variant="transaction" /></div>}
     {data && <>
-      <div className="p4-overview t37-overview" aria-busy={state.loading}>
-        <div>
-          <p className="v2-eyebrow">Financial position · all history</p>
+      <div className="cl-position-grid t37-overview" aria-busy={state.loading}>
+        <section className="cl-position-canvas" aria-label="Current financial position">
           <SummaryCard label="Net position" value={data.summary.totalBalance} emphasis caption="Assets less signed card debt · archived balances included" />
           <div className="t37-position">
-            <section aria-label="Total assets"><h2>Total assets</h2><MoneyDisplay value={data.summary.assets} /><p className="v2-helper">Signed non-card balances</p></section>
-            <section aria-label="Signed card debt"><h2>Signed card debt</h2><MoneyDisplay value={data.summary.cardDebt} kind="debt" /><p className="v2-helper">{data.summary.cardDebt.startsWith("-") ? "Overpayment · credit owed to you" : "Amount owed across cards"}</p></section>
+            <section aria-label="Total assets"><h2>Total assets</h2><MoneyDisplay value={data.summary.assets} /></section>
+            <section aria-label="Signed card debt"><h2>Card debt</h2><MoneyDisplay value={data.summary.cardDebt} kind="debt" /></section>
           </div>
-          <div className="v2-metric-strip">
+        </section>
+        <section className="cl-period-movement" aria-label="Period cash movement">
+          <h2>Period movement</h2>
+          <div className="cl-cash-flow">
             <SummaryCard label="Income" value={data.summary.income} kind="income" />
             <SummaryCard label="Expenses" value={data.summary.expenses} kind="expense" />
             <SummaryCard label="Net savings" value={data.summary.netSavings} caption={data.summary.netSavings.startsWith("-") ? "Expenses exceed income" : "Income less expenses"} />
           </div>
           <p className="v2-helper" data-testid="dashboard-range">Posted actuals · {periodLabels[data.period.key]} · <time dateTime={data.period.from}>{data.period.from}</time> – <time dateTime={data.period.to}>{data.period.to}</time> · {data.period.timezone}. Transfers excluded.</p>
-        </div>
+        </section>
+      </div>
+      <div className="cl-dashboard-accounts">
         <Panel title="Your accounts" href="/v2/accounts">
           <p className="v2-helper">Current balances · active and archived accounts</p>
-          {data.accounts.length === 0 ? <EmptyState title="Start with an account" description="Add where you keep your money to begin your financial overview." action={<Link className="v2-button v2-button--primary" href="/v2/accounts">Add account</Link>} /> : data.accounts.map(a => <Link key={a.id} href={`/v2/accounts/${a.id}`} className="t37-account"><AccountRow account={{ id: a.id, name: a.name, type: a.type, balance: a.currentBalance, archived: a.status === "archived" }} /></Link>)}
+          {data.accounts.length === 0 ? <EmptyState title="Start with an account" description="Add where you keep your money to begin your financial overview." action={<Link className="v2-button v2-button--primary" href="/v2/accounts">Add account</Link>} /> : <div className="cl-account-rail">{data.accounts.map(a => <Link key={a.id} href={`/v2/accounts/${a.id}`} className="t37-account"><AccountRow account={{ id: a.id, name: a.name, type: a.type, balance: a.currentBalance, archived: a.status === "archived" }} /></Link>)}</div>}
         </Panel>
       </div>
       <div className="p4-columns t37-activity">

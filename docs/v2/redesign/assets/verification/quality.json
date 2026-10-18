@@ -1,0 +1,28 @@
+{
+  "frontend": {
+    "lint": {
+      "result": "pass",
+      "warnings": 0,
+      "errors": 0
+    },
+    "typecheck": "pass",
+    "build": "pass",
+    "tests": {
+      "total": 185,
+      "pass": 185,
+      "fail": 0,
+      "skip": 0
+    }
+  },
+  "responsiveLayouts": 91,
+  "axeAudits": 191,
+  "financialBrowserGroups": 16,
+  "authGroups": 6,
+  "stressGroups": 6,
+  "generatedChecks": 4,
+  "gitWhitespace": "pass",
+  "reviewBranch": "v2-ui-redesign",
+  "startingMain": "40c16f6868f5f44bf405c3721b5ef0e2a3373dd1",
+  "productionDataTouched": false,
+  "productionDeployed": false
+}

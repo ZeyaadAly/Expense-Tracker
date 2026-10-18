@@ -4,6 +4,7 @@ import "../../v2/v2.css";
 import "../../v2/prototype.css";
 import { AuthProvider } from "../../../lib/auth/auth-provider";
 import { ProtectedBoundary } from "../../../features/v2/protected-boundary";
+import { v2FontClasses } from "../../../lib/v2-fonts";
 
 export const metadata: Metadata = {
   title: "Expense Tracker V2",
@@ -11,5 +12,5 @@ export const metadata: Metadata = {
 };
 
 export default function PublicV2Layout({ children }: { children: ReactNode }) {
-  return <div className="v2-theme"><AuthProvider><ProtectedBoundary>{children}</ProtectedBoundary></AuthProvider></div>;
+  return <div className={`v2-theme ${v2FontClasses}`}><AuthProvider><ProtectedBoundary>{children}</ProtectedBoundary></AuthProvider></div>;
 }

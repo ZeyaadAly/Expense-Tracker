@@ -1,0 +1,13 @@
+{
+  "domain": "ux",
+  "query": "transaction ledger density",
+  "file": "ux-guidelines.csv",
+  "count": 0,
+  "results": [],
+  "suggestions": [
+    "transition",
+    "transitions",
+    "interaction",
+    "distraction"
+  ]
+}

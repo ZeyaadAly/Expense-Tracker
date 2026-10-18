@@ -47,7 +47,7 @@ function ConnectedRecurring({ userId }: { userId: string }) {
   const change = (key: keyof RecurringQuery, value: string) => store.setQuery({ [key]: value || undefined });
   const filtered = Object.values(state.query).some(Boolean);
   return <PrototypeShell liveRecurring>
-    <PageHeader title="Recurring" description="A rhythm for the money that repeats." actions={<>
+    <PageHeader title="Recurring" description="Your schedules and the money ahead." actions={<>
       <Button variant="secondary" disabled={state.loading || state.upcomingLoading || state.pending} onClick={() => { void store.refresh(); void store.loadOptions(); }}>Refresh recurring items</Button>
       <Button id={`${pageId}-add`} disabled={state.pending} onClick={() => open({ kind: "create" })}>Add recurring item</Button>
     </>} />
@@ -69,7 +69,7 @@ function ConnectedRecurring({ userId }: { userId: string }) {
         {state.error && state.rows && <StaleIndicator />}
         {state.rows === null && state.loading && <Skeleton variant="transaction" />}
         {state.rows?.length === 0 && !state.loading && !state.error && <EmptyState title={filtered ? "No recurring items match these filters." : "No recurring items yet."} description={filtered ? "Clear your filters to see your schedules." : "Plan repeating income or expenses."} action={<Button onClick={() => filtered ? store.clearFilters() : open({ kind: "create" })}>{filtered ? "Clear filters" : "Add recurring item"}</Button>} />}
-        {state.rows?.map(row => <article key={row.id} className="t34-schedule" aria-label={row.description}>
+        {state.rows?.map(row => <article key={row.id} className="t34-schedule" data-status={row.status} aria-label={row.description}>
           <div className="v2-data-row"><div><strong>{row.description}</strong><p className="v2-helper">{row.accountName} · {row.categoryName}</p>
             <p className="v2-helper">{row.nextOccurrence ? <>Next <time dateTime={row.nextOccurrence}>{row.nextOccurrence}</time></> : row.exhausted ? "Schedule complete" : "No future occurrence"}</p>
             {row.endDate && <p className="v2-helper">Ends <time dateTime={row.endDate}>{row.endDate}</time></p>}

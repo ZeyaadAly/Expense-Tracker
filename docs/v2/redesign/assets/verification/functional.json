@@ -1,0 +1,111 @@
+{
+  "checks": [
+    "Settings profile update and category create/edit/archive/restore",
+    "Accounts create all financial types / edit / opening balance",
+    "Keyboard dialog trap, Escape and focus return",
+    "Transaction create with pending double-submit guard; posted opening balance lock",
+    "Transaction edit; search; six ledger filters; cursor next/previous",
+    "Transfer review/create/edit/delete preserves net position and excludes actuals",
+    "Recurring create/edit/pause/resume; archive reference pauses and restore stays paused",
+    "Budget create/edit/delete preserves posted expenses; backend pressure status",
+    "Goal create/edit/manual savings above 100/complete/reopen/archive; no balance effect",
+    "Dashboard and Analytics authoritative totals, period/account/custom range interactions",
+    "Transaction delete and no stale row after refresh",
+    "Saved-but-stale feedback and safe GET refresh",
+    "Uncertain account write preserves draft, never auto retries, inspection GET-only",
+    "Read error retry and loading without invented totals",
+    "Mobile navigation and filter drawer traps/focus return",
+    "Owner change unmounts open private draft; expired session redirects; signed-out route protection"
+  ],
+  "audits": [
+    {
+      "label": "category form",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "account form cash",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "account form credit_card",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "transaction form",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "filtered ledger",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "transfer review",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "recurring form",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "budget form",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "goal form",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "analytics custom",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "dashboard stale error",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "Open navigation drawer 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "Filters drawer 320",
+      "violations": [],
+      "incomplete": []
+    }
+  ],
+  "errors": [],
+  "localDatabase": true,
+  "financialNetworkMocked": false,
+  "providerSynthetic": true
+}

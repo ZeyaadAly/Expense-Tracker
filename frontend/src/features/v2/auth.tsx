@@ -9,6 +9,8 @@ import { safeNext } from "../../lib/auth/redirects";
 import type { AuthError } from "../../lib/auth/types";
 import { createAuthFormSubmitter, validateAuthForm, type AuthRoute } from "./auth-form";
 import { profileDrafts } from "../../lib/auth/profile-draft";
+import { BrandMark } from "../../components/v2/brand";
+import { Icon } from "../../components/v2/icon";
 export type { AuthRoute } from "./auth-form";
 const titles = { login: "Sign in to your workspace", register: "Create your account", "forgot-password": "Reset your password", "reset-password": "Choose a new password" };
 export function AuthPage({ route }: { route: AuthRoute }) {
@@ -83,12 +85,13 @@ export function AuthPage({ route }: { route: AuthRoute }) {
   return (
     <main className="p4-auth">
       <section className="p4-auth-story">
-        <Link className="v2-brand" href="/v2/login"><span className="v2-mark">e<span>.</span></span>Expense Tracker</Link>
-        <div><p className="v2-eyebrow">A clearer view of your money</p><h2>Make room for<br />what matters.</h2><p>Understand your everyday spending. Plan for the next chapter.</p></div>
-        <p>EGP · built around your financial life</p>
+        <Link className="v2-brand" href="/v2/login"><BrandMark />Expense Tracker</Link>
+        <div className="cl-auth-intro"><h2>Every account.<br />One clear position.</h2><p>Accounts, spending and upcoming commitments in one personal workspace.</p>
+          <div className="cl-auth-register"><span>Personal financial workspace</span><div><Icon name="accounts" /><strong>Know your position</strong><span>Accounts and balances</span></div><div><Icon name="ledger" /><strong>Follow the movement</strong><span>Income, spending and transfers</span></div><div><Icon name="recurring" /><strong>Plan what comes next</strong><span>Recurring entries, budgets and goals</span></div></div>
+        </div>
+        <p className="cl-auth-footnote">Personal by design. Your financial data stays yours.</p>
       </section>
       <section className="p4-auth-form">
-        <p className="p4-prototype-label">{process.env.NODE_ENV === "development" ? "Real authentication · development preview" : "Secure sign in"}</p>
         <h1>{titles[route]}</h1>
         <p className="v2-secondary">{route === "login" ? "Pick up where you left off." : "A little clarity starts here."}</p>
         {initializing && <p role="status" className="v2-helper">Checking authentication…</p>}

@@ -42,7 +42,7 @@ function ConnectedSettings({ userId, email }: { userId: string; email: string })
   }
   const list = state[status];
   return <PrototypeShell liveSettings>
-    <PageHeader title="Settings" description="Your workspace, your details." eyebrow="Expense Tracker / Personal workspace" />
+    <PageHeader title="Settings" description="Your profile, preferences and categories." />
     <div className="p4-settings">
       <section className="p4-panel" aria-labelledby="settings-profile-title">
         <h2 id="settings-profile-title">Profile</h2>
@@ -54,11 +54,11 @@ function ConnectedSettings({ userId, email }: { userId: string; email: string })
       <section className="p4-panel" aria-labelledby="settings-preferences-title">
         <h2 id="settings-preferences-title">Preferences</h2>
         <dl className="p4-definition"><div><dt>Currency</dt><dd>EGP</dd></div><div><dt>Financial timezone</dt><dd>Africa/Cairo</dd></div><div><dt>Language</dt><dd>English (en)</dd></div></dl>
-        <p className="v2-helper">Fixed for V2 core. These preferences cannot be changed here.</p>
+        <p className="v2-helper">Your workspace uses EGP, English and Cairo calendar dates.</p>
       </section>
       <section className="p4-panel" aria-labelledby="settings-accounts-title">
         <h2 id="settings-accounts-title">Accounts</h2>
-        <p>Manage accounts, balances, archive and restore from the connected Accounts page.</p>
+        <p>Manage balances and active or archived accounts.</p>
         <Link className="v2-button v2-button--secondary" href="/v2/accounts">Manage accounts</Link>
       </section>
       <section className="p4-panel" aria-labelledby="settings-categories-title">

@@ -1,0 +1,2 @@
+import{fileURLToPath as redesignFilePath}from'node:url';process.chdir(redesignFilePath(new URL('../../../',import.meta.url)));
+import{pathToFileURL as toolUrl}from'node:url';import{resolve as toolResolve}from'node:path';const library=process.env.REDESIGN_PLAYWRIGHT_PATH||'.tmp-v2-t62/tools/node_modules/playwright-core/index.mjs';export const{chromium}=await import(toolUrl(toolResolve(library)).href);

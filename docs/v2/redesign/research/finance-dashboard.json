@@ -1,0 +1,35 @@
+{
+  "domain": "product",
+  "query": "finance dashboard",
+  "file": "products.csv",
+  "count": 3,
+  "results": [
+    {
+      "Product Type": "Banking/Traditional Finance",
+      "Keywords": "banking, finance, traditional",
+      "Primary Style Recommendation": "Minimalism & Swiss Style + Accessible & Ethical",
+      "Secondary Styles": "Swiss Modernism 2.0 , Dark Mode (OLED)",
+      "Landing Page Pattern": "Trust & Authority + Feature-Rich",
+      "Dashboard Style (if applicable)": "Financial Dashboard",
+      "Color Palette Focus": "Navy (#0A1628) + Trust Blue + Gold accents"
+    },
+    {
+      "Product Type": "Personal Finance Tracker",
+      "Keywords": "budget, expense, money, finance, spending, savings, tracker, personal, wallet",
+      "Primary Style Recommendation": "Glassmorphism + Dark Mode (OLED)",
+      "Secondary Styles": "Minimalism & Swiss Style , Flat Design",
+      "Landing Page Pattern": "Interactive Product Demo",
+      "Dashboard Style (if applicable)": "Financial Dashboard",
+      "Color Palette Focus": "Calm blue + success green + alert red + chart accents"
+    },
+    {
+      "Product Type": "Analytics Dashboard",
+      "Keywords": "kpi, metric, funnel, conversion, cohort, retention, segment, attribution, ab-test, dashboard-data, business-intelligence",
+      "Primary Style Recommendation": "Data-Dense Dashboard + Heat Map & Heatmap Style",
+      "Secondary Styles": "Minimalism & Swiss Style , Dark Mode (OLED)",
+      "Landing Page Pattern": "N/A - Analytics focused",
+      "Dashboard Style (if applicable)": "Drill-Down Analytics + Comparative",
+      "Color Palette Focus": "Cool→Hot gradients + neutral grey"
+    }
+  ]
+}

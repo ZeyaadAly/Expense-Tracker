@@ -158,8 +158,11 @@ export function AccountCard({ account }: { account: AccountFixture }) {
   return (
     <article
       className={`v2-account ${account.type === "credit_card" ? "v2-account--debt" : ""}`}
+      data-account-type={account.type}
+      data-account-status={account.archived ? "archived" : "active"}
     >
       <header>
+        <span className="cl-account-symbol"><Icon name={account.type === "credit_card" ? "card" : account.type === "cash" || account.type === "mobile_wallet" ? "wallet" : account.type === "savings" ? "savings" : "accounts"} /></span>
         <AccountTypeBadge type={account.type} />
         {account.archived ? <ArchivedState /> : <span className="v2-badge">Active</span>}
       </header>
@@ -369,13 +372,15 @@ export function RecurringStatusBadge({ status }: { status: RecurringStatus }) {
   );
 }
 export function UpcomingItem({ item }: { item: Pick<RecurringFixture, "name" | "amount" | "type" | "date" | "account"> }) {
+  const parts = item.date?.split("-");
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   return (
     <div className="v2-upcoming">
-      <span className="v2-timeline-point" aria-hidden="true" />
+      <time className="cl-date-anchor" dateTime={item.date ?? undefined}>
+        <span aria-hidden="true">{parts?.[2] ?? "—"}</span><span aria-hidden="true">{parts ? months[Number(parts[1]) - 1] : ""}</span>
+        <span className="v2-sr-only">{item.date ? dateLabel(item.date) : "No upcoming date"}</span>
+      </time>
       <div>
-        <time dateTime={item.date ?? undefined}>
-          {item.date ? dateLabel(item.date) : "No upcoming date"}
-        </time>
         <strong>{item.name}</strong>
         <span className="v2-helper">
           {item.account} · Expected {item.type}
