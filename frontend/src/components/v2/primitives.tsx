@@ -16,6 +16,7 @@ import { Icon } from "./icon";
 export type Tone = "success" | "warning" | "error" | "info";
 export function Button({
   variant = "primary",
+  size = "md",
   loading = false,
   children,
   className = "",
@@ -24,6 +25,7 @@ export function Button({
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "secondary" | "danger" | "ghost" | "text";
+  size?: "sm" | "md" | "lg";
   loading?: boolean;
 }) {
   return (
@@ -32,13 +34,27 @@ export function Button({
       type={type}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
-      className={`v2-button v2-button--${variant} ${className}`}
+      className={`v2-button v2-button--${variant} v2-button--${size} ${className}`}
     >
       {loading ? <span className="v2-spinner" aria-hidden="true" /> : null}
       {children}
       {loading ? <span className="v2-sr-only"> — loading</span> : null}
     </button>
   );
+}
+
+export function Disclosure({ title, children, lazy = false, onOpenChange }: {
+  title: string; children: ReactNode; lazy?: boolean; onOpenChange?: (open: boolean) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  return <details className="v2-disclosure" onToggle={event => {
+    const next = event.currentTarget.open;
+    setOpen(next);
+    onOpenChange?.(next);
+  }}>
+    <summary>{title}</summary>
+    <div className="v2-disclosure-content">{!lazy || open ? children : null}</div>
+  </details>;
 }
 
 export function FormField({

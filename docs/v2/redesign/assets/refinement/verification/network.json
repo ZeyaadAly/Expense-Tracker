@@ -1,0 +1,992 @@
+{
+  "matrix": [
+    {
+      "route": "dashboard",
+      "requestCount": 2,
+      "requests": [
+        {
+          "method": "POST",
+          "endpoint": "/api/v2/profile/bootstrap"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/dashboard?period=this_month"
+        }
+      ]
+    },
+    {
+      "route": "accounts",
+      "requestCount": 3,
+      "requests": [
+        {
+          "method": "POST",
+          "endpoint": "/api/v2/profile/bootstrap"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/accounts?status=active"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/accounts/summary"
+        }
+      ]
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "requestCount": 3,
+      "requests": [
+        {
+          "method": "POST",
+          "endpoint": "/api/v2/profile/bootstrap"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc/summary"
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "requestCount": 6,
+      "requests": [
+        {
+          "method": "POST",
+          "endpoint": "/api/v2/profile/bootstrap"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/transactions?limit=25"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/accounts?status=active"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/accounts?status=archived"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/categories?status=active"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/categories?status=archived"
+        }
+      ]
+    },
+    {
+      "route": "recurring",
+      "requestCount": 7,
+      "requests": [
+        {
+          "method": "POST",
+          "endpoint": "/api/v2/profile/bootstrap"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/recurring"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/recurring/upcoming?days=30"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/accounts?status=active"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/accounts?status=archived"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/categories?status=active"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/categories?status=archived"
+        }
+      ]
+    },
+    {
+      "route": "analytics",
+      "requestCount": 4,
+      "requests": [
+        {
+          "method": "POST",
+          "endpoint": "/api/v2/profile/bootstrap"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/analytics/overview?from=2026-09-19&to=2026-10-18"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/accounts?status=active"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/accounts?status=archived"
+        }
+      ]
+    },
+    {
+      "route": "budgets",
+      "requestCount": 4,
+      "requests": [
+        {
+          "method": "POST",
+          "endpoint": "/api/v2/profile/bootstrap"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/budgets?year=2026&month=10"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/categories?status=active"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/categories?status=archived"
+        }
+      ]
+    },
+    {
+      "route": "goals",
+      "requestCount": 4,
+      "requests": [
+        {
+          "method": "POST",
+          "endpoint": "/api/v2/profile/bootstrap"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/goals"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/accounts?status=active"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/api/v2/accounts?status=archived"
+        }
+      ]
+    },
+    {
+      "route": "settings",
+      "requestCount": 1,
+      "requests": [
+        {
+          "method": "POST",
+          "endpoint": "/api/v2/profile/bootstrap"
+        }
+      ]
+    }
+  ],
+  "checks": [
+    "Fresh optimized entry: exact per-route allowlists/counts",
+    "Dashboard idle and navigation hover fetch no unrelated financial data",
+    "Dashboard to Transactions: list/references start only after deliberate navigation",
+    "Back reactivates Dashboard with one fresh aggregate; session profile remains bound",
+    "Transfer/category workspaces fetch only on disclosure; archived categories load on selection",
+    "Leaving an in-flight route aborts reads and suppresses late page publication"
+  ],
+  "navigation": [
+    {
+      "method": "GET",
+      "endpoint": "/api/v2/transactions?limit=25"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/v2/accounts?status=active"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/v2/accounts?status=archived"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/v2/categories?status=active"
+    },
+    {
+      "method": "GET",
+      "endpoint": "/api/v2/categories?status=archived"
+    }
+  ],
+  "back": "one fresh Dashboard aggregate",
+  "routeCodePrefetchRequests": [
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+    },
+    {
+      "path": "/v2/accounts/04ead89e-9d4d-4143-b3aa-5e513295f113"
+    },
+    {
+      "path": "/v2/accounts/a226ed3f-8e91-42af-9a93-e6638a150736"
+    },
+    {
+      "path": "/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+    },
+    {
+      "path": "/v2/accounts/04ead89e-9d4d-4143-b3aa-5e513295f113"
+    },
+    {
+      "path": "/v2/accounts/a226ed3f-8e91-42af-9a93-e6638a150736"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+    },
+    {
+      "path": "/v2/accounts/04ead89e-9d4d-4143-b3aa-5e513295f113"
+    },
+    {
+      "path": "/v2/accounts/a226ed3f-8e91-42af-9a93-e6638a150736"
+    },
+    {
+      "path": "/v2/accounts/5c9fbb25-e60f-415a-8b3a-0d1caaea84be"
+    },
+    {
+      "path": "/v2/accounts/04ead89e-9d4d-4143-b3aa-5e513295f113"
+    },
+    {
+      "path": "/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+    },
+    {
+      "path": "/v2/accounts/a226ed3f-8e91-42af-9a93-e6638a150736"
+    },
+    {
+      "path": "/v2/accounts/5c9fbb25-e60f-415a-8b3a-0d1caaea84be"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/forgot-password"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/forgot-password"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+    },
+    {
+      "path": "/v2/accounts/04ead89e-9d4d-4143-b3aa-5e513295f113"
+    },
+    {
+      "path": "/v2/accounts/a226ed3f-8e91-42af-9a93-e6638a150736"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+    },
+    {
+      "path": "/v2/accounts/04ead89e-9d4d-4143-b3aa-5e513295f113"
+    },
+    {
+      "path": "/v2/accounts/a226ed3f-8e91-42af-9a93-e6638a150736"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+    },
+    {
+      "path": "/v2/accounts/04ead89e-9d4d-4143-b3aa-5e513295f113"
+    },
+    {
+      "path": "/v2/accounts/a226ed3f-8e91-42af-9a93-e6638a150736"
+    },
+    {
+      "path": "/v2/accounts/5c9fbb25-e60f-415a-8b3a-0d1caaea84be"
+    },
+    {
+      "path": "/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+    },
+    {
+      "path": "/v2/accounts/04ead89e-9d4d-4143-b3aa-5e513295f113"
+    },
+    {
+      "path": "/v2/accounts/a226ed3f-8e91-42af-9a93-e6638a150736"
+    },
+    {
+      "path": "/v2/accounts/5c9fbb25-e60f-415a-8b3a-0d1caaea84be"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/forgot-password"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/forgot-password"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+    },
+    {
+      "path": "/v2/accounts/04ead89e-9d4d-4143-b3aa-5e513295f113"
+    },
+    {
+      "path": "/v2/accounts/a226ed3f-8e91-42af-9a93-e6638a150736"
+    },
+    {
+      "path": "/v2/accounts"
+    },
+    {
+      "path": "/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+    },
+    {
+      "path": "/v2/accounts/a226ed3f-8e91-42af-9a93-e6638a150736"
+    },
+    {
+      "path": "/v2/accounts/04ead89e-9d4d-4143-b3aa-5e513295f113"
+    },
+    {
+      "path": "/v2/transactions"
+    },
+    {
+      "path": "/v2/recurring"
+    },
+    {
+      "path": "/v2/dashboard"
+    },
+    {
+      "path": "/v2/budgets"
+    },
+    {
+      "path": "/v2/goals"
+    },
+    {
+      "path": "/v2/analytics"
+    },
+    {
+      "path": "/v2/settings"
+    },
+    {
+      "path": "/v2/accounts/5c9fbb25-e60f-415a-8b3a-0d1caaea84be"
+    }
+  ],
+  "aborted": [
+    {
+      "path": "/api/v2/transactions",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v2/accounts",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v2/accounts",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v2/categories",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "path": "/api/v2/categories",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "financialCaching": "No new global cache. Stores remain user/session bound and clear on teardown.",
+  "dashboardUnrelatedFinancialRequests": 0
+}

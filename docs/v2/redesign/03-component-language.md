@@ -1,7 +1,7 @@
 # Component language
 
 - **Shell:** compact balance mark and product name, restrained grouped navigation, a precise selected route, quiet profile block. No connected/development/prototype labels in normal flows. All existing routes and owner-keyed teardown remain.
-- **Buttons:** solid cobalt commits; bordered secondary actions; text/quiet navigation; restrained vermilion destructive confirmations. Icon buttons keep accessible names and44px hit areas. Pending states still block double dispatch.
+- **Buttons:** solid cobalt commits; bordered secondary actions; text/quiet navigation; restrained vermilion destructive confirmations. Icon buttons keep accessible names; compact desktop targets remain at least32px and real touch targets44px. Pending states still block double dispatch.
 - **Fields:** visible labels, strong bottom/outer boundary, aligned money affix, native date/select behavior, associated helper/error text. Focus is an offset ring. Preserve first-invalid focus, drafts, uncertainty and GET-only inspection.
 - **Dialogs/drawers:** concise header, quiet white surface, relevant width, compact header separator and visible close action. Phone dialogs use available height with scrollable content; do not clip the action row. Existing showModal, Escape/pending behavior, focus trap, scroll lock and trigger/fallback focus are retained.
 - **Surfaces:** financial position gets an ink canvas; account instruments get a restrained type marker; ordinary lists use rows and sections. No universal rounded-card wrapper.
@@ -11,4 +11,6 @@
 - **Charts:** the existing lightweight DOM/SVG geometry and exact text/table equivalents remain. Restyle grid/series/legend and category bars; no chart library, fake trend or browser aggregate.
 - **Empty/loading/error:** no illustration. Clear next action, compact skeletons that match the data shape, integrated severity rail. Preserve all existing scope-specific retry and uncertain-write safeguards.
 
-The presentation layer may add semantic layout wrappers and data attributes; session clients, stores, backend routes and financial calculations remain unchanged.
+The presentation layer may add semantic layout wrappers and data attributes; session clients, backend routes and financial calculations remain unchanged. Settings alone reuses the verified session profile and defers category reads; owner/session abort protections remain.
+
+Native disclosure summaries progressively reveal advanced filters, schedule/reference metadata, exact Analytics tables and planning details. Lazy Transfers mount only while open; Settings categories load only after expansion. Closing a lazy workspace unmounts its route-owned store and aborts reads. See [current refinement](06-density-and-loading-refinement.md).

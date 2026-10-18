@@ -1,0 +1,88 @@
+{
+  "requested": "compact form controls",
+  "results": [
+    {
+      "domain": "ux",
+      "query": "compact form controls",
+      "file": "ux-guidelines.csv",
+      "count": 3,
+      "results": [
+        {
+          "Category": "Forms",
+          "Issue": "Submit Feedback",
+          "Platform": "All",
+          "Description": "Confirm form submission status",
+          "Do": "Show loading then success/error state",
+          "Don't": "No feedback after submit",
+          "Code Example Good": "Loading -> Success message",
+          "Code Example Bad": "Button click with no response",
+          "Severity": "High"
+        },
+        {
+          "Category": "Accessibility",
+          "Issue": "Form Labels",
+          "Platform": "All",
+          "Description": "Inputs must have associated labels",
+          "Do": "Use label with for attribute or wrap input",
+          "Don't": "Placeholder-only inputs",
+          "Code Example Good": "<label for='email'>",
+          "Code Example Bad": "placeholder='Email' only",
+          "Severity": "High"
+        },
+        {
+          "Category": "Animation",
+          "Issue": "Auto-Rotating Content Controls",
+          "Platform": "All",
+          "Description": "Auto-rotating content needs user control",
+          "Do": "Provide previous next and play/pause; stop on focus or hover and when reduced motion is requested",
+          "Don't": "Auto-advance slides without a stop control",
+          "Code Example Good": "button aria-label=\"Pause carousel\"",
+          "Code Example Bad": "timer-only carousel",
+          "Severity": "High"
+        }
+      ]
+    },
+    {
+      "domain": "ux",
+      "query": "form field spacing",
+      "file": "ux-guidelines.csv",
+      "count": 3,
+      "results": [
+        {
+          "Category": "Touch",
+          "Issue": "Touch Spacing",
+          "Platform": "Mobile",
+          "Description": "Adjacent touch targets need adequate spacing",
+          "Do": "Minimum 8px gap between touch targets",
+          "Don't": "Tightly packed clickable elements",
+          "Code Example Good": "gap-2 between buttons",
+          "Code Example Bad": "gap-0 or gap-1",
+          "Severity": "Medium"
+        },
+        {
+          "Category": "Forms",
+          "Issue": "Error Placement",
+          "Platform": "All",
+          "Description": "Each invalid field needs an inline error connected to that field",
+          "Do": "Show a specific error below the input and reference it with aria-describedby",
+          "Don't": "Show only a top-level error without identifying each invalid field",
+          "Code Example Good": "<input aria-describedby=\"email-error\"><p id=\"email-error\">Enter an email address</p>",
+          "Code Example Bad": "Red border or summary only",
+          "Severity": "High"
+        },
+        {
+          "Category": "Accessibility",
+          "Issue": "Text Reflow and Spacing",
+          "Platform": "Web",
+          "Description": "Text must remain available at narrow widths zoom and user spacing overrides",
+          "Do": "Use fluid sizes content-driven height and unitless line height",
+          "Don't": "Clip text in fixed-width or fixed-height boxes",
+          "Code Example Good": ".copy { inline-size: min(100%, 65ch); height: auto; line-height: 1.5; }",
+          "Code Example Bad": ".copy { width: 900px; height: 40px; overflow: hidden; }",
+          "Severity": "Critical"
+        }
+      ]
+    }
+  ],
+  "review": "Recommendations require product/stack fit review; no automatic implementation authority."
+}

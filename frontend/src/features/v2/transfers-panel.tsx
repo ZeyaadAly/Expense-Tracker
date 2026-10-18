@@ -7,7 +7,7 @@ import { cairoToday } from "../../lib/api/v2-transactions";
 import { createTransfersStore } from "../../lib/transfers-store";
 import { TransferForm, TransferSummary } from "../../components/v2/forms";
 import { MoneyDisplay, TransferBadge } from "../../components/v2/finance";
-import { Button, DialogShell, EmptyState, ErrorState, FeedbackBanner, Skeleton, StaleIndicator } from "../../components/v2/primitives";
+import { Button, DialogShell, Disclosure, EmptyState, ErrorState, FeedbackBanner, Skeleton, StaleIndicator } from "../../components/v2/primitives";
 type Action = { kind: "create" | "edit" | "delete"; transfer?: Transfer };
 type Store = ReturnType<typeof createTransfersStore>;
 export function TransfersPanel({ userId, account, refreshBalances, disabled = false }: { userId: string; account?: Account; refreshBalances: () => Promise<boolean>; disabled?: boolean }) {
@@ -23,8 +23,8 @@ export function TransfersPanel({ userId, account, refreshBalances, disabled = fa
   const open = (next: Action) => { store.clearMutation(); setAction(next); void store.loadOptions(); };
   const close = () => { if (!store.getSnapshot().pending && !store.getSnapshot().inspecting) { setAction(null); store.clearMutation(); setTimeout(() => { if (document.activeElement === document.body) document.getElementById(refreshId)?.focus(); }, 0); } };
   return <section className="p4-panel transfers-connected" aria-label="Transfers">
-    <div className="v2-actions"><h2>Transfers</h2><Button disabled={disabled || state.pending || (state.optionsLoading && !state.accounts) || !!state.optionsError || (account?.status === "archived") || (state.accounts?.filter(row => row.status === "active").length ?? 0) < 2} onClick={() => open({ kind: "create" })}>New transfer</Button><Button id={refreshId} variant="secondary" disabled={disabled || state.pending || state.loading} onClick={() => { void store.refresh(); void store.loadOptions(); }}>Refresh transfers</Button></div>
-    <p className="v2-helper">Account movement only. Card payments use transfers to avoid a second expense.</p>
+    <div className="v2-actions"><h2>Transfers</h2><Button disabled={disabled || state.pending || (state.optionsLoading && !state.accounts) || !!state.optionsError || (account?.status === "archived") || (state.accounts?.filter(row => row.status === "active").length ?? 0) < 2} onClick={() => open({ kind: "create" })}>New transfer</Button><Button id={refreshId} variant="secondary" disabled={disabled || state.pending || state.loading} onClick={() => { void store.refresh(); void store.loadOptions(); }}>Refresh<span className="v2-sr-only"> transfers</span></Button></div>
+    <p className="v2-helper">Transfers move money between accounts; card payments are not another expense.</p>
     {account?.status === "archived" && <p className="v2-helper">Archived history remains available. Restore the account to use it in a new transfer.</p>}
     {state.notice && <FeedbackBanner tone={state.notice.includes("could not") ? "warning" : "success"} title={state.notice}/>}
     {state.optionsError && <ErrorState title="Account choices unavailable" description={state.optionsError} onRetry={() => void store.loadOptions()}/>}
@@ -35,9 +35,9 @@ export function TransfersPanel({ userId, account, refreshBalances, disabled = fa
       const source = state.accounts?.find(a => a.id === row.sourceAccountId), destination = state.accounts?.find(a => a.id === row.destinationAccountId);
       const direction = account ? row.sourceAccountId === account.id ? `To ${row.destinationAccountName}` : `From ${row.sourceAccountName}` : `${row.sourceAccountName} → ${row.destinationAccountName}`;
       return <article className="v2-data-row transfer-history-row" key={row.id}>
-        <div><TransferBadge/><h3>{direction}</h3><time dateTime={row.date}>{row.date}</time>{row.description && <p>{row.description}</p>}
+        <div><TransferBadge/><h3>{direction}</h3><time dateTime={row.date}>{row.date}</time><Disclosure title="Transfer details">{row.description && <p>{row.description}</p>}
           <p className="v2-helper">From {row.sourceAccountName}{source?.status === "archived" ? " (Archived)" : ""} · To {row.destinationAccountName}{destination?.status === "archived" ? " (Archived)" : ""}</p>
-        </div><MoneyDisplay value={row.amount} kind="transfer"/><div className="v2-actions">
+        </Disclosure></div><MoneyDisplay value={row.amount} kind="transfer"/><div className="v2-actions">
           <Button variant="text" disabled={disabled || state.pending} aria-label={`Edit transfer ${row.description || row.date}`} onClick={() => open({ kind: "edit", transfer: row })}>Edit</Button>
           <Button variant="text" disabled={disabled || state.pending} aria-label={`Delete transfer ${row.description || row.date}`} onClick={() => open({ kind: "delete", transfer: row })}>Delete</Button>
         </div>

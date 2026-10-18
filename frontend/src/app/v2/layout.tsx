@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import "./v2.css";
 import "./prototype.css";
+import "./refinement.css";
 import { AuthProvider } from "../../lib/auth/auth-provider";
 import { ProtectedBoundary } from "../../features/v2/protected-boundary";
 import { v2FontClasses } from "../../lib/v2-fonts";

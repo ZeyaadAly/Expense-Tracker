@@ -1,0 +1,208 @@
+/* Shared compact workspace policy. Root causes are fixed in v2.css; this file
+   composes the denser views and disclosure hierarchy over the visual system. */
+.v2-theme { --v2-sidebar-width:200px; --v2-content-max:1280px; }
+.v2-theme h1 { font-size:28px; }
+.v2-theme h2 { font-size:19px; }
+.v2-theme .v2-sidebar-content { padding:20px 12px; gap:20px; }
+.v2-theme .v2-sidebar-content nav { gap:12px; }
+.v2-theme .v2-nav-item { min-height:36px; padding:7px 10px; font-size:13px; }
+.v2-theme .v2-nav-section>p { padding:0 12px 2px; font-size:11px; }
+.v2-theme .v2-brand small { display:none; }
+.v2-theme .v2-main { width:calc(100% - var(--v2-sidebar-width)); max-width:var(--v2-content-max); padding:24px 28px 40px; }
+.v2-theme .v2-page-header { align-items:flex-start; gap:12px; margin-bottom:20px; }
+.v2-theme .v2-page-actions { align-items:end; gap:8px; max-width:100%; }
+.v2-theme .v2-page-actions>.v2-field { margin:0; }
+.v2-theme .v2-actions { min-width:0; max-width:100%; }
+.v2-theme .v2-page-header p { font-size:13px; margin-top:4px; }
+.v2-theme .v2-user .v2-button { min-height:36px; }
+.v2-theme .v2-segmented { margin:16px 0; }
+.v2-theme .v2-segmented span { min-height:32px; padding:5px 12px; font-size:13px; }
+.v2-theme .p4-panel { margin-top:20px; padding-top:16px; }
+.v2-disclosure { min-width:0; max-width:100%; margin:12px 0; }
+.v2-disclosure>summary { cursor:pointer; min-height:32px; padding:6px 0; font-size:13px; font-weight:500; color:var(--text-secondary); overflow-wrap:anywhere; }
+.v2-disclosure>summary:hover { color:var(--text-primary); }
+.v2-disclosure-content { min-width:0; max-width:100%; padding-top:12px; }
+.v2-disclosure:not([open])>.v2-disclosure-content { display:none; }
+.v2-disclosure-content>:first-child { margin-top:0; }
+.v2-theme .v2-dialog { max-width:calc(100% - 24px); padding:20px; }
+.v2-theme .v2-dialog--drawer { max-width:100%; }
+.v2-theme .v2-dialog-header { padding-bottom:8px; margin-bottom:10px; }
+.v2-theme .v2-dialog-header h2 { margin-top:5px; font-size:20px; }
+.v2-theme .v2-dialog>.v2-secondary { font-size:13px; margin-bottom:16px; }
+.v2-theme .v2-dialog>form>.v2-field { margin-bottom:12px; }
+.v2-theme .v2-empty { padding:20px; }
+.v2-theme .v2-empty p { margin:6px 0 12px; }
+.v2-theme .v2-skeleton { padding:16px; }
+.v2-theme .v2-data-row { padding:12px 0; gap:12px; }
+.v2-theme .v2-data-row>* { min-width:0; }
+.v2-theme .v2-money-value { min-width:0; }
+.v2-theme .v2-money--hero>.v2-money-value { font-size:36px; }
+.v2-theme .v2-money--large>.v2-money-value { font-size:24px; }
+.v2-theme .v2-filter-chip { min-height:32px; padding:4px 8px; }
+/* Overview: one dominant position, short movement rows, bounded previews. */
+.v2-theme .cl-position-grid { margin-top:0; gap:20px; grid-template-columns:minmax(0,1fr) minmax(0,1.2fr); }
+.v2-theme .cl-position-canvas { min-width:0; padding:24px; justify-content:start; gap:12px; }
+.cl-position-canvas .v2-disclosure { margin:0; }
+.cl-position-canvas { --focus:var(--on-ink); }
+.cl-position-canvas .v2-disclosure>summary { color:var(--on-ink-secondary); }
+.v2-theme .t37-position { padding-top:0; border:0; gap:16px; }
+.v2-theme .t37-position .v2-money-value { font-size:19px; }
+.v2-theme .t37-position h2 { font-size:12px; }
+.v2-theme .cl-period-movement { padding:16px 20px; }
+.v2-theme .cl-cash-flow { margin-top:8px; }
+.v2-theme .cl-cash-flow .v2-metric { padding:6px 0; }
+.v2-theme .cl-cash-flow .v2-money-value { font-size:21px; }
+.v2-theme .cl-period-movement>[data-testid=dashboard-range] { margin-top:10px; font-size:11px; }
+.v2-theme .cl-dashboard-accounts .p4-panel { margin-top:24px; }
+.v2-theme .t37-panel-heading { margin-bottom:8px; }
+.v2-theme .t37-panel-heading>a { min-height:32px; }
+.v2-theme .t37-account { padding:12px 16px; flex-basis:220px; }
+.v2-theme .t37-account .v2-money { margin-top:8px; }
+.v2-theme .t37-account .v2-money-value { font-size:19px; }
+.rf-preview-note { margin-top:8px!important; font-size:12px; }
+.rf-preview-note a { text-decoration:underline; }
+.v2-theme .t37-activity { margin-top:24px; gap:24px; }
+.v2-theme .t37-activity .p4-panel { margin-top:0; }
+.v2-theme .v2-upcoming { padding:12px 0; gap:10px; }
+.v2-theme .cl-date-anchor { padding:4px 2px; }
+.v2-theme .cl-date-anchor>span:first-child { font-size:17px; }
+/* Instruments and movements keep primary rows short. */
+.v2-theme .p4-account-grid { margin:16px 0 20px; }
+.v2-theme .p4-account-grid>div { padding:14px 16px; gap:12px; }
+.v2-theme .p4-account-grid>div>.v2-actions { max-width:none; gap:4px; }
+.v2-theme .p4-account-grid>div>.v2-actions>a { min-height:32px; padding:4px 8px; }
+.v2-theme .v2-account { grid-template-columns:36px minmax(0,1.3fr) minmax(0,1fr); gap:2px 12px; }
+.v2-theme .cl-account-symbol { width:32px; height:36px; border-radius:4px; background:var(--surface-subtle); color:var(--text-secondary); }
+.v2-theme .v2-account>h3 { font-size:15px; }
+.v2-theme .v2-account .v2-money-value { font-size:22px; }
+.v2-theme .account-detail-summary { padding:20px; gap:16px; }
+.v2-theme .account-detail-summary>.v2-metric:first-child { padding-bottom:16px; }
+.v2-theme .account-detail-summary>.v2-metric .v2-helper { display:none; }
+.v2-theme .account-detail-summary>.v2-metric:first-child .v2-helper { display:block; }
+.v2-theme .transfer-history-row { padding:12px 16px; gap:12px; }
+.v2-theme .transfer-history-row p { font-size:12px; }
+.v2-theme .transfer-history-row .v2-disclosure { margin:2px 0; }
+/* Filters share a 36px baseline instead of stretching across the canvas. */
+.v2-theme .transactions-connected { padding:12px 0; border:0; background:none; margin-top:0; }
+.v2-theme .v2-search-bar { max-width:600px; }
+.v2-theme .t25-desktop-filters { display:flex; align-items:start; gap:12px; margin-top:10px; flex-wrap:wrap; }
+.v2-theme .t25-desktop-filters>.p4-filters { grid-template-columns:repeat(2,minmax(0,180px)); margin:0; }
+.v2-theme .t25-desktop-filters>.v2-disclosure { margin:24px 0 0; flex:1 1 200px; }
+.v2-theme .t25-desktop-filters>.v2-disclosure>summary { min-height:var(--control-height-md); padding-block:8px; }
+.v2-theme .t25-desktop-filters .v2-disclosure .p4-filters { grid-template-columns:repeat(4,minmax(0,1fr)); margin:0; }
+.v2-theme .v2-ledger td { padding:6px 10px; }
+.v2-theme .v2-ledger .v2-button { min-height:32px; min-width:32px; padding:4px 6px; font-size:12px; }
+.v2-theme .v2-ledger td strong { font-size:13px; }
+.v2-theme .v2-ledger td .v2-actions { flex-wrap:nowrap; }
+.v2-theme .v2-ledger th { padding:8px 10px; }
+.v2-theme .v2-ledger caption { padding:10px; font-size:12px; }
+.v2-theme .v2-transaction-card { padding:12px; }
+.v2-theme .v2-transaction-card>header { margin-bottom:8px; }
+.v2-theme .v2-transaction-card>.v2-helper { margin:4px 0 8px; }
+.v2-theme .v2-transaction-card>.v2-actions { margin-top:8px; padding-top:4px; }
+.v2-theme [aria-label="Recurring filters"] { padding:0; margin-top:12px; background:none; border:0; }
+.v2-theme [aria-label="Recurring filters"] .v2-form-grid { grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; }
+.v2-theme .t34-recurring { margin-top:12px; gap:24px; }
+.v2-theme .t34-schedule { margin-top:12px; padding:12px 0 8px 12px; border-left-width:2px; }
+.v2-theme .t34-schedule .v2-money-value { font-size:20px; }
+.v2-theme .t34-schedule .v2-disclosure { margin:2px 0; }
+.v2-theme .t34-schedule .v2-disclosure>summary { font-size:12px; }
+.v2-theme .t34-schedule>.v2-actions { padding-top:0; }
+.v2-theme .t40-controls { padding:12px; gap:12px; }
+.v2-theme .t40-controls .v2-field { flex:0 1 220px; }
+.v2-theme .t40-content { grid-template-columns:minmax(0,1fr); gap:16px; }
+.v2-theme .t40-content>.p4-panel { padding:16px 0 0; border-radius:0; }
+.v2-theme .t40-content>.p4-panel:nth-child(2) { order:6; padding:0; border:0; background:none; }
+.v2-theme .t40-narrative { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px 24px; max-width:920px; }
+.v2-theme .t40-narrative>.v2-eyebrow { font-size:12px; }
+.v2-theme .t40-narrative>.v2-metric--emphasis { padding-bottom:12px; }
+.v2-theme .t40-narrative>.v2-disclosure { grid-column:1/-1; margin:0; }
+.v2-theme .t40-narrative>.v2-disclosure .t40-derived { margin-bottom:8px; }
+.v2-theme .t40-content .v2-chart header>.v2-helper { display:none; }
+.v2-theme .t40-trend-grid { grid-template-columns:minmax(0,1fr); gap:12px; }
+.v2-theme .t40-trends .v2-chart { max-width:920px; }
+.v2-theme .t40-content>.p4-panel[aria-label="Category breakdowns"] { grid-template-columns:minmax(0,1fr); gap:12px; }
+.v2-theme .v2-chart-summary { font-size:12px; border:0; padding:4px 0; }
+.v2-theme .v2-chart-summary>strong { display:none; }
+.v2-theme .t40-chart-scroll { max-width:920px; }
+.v2-theme .t44-month { max-width:180px; }
+.v2-theme .t44-budget { padding:16px 20px; }
+.v2-theme .v2-planning-row>header { gap:4px; }
+.v2-theme .v2-planning-row .v2-money-value { font-size:22px; }
+.v2-theme .v2-planning-row .v2-tabular { font-size:19px; }
+.v2-theme .t44-budget>.v2-actions { margin-top:0; }
+.v2-theme .t44-budget>.v2-disclosure { margin:4px 0; }
+.v2-theme .t46-goals>section { padding:16px 20px; }
+.v2-theme .v2-goal>header { margin-bottom:6px; }
+.v2-theme .v2-goal>header>h3 { font-size:17px; }
+.v2-theme .v2-goal>.v2-data-row time,.v2-theme .v2-goal>.v2-data-row>span { display:none; }
+.v2-theme .t46-goals>section>.v2-helper { margin-top:8px; }
+.v2-theme .t46-goals>section>.v2-disclosure { margin:4px 0; }
+.v2-theme .t46-goals>section>.v2-actions { margin-top:8px; padding-top:8px; }
+.rf-record-footer { display:flex; align-items:center; flex-wrap:wrap; gap:8px 16px; padding-top:8px; margin-top:8px; border-top:1px solid var(--border); min-width:0; }
+.rf-record-footer>.v2-disclosure,.rf-record-footer>.v2-helper { margin:0; }
+.rf-record-footer>.v2-actions { margin-left:auto; }
+.rf-record-footer>.v2-disclosure[open] { flex:1 1 100%; order:3; }
+.v2-theme .v2-goal>.v2-data-row { padding:0; }
+.v2-theme .v2-account[data-account-type] .cl-account-symbol { background:var(--surface-subtle); color:var(--text-secondary); }
+.v2-theme .p4-settings { gap:16px; }
+.v2-theme .p4-settings>.p4-panel { padding:20px; margin:0; }
+.v2-theme .p4-settings>.p4-panel:nth-child(4)>.v2-disclosure { margin:0; }
+.v2-theme .p4-settings>.p4-panel:nth-child(4)>.v2-disclosure>summary { font-size:19px; color:var(--text-primary); }
+.v2-theme .v2-settings-category-list { margin-top:12px; }
+.v2-theme .p4-auth-form .v2-input { height:44px; font-size:16px; }
+.v2-theme .p4-auth-form form>.v2-button { min-height:44px; font-size:15px; }
+@media (max-width:1279px) {
+  .v2-theme .p4-account-grid>div { grid-template-columns:minmax(0,1fr); }
+  .v2-theme .t25-desktop-filters .v2-disclosure .p4-filters { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (min-width:768px) {
+  .v2-theme .t40-narrative { grid-template-columns:minmax(0,1fr) minmax(0,1.8fr); }
+  .v2-theme .t40-narrative>.v2-metric--emphasis { grid-column:1; border:0; padding:0; }
+  .v2-theme .t40-narrative>.v2-metric-strip { grid-column:2; align-items:start; }
+}
+@media (max-width:1023px) {
+  .v2-theme .v2-main { width:100%; margin-left:0; padding:20px 24px 32px; }
+  .v2-theme .t25-desktop-filters { display:none; }
+  .v2-theme .t25-mobile-filters { display:inline-flex; }
+  .v2-theme [aria-label="Recurring filters"] .v2-form-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+@media (max-width:767px) {
+  .v2-theme .cl-position-grid { grid-template-columns:minmax(0,1fr); }
+  .v2-theme .t40-narrative { grid-template-columns:minmax(0,1fr); }
+  .v2-theme .t40-content,.v2-theme .t37-activity { gap:20px; }
+}
+@media (max-width:599px) {
+  .v2-theme h1 { font-size:25px; }
+  .v2-theme .v2-main { padding:18px 16px 32px; }
+  .v2-theme .v2-page-header { margin-bottom:16px; }
+  .v2-theme .v2-page-actions { width:100%; }
+  .v2-theme .v2-page-actions>.v2-button { flex:0 1 auto; }
+  .v2-theme .cl-position-canvas,.v2-theme .cl-period-movement { padding:20px; }
+  .v2-theme .cl-cash-flow .v2-money-value { font-size:20px; }
+  .v2-theme .v2-account { grid-template-columns:32px minmax(0,1fr); }
+  .v2-theme .cl-account-rail .t37-account { flex-basis:100%; }
+  .v2-theme .t37-account .v2-data-row { gap:12px; }
+  .v2-theme .v2-upcoming { grid-template-columns:36px minmax(0,1fr); }
+  .v2-theme .v2-upcoming--compact { grid-template-columns:36px minmax(0,1fr) auto; align-items:center; }
+  .v2-theme .v2-upcoming--compact>.v2-money { grid-column:3; grid-row:1; font-size:14px; margin:0; padding:0; align-self:center; }
+  .v2-theme .t40-controls { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .v2-theme [aria-label="Recurring filters"] .v2-form-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .v2-theme .transfer-history-row { grid-template-columns:minmax(0,1fr); }
+  .v2-theme .transfer-history-row>.v2-money { justify-content:start; text-align:left; }
+  .v2-theme .p4-account-grid>div>.v2-actions { justify-content:start; }
+  .v2-theme .account-detail-summary { padding:16px; }
+}
+/* Touch context is separate from compact desktop visual sizing. No pseudo hit
+   areas overlap neighboring controls; the real control itself grows. */
+@media (any-pointer:coarse),(max-width:1023px) {
+  .v2-theme { --control-height-sm:44px; --control-height-md:44px; --control-height-lg:44px; }
+  .v2-theme .v2-button,.v2-theme .v2-segmented span,.v2-theme .v2-disclosure>summary,.v2-theme .v2-nav-item,.v2-theme .v2-filter-chip,.v2-theme .v2-ledger .v2-button,.v2-theme .t37-panel-heading>a,.v2-theme .p4-account-grid>div>.v2-actions>a { min-height:44px; }
+  .v2-theme .v2-input { font-size:16px; }
+  .v2-theme :is(.p4-filters,.t40-controls,[aria-label="Recurring filters"]) .v2-input { font-size:16px; }
+  .v2-theme .v2-button--ghost { min-width:44px; }
+  .v2-theme .v2-button { min-width:44px; }
+  .v2-theme .v2-ledger .v2-button { min-width:44px; }
+  .v2-theme .v2-user .v2-button { min-height:44px; }
+  .v2-theme .v2-actions { gap:8px; }
+}

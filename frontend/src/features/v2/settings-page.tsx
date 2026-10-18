@@ -8,7 +8,7 @@ import { createProfileClient, type Profile } from "../../lib/api/profile";
 import { createCategoryClient } from "../../lib/api/categories";
 import { createSettingsStore } from "../../lib/settings-store";
 import { PageHeader } from "../../components/v2/app-shell";
-import { Button, EmptyState, ErrorState, FeedbackBanner, FormField, SegmentedControl, Skeleton, StaleIndicator, TextInput } from "../../components/v2/primitives";
+import { Button, Disclosure, EmptyState, ErrorState, FeedbackBanner, FormField, SegmentedControl, Skeleton, StaleIndicator, TextInput } from "../../components/v2/primitives";
 import { PrototypeShell } from "./shell";
 import { CategoryDialog, type CategoryAction } from "./settings-category-dialog";
 
@@ -21,6 +21,8 @@ export function SettingsPage() {
 function ConnectedSettings({ userId, email }: { userId: string; email: string }) {
   const { invalidateSession, signOut } = useAuth();
   const router = useRouter();
+  const context = useOptionalProfile();
+  const [initialProfile] = useState(context?.profile);
   const [profileClient] = useState(() => createProfileClient(userId));
   const [categoryClient] = useState(() => createCategoryClient(userId));
   const [store] = useState(() => createSettingsStore(profileClient, categoryClient));
@@ -30,7 +32,7 @@ function ConnectedSettings({ userId, email }: { userId: string; email: string })
   const [signingOut, setSigningOut] = useState(false);
   const [signOutError, setSignOutError] = useState("");
   const logoutPending = useRef(false);
-  useEffect(() => store.start(), [store]);
+  useEffect(() => store.start({profile:initialProfile,deferCategories:true}), [store,initialProfile]);
   useEffect(() => { if (state.authError) { invalidateSession(); void signOut(); router.replace("/v2/login?reason=expired"); } }, [state.authError, invalidateSession, signOut, router]);
   if (state.authError) return null;
   async function logout() {
@@ -42,7 +44,7 @@ function ConnectedSettings({ userId, email }: { userId: string; email: string })
   }
   const list = state[status];
   return <PrototypeShell liveSettings>
-    <PageHeader title="Settings" description="Your profile, preferences and categories." />
+    <PageHeader title="Settings" />
     <div className="p4-settings">
       <section className="p4-panel" aria-labelledby="settings-profile-title">
         <h2 id="settings-profile-title">Profile</h2>
@@ -54,19 +56,18 @@ function ConnectedSettings({ userId, email }: { userId: string; email: string })
       <section className="p4-panel" aria-labelledby="settings-preferences-title">
         <h2 id="settings-preferences-title">Preferences</h2>
         <dl className="p4-definition"><div><dt>Currency</dt><dd>EGP</dd></div><div><dt>Financial timezone</dt><dd>Africa/Cairo</dd></div><div><dt>Language</dt><dd>English (en)</dd></div></dl>
-        <p className="v2-helper">Your workspace uses EGP, English and Cairo calendar dates.</p>
       </section>
       <section className="p4-panel" aria-labelledby="settings-accounts-title">
         <h2 id="settings-accounts-title">Accounts</h2>
         <p>Manage balances and active or archived accounts.</p>
         <Link className="v2-button v2-button--secondary" href="/v2/accounts">Manage accounts</Link>
       </section>
-      <section className="p4-panel" aria-labelledby="settings-categories-title">
-        <h2 id="settings-categories-title">Categories</h2>
+      <section className="p4-panel" aria-label="Category manager">
+        <Disclosure title="Categories" onOpenChange={open=>{if(open&&!store.getSnapshot()[status].data)void store.refreshCategories(status);}}>
         {state.categoryNotice && <FeedbackBanner tone="success" title={state.categoryNotice} />}
         {state.categoryFailure && !action && <FeedbackBanner tone={state.categoryFailure.uncertain ? "warning" : "error"} title={state.categoryFailure.message} />}
-        <div className="v2-actions"><Button disabled={state.categoryPending || !!state.categoryFailure?.uncertain} onClick={() => { store.clearFailure("category"); setAction({ kind: "create" }); }}>Add custom category</Button><Button variant="secondary" disabled={list.loading || state.categoryPending} onClick={() => void store.refreshCategories(status)}>Refresh categories</Button></div>
-        <SegmentedControl label="Category status" value={status === "active" ? "Active" : "Archived"} options={["Active", "Archived"]} onChange={value => setStatus(value.toLowerCase() as "active" | "archived")} />
+        <div className="v2-actions"><Button disabled={state.categoryPending || !!state.categoryFailure?.uncertain} onClick={() => { store.clearFailure("category"); setAction({ kind: "create" }); }}>Add custom category</Button><Button variant="secondary" disabled={list.loading || state.categoryPending} onClick={() => void store.refreshCategories(status)}>Refresh<span className="v2-sr-only"> categories</span></Button></div>
+        <SegmentedControl label="Category status" value={status === "active" ? "Active" : "Archived"} options={["Active", "Archived"]} onChange={value => {const next=value.toLowerCase() as "active"|"archived";setStatus(next);if(!store.getSnapshot()[next].data)void store.refreshCategories(next);}} />
         {list.error && <ErrorState title="Categories could not refresh" description={list.error} onRetry={() => void store.refreshCategories(status)} />}
         {list.stale && <StaleIndicator />}
         {list.loading && <p role="status">Loading {status} categories…</p>}
@@ -78,6 +79,7 @@ function ConnectedSettings({ userId, email }: { userId: string; email: string })
           </div>}
         </div>)}</div>}
         {state.categoryFailure?.uncertain && !action && <CategoryInspection state={state} store={store} />}
+        </Disclosure>
       </section>
       <section className="p4-panel" aria-labelledby="settings-security-title">
         <h2 id="settings-security-title">Security</h2>
@@ -112,7 +114,7 @@ export function ProfileForm({ profile, email, state, store }: { profile: Profile
     {state.profileFailure && <FeedbackBanner tone={state.profileFailure.uncertain ? "warning" : "error"} title={state.profileFailure.message} />}
     <FormField id={`${id}-name`} label="Display name" error={error || state.profileFailure?.fields.displayName} hint="Leave blank to clear your display name."><TextInput id={`${id}-name`} value={draft} maxLength={200} disabled={state.profilePending} aria-invalid={!!(error || state.profileFailure?.fields.displayName)} aria-describedby={[`${id}-name-hint`, error || state.profileFailure?.fields.displayName ? `${id}-name-error` : ""].filter(Boolean).join(" ")} onChange={event => { setDraft(event.target.value); setError(""); }} /></FormField>
     <FormField id={`${id}-email`} label="Email" hint="Managed by your sign-in provider."><TextInput id={`${id}-email`} value={email} readOnly /></FormField>
-    <div className="v2-actions"><Button type="submit" loading={state.profilePending} disabled={!!state.profileFailure?.uncertain || (draft.trim() || null) === profile.displayName}>Save profile</Button><Button variant="secondary" disabled={state.profile.loading || state.profilePending} onClick={() => void store.refreshProfile()}>Refresh profile</Button></div>
+    <div className="v2-actions"><Button type="submit" loading={state.profilePending} disabled={!!state.profileFailure?.uncertain || (draft.trim() || null) === profile.displayName}>Save profile</Button><Button variant="secondary" disabled={state.profile.loading || state.profilePending} onClick={() => void store.refreshProfile()}>Refresh<span className="v2-sr-only"> profile</span></Button></div>
     {state.profileFailure?.uncertain && <><p>Latest saved display name: {profile.displayName ?? "No display name"}</p><Button variant="text" disabled={!state.profileInspectionReady || state.profile.loading || !!state.profile.error} onClick={() => store.inspected("profile")}>I inspected the current profile</Button></>}
   </form>;
 }

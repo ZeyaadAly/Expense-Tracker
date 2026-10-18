@@ -25,6 +25,7 @@ import {
   Button,
   DateInput,
   DialogShell,
+  Disclosure,
   Drawer,
   EmptyState,
   ErrorState,
@@ -138,7 +139,6 @@ function ConnectedTransactions({ userId }: { userId: string }) {
     <PrototypeShell liveTransactions>
       <PageHeader
         title="Transactions"
-        description="Every movement, with its place in the story."
         actions={
           <>
             <Button variant="secondary" disabled={state.loading || state.pending} onClick={() => void store.refresh()}>
@@ -190,7 +190,8 @@ function ConnectedTransactions({ userId }: { userId: string }) {
           Filters
         </Button>
         <div className="t25-desktop-filters">
-          <TransactionFilters state={state} change={change} />
+          <TransactionFilters state={state} change={change} scope="common" />
+          <Disclosure title="More filters"><TransactionFilters state={state} change={change} scope="advanced" /></Disclosure>
         </div>
         <div className="v2-actions">
           {Object.entries(state.query)
@@ -325,9 +326,11 @@ function ConnectedTransactions({ userId }: { userId: string }) {
 function TransactionFilters({
   state,
   change,
+  scope = "all",
 }: {
   state: State;
   change: (key: keyof TransactionQuery, value: string) => void;
+  scope?: "all" | "common" | "advanced";
 }) {
   const prefix = useId();
   const options: {
@@ -365,7 +368,7 @@ function TransactionFilters({
   ];
   return (
     <div className="p4-filters">
-      {options.map(({ key, items }) => (
+      {options.filter(({key})=>scope==="all"||(scope==="common"?["type","accountId"].includes(key):!["type","accountId"].includes(key))).map(({ key, items }) => (
         <FormField key={key} id={`${prefix}-${key}`} label={labels[key]} error={state.fields[key]}>
           <Select
             id={`${prefix}-${key}`}
@@ -387,7 +390,7 @@ function TransactionFilters({
           </Select>
         </FormField>
       ))}
-      {(["from", "to"] as const).map((key) => (
+      {scope!=="common"&&(["from", "to"] as const).map((key) => (
         <FormField key={key} id={`${prefix}-${key}`} label={labels[key]} error={state.fields[key]}>
           <DateInput
             id={`${prefix}-${key}`}

@@ -1,0 +1,280 @@
+{
+  "phase": "refinement-final",
+  "shots": [
+    {
+      "route": "/v2/dashboard",
+      "width": 1440,
+      "file": "dashboard-1440.png",
+      "viewport": 1440,
+      "scroll": 1440
+    },
+    {
+      "route": "/v2/accounts",
+      "width": 1440,
+      "file": "accounts-1440.png",
+      "viewport": 1440,
+      "scroll": 1440
+    },
+    {
+      "route": "/v2/account-detail",
+      "width": 1440,
+      "file": "account-detail-1440.png",
+      "viewport": 1440,
+      "scroll": 1440
+    },
+    {
+      "route": "/v2/transactions",
+      "width": 1440,
+      "file": "transactions-1440.png",
+      "viewport": 1440,
+      "scroll": 1440
+    },
+    {
+      "route": "/v2/recurring",
+      "width": 1440,
+      "file": "recurring-1440.png",
+      "viewport": 1440,
+      "scroll": 1440
+    },
+    {
+      "route": "/v2/analytics",
+      "width": 1440,
+      "file": "analytics-1440.png",
+      "viewport": 1440,
+      "scroll": 1440
+    },
+    {
+      "route": "/v2/budgets",
+      "width": 1440,
+      "file": "budgets-1440.png",
+      "viewport": 1440,
+      "scroll": 1440
+    },
+    {
+      "route": "/v2/goals",
+      "width": 1440,
+      "file": "goals-1440.png",
+      "viewport": 1440,
+      "scroll": 1440
+    },
+    {
+      "route": "/v2/settings",
+      "width": 1440,
+      "file": "settings-1440.png",
+      "viewport": 1440,
+      "scroll": 1440
+    },
+    {
+      "route": "/v2/dashboard",
+      "width": 768,
+      "file": "dashboard-768.png",
+      "viewport": 768,
+      "scroll": 768
+    },
+    {
+      "route": "/v2/accounts",
+      "width": 768,
+      "file": "accounts-768.png",
+      "viewport": 768,
+      "scroll": 768
+    },
+    {
+      "route": "/v2/account-detail",
+      "width": 768,
+      "file": "account-detail-768.png",
+      "viewport": 768,
+      "scroll": 768
+    },
+    {
+      "route": "/v2/transactions",
+      "width": 768,
+      "file": "transactions-768.png",
+      "viewport": 768,
+      "scroll": 768
+    },
+    {
+      "route": "/v2/recurring",
+      "width": 768,
+      "file": "recurring-768.png",
+      "viewport": 768,
+      "scroll": 768
+    },
+    {
+      "route": "/v2/analytics",
+      "width": 768,
+      "file": "analytics-768.png",
+      "viewport": 768,
+      "scroll": 768
+    },
+    {
+      "route": "/v2/budgets",
+      "width": 768,
+      "file": "budgets-768.png",
+      "viewport": 768,
+      "scroll": 768
+    },
+    {
+      "route": "/v2/goals",
+      "width": 768,
+      "file": "goals-768.png",
+      "viewport": 768,
+      "scroll": 768
+    },
+    {
+      "route": "/v2/settings",
+      "width": 768,
+      "file": "settings-768.png",
+      "viewport": 768,
+      "scroll": 768
+    },
+    {
+      "route": "/v2/dashboard",
+      "width": 360,
+      "file": "dashboard-360.png",
+      "viewport": 360,
+      "scroll": 360
+    },
+    {
+      "route": "/v2/accounts",
+      "width": 360,
+      "file": "accounts-360.png",
+      "viewport": 360,
+      "scroll": 360
+    },
+    {
+      "route": "/v2/account-detail",
+      "width": 360,
+      "file": "account-detail-360.png",
+      "viewport": 360,
+      "scroll": 360
+    },
+    {
+      "route": "/v2/transactions",
+      "width": 360,
+      "file": "transactions-360.png",
+      "viewport": 360,
+      "scroll": 360
+    },
+    {
+      "route": "/v2/recurring",
+      "width": 360,
+      "file": "recurring-360.png",
+      "viewport": 360,
+      "scroll": 360
+    },
+    {
+      "route": "/v2/analytics",
+      "width": 360,
+      "file": "analytics-360.png",
+      "viewport": 360,
+      "scroll": 360
+    },
+    {
+      "route": "/v2/budgets",
+      "width": 360,
+      "file": "budgets-360.png",
+      "viewport": 360,
+      "scroll": 360
+    },
+    {
+      "route": "/v2/goals",
+      "width": 360,
+      "file": "goals-360.png",
+      "viewport": 360,
+      "scroll": 360
+    },
+    {
+      "route": "/v2/settings",
+      "width": 360,
+      "file": "settings-360.png",
+      "viewport": 360,
+      "scroll": 360
+    },
+    {
+      "route": "/v2/login",
+      "width": 1440,
+      "file": "login-1440.png",
+      "viewport": 1440,
+      "scroll": 1440
+    },
+    {
+      "route": "/v2/register",
+      "width": 1440,
+      "file": "register-1440.png",
+      "viewport": 1440,
+      "scroll": 1440
+    },
+    {
+      "route": "/v2/forgot-password",
+      "width": 1440,
+      "file": "forgot-password-1440.png",
+      "viewport": 1440,
+      "scroll": 1440
+    },
+    {
+      "route": "/v2/reset-password",
+      "width": 1440,
+      "file": "reset-password-1440.png",
+      "viewport": 1440,
+      "scroll": 1440
+    },
+    {
+      "route": "/v2/login",
+      "width": 768,
+      "file": "login-768.png",
+      "viewport": 768,
+      "scroll": 768
+    },
+    {
+      "route": "/v2/register",
+      "width": 768,
+      "file": "register-768.png",
+      "viewport": 768,
+      "scroll": 768
+    },
+    {
+      "route": "/v2/forgot-password",
+      "width": 768,
+      "file": "forgot-password-768.png",
+      "viewport": 768,
+      "scroll": 768
+    },
+    {
+      "route": "/v2/reset-password",
+      "width": 768,
+      "file": "reset-password-768.png",
+      "viewport": 768,
+      "scroll": 768
+    },
+    {
+      "route": "/v2/login",
+      "width": 360,
+      "file": "login-360.png",
+      "viewport": 360,
+      "scroll": 360
+    },
+    {
+      "route": "/v2/register",
+      "width": 360,
+      "file": "register-360.png",
+      "viewport": 360,
+      "scroll": 360
+    },
+    {
+      "route": "/v2/forgot-password",
+      "width": 360,
+      "file": "forgot-password-360.png",
+      "viewport": 360,
+      "scroll": 360
+    },
+    {
+      "route": "/v2/reset-password",
+      "width": 360,
+      "file": "reset-password-360.png",
+      "viewport": 360,
+      "scroll": 360
+    }
+  ],
+  "errors": [],
+  "localOnly": true
+}

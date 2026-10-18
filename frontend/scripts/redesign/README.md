@@ -50,6 +50,8 @@ node frontend/scripts/redesign/extended-qa.mjs
 node frontend/scripts/redesign/generated.mjs
 node frontend/scripts/redesign/responsive.mjs
 node frontend/scripts/redesign/states.mjs
+node frontend/scripts/redesign/refinement-geometry.mjs
+node frontend/scripts/redesign/network.mjs
 node frontend/scripts/redesign/performance.mjs
 node frontend/scripts/redesign/contrast.mjs
 node frontend/scripts/redesign/bundle.mjs
@@ -63,3 +65,11 @@ The fixed business date is 2026-10-18 in the API, seed and mutation drivers. Rep
 Structured results stay under `.tmp-v2-redesign`; sanitized results for this acceptance are retained under `docs/v2/redesign/assets/verification`. The seven-width suite measures native radio touch targets using the associated clickable label. Axe runs WCAG2 A/AA and WCAG2.1 AA after fonts and short entry motion settle. Native dialog overlap ambiguities are retained as manual-review items, not silently counted as automated passes.
 
 Stop only the frontend/API/PostgreSQL processes created for this fixture. No cluster deletion or production deployment is needed.
+
+## Density and loading refinement
+
+The current acceptance report is [06-density-and-loading-refinement.md](../../../docs/v2/redesign/06-density-and-loading-refinement.md); the original visual review was rejected. Preserve its historical evidence. For this refinement, set `REDESIGN_EVIDENCE_DIR=docs/v2/redesign/assets/refinement/final` when running `states` and `extended-qa`. Capture with `capture.mjs refinement-final`, then run `contact.mjs refinement-final`; copy that completed directory to the refinement's `final` evidence directory. Galleries use relative image paths.
+
+`responsive` checks all 13 routes at all seven required widths, asserts zero undersized visible targets, and checks a real coarse-pointer browser context at desktop width. Desktop controls are deliberately compact (32/36/40px); touch controls are at least44px. `refinement-geometry` checks normal and expanded content for nested overflow, measures control heights and asserts Budget/Transaction toolbar baselines. `network` records exact per-route endpoint allowlists/counts, code-prefetch isolation, Back refetch, deferred transfer/category reads and route cancellation. Run it serially because it changes the fixture failure mode.
+
+The baseline network/geometry snapshot belongs to `e1d7855`, before this refinement. New sanitized results belong under `assets/refinement/verification`; do not replace the earlier acceptance's results. Treat local timing as diagnostic evidence, not production Core Web Vitals.

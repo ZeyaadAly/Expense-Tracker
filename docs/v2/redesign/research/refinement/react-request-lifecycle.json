@@ -1,0 +1,27 @@
+{
+  "requested": "React request lifecycle",
+  "results": [
+    {
+      "domain": "ux",
+      "query": "React request lifecycle",
+      "file": "ux-guidelines.csv",
+      "count": 0,
+      "results": [],
+      "suggestions": [
+        "requires",
+        "repeat"
+      ]
+    },
+    {
+      "domain": "ux",
+      "query": "request cancellation",
+      "file": "ux-guidelines.csv",
+      "count": 0,
+      "results": [],
+      "suggestions": [
+        "requires"
+      ]
+    }
+  ],
+  "review": "Recommendations require product/stack fit review; no automatic implementation authority."
+}

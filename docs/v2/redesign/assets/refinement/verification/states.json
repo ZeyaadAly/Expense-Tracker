@@ -1,0 +1,155 @@
+{
+  "audits": [
+    {
+      "label": "Add account 320",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "label": "New transfer 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "Add transaction 320",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "Add recurring item 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "Add budget 320",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "Create goal 320",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "Add custom category 320",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "Add account 1440",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "New transfer 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "Add transaction 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "Add recurring item 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "Add budget 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "Create goal 1440",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "Add custom category 1440",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "filters drawer320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "navigation drawer320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "transfer review",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "shots": [
+    "dialog-add-account-320.png",
+    "dialog-new-transfer-320.png",
+    "dialog-add-transaction-320.png",
+    "dialog-add-recurring-item-320.png",
+    "dialog-add-budget-320.png",
+    "dialog-create-goal-320.png",
+    "dialog-add-custom-category-320.png",
+    "dialog-add-account-1440.png",
+    "dialog-new-transfer-1440.png",
+    "dialog-add-transaction-1440.png",
+    "dialog-add-recurring-item-1440.png",
+    "dialog-add-budget-1440.png",
+    "dialog-create-goal-1440.png",
+    "dialog-add-custom-category-1440.png",
+    "filter-drawer-320.png",
+    "navigation-drawer-320.png",
+    "transfer-review-1440.png"
+  ],
+  "errors": [],
+  "financialMutations": 0
+}
