@@ -9,6 +9,7 @@ Authenticated expense tracking in EGP, with accounts, credit cards, transactions
 - [Migration and recovery runbook](docs/v2/production-migration-runbook.md)
 - [Final release verification](docs/v2/t75-verification.md)
 - [Current UI density and loading refinement](docs/v2/redesign/06-density-and-loading-refinement.md)
+- [Active route loading and skeletons](docs/v2/redesign/07-active-route-loading.md)
 - [Historical Clear Ledger redesign evidence](docs/v2/redesign/05-redesign-verification.md)
 
 **Core V2 is complete and ready for normal authenticated production use.** T66-T75 passed in their documented scope. The final public release checkpoint is recorded in T75; use that report for deployment/source evidence and verification limits. V1 financial endpoints are permanently retired with HTTP410. Optional P1 T35/T41/T47/T50-T56 remain deferred.

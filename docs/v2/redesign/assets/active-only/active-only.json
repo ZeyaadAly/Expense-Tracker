@@ -1,0 +1,88 @@
+{
+  "checks": [
+    "Cold navigation 1440: no prefetch; route skeleton, data skeleton and real ledger",
+    "Idle/hover after navigation 1440: zero extra route/API requests",
+    "Cold navigation 360: no prefetch; route skeleton, data skeleton and real ledger",
+    "Idle/hover after navigation 360: zero extra route/API requests",
+    "Four Auth routes: no route prefetch on entry or link hover"
+  ],
+  "audits": [
+    {
+      "label": "route skeleton 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "route skeleton 360",
+      "violations": [],
+      "incomplete": []
+    }
+  ],
+  "requests": [
+    {
+      "width": 1440,
+      "path": "/api/v2/profile/bootstrap"
+    },
+    {
+      "width": 1440,
+      "path": "/api/v2/dashboard?period=this_month"
+    },
+    {
+      "width": 1440,
+      "path": "/v2/transactions?_rsc=0d3DRbGSWC5mqomU"
+    },
+    {
+      "width": 1440,
+      "path": "/api/v2/transactions?limit=25"
+    },
+    {
+      "width": 1440,
+      "path": "/api/v2/accounts?status=active"
+    },
+    {
+      "width": 1440,
+      "path": "/api/v2/accounts?status=archived"
+    },
+    {
+      "width": 1440,
+      "path": "/api/v2/categories?status=active"
+    },
+    {
+      "width": 1440,
+      "path": "/api/v2/categories?status=archived"
+    },
+    {
+      "width": 360,
+      "path": "/api/v2/profile/bootstrap"
+    },
+    {
+      "width": 360,
+      "path": "/api/v2/dashboard?period=this_month"
+    },
+    {
+      "width": 360,
+      "path": "/v2/transactions?_rsc=0d3DRbGSWC5mqomU"
+    },
+    {
+      "width": 360,
+      "path": "/api/v2/transactions?limit=25"
+    },
+    {
+      "width": 360,
+      "path": "/api/v2/accounts?status=active"
+    },
+    {
+      "width": 360,
+      "path": "/api/v2/accounts?status=archived"
+    },
+    {
+      "width": 360,
+      "path": "/api/v2/categories?status=active"
+    },
+    {
+      "width": 360,
+      "path": "/api/v2/categories?status=archived"
+    }
+  ],
+  "errors": []
+}

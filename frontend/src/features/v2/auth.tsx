@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import Link from "../../components/v2/route-link";
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { Button, FeedbackBanner, FormField, PasswordInput, TextInput } from "../../components/v2/primitives";

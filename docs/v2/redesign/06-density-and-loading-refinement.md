@@ -1,5 +1,7 @@
 # Density and loading refinement
 
+> Follow-up: [Active route loading](07-active-route-loading.md) supersedes this report's retained-prefetch policy. The user now requires zero inactive-route requests and skeletons while navigating.
+
 Status: **Ready for Review**. Starting review branch `v2-ui-redesign` at `e1d78555a8ce61701113a282b0dde756180a0640`. The previous visual result was rejected; its acceptance report is historical, not approval of this refinement.
 
 ## Direction before implementation

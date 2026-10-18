@@ -1,5 +1,7 @@
 "use client";
-import Link from "next/link";
+import Link from "../../components/v2/route-link";
+import { NavigationPendingContext } from "../../components/v2/route-link";
+import { RouteSkeleton } from "../../components/v2/route-skeleton";
 import { useRef, useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { SidebarSection } from "../../components/v2/app-shell";
@@ -51,6 +53,7 @@ export function PrototypeShell({ children, liveAccounts = false, liveTransaction
     else router.replace("/v2/login");
   }
   const [open, setOpen] = useState(false);
+  const [navigating, setNavigating] = useState(false);
   const nav = (
     <div className="v2-sidebar-content">
       <Link href="/v2/dashboard" className="v2-brand">
@@ -65,6 +68,7 @@ export function PrototypeShell({ children, liveAccounts = false, liveTransaction
             {group.items.map(([label, icon]) => (
               <Link
                 onClick={() => setOpen(false)}
+                onNavigate={() => { if (path !== `/v2/${label.toLowerCase()}`) setNavigating(true); }}
                 key={label}
                 className={`v2-nav-item ${path === `/v2/${label.toLowerCase()}` || (label === "Accounts" && path.startsWith("/v2/accounts/")) ? "is-active" : ""}`}
                 aria-current={
@@ -94,7 +98,7 @@ export function PrototypeShell({ children, liveAccounts = false, liveTransaction
     </div>
   );
   return (
-    <div className="v2-shell p4-workspace">
+    <NavigationPendingContext value={setNavigating}><div className="v2-shell p4-workspace">
       <a className="v2-skip" href="#v2-main">
         Skip to content
       </a>
@@ -112,7 +116,8 @@ export function PrototypeShell({ children, liveAccounts = false, liveTransaction
           <Icon name="menu" />
         </Button>
       </header>
-      <main id="v2-main" className="v2-main" tabIndex={-1}>
+      <main id="v2-main" className="v2-main" tabIndex={-1} data-route-pending={navigating} aria-busy={navigating || undefined}>
+        {navigating && <RouteSkeleton />}
         {logoutError && <FeedbackBanner tone="error" title={logoutError} />}
         {liveAccounts || liveTransactions || liveRecurring || liveDashboard || liveAnalytics || liveBudgets || liveGoals || liveSettings || user ? (
           children
@@ -135,6 +140,6 @@ export function PrototypeShell({ children, liveAccounts = false, liveTransaction
           {nav}
         </Drawer>
       )}
-    </div>
+    </div></NavigationPendingContext>
   );
 }

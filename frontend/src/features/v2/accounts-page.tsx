@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import Link from "../../components/v2/route-link";
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { useAuth } from "../../lib/auth/auth-provider";
 import { createAccountClient, validateAccountInput, accountTypes, type Account, type AccountInput, type AccountStatus } from "../../lib/api/accounts";

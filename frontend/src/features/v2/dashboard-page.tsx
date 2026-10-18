@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import Link from "../../components/v2/route-link";
 import { useEffect, useId, useState, useSyncExternalStore, type ReactNode } from "react";
 import { useAuth } from "../../lib/auth/auth-provider";
 import { createDashboardClient, dashboardPeriods, periodLabels, type DashboardPeriod } from "../../lib/api/dashboard";
