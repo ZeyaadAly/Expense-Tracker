@@ -185,7 +185,7 @@ export function PageHeader({
         <h1>{title}</h1>
         {description ? <p className="v2-secondary">{description}</p> : null}
       </div>
-      {actions ? <div className="v2-actions">{actions}</div> : null}
+      {actions ? <div className="v2-actions v2-page-actions">{actions}</div> : null}
     </header>
   );
 }

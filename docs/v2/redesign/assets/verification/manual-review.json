@@ -1,0 +1,100 @@
+[
+  {
+    "route": "accounts",
+    "details": {
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "html": "<p id=\"_r_4_\" class=\"v2-secondary\">Currency is EGP. Positive credit-card opening balance is debt; negative is an overpayment.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            },
+            {
+              "html": "<p class=\"v2-helper\" id=\"_r_2_-openingBalance-hint\">Use a decimal amount. Negative asset balances and card overpayments are allowed.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "focus": "<input id=\"_r_2_-name\" data-initial-focus=\"true\" aria-invalid=\"false\" class=\"v2-input \" value=\"\">",
+      "skip": {
+        "focus": false,
+        "transform": "matrix(1, 0, 0, 1, 0, -86.4)",
+        "top": -78.4000015258789,
+        "height": 48
+      },
+      "theme": "v2-theme interfacefont_5ad1de24-module__rA4Mlq__variable financialfont_9b16fc08-module__JRJmXG__variable"
+    }
+  },
+  {
+    "route": "goals",
+    "details": {
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "html": "<p id=\"_r_3_\" class=\"v2-secondary\">Set your target and update savings manually. Linked account is for reference only.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            },
+            {
+              "html": "<p class=\"v2-helper\" id=\"_r_1_-linkedAccountId-hint\">Linked account is for reference only. Goal progress is updated manually.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "focus": "<input data-initial-focus=\"true\" id=\"_r_1_-name\" aria-invalid=\"false\" class=\"v2-input \" value=\"\">",
+      "skip": {
+        "focus": false,
+        "transform": "matrix(1, 0, 0, 1, 0, -86.4)",
+        "top": -78.4000015258789,
+        "height": 48
+      },
+      "theme": "v2-theme interfacefont_5ad1de24-module__rA4Mlq__variable financialfont_9b16fc08-module__JRJmXG__variable"
+    }
+  },
+  {
+    "route": "settings",
+    "details": {
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "html": "<h2 id=\"_r_3_\">Add custom category</h2>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            },
+            {
+              "html": "<p id=\"_r_4_\" class=\"v2-secondary\">A custom category can be used for income, expenses or both. A category already used by financial records cannot change kind.</p>",
+              "summary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            }
+          ]
+        }
+      ],
+      "focus": "<input id=\"_r_2_-name\" data-initial-focus=\"true\" maxlength=\"160\" aria-invalid=\"false\" class=\"v2-inpu",
+      "skip": {
+        "focus": false,
+        "transform": "matrix(1, 0, 0, 1, 0, -86.4)",
+        "top": -78.4000015258789,
+        "height": 48
+      },
+      "theme": "v2-theme interfacefont_5ad1de24-module__rA4Mlq__variable financialfont_9b16fc08-module__JRJmXG__variable"
+    }
+  },
+  {
+    "route": "recurring",
+    "details": {
+      "incomplete": [],
+      "focus": "<select id=\"_r_3_-type\" name=\"type\" aria-invalid=\"false\" data-initial-focus=\"true\" class=\"v2-input \"",
+      "skip": {
+        "focus": false,
+        "transform": "matrix(1, 0, 0, 1, 0, -86.4)",
+        "top": -78.4000015258789,
+        "height": 48
+      },
+      "theme": "v2-theme interfacefont_5ad1de24-module__rA4Mlq__variable financialfont_9b16fc08-module__JRJmXG__variable"
+    }
+  }
+]

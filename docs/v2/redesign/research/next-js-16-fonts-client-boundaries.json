@@ -1,0 +1,51 @@
+{
+  "domain": "stack",
+  "stack": "nextjs",
+  "query": "Next.js 16 fonts client boundaries",
+  "file": "stacks/nextjs.csv",
+  "count": 3,
+  "results": [
+    {
+      "Category": "Fonts",
+      "Guideline": "Use next/font for fonts",
+      "Description": "Self-hosted fonts with zero layout shift",
+      "Do": "next/font/google or next/font/local",
+      "Don't": "External font links",
+      "Code Good": "import { Inter } from 'next/font/google'",
+      "Code Bad": "<link href=\"fonts.googleapis.com\"/>",
+      "Severity": "Medium",
+      "Docs URL": "https://nextjs.org/docs/app/building-your-application/optimizing/fonts",
+      "Applies To": "nextjs 16.2",
+      "Status": "active",
+      "Verified At": "2026-08-13"
+    },
+    {
+      "Category": "DataFetching",
+      "Guideline": "Configure caching explicitly (Next.js 16.2+)",
+      "Description": "Next.js 16 uses Cache Components and explicit cache directives instead of assuming fetch is the cache model.",
+      "Do": "Set cache semantics explicitly for static and dynamic data",
+      "Don't": "Assume fetch defaults alone define the cache model",
+      "Code Good": "fetch(url, { cache: 'force-cache' })",
+      "Code Bad": "fetch(url) // Uncached in v15",
+      "Severity": "High",
+      "Docs URL": "https://nextjs.org/docs/app/guides/upgrading/version-16",
+      "Applies To": "nextjs 16.2",
+      "Status": "active",
+      "Verified At": "2026-08-13"
+    },
+    {
+      "Category": "Config",
+      "Guideline": "Use next.config.ts correctly",
+      "Description": "Use current Next.js 16 config names such as cacheComponents and skipProxyUrlNormalize.",
+      "Do": "Proper config options",
+      "Don't": "Deprecated or wrong options",
+      "Code Good": "images: { remotePatterns: [] }",
+      "Code Bad": "images: { domains: [] }",
+      "Severity": "Medium",
+      "Docs URL": "https://nextjs.org/docs/app/api-reference/next-config-js",
+      "Applies To": "nextjs 16.2",
+      "Status": "active",
+      "Verified At": "2026-08-13"
+    }
+  ]
+}

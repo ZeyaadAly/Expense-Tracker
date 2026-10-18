@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "Local due processor twice creates exactly one generated transaction",
+    "Generated badge and search show the posted record",
+    "Budget pressure comes from backend posted expense",
+    "Analytics and Dashboard reflect the same posted actual"
+  ],
+  "financialBoundary": "actual local API and PostgreSQL",
+  "productionTouched": false
+}

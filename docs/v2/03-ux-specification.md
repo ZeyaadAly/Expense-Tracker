@@ -1,5 +1,7 @@
 # Expense Tracker V2 — UX Specification
 
+**Visual authority update, 2026-10-18:** The user's complete visual-redesign brief supersedes T03/T04 appearance decisions. The [Clear Ledger design system](redesign/02-design-system.md) and [redesign verification](redesign/05-redesign-verification.md) govern the review branch's appearance. Existing functional, financial, navigation, recovery and accessibility contracts in this specification remain authoritative; optional P1 scope is unchanged.
+
 **Version:** 2.0 Planning — T02 decisions recorded
 **Status:** P0 planning frozen; T03 completed; T04 ✅ Completed — explicit user visual approval recorded on 2026-10-06; T05 next, not started
 **Date:** 2026-10-06  

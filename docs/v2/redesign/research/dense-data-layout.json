@@ -1,0 +1,41 @@
+{
+  "domain": "ux",
+  "query": "dense data layout",
+  "file": "ux-guidelines.csv",
+  "count": 3,
+  "results": [
+    {
+      "Category": "Data Entry",
+      "Issue": "Bulk Actions",
+      "Platform": "Web",
+      "Description": "Editing one by one is tedious",
+      "Do": "Allow multi-select and bulk edit",
+      "Don't": "Single row actions only",
+      "Code Example Good": "Checkbox column + Action bar",
+      "Code Example Bad": "Repeated actions per row",
+      "Severity": "Low"
+    },
+    {
+      "Category": "Sustainability",
+      "Issue": "Auto-Play Video",
+      "Platform": "Web",
+      "Description": "Autoplaying media consumes data and creates motion barriers",
+      "Do": "Prefer click-to-play; provide pause and captions; stop off-screen and honor reduced motion",
+      "Don't": "Auto-play high-resolution loops without pause or captions",
+      "Code Example Good": "<video controls preload=\"none\"><track kind=\"captions\" /></video>",
+      "Code Example Bad": "autoplay loop",
+      "Severity": "Medium"
+    },
+    {
+      "Category": "Layout",
+      "Issue": "Fixed Positioning",
+      "Platform": "Web",
+      "Description": "Fixed elements can overlap or be inaccessible",
+      "Do": "Account for safe areas and other fixed elements",
+      "Don't": "Stack multiple fixed elements carelessly",
+      "Code Example Good": "Fixed nav + fixed bottom with gap",
+      "Code Example Bad": "Multiple overlapping fixed elements",
+      "Severity": "Medium"
+    }
+  ]
+}

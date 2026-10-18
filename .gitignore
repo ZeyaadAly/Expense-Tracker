@@ -83,3 +83,4 @@ supabase/.env.*.local
 .private-backups/
 *.dump
 *.backup
+.tmp-v2-redesign/

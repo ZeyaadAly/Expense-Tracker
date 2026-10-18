@@ -1,0 +1,56 @@
+{
+  "domain": "chart",
+  "query": "financial analytics comparison",
+  "file": "charts.csv",
+  "count": 3,
+  "results": [
+    {
+      "Data Type": "Stock / Trading OHLC",
+      "Keywords": "stock, trading, ohlc, candlestick, finance, price, volume, accessible chart, keyboard accessible chart",
+      "Best Chart Type": "Candlestick Chart",
+      "Secondary Options": "OHLC Bar, Heikin-Ashi",
+      "When to Use": "Financial time-series with Open/High/Low/Close data; trading or investment product context only",
+      "When NOT to Use": "Non-financial audience; no OHLC data available (use line chart); accessibility-first context",
+      "Data Volume Threshold": "Real-time: Canvas required. Historical: paginate by time range. Max 500 candles visible at once",
+      "Color Guidance": "Bullish: #26A69A. Bearish: #EF5350. Volume bars: 40% opacity below. Body fill vs hollow for OHLC style",
+      "Accessibility Grade": "deprecated: use Accessibility Risk",
+      "Accessibility Risk": "risk:conditional",
+      "Accessibility Notes": "Use filled versus hollow candles and OHLC text values; bullish/bearish meaning cannot depend on color. Do not rely on color alone.",
+      "A11y Fallback": "Sortable OHLC table plus daily-change summary. Keyboard: focus reveals candle values; +/- buttons zoom; Reset restores range; live updates do not steal focus.",
+      "Library Recommendation": "Lightweight Charts (TradingView), ApexCharts",
+      "Interactive Level": "Real-time + Hover + Zoom"
+    },
+    {
+      "Data Type": "Multi-Variable Comparison",
+      "Keywords": "radar, spider, multi-variable, attributes, dimensions, comparison, accessible chart, keyboard accessible chart",
+      "Best Chart Type": "Radar / Spider Chart",
+      "Secondary Options": "Parallel Coordinates, Grouped Bar",
+      "When to Use": "Comparing multiple entities across the same fixed set of attributes (e.g., product feature comparison)",
+      "When NOT to Use": "Axes > 8 (unreadable); values need precise comparison (use grouped bar); audience unfamiliar with radar charts",
+      "Data Volume Threshold": "2–3 datasets maximum per chart; 5–8 axes; beyond 8 axes switch to parallel coordinates",
+      "Color Guidance": "Single dataset: #0080FF at 20% fill. Multiple: distinct hues with 30% fill. Border: full opacity",
+      "Accessibility Grade": "deprecated: use Accessibility Risk",
+      "Accessibility Risk": "risk:conditional",
+      "Accessibility Notes": "Use line styles, point shapes, and direct series labels in addition to color. Do not rely on color alone.",
+      "A11y Fallback": "Raw data table and grouped-bar alternative plus comparison summary. Keyboard: focus reveals values; buttons toggle series.",
+      "Library Recommendation": "Chart.js, Recharts, ApexCharts",
+      "Interactive Level": "Hover + Toggle"
+    },
+    {
+      "Data Type": "Geographic Data",
+      "Keywords": "geographic, map, location, region, geo, spatial, choropleth, accessible chart, keyboard accessible chart",
+      "Best Chart Type": "Choropleth Map or Bubble Map",
+      "Secondary Options": "Geographic Heat Map",
+      "When to Use": "Data has a regional/location dimension; spatial distribution is the core insight for the user",
+      "When NOT to Use": "Regions have very different sizes making visual comparison misleading (use bar); mobile-primary context",
+      "Data Volume Threshold": "<1000 regions: SVG; ≥1000: Canvas/WebGL (Deck.gl); global maps: tile-based rendering",
+      "Color Guidance": "Single color gradient per region group. Categorized colors for discrete types. Legend with clear scale breaks",
+      "Accessibility Grade": "deprecated: use Accessibility Risk",
+      "Accessibility Risk": "risk:conditional",
+      "Accessibility Notes": "Label regions directly and pair fills with boundaries or patterns; location meaning cannot depend on color alone.",
+      "A11y Fallback": "Sortable region table plus geographic summary. Keyboard: arrow keys or labeled pan buttons move the map; +/- buttons zoom; Enter drills into a focused region; Back returns.",
+      "Library Recommendation": "D3.js, Mapbox, Leaflet",
+      "Interactive Level": "Pan + Zoom + Drill"
+    }
+  ]
+}

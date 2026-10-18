@@ -1,0 +1,352 @@
+{
+  "checks": [
+    "Empty workspace: real new local owner, eight domains, no synthetic financial response",
+    "Long names/descriptions, maximum money, card overpayment, extreme percentages, archived/completed states",
+    "Reduced motion disables every animation/transition; forced colors retain control geometry",
+    "Short-height dialogs: scroll to actions, 150% text enlargement, 200% equivalent viewport reflow",
+    "Real browser zoom 200% with desktop viewport and keyboard skip link",
+    "Initial loading and read-error route retain clear recovery"
+  ],
+  "audits": [
+    {
+      "label": "empty dashboard",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "empty accounts",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "empty transactions",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "empty recurring",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "empty analytics",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "empty budgets",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "empty goals",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "empty settings",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress dashboard 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress accounts 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress accounts/63c08f14-c7a6-45e0-9464-dc318a70798e 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress transactions 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress recurring 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress analytics 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress budgets 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress goals 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress settings 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress dashboard 375",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress accounts 375",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress accounts/63c08f14-c7a6-45e0-9464-dc318a70798e 375",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress transactions 375",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress recurring 375",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress analytics 375",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress budgets 375",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress goals 375",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress settings 375",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress dashboard 768",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress accounts 768",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress accounts/63c08f14-c7a6-45e0-9464-dc318a70798e 768",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress transactions 768",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress recurring 768",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress analytics 768",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress budgets 768",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress goals 768",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress settings 768",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress dashboard 1024",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress accounts 1024",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress accounts/63c08f14-c7a6-45e0-9464-dc318a70798e 1024",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress transactions 1024",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress recurring 1024",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress analytics 1024",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress budgets 1024",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress goals 1024",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress settings 1024",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress dashboard 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress accounts 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress accounts/63c08f14-c7a6-45e0-9464-dc318a70798e 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress transactions 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress recurring 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress analytics 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress budgets 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress goals 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "stress settings 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "archived stress account",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "reduced motion dialog",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "short dialog 320",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "short dialog 768",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "label": "short dialog 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "200% equivalent viewport dashboard",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "200% equivalent viewport transactions",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "200% equivalent viewport analytics",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "read error",
+      "violations": [],
+      "incomplete": []
+    }
+  ],
+  "shots": [
+    "empty-dashboard-1440",
+    "stress-dashboard-320",
+    "stress-accounts-320",
+    "stress-transactions-320",
+    "stress-budgets-320",
+    "stress-goals-320",
+    "forced-colors-dashboard-360",
+    "error-dashboard-1440"
+  ],
+  "errors": [],
+  "stressWidths": [
+    320,
+    375,
+    768,
+    1024,
+    1440
+  ],
+  "financialData": "actual isolated local PostgreSQL",
+  "zoom": "CSS zoom plus equivalent viewport reflow; not OS-level browser UI automation"
+}

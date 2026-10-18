@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { SidebarSection } from "../../components/v2/app-shell";
 import { Button, Drawer } from "../../components/v2/primitives";
 import { Icon, type IconName } from "../../components/v2/icon";
+import { BrandMark } from "../../components/v2/brand";
 
 
 
@@ -53,11 +54,9 @@ export function PrototypeShell({ children, liveAccounts = false, liveTransaction
   const nav = (
     <div className="v2-sidebar-content">
       <Link href="/v2/dashboard" className="v2-brand">
-        <span className="v2-mark">
-          e<span>.</span>
-        </span>
+        <BrandMark />
         <span>
-          Expense Tracker<small>Your financial workspace</small>
+          Expense Tracker<small>Personal finance</small>
         </span>
       </Link>
       <nav aria-label="Main navigation">
@@ -86,8 +85,8 @@ export function PrototypeShell({ children, liveAccounts = false, liveTransaction
         </span>
         <div>
           <strong>{name}</strong>
-          <span>EGP · Africa/Cairo</span>
-          <Button variant="text" style={{ color: "inherit", background: "transparent", padding: 0 }} loading={signingOut} onClick={logout}>
+          <span>EGP · Cairo</span>
+          <Button variant="text" loading={signingOut} onClick={logout}>
             Sign out
           </Button>
         </div>
@@ -101,19 +100,19 @@ export function PrototypeShell({ children, liveAccounts = false, liveTransaction
       </a>
       <aside className="v2-sidebar">{nav}</aside>
       <header className="v2-mobile-header">
-        <Link href="/v2/dashboard">
-          Expense Tracker <span>V2</span>
+        <Link href="/v2/dashboard" className="v2-brand">
+          <BrandMark /><span>Expense Tracker</span>
         </Link>
         <Button
           variant="ghost"
           aria-label="Open navigation"
+          aria-expanded={open}
           onClick={() => setOpen(true)}
         >
           <Icon name="menu" />
         </Button>
       </header>
       <main id="v2-main" className="v2-main" tabIndex={-1}>
-        <p className="p4-prototype-label">{liveSettings ? "Development · connected settings" : liveGoals ? "Development · connected goals" : liveBudgets ? "Development · connected budgets" : liveAnalytics ? "Development · connected analytics" : liveDashboard ? "Development · connected dashboard" : liveRecurring ? "Development · connected recurring items" : liveTransactions ? "Development · connected transactions" : liveAccounts ? "Development · connected accounts" : "Prototype · fictional data"}</p>
         {logoutError && <FeedbackBanner tone="error" title={logoutError} />}
         {liveAccounts || liveTransactions || liveRecurring || liveDashboard || liveAnalytics || liveBudgets || liveGoals || liveSettings || user ? (
           children

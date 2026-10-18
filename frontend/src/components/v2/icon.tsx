@@ -5,6 +5,9 @@ const paths = {
   dashboard: "M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z",
   ledger: "M5 3h14v18H5z M8 7h8 M8 11h8 M8 15h5",
   accounts: "M3 9l9-6 9 6H3 M5 10v8 M10 10v8 M14 10v8 M19 10v8 M3 21h18",
+  wallet: "M4 6h14v14H4z M4 6l12-3v3 M14 11h6v5h-6z M17 13h.1",
+  card: "M3 5h18v14H3z M3 10h18 M7 15h4",
+  savings: "M5 8h14v13H5z M3 8l9-5 9 5 M9 12h6 M12 11v7",
   recurring:
     "M20 7a8 8 0 0 0-14-2L3 8 M3 3v5h5 M4 17a8 8 0 0 0 14 2l3-3 M21 21v-5h-5",
   budgets: "M4 5h16v14H4z M4 9h16 M8 13h3 M8 16h7",
