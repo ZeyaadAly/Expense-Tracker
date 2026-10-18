@@ -1,5 +1,7 @@
 # Expense Tracker V2 Redesign Result
 
+> Historical evidence: the user rejected this visual result. [The density and loading refinement](06-density-and-loading-refinement.md) is the current review report. This document does not establish acceptance of the refinement.
+
 **Status: Ready for Review, 2026-10-18.** Starting main: `40c16f6868f5f44bf405c3721b5ef0e2a3373dd1`. Review branch: `v2-ui-redesign`. The final commit and origin synchronization are reported at delivery, avoiding a circular self-hash in this report.
 
 Production remains on the previously released main revision. No hosted financial data, backend deployment, migration, cron or production environment variable changed. The retained production transaction is unaffected. This branch is prepared for review, merge and the existing frontend deployment workflow.

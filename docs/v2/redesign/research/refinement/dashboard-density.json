@@ -1,0 +1,55 @@
+{
+  "requested": "dashboard density",
+  "results": [
+    {
+      "domain": "ux",
+      "query": "dashboard density",
+      "file": "ux-guidelines.csv",
+      "count": 0,
+      "results": [],
+      "suggestions": []
+    },
+    {
+      "domain": "ux",
+      "query": "information hierarchy",
+      "file": "ux-guidelines.csv",
+      "count": 3,
+      "results": [
+        {
+          "Category": "Accessibility",
+          "Issue": "Color Only",
+          "Platform": "All",
+          "Description": "Don't convey information by color alone",
+          "Do": "Use icons/text in addition to color",
+          "Don't": "Red/green only for error/success",
+          "Code Example Good": "Red text + error icon",
+          "Code Example Bad": "Red border only for error",
+          "Severity": "High"
+        },
+        {
+          "Category": "Navigation",
+          "Issue": "Breadcrumbs",
+          "Platform": "Web",
+          "Description": "Show user location in site hierarchy",
+          "Do": "Use for sites with 3+ levels of depth",
+          "Don't": "Use for flat single-level sites",
+          "Code Example Good": "Home > Category > Product",
+          "Code Example Bad": "Only on deep nested pages",
+          "Severity": "Low"
+        },
+        {
+          "Category": "Accessibility",
+          "Issue": "Heading Hierarchy",
+          "Platform": "Web",
+          "Description": "Screen readers use headings for navigation",
+          "Do": "Use sequential heading levels h1-h6",
+          "Don't": "Skip heading levels or misuse for styling",
+          "Code Example Good": "h1 then h2 then h3",
+          "Code Example Bad": "h1 then h4",
+          "Severity": "Medium"
+        }
+      ]
+    }
+  ],
+  "review": "Recommendations require product/stack fit review; no automatic implementation authority."
+}

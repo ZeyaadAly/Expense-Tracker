@@ -1,0 +1,2530 @@
+{
+  "results": [
+    {
+      "label": "dashboard 320",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "dashboard expanded 320",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts 320",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts expanded 320",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 44,
+          "top": -300,
+          "bottom": -256
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 44,
+          "top": -300,
+          "bottom": -256
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc 320",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Edit account",
+          "height": 44,
+          "top": 209.5,
+          "bottom": 253.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive account",
+          "height": 44,
+          "top": 209.5,
+          "bottom": 253.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "transactions 320",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 44,
+          "top": 221.5,
+          "bottom": 265.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 44,
+          "top": 221.5,
+          "bottom": 265.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "transactions expanded 320",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 44,
+          "top": 221.5,
+          "bottom": 265.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 44,
+          "top": 221.5,
+          "bottom": 265.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "recurring 320",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh recurring items",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add recurring item",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "analytics 320",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 44,
+          "top": 166.5,
+          "bottom": 210.5
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "top": 166.5,
+          "bottom": 210.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 44,
+          "top": 222.5,
+          "bottom": 266.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "analytics expanded 320",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 44,
+          "top": -3157.5,
+          "bottom": -3113.5
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "top": -3157.5,
+          "bottom": -3113.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 44,
+          "top": -3101.5,
+          "bottom": -3057.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "budgets 320",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "INPUT",
+          "text": "month",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh budgets",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add budget",
+          "height": 44,
+          "top": 201.5,
+          "bottom": 245.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "goals 320",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh goals",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Create goal",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "settings 320",
+      "overflows": [],
+      "controls": [],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "settings expanded 320",
+      "overflows": [],
+      "controls": [],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "dashboard 360",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "dashboard expanded 360",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts 360",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts expanded 360",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 44,
+          "top": -300,
+          "bottom": -256
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 44,
+          "top": -300,
+          "bottom": -256
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc 360",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Edit account",
+          "height": 44,
+          "top": 209.5,
+          "bottom": 253.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive account",
+          "height": 44,
+          "top": 209.5,
+          "bottom": 253.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "transactions 360",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 44,
+          "top": 221.5,
+          "bottom": 265.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 44,
+          "top": 221.5,
+          "bottom": 265.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "transactions expanded 360",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 44,
+          "top": 221.5,
+          "bottom": 265.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 44,
+          "top": 221.5,
+          "bottom": 265.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "recurring 360",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh recurring items",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add recurring item",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "analytics 360",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 44,
+          "top": 166.5,
+          "bottom": 210.5
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "top": 166.5,
+          "bottom": 210.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 44,
+          "top": 222.5,
+          "bottom": 266.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "analytics expanded 360",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 44,
+          "top": -3101.5,
+          "bottom": -3057.5
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "top": -3101.5,
+          "bottom": -3057.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 44,
+          "top": -3045.5,
+          "bottom": -3001.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "budgets 360",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "INPUT",
+          "text": "month",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh budgets",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add budget",
+          "height": 44,
+          "top": 201.5,
+          "bottom": 245.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "goals 360",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh goals",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Create goal",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "settings 360",
+      "overflows": [],
+      "controls": [],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "settings expanded 360",
+      "overflows": [],
+      "controls": [],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "dashboard 375",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "dashboard expanded 375",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts 375",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts expanded 375",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 44,
+          "top": -300,
+          "bottom": -256
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 44,
+          "top": -300,
+          "bottom": -256
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc 375",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Edit account",
+          "height": 44,
+          "top": 209.5,
+          "bottom": 253.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive account",
+          "height": 44,
+          "top": 209.5,
+          "bottom": 253.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "transactions 375",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 44,
+          "top": 221.5,
+          "bottom": 265.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 44,
+          "top": 221.5,
+          "bottom": 265.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "transactions expanded 375",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 44,
+          "top": 221.5,
+          "bottom": 265.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 44,
+          "top": 221.5,
+          "bottom": 265.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "recurring 375",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh recurring items",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add recurring item",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "analytics 375",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 44,
+          "top": 166.5,
+          "bottom": 210.5
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "top": 166.5,
+          "bottom": 210.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 44,
+          "top": 222.5,
+          "bottom": 266.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "analytics expanded 375",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 44,
+          "top": -3101.5,
+          "bottom": -3057.5
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "top": -3101.5,
+          "bottom": -3057.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 44,
+          "top": -3045.5,
+          "bottom": -3001.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "budgets 375",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "INPUT",
+          "text": "month",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh budgets",
+          "height": 44,
+          "top": 149.5,
+          "bottom": 193.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add budget",
+          "height": 44,
+          "top": 201.5,
+          "bottom": 245.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "goals 375",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh goals",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Create goal",
+          "height": 44,
+          "top": 126,
+          "bottom": 170
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "settings 375",
+      "overflows": [],
+      "controls": [],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "settings expanded 375",
+      "overflows": [],
+      "controls": [],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "dashboard 768",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 44,
+          "top": 109.5,
+          "bottom": 153.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 44,
+          "top": 109.5,
+          "bottom": 153.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "dashboard expanded 768",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 44,
+          "top": 109.5,
+          "bottom": 153.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 44,
+          "top": 109.5,
+          "bottom": 153.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts 768",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 44,
+          "top": 86,
+          "bottom": 130
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 44,
+          "top": 86,
+          "bottom": 130
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts expanded 768",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 44,
+          "top": -72,
+          "bottom": -28
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 44,
+          "top": -72,
+          "bottom": -28
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc 768",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Edit account",
+          "height": 44,
+          "top": 146,
+          "bottom": 190
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive account",
+          "height": 44,
+          "top": 146,
+          "bottom": 190
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "transactions 768",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 44,
+          "top": 86,
+          "bottom": 130
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 44,
+          "top": 86,
+          "bottom": 130
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 44,
+          "top": 185.5,
+          "bottom": 229.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 44,
+          "top": 185.5,
+          "bottom": 229.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "transactions expanded 768",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 44,
+          "top": 86,
+          "bottom": 130
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 44,
+          "top": 86,
+          "bottom": 130
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 44,
+          "top": 185.5,
+          "bottom": 229.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 44,
+          "top": 185.5,
+          "bottom": 229.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "recurring 768",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh recurring items",
+          "height": 44,
+          "top": 86,
+          "bottom": 130
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add recurring item",
+          "height": 44,
+          "top": 86,
+          "bottom": 130
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "analytics 768",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 44,
+          "top": 176.09375,
+          "bottom": 220.09375
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "top": 176.09375,
+          "bottom": 220.09375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 44,
+          "top": 176.09375,
+          "bottom": 220.09375
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "analytics expanded 768",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 44,
+          "top": -2209.90625,
+          "bottom": -2165.90625
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "top": -2209.90625,
+          "bottom": -2165.90625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 44,
+          "top": -2209.90625,
+          "bottom": -2165.90625
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "budgets 768",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "INPUT",
+          "text": "month",
+          "height": 44,
+          "top": 109.5,
+          "bottom": 153.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh budgets",
+          "height": 44,
+          "top": 109.5,
+          "bottom": 153.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add budget",
+          "height": 44,
+          "top": 109.5,
+          "bottom": 153.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "goals 768",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh goals",
+          "height": 44,
+          "top": 86,
+          "bottom": 130
+        },
+        {
+          "type": "BUTTON",
+          "text": "Create goal",
+          "height": 44,
+          "top": 86,
+          "bottom": 130
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "settings 768",
+      "overflows": [],
+      "controls": [],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "settings expanded 768",
+      "overflows": [],
+      "controls": [],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "dashboard 1024",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "dashboard expanded 1024",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts 1024",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts expanded 1024",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc 1024",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Edit account",
+          "height": 36,
+          "top": 84,
+          "bottom": 120
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive account",
+          "height": 36,
+          "top": 84,
+          "bottom": 120
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "transactions 1024",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 36,
+          "top": 115.5,
+          "bottom": 151.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 36,
+          "top": 115.5,
+          "bottom": 151.5
+        },
+        {
+          "type": "SELECT",
+          "text": "AllIncomeExpense",
+          "height": 36,
+          "top": 185,
+          "bottom": 221
+        },
+        {
+          "type": "SELECT",
+          "text": "AllEveryday accountCash walletReserve account",
+          "height": 36,
+          "top": 185,
+          "bottom": 221
+        }
+      ],
+      "ledgerRowRange": [
+        52,
+        52
+      ]
+    },
+    {
+      "label": "transactions expanded 1024",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 36,
+          "top": 115.5,
+          "bottom": 151.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 36,
+          "top": 115.5,
+          "bottom": 151.5
+        },
+        {
+          "type": "SELECT",
+          "text": "AllIncomeExpense",
+          "height": 36,
+          "top": 185,
+          "bottom": 221
+        },
+        {
+          "type": "SELECT",
+          "text": "AllEveryday accountCash walletReserve account",
+          "height": 36,
+          "top": 185,
+          "bottom": 221
+        },
+        {
+          "type": "SELECT",
+          "text": "AllBillsEntertainmentFoodFreelanceGiftOtherSa",
+          "height": 36,
+          "top": 257,
+          "bottom": 293
+        },
+        {
+          "type": "SELECT",
+          "text": "AllManualGenerated",
+          "height": 36,
+          "top": 257,
+          "bottom": 293
+        }
+      ],
+      "ledgerRowRange": [
+        52,
+        52
+      ]
+    },
+    {
+      "label": "recurring 1024",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh recurring items",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add recurring item",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "analytics 1024",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 36,
+          "top": 114.09375,
+          "bottom": 150.09375
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 36,
+          "top": 114.09375,
+          "bottom": 150.09375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 36,
+          "top": 114.09375,
+          "bottom": 150.09375
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "analytics expanded 1024",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 36,
+          "top": -2137.90625,
+          "bottom": -2101.90625
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 36,
+          "top": -2137.90625,
+          "bottom": -2101.90625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 36,
+          "top": -2137.90625,
+          "bottom": -2101.90625
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "budgets 1024",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "INPUT",
+          "text": "month",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh budgets",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add budget",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "goals 1024",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh goals",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Create goal",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "settings 1024",
+      "overflows": [],
+      "controls": [],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "settings expanded 1024",
+      "overflows": [],
+      "controls": [],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "dashboard 1280",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "dashboard expanded 1280",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts 1280",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts expanded 1280",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc 1280",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Edit account",
+          "height": 36,
+          "top": 84,
+          "bottom": 120
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive account",
+          "height": 36,
+          "top": 84,
+          "bottom": 120
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "transactions 1280",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 36,
+          "top": 115.5,
+          "bottom": 151.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 36,
+          "top": 115.5,
+          "bottom": 151.5
+        },
+        {
+          "type": "SELECT",
+          "text": "AllIncomeExpense",
+          "height": 36,
+          "top": 185,
+          "bottom": 221
+        },
+        {
+          "type": "SELECT",
+          "text": "AllEveryday accountCash walletReserve account",
+          "height": 36,
+          "top": 185,
+          "bottom": 221
+        }
+      ],
+      "ledgerRowRange": [
+        45,
+        45
+      ]
+    },
+    {
+      "label": "transactions expanded 1280",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 36,
+          "top": 115.5,
+          "bottom": 151.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 36,
+          "top": 115.5,
+          "bottom": 151.5
+        },
+        {
+          "type": "SELECT",
+          "text": "AllIncomeExpense",
+          "height": 36,
+          "top": 185,
+          "bottom": 221
+        },
+        {
+          "type": "SELECT",
+          "text": "AllEveryday accountCash walletReserve account",
+          "height": 36,
+          "top": 185,
+          "bottom": 221
+        },
+        {
+          "type": "SELECT",
+          "text": "AllBillsEntertainmentFoodFreelanceGiftOtherSa",
+          "height": 36,
+          "top": 257,
+          "bottom": 293
+        },
+        {
+          "type": "SELECT",
+          "text": "AllManualGenerated",
+          "height": 36,
+          "top": 257,
+          "bottom": 293
+        }
+      ],
+      "ledgerRowRange": [
+        45,
+        45
+      ]
+    },
+    {
+      "label": "recurring 1280",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh recurring items",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add recurring item",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "analytics 1280",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 36,
+          "top": 114.09375,
+          "bottom": 150.09375
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 36,
+          "top": 114.09375,
+          "bottom": 150.09375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 36,
+          "top": 114.09375,
+          "bottom": 150.09375
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "analytics expanded 1280",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 36,
+          "top": -1952.90625,
+          "bottom": -1916.90625
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 36,
+          "top": -1952.90625,
+          "bottom": -1916.90625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 36,
+          "top": -1952.90625,
+          "bottom": -1916.90625
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "budgets 1280",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "INPUT",
+          "text": "month",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh budgets",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add budget",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "goals 1280",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh goals",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Create goal",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "settings 1280",
+      "overflows": [],
+      "controls": [],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "settings expanded 1280",
+      "overflows": [],
+      "controls": [],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "dashboard 1440",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "dashboard expanded 1440",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts 1440",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts expanded 1440",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc 1440",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Edit account",
+          "height": 36,
+          "top": 84,
+          "bottom": 120
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive account",
+          "height": 36,
+          "top": 84,
+          "bottom": 120
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "transactions 1440",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 36,
+          "top": 115.5,
+          "bottom": 151.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 36,
+          "top": 115.5,
+          "bottom": 151.5
+        },
+        {
+          "type": "SELECT",
+          "text": "AllIncomeExpense",
+          "height": 36,
+          "top": 185,
+          "bottom": 221
+        },
+        {
+          "type": "SELECT",
+          "text": "AllEveryday accountCash walletReserve account",
+          "height": 36,
+          "top": 185,
+          "bottom": 221
+        }
+      ],
+      "ledgerRowRange": [
+        45,
+        45
+      ]
+    },
+    {
+      "label": "transactions expanded 1440",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 36,
+          "top": 115.5,
+          "bottom": 151.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 36,
+          "top": 115.5,
+          "bottom": 151.5
+        },
+        {
+          "type": "SELECT",
+          "text": "AllIncomeExpense",
+          "height": 36,
+          "top": 185,
+          "bottom": 221
+        },
+        {
+          "type": "SELECT",
+          "text": "AllEveryday accountCash walletReserve account",
+          "height": 36,
+          "top": 185,
+          "bottom": 221
+        },
+        {
+          "type": "SELECT",
+          "text": "AllBillsEntertainmentFoodFreelanceGiftOtherSa",
+          "height": 36,
+          "top": 257,
+          "bottom": 293
+        },
+        {
+          "type": "SELECT",
+          "text": "AllManualGenerated",
+          "height": 36,
+          "top": 257,
+          "bottom": 293
+        }
+      ],
+      "ledgerRowRange": [
+        45,
+        45
+      ]
+    },
+    {
+      "label": "recurring 1440",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh recurring items",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add recurring item",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "analytics 1440",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 36,
+          "top": 114.09375,
+          "bottom": 150.09375
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 36,
+          "top": 114.09375,
+          "bottom": 150.09375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 36,
+          "top": 114.09375,
+          "bottom": 150.09375
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "analytics expanded 1440",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 36,
+          "top": -1952.90625,
+          "bottom": -1916.90625
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 36,
+          "top": -1952.90625,
+          "bottom": -1916.90625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 36,
+          "top": -1952.90625,
+          "bottom": -1916.90625
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "budgets 1440",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "INPUT",
+          "text": "month",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh budgets",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add budget",
+          "height": 36,
+          "top": 47.5,
+          "bottom": 83.5
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "goals 1440",
+      "overflows": [],
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh goals",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        },
+        {
+          "type": "BUTTON",
+          "text": "Create goal",
+          "height": 36,
+          "top": 24,
+          "bottom": 60
+        }
+      ],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "settings 1440",
+      "overflows": [],
+      "controls": [],
+      "ledgerRowRange": null
+    },
+    {
+      "label": "settings expanded 1440",
+      "overflows": [],
+      "controls": [],
+      "ledgerRowRange": null
+    }
+  ],
+  "audits": [
+    {
+      "label": "dashboard expanded 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "accounts expanded 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "transactions expanded 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "analytics expanded 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "settings expanded 320",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "dashboard expanded 360",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "accounts expanded 360",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "transactions expanded 360",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "analytics expanded 360",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "settings expanded 360",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "dashboard expanded 375",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "accounts expanded 375",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "transactions expanded 375",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "analytics expanded 375",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "settings expanded 375",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "dashboard expanded 768",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "accounts expanded 768",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "transactions expanded 768",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "analytics expanded 768",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "settings expanded 768",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "dashboard expanded 1024",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "accounts expanded 1024",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "transactions expanded 1024",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "analytics expanded 1024",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "settings expanded 1024",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "dashboard expanded 1280",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "accounts expanded 1280",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "transactions expanded 1280",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "analytics expanded 1280",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "settings expanded 1280",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "dashboard expanded 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "accounts expanded 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "transactions expanded 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "analytics expanded 1440",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "settings expanded 1440",
+      "violations": [],
+      "incomplete": []
+    }
+  ],
+  "errors": [],
+  "baselineChecks": [
+    "Budget period/actions",
+    "Transaction common/advanced filters"
+  ],
+  "widths": [
+    320,
+    360,
+    375,
+    768,
+    1024,
+    1280,
+    1440
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "requested": "mobile filters",
+  "results": [
+    {
+      "domain": "ux",
+      "query": "mobile filters",
+      "file": "ux-guidelines.csv",
+      "count": 3,
+      "results": [
+        {
+          "Category": "Forms",
+          "Issue": "Mobile Keyboards",
+          "Platform": "Mobile",
+          "Description": "Show appropriate keyboard for input type",
+          "Do": "Use inputmode attribute",
+          "Don't": "Default keyboard for all inputs",
+          "Code Example Good": "inputmode='numeric'",
+          "Code Example Bad": "Text keyboard for numbers",
+          "Severity": "Medium"
+        },
+        {
+          "Category": "Responsive",
+          "Issue": "Mobile First",
+          "Platform": "Web",
+          "Description": "Design for mobile then enhance for larger",
+          "Do": "Start with mobile styles then add breakpoints",
+          "Don't": "Desktop-first causing mobile issues",
+          "Code Example Good": "Default mobile + md: lg: xl:",
+          "Code Example Bad": "Desktop default + max-width queries",
+          "Severity": "Medium"
+        },
+        {
+          "Category": "Touch",
+          "Issue": "Pull to Refresh",
+          "Platform": "Mobile",
+          "Description": "Accidental refresh is frustrating",
+          "Do": "Disable where not needed",
+          "Don't": "Enable by default everywhere",
+          "Code Example Good": "overscroll-behavior: contain",
+          "Code Example Bad": "Default overscroll",
+          "Severity": "Low"
+        }
+      ]
+    },
+    {
+      "domain": "ux",
+      "query": "filter drawer",
+      "file": "ux-guidelines.csv",
+      "count": 1,
+      "results": [
+        {
+          "Category": "Layout",
+          "Issue": "Chip Collection Reflow",
+          "Platform": "All",
+          "Description": "Filter chips and editable value collections must preserve labels when space or text size changes",
+          "Do": "Wrap the collection or use an operable +n disclosure for hidden overflow values",
+          "Don't": "Force all chips into one clipped row or hide overflow values",
+          "Code Example Good": "<div class='chip-list'>{chips}</div> with flex-wrap",
+          "Code Example Bad": "<div class='chip-list' style='height:32px;overflow:hidden'>",
+          "Severity": "High"
+        }
+      ]
+    }
+  ],
+  "review": "Recommendations require product/stack fit review; no automatic implementation authority."
+}

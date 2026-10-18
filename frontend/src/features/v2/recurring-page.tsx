@@ -9,7 +9,7 @@ import { cairoToday } from "../../lib/api/v2-transactions";
 import { createRecurringStore } from "../../lib/recurring-store";
 import { PageHeader } from "../../components/v2/app-shell";
 import { FrequencyBadge, MoneyDisplay, RecurringStatusBadge, UpcomingItem } from "../../components/v2/finance";
-import { Button, DateInput, DialogShell, EmptyState, ErrorState, FeedbackBanner, FormField, MoneyInput, Select, Skeleton, StaleIndicator, Textarea } from "../../components/v2/primitives";
+import { Button, DateInput, DialogShell, Disclosure, EmptyState, ErrorState, FeedbackBanner, FormField, MoneyInput, Select, Skeleton, StaleIndicator, Textarea } from "../../components/v2/primitives";
 import { PrototypeShell } from "./shell";
 
 type Store = ReturnType<typeof createRecurringStore>;
@@ -47,20 +47,20 @@ function ConnectedRecurring({ userId }: { userId: string }) {
   const change = (key: keyof RecurringQuery, value: string) => store.setQuery({ [key]: value || undefined });
   const filtered = Object.values(state.query).some(Boolean);
   return <PrototypeShell liveRecurring>
-    <PageHeader title="Recurring" description="Your schedules and the money ahead." actions={<>
-      <Button variant="secondary" disabled={state.loading || state.upcomingLoading || state.pending} onClick={() => { void store.refresh(); void store.loadOptions(); }}>Refresh recurring items</Button>
+    <PageHeader title="Recurring" actions={<>
+      <Button variant="secondary" disabled={state.loading || state.upcomingLoading || state.pending} onClick={() => { void store.refresh(); void store.loadOptions(); }}>Refresh<span className="v2-sr-only"> recurring items</span></Button>
       <Button id={`${pageId}-add`} disabled={state.pending} onClick={() => open({ kind: "create" })}>Add recurring item</Button>
     </>} />
-    <p className="v2-helper">Expected schedules · posted transactions remain separate. Items due today are posted by scheduled processing.</p>
+    <p className="v2-helper rf-context">Expected schedules, separate from posted transactions.</p>
     {state.notice && <FeedbackBanner tone={state.error || state.upcomingError ? "warning" : "success"} title={state.notice} />}
     {state.optionsError && <ErrorState title="Choices could not load" description={state.optionsError} onRetry={() => void store.loadOptions()} />}
-    <section className="p4-panel" aria-label="Recurring filters"><div className="v2-form-grid">
+    <section className="p4-panel" aria-label="Recurring filters"><Disclosure title="Filter schedules"><div className="v2-form-grid">
       <FormField id={`${pageId}-status`} label="Status"><Select id={`${pageId}-status`} value={state.query.status ?? ""} disabled={state.pending} onChange={e => change("status", e.target.value)}><option value="">All statuses</option>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</Select></FormField>
       <FormField id={`${pageId}-type`} label="Type"><Select id={`${pageId}-type`} value={state.query.type ?? ""} disabled={state.pending} onChange={e => change("type", e.target.value)}><option value="">All types</option><option value="income">Income</option><option value="expense">Expense</option></Select></FormField>
       <FormField id={`${pageId}-account`} label="Account"><Select id={`${pageId}-account`} value={state.query.accountId ?? ""} disabled={state.pending || state.optionsLoading} onChange={e => change("accountId", e.target.value)}><option value="">All accounts</option>{state.accounts?.map(a => <option key={a.id} value={a.id}>{a.name}{a.status === "archived" ? " (Archived)" : ""}</option>)}</Select></FormField>
       <FormField id={`${pageId}-category`} label="Category"><Select id={`${pageId}-category`} value={state.query.categoryId ?? ""} disabled={state.pending || state.optionsLoading} onChange={e => change("categoryId", e.target.value)}><option value="">All categories</option>{state.categories?.map(c => <option key={c.id} value={c.id}>{c.name}{c.status === "archived" ? " (Archived)" : ""}</option>)}</Select></FormField>
       <FormField id={`${pageId}-frequency`} label="Frequency"><Select id={`${pageId}-frequency`} value={state.query.frequency ?? ""} disabled={state.pending} onChange={e => change("frequency", e.target.value)}><option value="">All frequencies</option>{frequencies.map(f => <option key={f} value={f}>{frequencyLabels[f]}</option>)}</Select></FormField>
-    </div>{filtered && <Button variant="text" disabled={state.pending} onClick={() => store.clearFilters()}>Clear filters</Button>}</section>
+    </div>{filtered && <Button variant="text" disabled={state.pending} onClick={() => store.clearFilters()}>Clear filters</Button>}</Disclosure></section>
     <div className="p4-overview t34-recurring">
       <section className="p4-panel" aria-labelledby={`${pageId}-schedules`}>
         <h2 id={`${pageId}-schedules`}>Schedules</h2>
@@ -70,16 +70,17 @@ function ConnectedRecurring({ userId }: { userId: string }) {
         {state.rows === null && state.loading && <Skeleton variant="transaction" />}
         {state.rows?.length === 0 && !state.loading && !state.error && <EmptyState title={filtered ? "No recurring items match these filters." : "No recurring items yet."} description={filtered ? "Clear your filters to see your schedules." : "Plan repeating income or expenses."} action={<Button onClick={() => filtered ? store.clearFilters() : open({ kind: "create" })}>{filtered ? "Clear filters" : "Add recurring item"}</Button>} />}
         {state.rows?.map(row => <article key={row.id} className="t34-schedule" data-status={row.status} aria-label={row.description}>
-          <div className="v2-data-row"><div><strong>{row.description}</strong><p className="v2-helper">{row.accountName} · {row.categoryName}</p>
+          <div className="v2-data-row"><div><strong>{row.description}</strong>
             <p className="v2-helper">{row.nextOccurrence ? <>Next <time dateTime={row.nextOccurrence}>{row.nextOccurrence}</time></> : row.exhausted ? "Schedule complete" : "No future occurrence"}</p>
-            {row.endDate && <p className="v2-helper">Ends <time dateTime={row.endDate}>{row.endDate}</time></p>}
-            <div className="v2-actions"><FrequencyBadge frequency={frequencyLabels[row.frequency]} /><RecurringStatusBadge status={statusLabels[row.status]} /><span className="v2-helper">Expected {row.type}</span></div>
+
+            <div className="v2-actions"><FrequencyBadge frequency={frequencyLabels[row.frequency]} /><RecurringStatusBadge status={statusLabels[row.status]} /></div>
           </div><MoneyDisplay value={row.amount} kind={row.type} /></div>
           {row.status !== "archived" && <div className="v2-actions">
             <Button variant="text" disabled={state.pending} onClick={() => open({ kind: "edit", id: row.id })}>Edit</Button>
             <Button variant="text" disabled={state.pending} onClick={() => open({ kind: row.status === "active" ? "pause" : "resume", id: row.id })}>{row.status === "active" ? "Pause" : "Resume"}</Button>
             <Button variant="text" disabled={state.pending} onClick={() => open({ kind: "archive", id: row.id })}>Archive</Button>
           </div>}
+          <Disclosure title="Schedule details"><p className="v2-helper">{row.accountName} · {row.categoryName}</p><p className="v2-helper">{row.type} · Starts {row.startDate}{row.endDate ? ` · Ends ${row.endDate}` : ""}</p></Disclosure>
         </article>)}
       </section>
       <section className="p4-panel" aria-labelledby={`${pageId}-upcoming`}>

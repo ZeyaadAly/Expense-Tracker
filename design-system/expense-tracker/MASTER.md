@@ -35,12 +35,14 @@ Ink canvas uses white text and readable light secondary text. Transfers are neut
 
 Self-hosted variable Manrope: titles and financial numerals (weights500–750). Self-hosted variable IBM Plex Sans: UI/body (400–600). Two Latin WOFF2 files, no external browser font request and no new UI package. Source/licensing is retained with font files. Existing fallback covers user-entered scripts outside the font subset.
 
-Scale:12px supplementary metadata;13px labels;14px supporting text;16px body/inputs;18px section subheads;22px section heads;28–34px page titles;32–44px primary money;56px Auth statement only on large screens. Use tabular lining figures, stable amount alignment, restrained negative tracking for large numerals. EGP remains visible, subordinate and consistent. Never truncate a financial value; wrap/reflow long values. Existing exact decimal formatting and semantic signed labels remain unchanged.
+Scale:12px supplementary metadata;13px labels/actions;14px desktop inputs/supporting text;16px touch inputs/body;19px section heads;25–28px page titles;24–36px primary money;56px Auth statement only on large screens. Use tabular lining figures, stable amount alignment, restrained negative tracking for large numerals. EGP remains visible, subordinate and consistent. Never truncate a financial value; wrap/reflow long values. Existing exact decimal formatting and semantic signed labels remain unchanged.
 
 ## Geometry and motion
 
-Spacing4/8/12/16/24/32/40/48; desktop gutters32, tablet24, phone16. Control radius6, instrument10, dialog12, status3. Flat rows have no radius/shadow. Only overlays get an elevation shadow. Fields/actions have44px minimum targets; body text remains16px on phones.
+Spacing4/8/12/16/20/24/32/40; desktop gutters28, tablet24, phone16. Content max1280, desktop rail200. Control radius6, instrument10, dialog12, status3. Flat rows have no radius/shadow. Only overlays get an elevation shadow. Desktop small/default/large controls use32/36/40px tokens; real touch targets grow to44px at widths below1024 or any coarse pointer. Auth fields/primary actions retain44px. Body text remains16px on phones.
 
 Desktop rail begins1024px. Tablet/phone use a real native dialog drawer. Mobile data is composed as grouped records, not a squeezed table. Tables that require exact multi-series comparison may scroll internally in named keyboard-focusable regions.
 
 Feedback color transition120ms; dialog arrival160ms; drawer travel180ms. No autonomous card entrance. Reduced motion disables transitions/animations. Forced colors,150% text and200% zoom/reflow are verification cases. Body text contrast must meet4.5:1; control/focus distinction is measured separately.
+
+Current geometry and information hierarchy are governed by [density and loading refinement](../../docs/v2/redesign/06-density-and-loading-refinement.md). The earlier visual review was rejected; its report is historical.

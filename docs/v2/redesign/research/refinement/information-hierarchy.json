@@ -1,0 +1,66 @@
+{
+  "requested": "information hierarchy",
+  "results": [
+    {
+      "domain": "ux",
+      "query": "information hierarchy",
+      "file": "ux-guidelines.csv",
+      "count": 3,
+      "results": [
+        {
+          "Category": "Accessibility",
+          "Issue": "Color Only",
+          "Platform": "All",
+          "Description": "Don't convey information by color alone",
+          "Do": "Use icons/text in addition to color",
+          "Don't": "Red/green only for error/success",
+          "Code Example Good": "Red text + error icon",
+          "Code Example Bad": "Red border only for error",
+          "Severity": "High"
+        },
+        {
+          "Category": "Navigation",
+          "Issue": "Breadcrumbs",
+          "Platform": "Web",
+          "Description": "Show user location in site hierarchy",
+          "Do": "Use for sites with 3+ levels of depth",
+          "Don't": "Use for flat single-level sites",
+          "Code Example Good": "Home > Category > Product",
+          "Code Example Bad": "Only on deep nested pages",
+          "Severity": "Low"
+        },
+        {
+          "Category": "Accessibility",
+          "Issue": "Heading Hierarchy",
+          "Platform": "Web",
+          "Description": "Screen readers use headings for navigation",
+          "Do": "Use sequential heading levels h1-h6",
+          "Don't": "Skip heading levels or misuse for styling",
+          "Code Example Good": "h1 then h2 then h3",
+          "Code Example Bad": "h1 then h4",
+          "Severity": "Medium"
+        }
+      ]
+    },
+    {
+      "domain": "ux",
+      "query": "progressive disclosure",
+      "file": "ux-guidelines.csv",
+      "count": 1,
+      "results": [
+        {
+          "Category": "Typography",
+          "Issue": "Heading Line Balance",
+          "Platform": "Web",
+          "Description": "Short multi-line headings may use balanced wrapping as a progressive visual heuristic",
+          "Do": "Bound the measure and test natural-wrap fallback across widths fonts and locales",
+          "Don't": "Promise an exact final line or insert blanket nonbreaking spaces or hardcoded br tags",
+          "Code Example Good": ".hero-title { max-inline-size: 20ch; text-wrap: balance; }",
+          "Code Example Bad": "Heading copy rewritten with forced last-line breaks",
+          "Severity": "Medium"
+        }
+      ]
+    }
+  ],
+  "review": "Recommendations require product/stack fit review; no automatic implementation authority."
+}

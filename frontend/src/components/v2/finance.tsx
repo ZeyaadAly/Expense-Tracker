@@ -172,11 +172,6 @@ export function AccountCard({ account }: { account: AccountFixture }) {
         kind={account.type === "credit_card" ? "debt" : "balance"}
         size="large"
       />
-      <p className="v2-helper">
-        {account.type === "credit_card"
-          ? "Payments use Transfer; avoid a second expense."
-          : "Current balance · all history"}
-      </p>
     </article>
   );
 }
@@ -371,20 +366,20 @@ export function RecurringStatusBadge({ status }: { status: RecurringStatus }) {
     </span>
   );
 }
-export function UpcomingItem({ item }: { item: Pick<RecurringFixture, "name" | "amount" | "type" | "date" | "account"> }) {
+export function UpcomingItem({ item, compact = false }: { item: Pick<RecurringFixture, "name" | "amount" | "type" | "date" | "account">; compact?: boolean }) {
   const parts = item.date?.split("-");
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   return (
-    <div className="v2-upcoming">
+    <div className={`v2-upcoming ${compact ? "v2-upcoming--compact" : ""}`}>
       <time className="cl-date-anchor" dateTime={item.date ?? undefined}>
         <span aria-hidden="true">{parts?.[2] ?? "—"}</span><span aria-hidden="true">{parts ? months[Number(parts[1]) - 1] : ""}</span>
         <span className="v2-sr-only">{item.date ? dateLabel(item.date) : "No upcoming date"}</span>
       </time>
       <div>
         <strong>{item.name}</strong>
-        <span className="v2-helper">
+        {!compact && <span className="v2-helper">
           {item.account} · Expected {item.type}
-        </span>
+        </span>}
       </div>
       <MoneyDisplay value={item.amount} kind={item.type} />
     </div>
@@ -552,7 +547,7 @@ export function GoalCard({
       </header>
       <MoneyDisplay value={saved} size="large" />
       <p className="v2-helper">
-        of {formatDecimal(target).magnitude} EGP · manually maintained
+        of {formatDecimal(target).magnitude} EGP
       </p>
       <GoalProgress name={name} percent={percent} />
       <div className="v2-data-row v2-no-border">
@@ -568,9 +563,6 @@ export function GoalCard({
           Mark complete
         </Button>
       ) : null}
-      <p className="v2-helper">
-        Linked account is reference only. Completion is explicit.
-      </p>
     </article>
   );
 }

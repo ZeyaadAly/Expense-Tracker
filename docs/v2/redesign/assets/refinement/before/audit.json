@@ -1,0 +1,5023 @@
+{
+  "phase": "before",
+  "matrix": [
+    {
+      "route": "dashboard",
+      "count": 2,
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "active": "/v2/dashboard"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/dashboard?period=this_month",
+          "active": "/v2/dashboard"
+        }
+      ]
+    },
+    {
+      "route": "accounts",
+      "count": 6,
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "active": "/v2/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/transfers?limit=25",
+          "active": "/v2/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "active": "/v2/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "active": "/v2/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "active": "/v2/accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/summary",
+          "active": "/v2/accounts"
+        }
+      ]
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "count": 6,
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "active": "/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+          "active": "/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc/summary",
+          "active": "/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/transfers?accountId=6b87f970-32f2-4ff8-a553-1784b86e65cc&limit=25",
+          "active": "/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "active": "/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "active": "/v2/accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc"
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "count": 6,
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "active": "/v2/transactions"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/transactions?limit=25",
+          "active": "/v2/transactions"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "active": "/v2/transactions"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "active": "/v2/transactions"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "active": "/v2/transactions"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "active": "/v2/transactions"
+        }
+      ]
+    },
+    {
+      "route": "recurring",
+      "count": 7,
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "active": "/v2/recurring"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/recurring",
+          "active": "/v2/recurring"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/recurring/upcoming?days=30",
+          "active": "/v2/recurring"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "active": "/v2/recurring"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "active": "/v2/recurring"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "active": "/v2/recurring"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "active": "/v2/recurring"
+        }
+      ]
+    },
+    {
+      "route": "analytics",
+      "count": 4,
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "active": "/v2/analytics"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/analytics/overview?from=2026-09-19&to=2026-10-18",
+          "active": "/v2/analytics"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "active": "/v2/analytics"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "active": "/v2/analytics"
+        }
+      ]
+    },
+    {
+      "route": "budgets",
+      "count": 4,
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "active": "/v2/budgets"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/budgets?year=2026&month=10",
+          "active": "/v2/budgets"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "active": "/v2/budgets"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "active": "/v2/budgets"
+        }
+      ]
+    },
+    {
+      "route": "goals",
+      "count": 4,
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "active": "/v2/goals"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/goals",
+          "active": "/v2/goals"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=active",
+          "active": "/v2/goals"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/accounts?status=archived",
+          "active": "/v2/goals"
+        }
+      ]
+    },
+    {
+      "route": "settings",
+      "count": 4,
+      "requests": [
+        {
+          "method": "POST",
+          "path": "/api/v2/profile/bootstrap",
+          "active": "/v2/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/profile",
+          "active": "/v2/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=active",
+          "active": "/v2/settings"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v2/categories?status=archived",
+          "active": "/v2/settings"
+        }
+      ]
+    }
+  ],
+  "geometry": [
+    {
+      "route": "dashboard",
+      "width": 320,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 44,
+          "width": 152.1875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 44,
+          "width": 127.8125
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "accounts",
+      "width": 320,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 70,
+          "width": 140
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 46,
+          "width": 140
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Everyday account",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Everyday account",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Cash wallet",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Cash wallet",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Reserve account",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Reserve account",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Everyday credit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Everyday credit",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "New transfer",
+          "height": 46,
+          "width": 126.625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh transfers",
+          "height": 46,
+          "width": 157.546875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Cash withdrawal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Cash withdrawal",
+          "height": 46,
+          "width": 69
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "width": 320,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Edit account",
+          "height": 46,
+          "width": 140
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive account",
+          "height": 70,
+          "width": 140
+        },
+        {
+          "type": "BUTTON",
+          "text": "New transfer",
+          "height": 46,
+          "width": 126.625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh transfers",
+          "height": 46,
+          "width": 157.546875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Cash withdrawal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Cash withdrawal",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Credit card payment",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Credit card payment",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Monthly reserve transfer",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Monthly reserve transfer",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Previous transfers",
+          "height": 46,
+          "width": 163.8125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Next transfers",
+          "height": 46,
+          "width": 135.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh account",
+          "height": 46,
+          "width": 150.40625
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "transactions",
+      "width": 320,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 70,
+          "width": 140
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 70,
+          "width": 140
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 48,
+          "width": 168.4375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 46,
+          "width": 75.5625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Filters",
+          "height": 46,
+          "width": 79.21875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Weekend essentials 51",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Weekend essentials 51",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Lunch with a friend 34",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Lunch with a friend 34",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Coffee at the corner 17",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Coffee at the corner 17",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Lunch with a friend 50",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Lunch with a friend 50",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Coffee at the corner 33",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Coffee at the corner 33",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Local transport 16",
+          "height": 46,
+          "width": 50.078125
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "recurring",
+      "width": 320,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh recurring items",
+          "height": 94,
+          "width": 140
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add recurring item",
+          "height": 70,
+          "width": 140
+        },
+        {
+          "type": "SELECT",
+          "text": "All statusesActivePausedArchived",
+          "height": 44,
+          "width": 119
+        },
+        {
+          "type": "SELECT",
+          "text": "All typesIncomeExpense",
+          "height": 44,
+          "width": 119
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "width": 119
+        },
+        {
+          "type": "SELECT",
+          "text": "All categoriesBillsEntertainmentFoodFreelance",
+          "height": 44,
+          "width": 119
+        },
+        {
+          "type": "SELECT",
+          "text": "All frequenciesDailyWeeklyMonthlyYearly",
+          "height": 44,
+          "width": 119
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "analytics",
+      "width": 320,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 44,
+          "width": 123
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "width": 123
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 46,
+          "width": 258
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "budgets",
+      "width": 320,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh budgets",
+          "height": 70,
+          "width": 140
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add budget",
+          "height": 46,
+          "width": 140
+        },
+        {
+          "type": "INPUT",
+          "text": "month",
+          "height": 48,
+          "width": 288
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Food & groceries",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Food & groceries",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Home & utilities",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Home & utilities",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Transport",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Transport",
+          "height": 46,
+          "width": 69
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "goals",
+      "width": 320,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh goals",
+          "height": 46,
+          "width": 140
+        },
+        {
+          "type": "BUTTON",
+          "text": "Create goal",
+          "height": 46,
+          "width": 140
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Course fund",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Reopen Course fund",
+          "height": 46,
+          "width": 88.90625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Course fund",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit New laptop",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Mark complete New laptop",
+          "height": 46,
+          "width": 141.25
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive New laptop",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Reserve fund",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Reserve fund",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "settings",
+      "width": 320,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "INPUT",
+          "text": "text",
+          "height": 48,
+          "width": 246
+        },
+        {
+          "type": "INPUT",
+          "text": "text",
+          "height": 48,
+          "width": 246
+        },
+        {
+          "type": "BUTTON",
+          "text": "Save profile",
+          "height": 46,
+          "width": 118.171875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh profile",
+          "height": 46,
+          "width": 139.359375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add custom category",
+          "height": 46,
+          "width": 185.921875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh categories",
+          "height": 46,
+          "width": 167.890625
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Food & groceries",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Food & groceries",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Home & utilities",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Home & utilities",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Personal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Personal",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Transport",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Transport",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "dashboard",
+      "width": 360,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 44,
+          "width": 192.1875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 44,
+          "width": 127.8125
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "accounts",
+      "width": 360,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 46,
+          "width": 160
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 46,
+          "width": 160
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Everyday account",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Everyday account",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Cash wallet",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Cash wallet",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Reserve account",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Reserve account",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Everyday credit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Everyday credit",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "New transfer",
+          "height": 46,
+          "width": 126.625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh transfers",
+          "height": 46,
+          "width": 157.546875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Cash withdrawal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Cash withdrawal",
+          "height": 46,
+          "width": 69
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "width": 360,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Edit account",
+          "height": 46,
+          "width": 160
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive account",
+          "height": 46,
+          "width": 160
+        },
+        {
+          "type": "BUTTON",
+          "text": "New transfer",
+          "height": 46,
+          "width": 126.625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh transfers",
+          "height": 46,
+          "width": 157.546875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Cash withdrawal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Cash withdrawal",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Credit card payment",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Credit card payment",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Monthly reserve transfer",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Monthly reserve transfer",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Previous transfers",
+          "height": 46,
+          "width": 163.8125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Next transfers",
+          "height": 46,
+          "width": 135.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh account",
+          "height": 46,
+          "width": 150.40625
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "transactions",
+      "width": 360,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 70,
+          "width": 160
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 46,
+          "width": 160
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 48,
+          "width": 208.4375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 46,
+          "width": 75.5625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Filters",
+          "height": 46,
+          "width": 79.21875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Weekend essentials 51",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Weekend essentials 51",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Lunch with a friend 34",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Lunch with a friend 34",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Coffee at the corner 17",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Coffee at the corner 17",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Lunch with a friend 50",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Lunch with a friend 50",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Coffee at the corner 33",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Coffee at the corner 33",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Local transport 16",
+          "height": 46,
+          "width": 50.078125
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "recurring",
+      "width": 360,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh recurring items",
+          "height": 70,
+          "width": 160
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add recurring item",
+          "height": 70,
+          "width": 160
+        },
+        {
+          "type": "SELECT",
+          "text": "All statusesActivePausedArchived",
+          "height": 44,
+          "width": 139
+        },
+        {
+          "type": "SELECT",
+          "text": "All typesIncomeExpense",
+          "height": 44,
+          "width": 139
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "width": 139
+        },
+        {
+          "type": "SELECT",
+          "text": "All categoriesBillsEntertainmentFoodFreelance",
+          "height": 44,
+          "width": 139
+        },
+        {
+          "type": "SELECT",
+          "text": "All frequenciesDailyWeeklyMonthlyYearly",
+          "height": 44,
+          "width": 139
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "analytics",
+      "width": 360,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 44,
+          "width": 143
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "width": 143
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 46,
+          "width": 298
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "budgets",
+      "width": 360,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh budgets",
+          "height": 46,
+          "width": 160
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add budget",
+          "height": 46,
+          "width": 160
+        },
+        {
+          "type": "INPUT",
+          "text": "month",
+          "height": 48,
+          "width": 328
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Food & groceries",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Food & groceries",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Home & utilities",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Home & utilities",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Transport",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Transport",
+          "height": 46,
+          "width": 69
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "goals",
+      "width": 360,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh goals",
+          "height": 46,
+          "width": 160
+        },
+        {
+          "type": "BUTTON",
+          "text": "Create goal",
+          "height": 46,
+          "width": 160
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Course fund",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Reopen Course fund",
+          "height": 46,
+          "width": 88.90625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Course fund",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit New laptop",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Mark complete New laptop",
+          "height": 46,
+          "width": 141.25
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive New laptop",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Reserve fund",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Reserve fund",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "settings",
+      "width": 360,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "INPUT",
+          "text": "text",
+          "height": 48,
+          "width": 286
+        },
+        {
+          "type": "INPUT",
+          "text": "text",
+          "height": 48,
+          "width": 286
+        },
+        {
+          "type": "BUTTON",
+          "text": "Save profile",
+          "height": 46,
+          "width": 118.171875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh profile",
+          "height": 46,
+          "width": 139.359375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add custom category",
+          "height": 46,
+          "width": 185.921875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh categories",
+          "height": 46,
+          "width": 167.890625
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Food & groceries",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Food & groceries",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Home & utilities",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Home & utilities",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Personal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Personal",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Transport",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Transport",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "dashboard",
+      "width": 375,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 44,
+          "width": 207.1875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 44,
+          "width": 127.8125
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "accounts",
+      "width": 375,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 46,
+          "width": 167.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 46,
+          "width": 167.5
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Everyday account",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Everyday account",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Cash wallet",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Cash wallet",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Reserve account",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Reserve account",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Everyday credit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Everyday credit",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "New transfer",
+          "height": 46,
+          "width": 126.625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh transfers",
+          "height": 46,
+          "width": 157.546875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Cash withdrawal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Cash withdrawal",
+          "height": 46,
+          "width": 69
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "width": 375,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Edit account",
+          "height": 46,
+          "width": 167.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive account",
+          "height": 46,
+          "width": 167.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "New transfer",
+          "height": 46,
+          "width": 126.625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh transfers",
+          "height": 46,
+          "width": 157.546875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Cash withdrawal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Cash withdrawal",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Credit card payment",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Credit card payment",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Monthly reserve transfer",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Monthly reserve transfer",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Previous transfers",
+          "height": 46,
+          "width": 163.8125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Next transfers",
+          "height": 46,
+          "width": 135.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh account",
+          "height": 46,
+          "width": 150.40625
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "transactions",
+      "width": 375,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 70,
+          "width": 167.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 46,
+          "width": 167.5
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 48,
+          "width": 223.4375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 46,
+          "width": 75.5625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Filters",
+          "height": 46,
+          "width": 79.21875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Weekend essentials 51",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Weekend essentials 51",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Lunch with a friend 34",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Lunch with a friend 34",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Coffee at the corner 17",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Coffee at the corner 17",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Lunch with a friend 50",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Lunch with a friend 50",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Coffee at the corner 33",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Coffee at the corner 33",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Local transport 16",
+          "height": 46,
+          "width": 50.078125
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "recurring",
+      "width": 375,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh recurring items",
+          "height": 70,
+          "width": 167.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add recurring item",
+          "height": 70,
+          "width": 167.5
+        },
+        {
+          "type": "SELECT",
+          "text": "All statusesActivePausedArchived",
+          "height": 44,
+          "width": 146.5
+        },
+        {
+          "type": "SELECT",
+          "text": "All typesIncomeExpense",
+          "height": 44,
+          "width": 146.5
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "width": 146.5
+        },
+        {
+          "type": "SELECT",
+          "text": "All categoriesBillsEntertainmentFoodFreelance",
+          "height": 44,
+          "width": 146.5
+        },
+        {
+          "type": "SELECT",
+          "text": "All frequenciesDailyWeeklyMonthlyYearly",
+          "height": 44,
+          "width": 146.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "analytics",
+      "width": 375,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 44,
+          "width": 150.5
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "width": 150.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 46,
+          "width": 313
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "budgets",
+      "width": 375,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh budgets",
+          "height": 46,
+          "width": 167.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add budget",
+          "height": 46,
+          "width": 167.5
+        },
+        {
+          "type": "INPUT",
+          "text": "month",
+          "height": 48,
+          "width": 343
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Food & groceries",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Food & groceries",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Home & utilities",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Home & utilities",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Transport",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Transport",
+          "height": 46,
+          "width": 69
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "goals",
+      "width": 375,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh goals",
+          "height": 46,
+          "width": 167.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Create goal",
+          "height": 46,
+          "width": 167.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Course fund",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Reopen Course fund",
+          "height": 46,
+          "width": 88.90625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Course fund",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit New laptop",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Mark complete New laptop",
+          "height": 46,
+          "width": 141.25
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive New laptop",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Reserve fund",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Reserve fund",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "settings",
+      "width": 375,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "INPUT",
+          "text": "text",
+          "height": 48,
+          "width": 301
+        },
+        {
+          "type": "INPUT",
+          "text": "text",
+          "height": 48,
+          "width": 301
+        },
+        {
+          "type": "BUTTON",
+          "text": "Save profile",
+          "height": 46,
+          "width": 118.171875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh profile",
+          "height": 46,
+          "width": 139.359375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add custom category",
+          "height": 46,
+          "width": 185.921875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh categories",
+          "height": 46,
+          "width": 167.890625
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Food & groceries",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Food & groceries",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Home & utilities",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Home & utilities",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Personal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Personal",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Transport",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Transport",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "dashboard",
+      "width": 768,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 44,
+          "width": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 46,
+          "width": 169.75
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "accounts",
+      "width": 768,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 46,
+          "width": 158.203125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 46,
+          "width": 123.796875
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Everyday account",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Everyday account",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Cash wallet",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Cash wallet",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Reserve account",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Reserve account",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Everyday credit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Everyday credit",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "New transfer",
+          "height": 46,
+          "width": 126.625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh transfers",
+          "height": 46,
+          "width": 157.546875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Cash withdrawal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Cash withdrawal",
+          "height": 46,
+          "width": 69
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "width": 768,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Edit account",
+          "height": 46,
+          "width": 123.046875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive account",
+          "height": 46,
+          "width": 148.703125
+        },
+        {
+          "type": "BUTTON",
+          "text": "New transfer",
+          "height": 46,
+          "width": 126.625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh transfers",
+          "height": 46,
+          "width": 157.546875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Cash withdrawal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Cash withdrawal",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Credit card payment",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Credit card payment",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Monthly reserve transfer",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Monthly reserve transfer",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Previous transfers",
+          "height": 46,
+          "width": 163.8125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Next transfers",
+          "height": 46,
+          "width": 135.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh account",
+          "height": 46,
+          "width": 150.40625
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "transactions",
+      "width": 768,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 46,
+          "width": 182.109375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 46,
+          "width": 147.703125
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 48,
+          "width": 584.4375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 46,
+          "width": 83.5625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Filters",
+          "height": 46,
+          "width": 79.21875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Weekend essentials 51",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Weekend essentials 51",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Lunch with a friend 34",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Lunch with a friend 34",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Coffee at the corner 17",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Coffee at the corner 17",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Lunch with a friend 50",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Lunch with a friend 50",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Coffee at the corner 33",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Coffee at the corner 33",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Local transport 16",
+          "height": 46,
+          "width": 50.078125
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "recurring",
+      "width": 768,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh recurring items",
+          "height": 46,
+          "width": 202.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add recurring item",
+          "height": 46,
+          "width": 167.671875
+        },
+        {
+          "type": "SELECT",
+          "text": "All statusesActivePausedArchived",
+          "height": 44,
+          "width": 219.328125
+        },
+        {
+          "type": "SELECT",
+          "text": "All typesIncomeExpense",
+          "height": 44,
+          "width": 219.328125
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "width": 219.328125
+        },
+        {
+          "type": "SELECT",
+          "text": "All categoriesBillsEntertainmentFoodFreelance",
+          "height": 44,
+          "width": 219.328125
+        },
+        {
+          "type": "SELECT",
+          "text": "All frequenciesDailyWeeklyMonthlyYearly",
+          "height": 44,
+          "width": 219.328125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "analytics",
+      "width": 768,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 44,
+          "width": 250.484375
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "width": 250.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 46,
+          "width": 157.015625
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "budgets",
+      "width": 768,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh budgets",
+          "height": 46,
+          "width": 151.40625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add budget",
+          "height": 46,
+          "width": 117
+        },
+        {
+          "type": "INPUT",
+          "text": "month",
+          "height": 48,
+          "width": 720
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Food & groceries",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Food & groceries",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Home & utilities",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Home & utilities",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Transport",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Transport",
+          "height": 46,
+          "width": 69
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "goals",
+      "width": 768,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh goals",
+          "height": 46,
+          "width": 131.203125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Create goal",
+          "height": 46,
+          "width": 115.390625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Course fund",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Reopen Course fund",
+          "height": 46,
+          "width": 88.90625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Course fund",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit New laptop",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Mark complete New laptop",
+          "height": 46,
+          "width": 141.25
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive New laptop",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Reserve fund",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Reserve fund",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "settings",
+      "width": 768,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "INPUT",
+          "text": "text",
+          "height": 48,
+          "width": 367.59375
+        },
+        {
+          "type": "INPUT",
+          "text": "text",
+          "height": 48,
+          "width": 367.59375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Save profile",
+          "height": 46,
+          "width": 118.171875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh profile",
+          "height": 46,
+          "width": 139.359375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add custom category",
+          "height": 46,
+          "width": 185.921875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh categories",
+          "height": 46,
+          "width": 167.890625
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Food & groceries",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Food & groceries",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Home & utilities",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Home & utilities",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Personal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Personal",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Transport",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Transport",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "dashboard",
+      "width": 1024,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 44,
+          "width": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 46,
+          "width": 169.75
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "accounts",
+      "width": 1024,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 46,
+          "width": 158.203125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 46,
+          "width": 123.796875
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Everyday account",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Everyday account",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Cash wallet",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Cash wallet",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Reserve account",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Reserve account",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Everyday credit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Everyday credit",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "New transfer",
+          "height": 46,
+          "width": 126.625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh transfers",
+          "height": 46,
+          "width": 157.546875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Cash withdrawal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Cash withdrawal",
+          "height": 46,
+          "width": 69
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "width": 1024,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Edit account",
+          "height": 46,
+          "width": 123.046875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive account",
+          "height": 46,
+          "width": 148.703125
+        },
+        {
+          "type": "BUTTON",
+          "text": "New transfer",
+          "height": 46,
+          "width": 126.625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh transfers",
+          "height": 46,
+          "width": 157.546875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Cash withdrawal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Cash withdrawal",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Credit card payment",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Credit card payment",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Monthly reserve transfer",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Monthly reserve transfer",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Previous transfers",
+          "height": 46,
+          "width": 163.8125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Next transfers",
+          "height": 46,
+          "width": 135.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh account",
+          "height": 46,
+          "width": 150.40625
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "transactions",
+      "width": 1024,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 46,
+          "width": 182.109375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 46,
+          "width": 147.703125
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 48,
+          "width": 608.4375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 46,
+          "width": 83.5625
+        },
+        {
+          "type": "SELECT",
+          "text": "AllIncomeExpense",
+          "height": 44,
+          "width": 226
+        },
+        {
+          "type": "SELECT",
+          "text": "AllEveryday accountCash walletReserve account",
+          "height": 44,
+          "width": 226
+        },
+        {
+          "type": "SELECT",
+          "text": "AllBillsEntertainmentFoodFreelanceGiftOtherSa",
+          "height": 44,
+          "width": 226
+        },
+        {
+          "type": "SELECT",
+          "text": "AllManualGenerated",
+          "height": 44,
+          "width": 226
+        },
+        {
+          "type": "INPUT",
+          "text": "date",
+          "height": 45,
+          "width": 226
+        },
+        {
+          "type": "INPUT",
+          "text": "date",
+          "height": 45,
+          "width": 226
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Weekend essentials 51",
+          "height": 44,
+          "width": 44
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Weekend essentials 51",
+          "height": 44,
+          "width": 51.25
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Lunch with a friend 34",
+          "height": 44,
+          "width": 44
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Lunch with a friend 34",
+          "height": 44,
+          "width": 51.25
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Coffee at the corner 17",
+          "height": 44,
+          "width": 44
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Coffee at the corner 17",
+          "height": 44,
+          "width": 51.25
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "recurring",
+      "width": 1024,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh recurring items",
+          "height": 46,
+          "width": 202.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add recurring item",
+          "height": 46,
+          "width": 167.671875
+        },
+        {
+          "type": "SELECT",
+          "text": "All statusesActivePausedArchived",
+          "height": 44,
+          "width": 131.59375
+        },
+        {
+          "type": "SELECT",
+          "text": "All typesIncomeExpense",
+          "height": 44,
+          "width": 131.59375
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "width": 131.609375
+        },
+        {
+          "type": "SELECT",
+          "text": "All categoriesBillsEntertainmentFoodFreelance",
+          "height": 44,
+          "width": 131.59375
+        },
+        {
+          "type": "SELECT",
+          "text": "All frequenciesDailyWeeklyMonthlyYearly",
+          "height": 44,
+          "width": 131.609375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "analytics",
+      "width": 1024,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 44,
+          "width": 262.484375
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "width": 262.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 46,
+          "width": 157.015625
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "budgets",
+      "width": 1024,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh budgets",
+          "height": 46,
+          "width": 151.40625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add budget",
+          "height": 46,
+          "width": 117
+        },
+        {
+          "type": "INPUT",
+          "text": "month",
+          "height": 48,
+          "width": 744
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Food & groceries",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Food & groceries",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Home & utilities",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Home & utilities",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Transport",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Transport",
+          "height": 46,
+          "width": 69
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "goals",
+      "width": 1024,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh goals",
+          "height": 46,
+          "width": 131.203125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Create goal",
+          "height": 46,
+          "width": 115.390625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Course fund",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Reopen Course fund",
+          "height": 46,
+          "width": 88.90625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Course fund",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit New laptop",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Mark complete New laptop",
+          "height": 46,
+          "width": 141.25
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive New laptop",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Reserve fund",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Reserve fund",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "settings",
+      "width": 1024,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "INPUT",
+          "text": "text",
+          "height": 48,
+          "width": 382
+        },
+        {
+          "type": "INPUT",
+          "text": "text",
+          "height": 48,
+          "width": 382
+        },
+        {
+          "type": "BUTTON",
+          "text": "Save profile",
+          "height": 46,
+          "width": 118.171875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh profile",
+          "height": 46,
+          "width": 139.359375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add custom category",
+          "height": 46,
+          "width": 185.921875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh categories",
+          "height": 46,
+          "width": 167.890625
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Food & groceries",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Food & groceries",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Home & utilities",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Home & utilities",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Personal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Personal",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Transport",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Transport",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "dashboard",
+      "width": 1280,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 44,
+          "width": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 46,
+          "width": 169.75
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "accounts",
+      "width": 1280,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 46,
+          "width": 158.203125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 46,
+          "width": 123.796875
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Everyday account",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Everyday account",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Cash wallet",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Cash wallet",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Reserve account",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Reserve account",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Everyday credit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Everyday credit",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "New transfer",
+          "height": 46,
+          "width": 126.625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh transfers",
+          "height": 46,
+          "width": 157.546875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Cash withdrawal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Cash withdrawal",
+          "height": 46,
+          "width": 69
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "width": 1280,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Edit account",
+          "height": 46,
+          "width": 123.046875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive account",
+          "height": 46,
+          "width": 148.703125
+        },
+        {
+          "type": "BUTTON",
+          "text": "New transfer",
+          "height": 46,
+          "width": 126.625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh transfers",
+          "height": 46,
+          "width": 157.546875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Cash withdrawal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Cash withdrawal",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Credit card payment",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Credit card payment",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Monthly reserve transfer",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Monthly reserve transfer",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Previous transfers",
+          "height": 46,
+          "width": 163.8125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Next transfers",
+          "height": 46,
+          "width": 135.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh account",
+          "height": 46,
+          "width": 150.40625
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "transactions",
+      "width": 1280,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 46,
+          "width": 182.109375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 46,
+          "width": 147.703125
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 48,
+          "width": 864.4375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 46,
+          "width": 83.5625
+        },
+        {
+          "type": "SELECT",
+          "text": "AllIncomeExpense",
+          "height": 44,
+          "width": 149.65625
+        },
+        {
+          "type": "SELECT",
+          "text": "AllEveryday accountCash walletReserve account",
+          "height": 44,
+          "width": 149.671875
+        },
+        {
+          "type": "SELECT",
+          "text": "AllBillsEntertainmentFoodFreelanceGiftOtherSa",
+          "height": 44,
+          "width": 149.671875
+        },
+        {
+          "type": "SELECT",
+          "text": "AllManualGenerated",
+          "height": 44,
+          "width": 149.65625
+        },
+        {
+          "type": "INPUT",
+          "text": "date",
+          "height": 45,
+          "width": 149.671875
+        },
+        {
+          "type": "INPUT",
+          "text": "date",
+          "height": 45,
+          "width": 149.671875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Weekend essentials 51",
+          "height": 44,
+          "width": 44
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Weekend essentials 51",
+          "height": 44,
+          "width": 51.25
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Lunch with a friend 34",
+          "height": 44,
+          "width": 44
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Lunch with a friend 34",
+          "height": 44,
+          "width": 51.25
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Coffee at the corner 17",
+          "height": 44,
+          "width": 44
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Coffee at the corner 17",
+          "height": 44,
+          "width": 51.25
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "recurring",
+      "width": 1280,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh recurring items",
+          "height": 46,
+          "width": 202.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add recurring item",
+          "height": 46,
+          "width": 167.671875
+        },
+        {
+          "type": "SELECT",
+          "text": "All statusesActivePausedArchived",
+          "height": 44,
+          "width": 182.796875
+        },
+        {
+          "type": "SELECT",
+          "text": "All typesIncomeExpense",
+          "height": 44,
+          "width": 182.796875
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "width": 182.796875
+        },
+        {
+          "type": "SELECT",
+          "text": "All categoriesBillsEntertainmentFoodFreelance",
+          "height": 44,
+          "width": 182.796875
+        },
+        {
+          "type": "SELECT",
+          "text": "All frequenciesDailyWeeklyMonthlyYearly",
+          "height": 44,
+          "width": 182.8125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "analytics",
+      "width": 1280,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 44,
+          "width": 390.484375
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "width": 390.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 46,
+          "width": 157.015625
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "budgets",
+      "width": 1280,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh budgets",
+          "height": 46,
+          "width": 151.40625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add budget",
+          "height": 46,
+          "width": 117
+        },
+        {
+          "type": "INPUT",
+          "text": "month",
+          "height": 48,
+          "width": 1000
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Food & groceries",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Food & groceries",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Home & utilities",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Home & utilities",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Transport",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Transport",
+          "height": 46,
+          "width": 69
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "goals",
+      "width": 1280,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh goals",
+          "height": 46,
+          "width": 131.203125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Create goal",
+          "height": 46,
+          "width": 115.390625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Course fund",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Reopen Course fund",
+          "height": 46,
+          "width": 88.90625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Course fund",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit New laptop",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Mark complete New laptop",
+          "height": 46,
+          "width": 141.25
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive New laptop",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Reserve fund",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Reserve fund",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "settings",
+      "width": 1280,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "INPUT",
+          "text": "text",
+          "height": 48,
+          "width": 535.59375
+        },
+        {
+          "type": "INPUT",
+          "text": "text",
+          "height": 48,
+          "width": 535.59375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Save profile",
+          "height": 46,
+          "width": 118.171875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh profile",
+          "height": 46,
+          "width": 139.359375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add custom category",
+          "height": 46,
+          "width": 185.921875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh categories",
+          "height": 46,
+          "width": 167.890625
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Food & groceries",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Food & groceries",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Home & utilities",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Home & utilities",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Personal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Personal",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Transport",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Transport",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "dashboard",
+      "width": 1440,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "This monthLast month3 months6 months1 year",
+          "height": 44,
+          "width": 170
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh dashboard",
+          "height": 46,
+          "width": 169.75
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "accounts",
+      "width": 1440,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh accounts",
+          "height": 46,
+          "width": 158.203125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add account",
+          "height": 46,
+          "width": 123.796875
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Everyday account",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Everyday account",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Cash wallet",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Cash wallet",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Reserve account",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Reserve account",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Everyday credit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Everyday credit",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "New transfer",
+          "height": 46,
+          "width": 126.625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh transfers",
+          "height": 46,
+          "width": 157.546875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Cash withdrawal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Cash withdrawal",
+          "height": 46,
+          "width": 69
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "width": 1440,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Edit account",
+          "height": 46,
+          "width": 123.046875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive account",
+          "height": 46,
+          "width": 148.703125
+        },
+        {
+          "type": "BUTTON",
+          "text": "New transfer",
+          "height": 46,
+          "width": 126.625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh transfers",
+          "height": 46,
+          "width": 157.546875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Cash withdrawal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Cash withdrawal",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Credit card payment",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Credit card payment",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit transfer Monthly reserve transfer",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete transfer Monthly reserve transfer",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Previous transfers",
+          "height": 46,
+          "width": 163.8125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Next transfers",
+          "height": 46,
+          "width": 135.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh account",
+          "height": 46,
+          "width": 150.40625
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "transactions",
+      "width": 1440,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh transactions",
+          "height": 46,
+          "width": 182.109375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add transaction",
+          "height": 46,
+          "width": 147.703125
+        },
+        {
+          "type": "INPUT",
+          "text": "search",
+          "height": 48,
+          "width": 1024.4375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Search",
+          "height": 46,
+          "width": 83.5625
+        },
+        {
+          "type": "SELECT",
+          "text": "AllIncomeExpense",
+          "height": 44,
+          "width": 176.328125
+        },
+        {
+          "type": "SELECT",
+          "text": "AllEveryday accountCash walletReserve account",
+          "height": 44,
+          "width": 176.328125
+        },
+        {
+          "type": "SELECT",
+          "text": "AllBillsEntertainmentFoodFreelanceGiftOtherSa",
+          "height": 44,
+          "width": 176.328125
+        },
+        {
+          "type": "SELECT",
+          "text": "AllManualGenerated",
+          "height": 44,
+          "width": 176.34375
+        },
+        {
+          "type": "INPUT",
+          "text": "date",
+          "height": 45,
+          "width": 176.328125
+        },
+        {
+          "type": "INPUT",
+          "text": "date",
+          "height": 45,
+          "width": 176.328125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Weekend essentials 51",
+          "height": 44,
+          "width": 44
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Weekend essentials 51",
+          "height": 44,
+          "width": 51.25
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Lunch with a friend 34",
+          "height": 44,
+          "width": 44
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Lunch with a friend 34",
+          "height": 44,
+          "width": 51.25
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Coffee at the corner 17",
+          "height": 44,
+          "width": 44
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Coffee at the corner 17",
+          "height": 44,
+          "width": 51.25
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "recurring",
+      "width": 1440,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh recurring items",
+          "height": 46,
+          "width": 202.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add recurring item",
+          "height": 46,
+          "width": 167.671875
+        },
+        {
+          "type": "SELECT",
+          "text": "All statusesActivePausedArchived",
+          "height": 44,
+          "width": 214.796875
+        },
+        {
+          "type": "SELECT",
+          "text": "All typesIncomeExpense",
+          "height": 44,
+          "width": 214.796875
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "width": 214.796875
+        },
+        {
+          "type": "SELECT",
+          "text": "All categoriesBillsEntertainmentFoodFreelance",
+          "height": 44,
+          "width": 214.796875
+        },
+        {
+          "type": "SELECT",
+          "text": "All frequenciesDailyWeeklyMonthlyYearly",
+          "height": 44,
+          "width": 214.8125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Pause",
+          "height": 46,
+          "width": 65.75
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "analytics",
+      "width": 1440,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "SELECT",
+          "text": "7 days30 days3 months6 months1 yearCustom",
+          "height": 44,
+          "width": 470.484375
+        },
+        {
+          "type": "SELECT",
+          "text": "All accountsEveryday accountCash walletReserv",
+          "height": 44,
+          "width": 470.5
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh analytics",
+          "height": 46,
+          "width": 157.015625
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "budgets",
+      "width": 1440,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh budgets",
+          "height": 46,
+          "width": 151.40625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add budget",
+          "height": 46,
+          "width": 117
+        },
+        {
+          "type": "INPUT",
+          "text": "month",
+          "height": 48,
+          "width": 1160
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Food & groceries",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Food & groceries",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Home & utilities",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Home & utilities",
+          "height": 46,
+          "width": 69
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Transport",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Delete Transport",
+          "height": 46,
+          "width": 69
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "goals",
+      "width": 1440,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "BUTTON",
+          "text": "Refresh goals",
+          "height": 46,
+          "width": 131.203125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Create goal",
+          "height": 46,
+          "width": 115.390625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Course fund",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Reopen Course fund",
+          "height": 46,
+          "width": 88.90625
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Course fund",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit New laptop",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Mark complete New laptop",
+          "height": 46,
+          "width": 141.25
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive New laptop",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Reserve fund",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Reserve fund",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    },
+    {
+      "route": "settings",
+      "width": 1440,
+      "pageOverflow": 0,
+      "controls": [
+        {
+          "type": "INPUT",
+          "text": "text",
+          "height": 48,
+          "width": 631.59375
+        },
+        {
+          "type": "INPUT",
+          "text": "text",
+          "height": 48,
+          "width": 631.59375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Save profile",
+          "height": 46,
+          "width": 118.171875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh profile",
+          "height": 46,
+          "width": 139.359375
+        },
+        {
+          "type": "BUTTON",
+          "text": "Add custom category",
+          "height": 46,
+          "width": 185.921875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Refresh categories",
+          "height": 46,
+          "width": 167.890625
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "INPUT",
+          "text": "radio",
+          "height": 13,
+          "width": 1
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Food & groceries",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Food & groceries",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Home & utilities",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Home & utilities",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Personal",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Personal",
+          "height": 46,
+          "width": 75.71875
+        },
+        {
+          "type": "BUTTON",
+          "text": "Edit Transport",
+          "height": 46,
+          "width": 50.078125
+        },
+        {
+          "type": "BUTTON",
+          "text": "Archive Transport",
+          "height": 46,
+          "width": 75.71875
+        }
+      ],
+      "overflows": []
+    }
+  ],
+  "errors": []
+}

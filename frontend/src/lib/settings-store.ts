@@ -91,7 +91,12 @@ export function createSettingsStore(profileClient: ReturnType<typeof createProfi
     subscribe: (fn:()=>void) => { listeners.add(fn); return () => { listeners.delete(fn); }; },
     getSnapshot: () => state,
     getServerSnapshot: () => initial,
-    start: () => { void refreshProfile(); void refreshCategories("active"); void refreshCategories("archived"); return stop; },
+    start: (options?: { profile?: Profile; deferCategories?: boolean }) => {
+      if (options?.profile) publish({profile:{data:options.profile,loading:false,error:null,stale:false}});
+      else void refreshProfile();
+      if (!options?.deferCategories) { void refreshCategories("active"); void refreshCategories("archived"); }
+      return stop;
+    },
     refreshProfile, refreshCategories,
     saveProfile: (displayName:string|null) => write("profile", signal => profileClient.updateProfile({displayName},{signal}), "Profile saved."),
     mutateCategory: (operation:(signal:AbortSignal)=>Promise<unknown>, notice:string) => write("category",operation,notice),

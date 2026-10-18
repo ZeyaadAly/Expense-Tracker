@@ -19,6 +19,16 @@ const row = { id:'c4900000-0000-4000-8000-000000000001', name:'Food', kind:'expe
 const defer = () => { let resolve, reject; const promise = new Promise((a,b) => {resolve=a;reject=b;}); return {promise,resolve,reject}; };
 const tick = () => new Promise(r => setTimeout(r, 0));
 
+test('Refinement Settings reuses the session profile and defers categories until requested; teardown rejects late data', async () => {
+  const calls=[],late=defer();let signal;
+  const store=createSettingsStore({getProfile:async()=>{calls.push('profile');return profile;}},{listCategories:async(status,options)=>{calls.push(status);signal=options.signal;return late.promise;}});
+  const stop=store.start({profile,deferCategories:true});await tick();
+  assert.deepEqual(calls,[]);assert.equal(store.getSnapshot().profile.data,profile);
+  const request=store.refreshCategories('active');assert.deepEqual(calls,['active']);
+  stop();assert.equal(signal.aborted,true);late.resolve([row]);await request;
+  assert.equal(store.getSnapshot().active.data,null);assert.equal(store.getSnapshot().profile.data,null);
+});
+
 test('T49 category client exact routes, write shapes, archived filter and response checks', async () => {
   const calls = [], token = () => ({data:'synthetic',error:null});
   const client = createCategoryClient(a, createV2ApiClient({baseUrl:'http://localhost:4000/api/v1', tokenSupplier:token, fetcher:async (url, options) => {

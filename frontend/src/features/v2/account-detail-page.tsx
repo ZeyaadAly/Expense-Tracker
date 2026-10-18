@@ -9,7 +9,7 @@ import {TransfersPanel} from "./transfers-panel";
 import {AccountDialog,accountTypeLabels,type AccountAction} from "./accounts-page";
 import {PageHeader} from "../../components/v2/app-shell";
 import {SummaryCard} from "../../components/v2/finance";
-import {Button,EmptyState,ErrorState,FeedbackBanner,Skeleton,StaleIndicator} from "../../components/v2/primitives";
+import {Button,Disclosure,EmptyState,ErrorState,FeedbackBanner,Skeleton,StaleIndicator} from "../../components/v2/primitives";
 
 export function AccountDetailPage({id}:{id:string}) {
   const {user}=useAuth();
@@ -45,7 +45,7 @@ function ConnectedAccountDetail({userId,id}:{userId:string;id:string}) {
           {account.status==='archived'&&<FeedbackBanner tone="warning" title="Archived account">Historical balances remain available. Restore this account to make it active; recurring schedules remain paused.</FeedbackBanner>}
           <section aria-labelledby="account-financial-summary"><h2 id="account-financial-summary">Financial summary</h2>
             <div className="account-detail-summary">
-              <SummaryCard label={balanceLabel} value={summary.currentBalance} kind={card?'debt':'balance'} emphasis caption={card?'Positive means debt; negative means credit / overpayment. Currency: EGP.':'Authoritative balance · EGP'}/>
+              <SummaryCard label={balanceLabel} value={summary.currentBalance} kind={card?'debt':'balance'} emphasis caption={card?'Positive means debt; negative means credit / overpayment. Currency: EGP.':'Includes posted activity'}/>
               <SummaryCard label="Opening balance" value={summary.openingBalance} caption="EGP"/>
               <SummaryCard label="Total income" value={summary.totalIncome} caption="All posted income · EGP"/>
               <SummaryCard label="Total expenses" value={summary.totalExpenses} caption="All posted expenses · EGP"/>
@@ -53,14 +53,14 @@ function ConnectedAccountDetail({userId,id}:{userId:string;id:string}) {
               <SummaryCard label="Outgoing transfers" value={summary.outgoingTransfers} caption="All posted transfers out · EGP"/>
             </div>
           </section>
-          <section className="p4-panel" aria-labelledby="account-metadata"><h2 id="account-metadata">Account information</h2><dl className="account-detail-metadata">
+          <Disclosure title="Account information"><dl className="account-detail-metadata">
             <div><dt>Created</dt><dd>{new Intl.DateTimeFormat('en-GB',{dateStyle:'long',timeZone:'Africa/Cairo'}).format(new Date(account.createdAt))}</dd></div>
             <div><dt>Account type</dt><dd>{accountTypeLabels[account.type]}</dd></div>
             <div><dt>Status</dt><dd>{account.status==='archived'?'Archived':'Active'}</dd></div>
             <div><dt>Opening balance</dt><dd>{account.openingBalance} EGP{!account.openingBalanceEditable?' · Locked after posted activity':''}</dd></div>
-          </dl></section>
-          <TransfersPanel key={account.id} userId={userId} account={account} refreshBalances={()=>store.refresh()} disabled={state.pending}/>
-          <Button variant="secondary" disabled={state.loading||state.pending} onClick={()=>void store.refresh()}>Refresh account</Button>
+          </dl></Disclosure>
+          <Disclosure title="Transfers" lazy><TransfersPanel key={account.id} userId={userId} account={account} refreshBalances={()=>store.refresh()} disabled={state.pending}/></Disclosure>
+          <Button variant="secondary" disabled={state.loading||state.pending} onClick={()=>void store.refresh()}>Refresh<span className="v2-sr-only"> account</span></Button>
         </>}
       </>}
       {action&&<AccountDialog key={action.kind+action.account?.id} action={action} state={state} store={store} client={client} close={close}/>}

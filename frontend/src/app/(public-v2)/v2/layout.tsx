@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "../../v2/v2.css";
 import "../../v2/prototype.css";
+import "../../v2/refinement.css";
 import { AuthProvider } from "../../../lib/auth/auth-provider";
 import { ProtectedBoundary } from "../../../features/v2/protected-boundary";
 import { v2FontClasses } from "../../../lib/v2-fonts";

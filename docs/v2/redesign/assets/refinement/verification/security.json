@@ -1,0 +1,10 @@
+{
+  "filesScanned": 233,
+  "recognizedSecretFindings": [],
+  "classifiedPlaceholders": [],
+  "financialPagesFixtureFree": 10,
+  "financialArithmeticChanged": false,
+  "dependenciesAdded": 0,
+  "productionMutation": false,
+  "note": "Pattern scan complements diff review; not an exhaustive secret-detection guarantee."
+}

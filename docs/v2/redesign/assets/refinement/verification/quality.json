@@ -1,0 +1,57 @@
+{
+  "branch": "v2-ui-redesign",
+  "startingRevision": "e1d78555a8ce61701113a282b0dde756180a0640",
+  "checks": {
+    "lint": {
+      "command": "npm.cmd run lint",
+      "exitCode": 0
+    },
+    "typecheck": {
+      "command": "npm.cmd run typecheck",
+      "exitCode": 0
+    },
+    "build": {
+      "command": "npm.cmd run build",
+      "exitCode": 0,
+      "mode": "optimized local production, fictional public configuration"
+    },
+    "tests": {
+      "command": "npm.cmd test",
+      "tests": 186,
+      "pass": 186,
+      "fail": 0,
+      "skipped": 0
+    }
+  },
+  "browserBehaviorChecks": 38,
+  "axe": {
+    "audits": 253,
+    "violations": 0,
+    "incompleteAuditEntries": 16,
+    "incompleteNodes": 18,
+    "manualReview": "Native dialog color-contrast overlap incompletes retained. Dialog screenshots and semantic text/background pairs reviewed; no failing pair identified."
+  },
+  "layoutChecks": {
+    "routesAtSevenWidths": 91,
+    "desktopCoarsePointerRoutes": 9,
+    "normalAndExpanded": 98,
+    "stressAudits": 80,
+    "dialogDrawerAudits": 17,
+    "pageOverflows": 0
+  },
+  "bundleDeltaFromStartingRedesign": {
+    "allEmittedJsBytes": 715,
+    "allEmittedJsGzipBytes": 117,
+    "emittedCssGzipBytes": 1843,
+    "newDependencies": 0
+  },
+  "localReadiness": {
+    "samples": 9,
+    "min": 731,
+    "median": 798,
+    "max": 832,
+    "limitation": "Warm local network-idle plus two animation frames; not production Core Web Vitals"
+  },
+  "productionTouched": false,
+  "financialArithmeticChanged": false
+}

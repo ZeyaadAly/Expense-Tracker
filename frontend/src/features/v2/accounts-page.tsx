@@ -8,7 +8,7 @@ import { PrototypeShell } from "./shell";
 import { TransfersPanel } from "./transfers-panel";
 import { PageHeader } from "../../components/v2/app-shell";
 import { AccountCard, SummaryCard } from "../../components/v2/finance";
-import { Button, DialogShell, EmptyState, ErrorState, FeedbackBanner, FormField, MoneyInput, SegmentedControl, Select, Skeleton, StaleIndicator, TextInput } from "../../components/v2/primitives";
+import { Button, DialogShell, Disclosure, EmptyState, ErrorState, FeedbackBanner, FormField, MoneyInput, SegmentedControl, Select, Skeleton, StaleIndicator, TextInput } from "../../components/v2/primitives";
 
 export const accountTypeLabels={cash:'Cash',bank:'Bank',savings:'Savings',credit_card:'Credit card',mobile_wallet:'Mobile wallet',other:'Other'};
 const labels=accountTypeLabels;
@@ -29,7 +29,7 @@ function ConnectedAccounts({userId}:{userId:string}) {
   const open=(next:Action)=>{store.clearMutation();setAction(next);};
   const close=()=>{if(!state.pending){setAction(null);store.clearMutation();}};
   return <PrototypeShell liveAccounts>
-    <PageHeader title="Accounts" description="Where your money lives — and what you owe." actions={<><Button variant="secondary" disabled={state.loading||state.pending} onClick={()=>void store.refresh()}>Refresh accounts</Button><Button disabled={state.pending} onClick={()=>open({kind:'create'})}>Add account</Button></>}/>
+    <PageHeader title="Accounts" actions={<><Button variant="secondary" disabled={state.loading||state.pending} onClick={()=>void store.refresh()}>Refresh<span className="v2-sr-only"> accounts</span></Button><Button disabled={state.pending} onClick={()=>open({kind:'create'})}>Add account</Button></>}/>
     {state.notice&&<FeedbackBanner tone={state.error?'warning':'success'} title={state.notice}/>}
     {state.error&&<ErrorState title="Accounts could not refresh" description={state.error} onRetry={()=>void store.refresh()}/>}
     {state.error&&(state.accounts||state.summary)&&<StaleIndicator/>}
@@ -38,7 +38,7 @@ function ConnectedAccounts({userId}:{userId:string}) {
     <SegmentedControl label="Account status" options={['Active','Archived']} value={state.status==='active'?'Active':'Archived'} onChange={value=>{if(!state.pending)void store.refresh(value.toLowerCase() as AccountStatus);}}/>
     {state.loading&&<p role="status">Loading accounts…</p>}
     {state.accounts===null?state.loading?<div className="p4-account-grid"><Skeleton variant="account"/><Skeleton variant="account"/></div>:null:state.accounts.length===0?<EmptyState title={state.status==='active'?'No accounts yet.':'No archived accounts.'} description={state.status==='active'?'Add an account to start your financial picture.':'Archived accounts remain in history and net position.'} action={state.status==='active'?<Button onClick={()=>open({kind:'create'})}>Add your first account</Button>:undefined}/>:<div className="p4-account-grid">{state.accounts.map(account=><div key={account.id}><AccountCard account={{id:account.id,name:account.name,type:account.type,balance:account.currentBalance,archived:account.status==='archived'}}/><div className="v2-actions"><Link href={`/v2/accounts/${account.id}`}>View account<span className="v2-sr-only"> {account.name}</span></Link><Button variant="text" disabled={state.pending} onClick={()=>open({kind:'edit',account})}>Edit<span className="v2-sr-only"> {account.name}</span></Button><Button variant="text" disabled={state.pending} onClick={()=>open({kind:account.status==='active'?'archive':'restore',account})}>{account.status==='active'?'Archive':'Restore'}<span className="v2-sr-only"> {account.name}</span></Button></div></div>)}</div>}
-    <TransfersPanel userId={userId} refreshBalances={()=>store.refresh()} disabled={state.pending}/>
+    <Disclosure title="Transfers" lazy><TransfersPanel userId={userId} refreshBalances={()=>store.refresh()} disabled={state.pending}/></Disclosure>
     {action&&<AccountDialog key={action.kind+action.account?.id} action={action} state={state} store={store} client={client} close={close}/>}
   </PrototypeShell>;
 }

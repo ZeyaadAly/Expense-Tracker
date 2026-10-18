@@ -6,7 +6,7 @@ import {createAccountClient} from "../../lib/api/accounts";
 import {createGoalsStore} from "../../lib/goals-store";
 import {PageHeader} from "../../components/v2/app-shell";
 import {GoalCard,MoneyDisplay} from "../../components/v2/finance";
-import {Button,DialogShell,EmptyState,ErrorState,FeedbackBanner,FormField,MoneyInput,Select,Skeleton,StaleIndicator,TextInput} from "../../components/v2/primitives";
+import {Button,DialogShell,Disclosure,EmptyState,ErrorState,FeedbackBanner,FormField,MoneyInput,Select,Skeleton,StaleIndicator,TextInput} from "../../components/v2/primitives";
 import {PrototypeShell} from "./shell";
 type Action={kind:'create'|'edit'|'complete'|'reopen'|'archive';id?:string};
 type Store=ReturnType<typeof createGoalsStore>;
@@ -24,8 +24,8 @@ function ConnectedGoals({userId}:{userId:string}){
   const open=(next:Action)=>{store.clearAction();setAction(next);void store.loadOptions();if(next.id)void store.loadResource(next.id);};
   const close=()=>{if(!state.pending&&!state.inspecting){setAction(null);store.clearAction();setTimeout(()=>{if(document.activeElement===document.body)document.getElementById(`${id}-add`)?.focus();},0);}};
   return <PrototypeShell liveGoals>
-    <PageHeader title="Goals" description="Make steady progress toward what matters." actions={<><Button variant="secondary" disabled={state.loading||state.pending} onClick={()=>{void store.refresh();void store.loadOptions();}}>Refresh goals</Button><Button id={`${id}-add`} disabled={state.pending} onClick={()=>open({kind:'create'})}>Create goal</Button></>}/>
-    <p role="status" className="v2-helper">{state.loading?state.rows?'Refreshing goals… Showing last loaded values.':'Loading your goals…':state.error?'Goal refresh failed.':'Goals are up to date.'}</p>
+    <PageHeader title="Goals" actions={<><Button variant="secondary" disabled={state.loading||state.pending} onClick={()=>{void store.refresh();void store.loadOptions();}}>Refresh<span className="v2-sr-only"> goals</span></Button><Button id={`${id}-add`} disabled={state.pending} onClick={()=>open({kind:'create'})}>Create goal</Button></>}/>
+    <p role="status" className={state.loading||state.error?"v2-helper":"v2-sr-only"}>{state.loading?state.rows?'Refreshing goals… Showing last loaded values.':'Loading your goals…':state.error?'Goal refresh failed.':'Goals are up to date.'}</p>
     {state.notice&&<FeedbackBanner tone={state.error?'warning':'success'} title={state.notice}/>}
     {state.error&&<ErrorState title="Goals unavailable" description={state.error} onRetry={()=>void store.refresh()}/>}
     {state.error&&state.rows&&<StaleIndicator>Last loaded goals · refresh failed</StaleIndicator>}
@@ -34,15 +34,16 @@ function ConnectedGoals({userId}:{userId:string}){
       const account=state.accounts.find(a=>a.id===g.linkedAccountId);
       return <section data-goal-id={g.id} data-status={g.status} key={g.id} aria-label={g.name}>
         <GoalCard name={g.name} saved={g.savedAmount} target={g.targetAmount} percent={g.percentComplete} date={g.targetDate??undefined} status={statusLabel(g.status)}/>
-        <p className="v2-helper">Remaining <MoneyDisplay value={g.remainingAmount}/></p>
-        <p className="v2-helper">Linked account: {g.linkedAccountId?account?`${account.name}${account.status==='archived'?' (Archived)':''}`:state.optionsLoading?'Loading reference…':'Reference unavailable':'None'}</p>
-        {g.status==='active'&&goalIsFunded(g)&&<p className="v2-helper">Target reached. Mark complete when you are ready.</p>}
+        <div className="rf-record-footer"><p className="v2-helper">Remaining <MoneyDisplay value={g.remainingAmount}/></p>
+        <Disclosure title="Goal details"><p className="v2-helper">Linked account: {g.linkedAccountId?account?`${account.name}${account.status==='archived'?' (Archived)':''}`:state.optionsLoading?'Loading reference…':'Reference unavailable':'None'}</p><p className="v2-helper">{g.targetDate?`Target ${g.targetDate}`:'No target date'}. Savings are manual; the linked account is a reference.</p></Disclosure>
+
         {g.status!=='archived'&&<div className="v2-actions">
           <Button variant="text" disabled={state.pending} onClick={()=>open({kind:'edit',id:g.id})}>Edit<span className="v2-sr-only"> {g.name}</span></Button>
           {g.status==='active'&&goalIsFunded(g)&&<Button variant="secondary" disabled={state.pending} onClick={()=>open({kind:'complete',id:g.id})}>Mark complete<span className="v2-sr-only"> {g.name}</span></Button>}
           {g.status==='completed'&&<Button variant="secondary" disabled={state.pending} onClick={()=>open({kind:'reopen',id:g.id})}>Reopen<span className="v2-sr-only"> {g.name}</span></Button>}
           <Button variant="text" disabled={state.pending} onClick={()=>open({kind:'archive',id:g.id})}>Archive<span className="v2-sr-only"> {g.name}</span></Button>
         </div>}
+        </div>
       </section>;
     })}</div>}
     {action&&(action.kind!=='create'&&(!state.resource||state.resourceLoading)?<DialogShell title="Check goal" description="Loading the current goal before making a change." onClose={close}>{state.resourceLoading?<Skeleton variant="metric"/>:<ErrorState title="Goal unavailable" description={state.resourceError??'This goal is unavailable.'} onRetry={()=>void store.loadResource(action.id!)}/>}</DialogShell>:<GoalDialog key={action.kind+action.id} action={action} goal={state.resource??undefined} state={state} store={store} client={client} close={close}/>)}

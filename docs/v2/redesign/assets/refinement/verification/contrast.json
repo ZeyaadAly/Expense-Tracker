@@ -1,0 +1,103 @@
+{
+  "method": "WCAG sRGB relative luminance",
+  "pairs": [
+    {
+      "name": "primary",
+      "foreground": "#172738",
+      "background": "#f3f6fa",
+      "ratio": 14,
+      "min": 4.5
+    },
+    {
+      "name": "secondary",
+      "foreground": "#526279",
+      "background": "#f3f6fa",
+      "ratio": 5.73,
+      "min": 4.5
+    },
+    {
+      "name": "tertiary",
+      "foreground": "#5c6b80",
+      "background": "#eaf0f6",
+      "ratio": 4.73,
+      "min": 4.5
+    },
+    {
+      "name": "action",
+      "foreground": "#ffffff",
+      "background": "#2855d9",
+      "ratio": 6.19,
+      "min": 4.5
+    },
+    {
+      "name": "accent text",
+      "foreground": "#2855d9",
+      "background": "#eaf0ff",
+      "ratio": 5.43,
+      "min": 4.5
+    },
+    {
+      "name": "income",
+      "foreground": "#08796c",
+      "background": "#e6f4ef",
+      "ratio": 4.68,
+      "min": 4.5
+    },
+    {
+      "name": "expense",
+      "foreground": "#bb3f42",
+      "background": "#fcecee",
+      "ratio": 4.71,
+      "min": 4.5
+    },
+    {
+      "name": "warning",
+      "foreground": "#8b5a10",
+      "background": "#fff3da",
+      "ratio": 5.35,
+      "min": 4.5
+    },
+    {
+      "name": "ink primary",
+      "foreground": "#ffffff",
+      "background": "#172738",
+      "ratio": 15.18,
+      "min": 4.5
+    },
+    {
+      "name": "ink secondary",
+      "foreground": "#c0ccdc",
+      "background": "#172738",
+      "ratio": 9.33,
+      "min": 4.5
+    },
+    {
+      "name": "ink positive",
+      "foreground": "#91d4c6",
+      "background": "#172738",
+      "ratio": 8.99,
+      "min": 4.5
+    },
+    {
+      "name": "ink negative",
+      "foreground": "#f5b7b8",
+      "background": "#172738",
+      "ratio": 8.92,
+      "min": 4.5
+    },
+    {
+      "name": "field boundary",
+      "foreground": "#7e8da4",
+      "background": "#ffffff",
+      "ratio": 3.37,
+      "min": 3
+    },
+    {
+      "name": "focus",
+      "foreground": "#2855d9",
+      "background": "#ffffff",
+      "ratio": 6.19,
+      "min": 3
+    }
+  ]
+}

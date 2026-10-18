@@ -1,0 +1,108 @@
+{
+  "requested": "Next.js route data loading",
+  "results": [
+    {
+      "domain": "stack",
+      "stack": "nextjs",
+      "query": "Next.js route data loading",
+      "file": "stacks/nextjs.csv",
+      "count": 3,
+      "results": [
+        {
+          "Category": "Routing",
+          "Guideline": "Handle loading states",
+          "Description": "Use loading.tsx for route loading UI",
+          "Do": "loading.tsx alongside page.tsx",
+          "Don't": "Manual loading state management",
+          "Code Good": "app/dashboard/loading.tsx",
+          "Code Bad": "useState for loading in page",
+          "Severity": "Medium",
+          "Docs URL": "https://nextjs.org/docs/app/building-your-application/routing/loading-ui-and-streaming",
+          "Applies To": "nextjs 16.2",
+          "Status": "active",
+          "Verified At": "2026-08-13"
+        },
+        {
+          "Category": "DataFetching",
+          "Guideline": "Configure caching explicitly (Next.js 16.2+)",
+          "Description": "Next.js 16 uses Cache Components and explicit cache directives instead of assuming fetch is the cache model.",
+          "Do": "Set cache semantics explicitly for static and dynamic data",
+          "Don't": "Assume fetch defaults alone define the cache model",
+          "Code Good": "fetch(url, { cache: 'force-cache' })",
+          "Code Bad": "fetch(url) // Uncached in v15",
+          "Severity": "High",
+          "Docs URL": "https://nextjs.org/docs/app/guides/upgrading/version-16",
+          "Applies To": "nextjs 16.2",
+          "Status": "active",
+          "Verified At": "2026-08-13"
+        },
+        {
+          "Category": "Images",
+          "Guideline": "Use next/image for optimization",
+          "Description": "Automatic image optimization and lazy loading",
+          "Do": "<Image> component for all images",
+          "Don't": "<img> tags directly",
+          "Code Good": "<Image src={} alt={} width={} height={}>",
+          "Code Bad": "<img src={}/>",
+          "Severity": "High",
+          "Docs URL": "https://nextjs.org/docs/app/building-your-application/optimizing/images",
+          "Applies To": "nextjs 16.2",
+          "Status": "active",
+          "Verified At": "2026-08-13"
+        }
+      ]
+    },
+    {
+      "domain": "stack",
+      "stack": "nextjs",
+      "query": "client effects cleanup",
+      "file": "stacks/nextjs.csv",
+      "count": 3,
+      "results": [
+        {
+          "Category": "Rendering",
+          "Guideline": "Push Client Components down",
+          "Description": "Keep Client Components as leaf nodes",
+          "Do": "Client wrapper for interactive parts only",
+          "Don't": "Mark page as Client Component",
+          "Code Good": "<InteractiveButton/> in Server Page",
+          "Code Bad": "('use client') on page.tsx",
+          "Severity": "High",
+          "Docs URL": "https://nextjs.org/docs/app/building-your-application/rendering/client-components",
+          "Applies To": "nextjs 16.2",
+          "Status": "active",
+          "Verified At": "2026-08-13"
+        },
+        {
+          "Category": "Environment",
+          "Guideline": "Use NEXT_PUBLIC prefix",
+          "Description": "Client-accessible env vars need prefix",
+          "Do": "NEXT_PUBLIC_ for client vars",
+          "Don't": "Server vars exposed to client",
+          "Code Good": "NEXT_PUBLIC_API_URL",
+          "Code Bad": "API_SECRET in client code",
+          "Severity": "High",
+          "Docs URL": "https://nextjs.org/docs/app/building-your-application/configuring/environment-variables",
+          "Applies To": "nextjs 16.2",
+          "Status": "active",
+          "Verified At": "2026-08-13"
+        },
+        {
+          "Category": "Rendering",
+          "Guideline": "Mark Client Components explicitly",
+          "Description": "'use client' for interactive components",
+          "Do": "Add 'use client' only when needed",
+          "Don't": "Server Component with hooks/events",
+          "Code Good": "('use client') for onClick useState",
+          "Code Bad": "No directive with useState",
+          "Severity": "High",
+          "Docs URL": "https://nextjs.org/docs/app/building-your-application/rendering/client-components",
+          "Applies To": "nextjs 16.2",
+          "Status": "active",
+          "Verified At": "2026-08-13"
+        }
+      ]
+    }
+  ],
+  "review": "Recommendations require product/stack fit review; no automatic implementation authority."
+}

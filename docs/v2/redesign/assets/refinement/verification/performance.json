@@ -1,0 +1,244 @@
+{
+  "mode": "optimized local production, real local financial API and PostgreSQL, synthetic external Auth only",
+  "samples": [
+    {
+      "route": "dashboard",
+      "iteration": 1,
+      "routeDataNetworkIdleAndTwoFramesMs": 798,
+      "navigationMs": 97.60000002384186,
+      "domNodes": 320,
+      "fontsLoaded": true,
+      "fonts": [
+        {
+          "family": "interfaceFont",
+          "status": "loaded"
+        },
+        {
+          "family": "interfaceFont Fallback",
+          "status": "unloaded"
+        },
+        {
+          "family": "financialFont",
+          "status": "loaded"
+        },
+        {
+          "family": "financialFont Fallback",
+          "status": "unloaded"
+        }
+      ]
+    },
+    {
+      "route": "dashboard",
+      "iteration": 2,
+      "routeDataNetworkIdleAndTwoFramesMs": 806,
+      "navigationMs": 84.70000004768372,
+      "domNodes": 320,
+      "fontsLoaded": true,
+      "fonts": [
+        {
+          "family": "interfaceFont",
+          "status": "loaded"
+        },
+        {
+          "family": "interfaceFont Fallback",
+          "status": "unloaded"
+        },
+        {
+          "family": "financialFont",
+          "status": "loaded"
+        },
+        {
+          "family": "financialFont Fallback",
+          "status": "unloaded"
+        }
+      ]
+    },
+    {
+      "route": "dashboard",
+      "iteration": 3,
+      "routeDataNetworkIdleAndTwoFramesMs": 763,
+      "navigationMs": 77.70000004768372,
+      "domNodes": 320,
+      "fontsLoaded": true,
+      "fonts": [
+        {
+          "family": "interfaceFont",
+          "status": "loaded"
+        },
+        {
+          "family": "interfaceFont Fallback",
+          "status": "unloaded"
+        },
+        {
+          "family": "financialFont",
+          "status": "loaded"
+        },
+        {
+          "family": "financialFont Fallback",
+          "status": "unloaded"
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "iteration": 1,
+      "routeDataNetworkIdleAndTwoFramesMs": 832,
+      "navigationMs": 88.20000004768372,
+      "domNodes": 1062,
+      "fontsLoaded": true,
+      "fonts": [
+        {
+          "family": "interfaceFont",
+          "status": "loaded"
+        },
+        {
+          "family": "interfaceFont Fallback",
+          "status": "unloaded"
+        },
+        {
+          "family": "financialFont",
+          "status": "loaded"
+        },
+        {
+          "family": "financialFont Fallback",
+          "status": "unloaded"
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "iteration": 2,
+      "routeDataNetworkIdleAndTwoFramesMs": 806,
+      "navigationMs": 89.70000004768372,
+      "domNodes": 1062,
+      "fontsLoaded": true,
+      "fonts": [
+        {
+          "family": "interfaceFont",
+          "status": "loaded"
+        },
+        {
+          "family": "interfaceFont Fallback",
+          "status": "unloaded"
+        },
+        {
+          "family": "financialFont",
+          "status": "loaded"
+        },
+        {
+          "family": "financialFont Fallback",
+          "status": "unloaded"
+        }
+      ]
+    },
+    {
+      "route": "transactions",
+      "iteration": 3,
+      "routeDataNetworkIdleAndTwoFramesMs": 772,
+      "navigationMs": 85.5,
+      "domNodes": 1062,
+      "fontsLoaded": true,
+      "fonts": [
+        {
+          "family": "interfaceFont",
+          "status": "loaded"
+        },
+        {
+          "family": "interfaceFont Fallback",
+          "status": "unloaded"
+        },
+        {
+          "family": "financialFont",
+          "status": "loaded"
+        },
+        {
+          "family": "financialFont Fallback",
+          "status": "unloaded"
+        }
+      ]
+    },
+    {
+      "route": "analytics",
+      "iteration": 1,
+      "routeDataNetworkIdleAndTwoFramesMs": 740,
+      "navigationMs": 74.89999997615814,
+      "domNodes": 546,
+      "fontsLoaded": true,
+      "fonts": [
+        {
+          "family": "interfaceFont",
+          "status": "loaded"
+        },
+        {
+          "family": "interfaceFont Fallback",
+          "status": "unloaded"
+        },
+        {
+          "family": "financialFont",
+          "status": "loaded"
+        },
+        {
+          "family": "financialFont Fallback",
+          "status": "unloaded"
+        }
+      ]
+    },
+    {
+      "route": "analytics",
+      "iteration": 2,
+      "routeDataNetworkIdleAndTwoFramesMs": 731,
+      "navigationMs": 70.90000009536743,
+      "domNodes": 546,
+      "fontsLoaded": true,
+      "fonts": [
+        {
+          "family": "interfaceFont",
+          "status": "loaded"
+        },
+        {
+          "family": "interfaceFont Fallback",
+          "status": "unloaded"
+        },
+        {
+          "family": "financialFont",
+          "status": "loaded"
+        },
+        {
+          "family": "financialFont Fallback",
+          "status": "unloaded"
+        }
+      ]
+    },
+    {
+      "route": "analytics",
+      "iteration": 3,
+      "routeDataNetworkIdleAndTwoFramesMs": 822,
+      "navigationMs": 102.70000004768372,
+      "domNodes": 546,
+      "fontsLoaded": true,
+      "fonts": [
+        {
+          "family": "interfaceFont",
+          "status": "loaded"
+        },
+        {
+          "family": "interfaceFont Fallback",
+          "status": "unloaded"
+        },
+        {
+          "family": "financialFont",
+          "status": "loaded"
+        },
+        {
+          "family": "financialFont Fallback",
+          "status": "unloaded"
+        }
+      ]
+    }
+  ],
+  "fontOrigins": [
+    "http://localhost:3000"
+  ],
+  "errors": [],
+  "interpretation": "Three warm samples after one warmup per route; readiness includes network-idle settling, not Core Web Vitals or a production SLA. Browser fonts are self hosted."
+}

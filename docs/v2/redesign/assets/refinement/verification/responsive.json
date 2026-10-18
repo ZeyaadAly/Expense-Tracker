@@ -1,0 +1,616 @@
+{
+  "layouts": 100,
+  "audits": [
+    {
+      "route": "dashboard",
+      "width": 320,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "accounts",
+      "width": 320,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "width": 320,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "transactions",
+      "width": 320,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "recurring",
+      "width": 320,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "analytics",
+      "width": 320,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "budgets",
+      "width": 320,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "goals",
+      "width": 320,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "settings",
+      "width": 320,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "login",
+      "width": 320,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "register",
+      "width": 320,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "forgot-password",
+      "width": 320,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "reset-password",
+      "width": 320,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "dashboard",
+      "width": 360,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "accounts",
+      "width": 360,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "width": 360,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "transactions",
+      "width": 360,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "recurring",
+      "width": 360,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "analytics",
+      "width": 360,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "budgets",
+      "width": 360,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "goals",
+      "width": 360,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "settings",
+      "width": 360,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "login",
+      "width": 360,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "register",
+      "width": 360,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "forgot-password",
+      "width": 360,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "reset-password",
+      "width": 360,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "dashboard",
+      "width": 375,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "accounts",
+      "width": 375,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "width": 375,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "transactions",
+      "width": 375,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "recurring",
+      "width": 375,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "analytics",
+      "width": 375,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "budgets",
+      "width": 375,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "goals",
+      "width": 375,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "settings",
+      "width": 375,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "login",
+      "width": 375,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "register",
+      "width": 375,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "forgot-password",
+      "width": 375,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "reset-password",
+      "width": 375,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "dashboard",
+      "width": 768,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "accounts",
+      "width": 768,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "width": 768,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "transactions",
+      "width": 768,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "recurring",
+      "width": 768,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "analytics",
+      "width": 768,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "budgets",
+      "width": 768,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "goals",
+      "width": 768,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "settings",
+      "width": 768,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "login",
+      "width": 768,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "register",
+      "width": 768,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "forgot-password",
+      "width": 768,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "reset-password",
+      "width": 768,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "dashboard",
+      "width": 1024,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "accounts",
+      "width": 1024,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "width": 1024,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "transactions",
+      "width": 1024,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "recurring",
+      "width": 1024,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "analytics",
+      "width": 1024,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "budgets",
+      "width": 1024,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "goals",
+      "width": 1024,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "settings",
+      "width": 1024,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "login",
+      "width": 1024,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "register",
+      "width": 1024,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "forgot-password",
+      "width": 1024,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "reset-password",
+      "width": 1024,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "dashboard",
+      "width": 1280,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "accounts",
+      "width": 1280,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "width": 1280,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "transactions",
+      "width": 1280,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "recurring",
+      "width": 1280,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "analytics",
+      "width": 1280,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "budgets",
+      "width": 1280,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "goals",
+      "width": 1280,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "settings",
+      "width": 1280,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "login",
+      "width": 1280,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "register",
+      "width": 1280,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "forgot-password",
+      "width": 1280,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "reset-password",
+      "width": 1280,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "dashboard",
+      "width": 1440,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "accounts",
+      "width": 1440,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "width": 1440,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "transactions",
+      "width": 1440,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "recurring",
+      "width": 1440,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "analytics",
+      "width": 1440,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "budgets",
+      "width": 1440,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "goals",
+      "width": 1440,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "settings",
+      "width": 1440,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "login",
+      "width": 1440,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "register",
+      "width": 1440,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "forgot-password",
+      "width": 1440,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "reset-password",
+      "width": 1440,
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "dashboard",
+      "width": 1440,
+      "context": "coarse pointer",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "accounts",
+      "width": 1440,
+      "context": "coarse pointer",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "accounts/6b87f970-32f2-4ff8-a553-1784b86e65cc",
+      "width": 1440,
+      "context": "coarse pointer",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "transactions",
+      "width": 1440,
+      "context": "coarse pointer",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "recurring",
+      "width": 1440,
+      "context": "coarse pointer",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "analytics",
+      "width": 1440,
+      "context": "coarse pointer",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "budgets",
+      "width": 1440,
+      "context": "coarse pointer",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "goals",
+      "width": 1440,
+      "context": "coarse pointer",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "route": "settings",
+      "width": 1440,
+      "context": "coarse pointer",
+      "violations": [],
+      "incomplete": []
+    }
+  ],
+  "errors": [],
+  "smallTargets": []
+}
