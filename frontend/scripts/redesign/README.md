@@ -66,6 +66,10 @@ Structured results stay under `.tmp-v2-redesign`; sanitized results for this acc
 
 Stop only the frontend/API/PostgreSQL processes created for this fixture. No cluster deletion or production deployment is needed.
 
+## Active route follow-up
+
+The user's later instruction supersedes the retained-prefetch policy: all V2 links now use `prefetch={false}`. Run `active-only.mjs` serially before `network.mjs`. It holds a real route payload, verifies the immediate route skeleton and subsequent financial-data skeleton at1440/360, audits both route skeletons, checks idle/hover traffic and verifies all four Auth pages avoid route prefetch. The network suite additionally asserts zero RSC prefetch on all nine fresh protected entries and zero route/API requests on Dashboard link hover. Its recorded RSC requests after that point are deliberate navigations, not prefetch. Current evidence belongs to `assets/active-only`; the earlier refinement results remain historical.
+
 ## Density and loading refinement
 
 The current acceptance report is [06-density-and-loading-refinement.md](../../../docs/v2/redesign/06-density-and-loading-refinement.md); the original visual review was rejected. Preserve its historical evidence. For this refinement, set `REDESIGN_EVIDENCE_DIR=docs/v2/redesign/assets/refinement/final` when running `states` and `extended-qa`. Capture with `capture.mjs refinement-final`, then run `contact.mjs refinement-final`; copy that completed directory to the refinement's `final` evidence directory. Galleries use relative image paths.

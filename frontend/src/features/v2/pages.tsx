@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import Link from "../../components/v2/route-link";
 import { useState, type ReactNode } from "react";
 import { PageHeader } from "../../components/v2/app-shell";
 import {

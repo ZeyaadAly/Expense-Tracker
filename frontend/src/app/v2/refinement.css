@@ -3,6 +3,7 @@
 .v2-theme { --v2-sidebar-width:200px; --v2-content-max:1280px; }
 .v2-theme h1 { font-size:28px; }
 .v2-theme h2 { font-size:19px; }
+.v2-theme .v2-main[data-route-pending=true]>:not([data-route-skeleton]) { display:none!important; }
 .v2-theme .v2-sidebar-content { padding:20px 12px; gap:20px; }
 .v2-theme .v2-sidebar-content nav { gap:12px; }
 .v2-theme .v2-nav-item { min-height:36px; padding:7px 10px; font-size:13px; }
